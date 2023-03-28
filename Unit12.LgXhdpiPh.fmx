@@ -1,0 +1,15 @@
+inherited Form12_LgXhdpiPh: TForm12_LgXhdpiPh
+  ClientHeight = 695
+  ClientWidth = 450
+  DesignerMasterStyle = 0
+  inherited tbProcess: TTrackBar
+    Size.Height = 32.000000000000000000
+  end
+  inherited tbVolume: TTrackBar
+    Size.Width = 32.000000000000000000
+  end
+  inherited ListBox1: TListBox
+    Viewport.Width = 200.000000000000000000
+    Viewport.Height = 200.000000000000000000
+  end
+end

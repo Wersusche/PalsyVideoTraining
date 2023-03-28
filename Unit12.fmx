@@ -1,0 +1,135 @@
+object Form12: TForm12
+  Left = 0
+  Top = 0
+  Caption = 'Form12'
+  ClientHeight = 480
+  ClientWidth = 640
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  OnCreate = FormCreate
+  DesignerMasterStyle = 0
+  object Label1: TLabel
+    Position.X = 36.000000000000000000
+    Position.Y = 368.000000000000000000
+    Size.Width = 349.000000000000000000
+    Size.Height = 17.000000000000000000
+    Size.PlatformDefault = False
+    Text = 'Label1'
+    TabOrder = 0
+  end
+  object Button1: TButton
+    Position.X = 528.000000000000000000
+    Position.Y = 435.000000000000000000
+    TabOrder = 1
+    Text = 'Button1'
+    OnClick = Button1Click
+  end
+  object Edit1: TEdit
+    Touch.InteractiveGestures = [LongTap, DoubleTap]
+    TabOrder = 2
+    Position.X = 368.000000000000000000
+    Position.Y = 415.000000000000000000
+  end
+  object MediaPlayerControl1: TMediaPlayerControl
+    Size.Width = 349.000000000000000000
+    Size.Height = 161.000000000000000000
+    Size.PlatformDefault = False
+    MediaPlayer = MediaPlayer1
+    Position.X = 36.000000000000000000
+    Position.Y = 38.000000000000000000
+  end
+  object MediaPlayer1: TMediaPlayer
+    Left = 600
+    Top = 160
+  end
+  object LabelTotalPlaybackTime: TLabel
+    Position.X = 159.000000000000000000
+    Position.Y = 415.000000000000000000
+    Size.Width = 201.000000000000000000
+    Size.Height = 33.000000000000000000
+    Size.PlatformDefault = False
+    Text = 'LabelTotalPlaybackTime'
+    TabOrder = 9
+  end
+  object Timer1: TTimer
+    OnTimer = Timer1Timer
+    Left = 600
+    Top = 224
+  end
+  object Timer2: TTimer
+    OnTimer = Timer2Timer
+    Left = 600
+    Top = 8
+  end
+  object tbProcess: TTrackBar
+    CanParentFocus = True
+    Orientation = Horizontal
+    Position.X = 36.000000000000000000
+    Position.Y = 280.000000000000000000
+    Size.Width = 349.000000000000000000
+    Size.Height = 19.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 16
+    OnChange = tbProcessChange
+  end
+  object tbVolume: TTrackBar
+    CanParentFocus = True
+    Orientation = Vertical
+    Position.X = 400.000000000000000000
+    Position.Y = 38.000000000000000000
+    Size.Width = 19.000000000000000000
+    Size.Height = 161.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 17
+    OnChange = tbVolumeChange
+  end
+  object bPlayClick: TButton
+    Position.X = 440.000000000000000000
+    Position.Y = 328.000000000000000000
+    TabOrder = 18
+    Text = 'bPlayClick'
+    OnClick = bPlayClickClick
+  end
+  object bStopClick: TButton
+    Position.X = 464.000000000000000000
+    Position.Y = 368.000000000000000000
+    TabOrder = 19
+    Text = 'bStopClick'
+    OnClick = bStopClickClick
+  end
+  object ListBox1: TListBox
+    Position.X = 427.000000000000000000
+    Position.Y = 38.000000000000000000
+    TabOrder = 20
+    DisableFocusEffect = True
+    DefaultItemStyles.ItemStyle = ''
+    DefaultItemStyles.GroupHeaderStyle = ''
+    DefaultItemStyles.GroupFooterStyle = ''
+    OnItemClick = ListBox1ItemClick
+    Viewport.Width = 196.000000000000000000
+    Viewport.Height = 196.000000000000000000
+  end
+  object Timer3: TTimer
+    OnTimer = Timer3Timer
+    Left = 592
+    Top = 288
+  end
+  object FDConnection1: TFDConnection
+    Params.Strings = (
+      'DriverID=SQLite'
+      'Database=.\pushcount.db')
+    LoginPrompt = False
+    BeforeConnect = FDConnection1BeforeConnect
+    Left = 544
+  end
+  object FDPhysSQLiteDriverLink1: TFDPhysSQLiteDriverLink
+    Left = 600
+    Top = 56
+  end
+  object FDQuery1: TFDQuery
+    Connection = FDConnection1
+    Left = 592
+    Top = 104
+  end
+end
