@@ -47,8 +47,7 @@ type
   private
     { Private declarations }
     FUpdatingTrackBar: Boolean;
-    FLibraryPath: string;
-    Path: string;
+     Path: string;
     FWatchedVideosCount: Integer;
     FTotalPlaybackTime: Double; // In seconds
 
@@ -142,7 +141,7 @@ end;
 procedure TForm12.Timer1Timer(Sender: TObject);
 begin
   // Check if the video playback has ended
-  if (MediaPlayer1.State = TMediaState.Stopped) and (MediaPlayer1.CurrentTime >= MediaPlayer1.Duration) then
+  if MediaPlayer1.CurrentTime >= MediaPlayer1.Duration then
   begin
     // Increment the counter
     Inc(FWatchedVideosCount);
@@ -151,7 +150,7 @@ begin
     Label1.Text := Format('Watched Videos: %d', [FWatchedVideosCount]);
 
     // Disable the timer to prevent counting the same video multiple times
-    Timer1.Enabled := False;
+    //Timer1.Enabled := False;
   end;
 end;
 
@@ -160,7 +159,7 @@ begin
 // Update the total playback time only if the video is playing
   if MediaPlayer1.State = TMediaState.Playing then
   begin
-    FTotalPlaybackTime := FTotalPlaybackTime + (Timer1.Interval / 1000);
+    FTotalPlaybackTime := FTotalPlaybackTime + (Timer1.Interval / 500);
   end;
   LabelTotalPlaybackTime.Text := Format('Total Playback Time: %.1f s', [FTotalPlaybackTime]);
 
@@ -169,21 +168,22 @@ end;
 procedure TForm12.Timer3Timer(Sender: TObject);
 begin
 
-     if tbProcess.Max <> MediaPlayer1.Duration then
-    tbProcess.Max := MediaPlayer1.Duration;
-  if tbProcess.Value <> MediaPlayer1.CurrentTime then
+//     if tbProcess.Max <> MediaPlayer1.Duration then
+//    tbProcess.Max := MediaPlayer1.Duration;
+//  if tbProcess.Value <> MediaPlayer1.CurrentTime then
+//    tbProcess.Value := MediaPlayer1.CurrentTime;
+
+ if Assigned(MediaPlayer1.Media) and (MediaPlayer1.State = TMediaState.Playing) then
+  begin
+  if tbProcess.Max <> MediaPlayer1.Duration then
+  tbProcess.Max := MediaPlayer1.Duration;
+   FUpdatingTrackBar := True;
+    try
     tbProcess.Value := MediaPlayer1.CurrentTime;
-//  if Assigned(MediaPlayer1.Media) and (MediaPlayer1.State = TMediaState.Playing) then
-//  begin
-//    if tbProcess.Max <> MediaPlayer1.Duration then
-//    tbProcess.Max := MediaPlayer1.Media.Duration;
-//    FUpdatingTrackBar := True;
-//    try
-//      tbProcess.Value := MediaPlayer1.CurrentTime;
-//    finally
-//      FUpdatingTrackBar := False;
-//    end;
-//  end;
+   finally
+    FUpdatingTrackBar := False;
+  end;
+  end;
 
   if (MediaPlayer1.Media = nil) or ((MediaPlayer1.State = TMediaState.Stopped) and (MediaPlayer1.CurrentTime >= MediaPlayer1.Duration)) then
   begin
@@ -197,12 +197,12 @@ begin
   end;
 
    MediaPlayer1.FileName :=  TPath.Combine(Path, ListBox1.Items.Strings[ListBox1.ItemIndex]);
+   tbProcess.Max := MediaPlayer1.Duration;
+   MediaPlayer1.CurrentTime := 0;
    MediaPlayer1.Volume := ((tbVolume.Max - tbVolume.value) + tbVolume.Min)/100;
    MediaPlayer1.Play;
   end;
-   //Listbox1.ItemIndex:= Listbox1.ItemIndex + 1;
- //MediaPlayer1.FileName := TPath.Combine(Path, Listbox1.ItemIndex, Item.Text);
- //ListBox1.Items.Strings[Listbox1.ItemIndex];
+
 end;
 
 procedure TForm12.FDConnection1BeforeConnect(Sender: TObject);
@@ -216,7 +216,7 @@ end;
 procedure TForm12.ListBox1ItemClick(const Sender: TCustomListBox;
   const Item: TListBoxItem);
 begin
-  MediaPlayer1.Stop;
+  //MediaPlayer1.Stop;
   MediaPlayer1.FileName := TPath.Combine(Path, Item.Text);
 
   //tbVolume.Value:= MediaPlayer1.Volume*100;
@@ -224,11 +224,11 @@ end;
 
 procedure TForm12.tbProcessChange(Sender: TObject);
 begin
-  if not FUpdatingTrackBar then
-  begin
-     //MediaPlayer1.Stop;
-    MediaPlayer1.CurrentTime :=  Round(tbProcess.Value);
-  end;
+if not FUpdatingTrackBar then
+begin
+  //MediaPlayer1.Stop;
+  MediaPlayer1.CurrentTime :=  Round(tbProcess.Value);
+ end;
 end;
 
 procedure TForm12.tbVolumeChange(Sender: TObject);
@@ -240,11 +240,3 @@ end;
 
 
 end.
-
-
-
-
-
-
-
-

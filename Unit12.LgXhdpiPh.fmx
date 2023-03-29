@@ -2,6 +2,9 @@ inherited Form12_LgXhdpiPh: TForm12_LgXhdpiPh
   ClientHeight = 695
   ClientWidth = 450
   DesignerMasterStyle = 0
+  inherited Button1: TButton
+    Anchors = [akLeft, akTop, akRight]
+  end
   inherited tbProcess: TTrackBar
     Size.Height = 32.000000000000000000
   end
