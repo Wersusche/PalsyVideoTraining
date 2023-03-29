@@ -46,12 +46,12 @@ type
     procedure FDConnection1BeforeConnect(Sender: TObject);
   private
     { Private declarations }
+    FUpdatingTrackBar: Boolean;
     FLibraryPath: string;
     Path: string;
     FWatchedVideosCount: Integer;
     FTotalPlaybackTime: Double; // In seconds
-    procedure FillFilesList;
-    function GetPathWithVideo: string;
+
     procedure ListTxtFiles;
 
   public
@@ -98,6 +98,7 @@ end;
 
 procedure TForm12.bPlayClickClick(Sender: TObject);
 begin
+ MediaPlayer1.Volume := ((tbVolume.Max - tbVolume.value) + tbVolume.Min)/100;
  MediaPlayer1.Play;
 end;
 
@@ -129,12 +130,12 @@ FDQuery1.ExecSQL;
 FDQuery1.SQL.Text := 'INSERT OR IGNORE INTO push_count (id, count) VALUES (1, 0);';
 FDQuery1.ExecSQL;
 FDConnection1.Close;
- FLibraryPath := GetPathWithVideo;
  //FillFilesList;
  ListTxtFiles;
  //(trackbar.Max - trackBar.Position) + trackBar.Min;
  // MediaPlayer1.Volume.MaxValue := tbVolume.Max;
  //MediaPlayer1.Volume.MinValue :=  tbVolume.Min;
+  MediaPlayer1.Volume:=100;
  tbVolume.Value := MediaPlayer1.Volume;
 end;
 
@@ -168,12 +169,37 @@ end;
 procedure TForm12.Timer3Timer(Sender: TObject);
 begin
 
-  if tbProcess.Max <> MediaPlayer1.Duration then
+     if tbProcess.Max <> MediaPlayer1.Duration then
     tbProcess.Max := MediaPlayer1.Duration;
   if tbProcess.Value <> MediaPlayer1.CurrentTime then
     tbProcess.Value := MediaPlayer1.CurrentTime;
+//  if Assigned(MediaPlayer1.Media) and (MediaPlayer1.State = TMediaState.Playing) then
+//  begin
+//    if tbProcess.Max <> MediaPlayer1.Duration then
+//    tbProcess.Max := MediaPlayer1.Media.Duration;
+//    FUpdatingTrackBar := True;
+//    try
+//      tbProcess.Value := MediaPlayer1.CurrentTime;
+//    finally
+//      FUpdatingTrackBar := False;
+//    end;
+//  end;
 
   if (MediaPlayer1.Media = nil) or ((MediaPlayer1.State = TMediaState.Stopped) and (MediaPlayer1.CurrentTime >= MediaPlayer1.Duration)) then
+  begin
+  if ListBox1.Items.Count > 0 then
+  begin
+    if ListBox1.ItemIndex < ListBox1.Items.Count - 1 then
+      ListBox1.ItemIndex := ListBox1.ItemIndex + 1
+    else
+      ListBox1.ItemIndex := 0;
+     // Do something with ItemText, e.g., show it in a label or memo
+  end;
+
+   MediaPlayer1.FileName :=  TPath.Combine(Path, ListBox1.Items.Strings[ListBox1.ItemIndex]);
+   MediaPlayer1.Volume := ((tbVolume.Max - tbVolume.value) + tbVolume.Min)/100;
+   MediaPlayer1.Play;
+  end;
    //Listbox1.ItemIndex:= Listbox1.ItemIndex + 1;
  //MediaPlayer1.FileName := TPath.Combine(Path, Listbox1.ItemIndex, Item.Text);
  //ListBox1.Items.Strings[Listbox1.ItemIndex];
@@ -187,57 +213,31 @@ begin
   {$ENDIF}
 end;
 
-procedure TForm12.FillFilesList;
-var
-  F: TSearchRec;
-  Path: string;
-  Attr: Integer;
-begin
-  Path := TPath.Combine(FLibraryPath, '*.mp4');
-{$IFDEF MSWINDOWS}
-//Attr := faReadOnly + faArchive;
-{$ELSE}
-  Attr := 0;
-{$ENDIF}
-  FindFirst(Path, Attr, F);
-  if F.name <> '' then
-  begin
-    ListBox1.Items.Add(F.name);
-    while FindNext(F) = 0 do
-      ListBox1.Items.Add(F.name);
-  end;
-  FindClose(F);
-end;
-
-function TForm12.GetPathWithVideo: string;
-begin
-  case TOSVersion.Platform of
-    TOSVersion.TPlatform.pfWindows:
-      Result := '..\..\Videos\';
-    TOSVersion.TPlatform.pfMacOS:
-      Result := TPath.GetFullPath('../Resources/StartUp');
-    TOSVersion.TPlatform.pfiOS, TOSVersion.TPlatform.pfAndroid:
-      Result := TPath.GetDocumentsPath;
-    TOSVersion.TPlatform.pfWinRT, TOSVersion.TPlatform.pfLinux:
-      raise Exception.Create('Unexpected platform');
-  end;
-end;
-
 procedure TForm12.ListBox1ItemClick(const Sender: TCustomListBox;
   const Item: TListBoxItem);
 begin
   MediaPlayer1.Stop;
   MediaPlayer1.FileName := TPath.Combine(Path, Item.Text);
+
+  //tbVolume.Value:= MediaPlayer1.Volume*100;
 end;
 
 procedure TForm12.tbProcessChange(Sender: TObject);
-begin //MediaPlayer1.CurrentTime := tbProcess.Value;
+begin
+  if not FUpdatingTrackBar then
+  begin
+     //MediaPlayer1.Stop;
+    MediaPlayer1.CurrentTime :=  Round(tbProcess.Value);
+  end;
 end;
 
 procedure TForm12.tbVolumeChange(Sender: TObject);
 begin
-MediaPlayer1.Volume := ((tbVolume.Max - tbVolume.value) + tbVolume.Min);
+MediaPlayer1.Volume := ((tbVolume.Max - tbVolume.value) + tbVolume.Min)/100;
 end;
+
+
+
 
 end.
 
