@@ -6,7 +6,7 @@ inherited Form12_LgXhdpiPh: TForm12_LgXhdpiPh
     Anchors = [akLeft, akTop, akRight]
   end
   inherited tbProcess: TTrackBar
-    Size.Height = 32.000000000000000000
+    Size.Height = 30.888885498046880000
   end
   inherited tbVolume: TTrackBar
     Size.Width = 32.000000000000000000

@@ -11,7 +11,8 @@ uses
   FireDAC.Phys, FireDAC.Phys.SQLite, FireDAC.Phys.SQLiteDef,
   FireDAC.Stan.ExprFuncs, FireDAC.Phys.SQLiteWrapper.Stat, FireDAC.FMXUI.Wait,
   Data.DB, FireDAC.Comp.Client, FMX.Edit, FireDAC.Stan.Param, FireDAC.DatS,
-  FireDAC.DApt.Intf, FireDAC.DApt, FireDAC.Comp.DataSet, System.IOUtils;
+  FireDAC.DApt.Intf, FireDAC.DApt, FireDAC.Comp.DataSet, System.IOUtils,
+  FireDAC.Comp.UI;
 
 type
   TForm12 = class(TForm)
@@ -32,6 +33,10 @@ type
     bStopClick: TButton;
     ListBox1: TListBox;
     Timer3: TTimer;
+    FDGUIxWaitCursor1: TFDGUIxWaitCursor;
+    Button2: TButton;
+    Label2: TLabel;
+    FDQuery2: TFDQuery;
     procedure FormCreate(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
@@ -44,6 +49,7 @@ type
     procedure tbVolumeChange(Sender: TObject);
     procedure Timer3Timer(Sender: TObject);
     procedure FDConnection1BeforeConnect(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
   private
     { Private declarations }
     FUpdatingTrackBar: Boolean;
@@ -116,6 +122,18 @@ FDQuery1.Open;
 Edit1.Text := FDQuery1.FieldByName('count').AsString;
 FDQuery1.Close;
 FDConnection1.Close;
+end;
+
+procedure TForm12.Button2Click(Sender: TObject);
+begin
+FDConnection1.Connected := true;
+FDQuery2.Open;
+  if not FDQuery2.IsEmpty then
+    Label2.Text := FDQuery2.FieldByName('count').AsString
+  else
+    Label2.Text := 'No data found';
+  FDQuery2.Close;
+  FDConnection1.Connected := False;
 end;
 
 procedure TForm12.FormCreate(Sender: TObject);
