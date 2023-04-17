@@ -218,7 +218,7 @@ begin
    tbProcess.Max := MediaPlayer1.Duration;
    MediaPlayer1.CurrentTime := 0;
    MediaPlayer1.Volume := ((tbVolume.Max - tbVolume.value) + tbVolume.Min)/100;
-   MediaPlayer1.Play;
+   //MediaPlayer1.Play;
   end;
 
 end;
