@@ -167,6 +167,6 @@ object Form12: TForm12
     SQL.Strings = (
       'SELECT count FROM push_count ORDER BY ID DESC LIMIT 1')
     Left = 456
-    Top = 280
+    Top = 264
   end
 end

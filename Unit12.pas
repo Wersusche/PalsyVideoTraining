@@ -50,6 +50,7 @@ type
     procedure Timer3Timer(Sender: TObject);
     procedure FDConnection1BeforeConnect(Sender: TObject);
     procedure Button2Click(Sender: TObject);
+    procedure Button3Click(Sender: TObject);
   private
     { Private declarations }
     FUpdatingTrackBar: Boolean;
@@ -61,6 +62,7 @@ type
 
   public
     { Public declarations }
+    function GenerateRandomPassword: string;
   end;
 
 var
@@ -134,6 +136,11 @@ FDQuery2.Open;
     Label2.Text := 'No data found';
   FDQuery2.Close;
   FDConnection1.Connected := False;
+end;
+
+procedure TForm12.Button3Click(Sender: TObject);
+begin
+Edit1.Text:= GenerateRandomPassword;
 end;
 
 procedure TForm12.FormCreate(Sender: TObject);
@@ -255,6 +262,19 @@ MediaPlayer1.Volume := ((tbVolume.Max - tbVolume.value) + tbVolume.Min)/100;
 end;
 
 
+
+
+function TForm12.GenerateRandomPassword: string;
+var
+  i: Integer;
+const
+  AllowedChars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
+begin
+  Randomize; // it's important to initialize the random number generator
+  Result := '';
+  for i := 1 to 8 do
+    Result := Result + AllowedChars[Random(Length(AllowedChars)) + 1];
+end;
 
 
 end.
