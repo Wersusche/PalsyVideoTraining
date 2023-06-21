@@ -12,7 +12,7 @@ uses
   FireDAC.Stan.ExprFuncs, FireDAC.Phys.SQLiteWrapper.Stat, FireDAC.FMXUI.Wait,
   Data.DB, FireDAC.Comp.Client, FMX.Edit, FireDAC.Stan.Param, FireDAC.DatS,
   FireDAC.DApt.Intf, FireDAC.DApt, FireDAC.Comp.DataSet, System.IOUtils,
-  FireDAC.Comp.UI;
+  FireDAC.Comp.UI, FireDAC.Phys.MySQL, FireDAC.Phys.MySQLDef;
 
 type
   TForm12 = class(TForm)
@@ -37,6 +37,7 @@ type
     Button2: TButton;
     Label2: TLabel;
     FDQuery2: TFDQuery;
+    FDPhysMySQLDriverLink1: TFDPhysMySQLDriverLink;
     procedure FormCreate(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
@@ -146,14 +147,24 @@ end;
 procedure TForm12.FormCreate(Sender: TObject);
 
 begin
+    // Connection settings
+    FDConnection1.DriverName := 'MySQL';
+    FDConnection1.Params.Values['Database'] := 'palsy_db';
+    FDConnection1.Params.Values['User_Name'] := 'Wersus';
+    FDConnection1.Params.Values['Password'] := '';
+    FDConnection1.Params.Values['Server'] := 'localhost';
+    FDConnection1.Connected := True;
+
+
+
 FWatchedVideosCount := 0;
 FTotalPlaybackTime := 0;
-FDConnection1.Open;
-FDQuery1.SQL.Text := 'CREATE TABLE IF NOT EXISTS push_count (id INTEGER PRIMARY KEY, count INTEGER);';
-FDQuery1.ExecSQL;
-FDQuery1.SQL.Text := 'INSERT OR IGNORE INTO push_count (id, count) VALUES (1, 0);';
-FDQuery1.ExecSQL;
-FDConnection1.Close;
+//FDConnection1.Open;
+//FDQuery1.SQL.Text := 'CREATE TABLE IF NOT EXISTS push_count (id INTEGER PRIMARY KEY, count INTEGER);';
+//FDQuery1.ExecSQL;
+//FDQuery1.SQL.Text := 'INSERT OR IGNORE INTO push_count (id, count) VALUES (1, 0);';
+//FDQuery1.ExecSQL;
+//FDConnection1.Close;
  //FillFilesList;
  ListTxtFiles;
  //(trackbar.Max - trackBar.Position) + trackBar.Min;
@@ -278,3 +289,39 @@ end;
 
 
 end.
+
+
+
+
+//
+//uses
+//  ..., System.Diagnostics;
+//
+//var
+//  Form1: TForm1;
+//  Stopwatch: TStopwatch;
+//
+//implementation
+//
+//procedure TForm1.FormCreate(Sender: TObject);
+//begin
+//  Stopwatch := TStopwatch.StartNew; // Start the stopwatch
+//  MediaPlayer1.FileName := 'YourVideoFile.mp4'; // Set your video file
+//  MediaPlayer1.Open;
+//  MediaPlayer1.Play;
+//  Timer1.Enabled := True;
+//end;
+//
+//procedure TForm1.Timer1Timer(Sender: TObject);
+//begin
+//  if Stopwatch.Elapsed.TotalSeconds >= 60 then // Check if 60 seconds have passed
+//  begin
+//    Timer1.Enabled := False; // Disable the timer
+//    MediaPlayer1.Stop;
+//  end
+//  else
+//  begin
+//    MediaPlayer1.Position := 0; // Rewind the video
+//    MediaPlayer1.Play;
+//  end;
+//end;

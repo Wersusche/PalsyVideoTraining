@@ -10,7 +10,7 @@ uses
   FireDAC.Stan.Pool, FireDAC.Stan.Async, FireDAC.Phys, FireDAC.Phys.MySQL,
   FireDAC.Phys.MySQLDef, FireDAC.FMXUI.Wait, FireDAC.Stan.Param, FireDAC.DatS,
   FireDAC.DApt.Intf, FireDAC.DApt, Data.DB, FireDAC.Comp.DataSet,
-  FireDAC.Comp.Client, System.Hash;
+  FireDAC.Comp.Client, System.Hash, System.IniFiles, System.IOUtils;
 
 type
   TLoginForm = class(TForm)
@@ -22,14 +22,22 @@ type
     FDConnection1: TFDConnection;
     FDQuery1: TFDQuery;
     FDPhysMySQLDriverLink1: TFDPhysMySQLDriverLink;
+    Button2: TButton;
     procedure Button1Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
   private
     { Private declarations }
-  public
-    { Public declarations }
-  end;
+        Path : string;
 
+      public
+    { Public declarations }
+     function ValidateCredentials(const Username, Password: string): Boolean;
+      end;
+
+  const
+  INI_FILE = 'MyApp.ini';
+  INI_SECTION = 'LastValues';
 var
   LoginForm: TLoginForm;
 
@@ -41,51 +49,59 @@ uses Unit12;
 
 procedure TLoginForm.Button1Click(Sender: TObject);
 var
-
-usernam, passwor, hashedPassword: string;
+    IniFile: TIniFile;
+LastValuelogin, LastValuepass: string;
+inifilename : string;
+Nextform : TForm12;
 
 begin
-
-usernam := UsernameEdit.Text;
-  passwor := PasswordEdit.Text;
-   hashedPassword := THashMD5.GetHashString(passwor);
-
+   inifilename := TPath.Combine(Path, 'MyApp.ini');
    try
-    FDQuery1.Connection := FDConnection1;
-    FDQuery1.SQL.Text := 'SELECT COUNT(*) FROM patients WHERE Username = :usernam AND Password = :passwor';
-    FDQuery1.ParamByName('usernam').AsString := usernam;
-    FDQuery1.ParamByName('passwor').AsString := hashedPassword;
-    FDQuery1.Open;
+   IniFile := TIniFile.Create(inifilename);
+   IniFile.WriteString(INI_SECTION, 'MyPassword', PasswordEdit.Text);
+   IniFile.WriteString(INI_SECTION, 'MyLogin', UsernameEdit.Text);
 
-    // Check result
-    if FDQuery1.Fields[0].AsInteger > 0 then
-      ShowMessage('Login successful')
-    else
-      ShowMessage('Login failed');
-   finally
-
-    FDQuery1.Free;
-    FDConnection1.Free;
+  finally
+    IniFile.Free;
    end;
 
-// // Replace 'user' and 'password' with the correct credentials.
-//  if (UsernameEdit.Text = 'user') and (PasswordEdit.Text = 'password') then
-//  begin
-//  Application.CreateForm(TForm12, Form12);
-//    //Form12.Create();
-//    Form12.Show;
-//    Self.Destroy;
-//  end
-//  else
-//  begin
-//    ShowMessage('Invalid username or password. Please try again.');
-//  end;
-end;
+  if ValidateCredentials(UsernameEdit.Text, PasswordEdit.Text) then
+  begin
+    // Credentials are valid
+    //Form12 := TForm12.Create(Application); // Assuming the main form class is TMainForm
+    Application.CreateForm(TForm12, NextForm);
+    NextForm.Show;
+   //Form12.Show;
+     Self.hide;
+  end
+  else
+  begin
+    // Invalid credentials
+    ShowMessage('Неправильный логин или пароль.');
+
+  end;
+
+
+ end;
+
+
+
+procedure TLoginForm.Button2Click(Sender: TObject);
+var
+Nextform : TForm12;
+
+begin
+   // Application.CreateForm(TForm12, NextForm);
+    NextForm.Show;
+    end;
 
 procedure TLoginForm.FormCreate(Sender: TObject);
+var
 
- begin
-
+  IniFile: TIniFile;
+  LastValuelogin, LastValuepass: string;
+  inifilename : string;
+begin
     // Connection settings
     FDConnection1.DriverName := 'MySQL';
     FDConnection1.Params.Values['Database'] := 'palsy_db';
@@ -93,7 +109,63 @@ procedure TLoginForm.FormCreate(Sender: TObject);
     FDConnection1.Params.Values['Password'] := '';
     FDConnection1.Params.Values['Server'] := 'localhost';
     FDConnection1.Connected := True;
-    // Query
+
+
+
+  Case TOSVersion.Platform of
+    TOSVersion.TPlatform.pfWindows:
+      Path := TPath.Combine('..', '..');
+    TOSVersion.TPlatform.pfMacOS:
+      Path := TPath.Combine(TPath.GetFullPath('../Resources/StartUp'), 'MyApp.ini');
+    TOSVersion.TPlatform.pfiOS, TOSVersion.TPlatform.pfAndroid:
+      Path := TPath.Combine(TPath.GetDocumentsPath, 'MyApp.ini');
+    TOSVersion.TPlatform.pfWinRT, TOSVersion.TPlatform.pfLinux:
+      raise Exception.Create('Unexpected platform');
+  end;
+
+   inifilename := TPath.Combine(Path, 'MyApp.ini');
+
+  try
+   IniFile := TIniFile.Create(inifilename);
+    LastValuepass := IniFile.ReadString(INI_SECTION, 'MyPassword', '');
+    LastValuelogin := IniFile.ReadString(INI_SECTION, 'MyLogin', '');
+    PasswordEdit.Text := LastValuepass;
+    UsernameEdit.Text := LastValuelogin;
+  finally
+    IniFile.Free;
+  end;
 
   end;
+
+
+  function TLoginForm.ValidateCredentials(const Username, Password: string): Boolean;
+var
+     hashedPassword: string;
+ // IdMD5: TIdHashMessageDigest5;
+begin
+  Result := False;
+  hashedPassword := THashMD5.GetHashString(Password);
+
+    try
+    LoginForm.FDQuery1.Connection := LoginForm.FDConnection1;
+    LoginForm.FDQuery1.SQL.Text := 'SELECT COUNT(*) FROM patients WHERE Username = :Username AND Password = :Password';
+    LoginForm.FDQuery1.ParamByName('Username').AsString := Username;
+    LoginForm.FDQuery1.ParamByName('Password').AsString := hashedPassword;
+    LoginForm.FDQuery1.Open;
+
+    // Check result
+    if LoginForm.FDQuery1.Fields[0].AsInteger > 0 then
+     begin
+      Result := true;
+      end
+
+  finally
+  //FDQuery1.Free;
+ // FDConnection1.Free;
+
+ end;
+   end;
+
+
+
 end.

@@ -97,7 +97,7 @@ object Form12: TForm12
     Size.Height = 24.000000000000000000
     Size.PlatformDefault = False
     TabOrder = 18
-    Text = 'bPlayClick'
+    Text = #1053#1072#1095#1072#1090#1100' '#1091#1087#1088#1072#1078#1085#1077#1085#1080#1077
     OnClick = bPlayClickClick
   end
   object bStopClick: TButton
@@ -142,7 +142,7 @@ object Form12: TForm12
   end
   object FDConnection1: TFDConnection
     Params.Strings = (
-      'DriverID=SQLite'
+      'DriverID=MySQL'
       'Database=.\pushcount.db')
     LoginPrompt = False
     BeforeConnect = FDConnection1BeforeConnect
@@ -168,5 +168,9 @@ object Form12: TForm12
       'SELECT count FROM push_count ORDER BY ID DESC LIMIT 1')
     Left = 456
     Top = 264
+  end
+  object FDPhysMySQLDriverLink1: TFDPhysMySQLDriverLink
+    Left = 592
+    Top = 392
   end
 end
