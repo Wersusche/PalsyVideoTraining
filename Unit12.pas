@@ -12,7 +12,7 @@ uses
   FireDAC.Stan.ExprFuncs, FireDAC.Phys.SQLiteWrapper.Stat, FireDAC.FMXUI.Wait,
   Data.DB, FireDAC.Comp.Client, FMX.Edit, FireDAC.Stan.Param, FireDAC.DatS,
   FireDAC.DApt.Intf, FireDAC.DApt, FireDAC.Comp.DataSet, System.IOUtils,
-  FireDAC.Comp.UI, FireDAC.Phys.MySQL, FireDAC.Phys.MySQLDef;
+  FireDAC.Comp.UI, FireDAC.Phys.MySQL, FireDAC.Phys.MySQLDef, System.Diagnostics;
 
 type
   TForm12 = class(TForm)
@@ -38,6 +38,11 @@ type
     Label2: TLabel;
     FDQuery2: TFDQuery;
     FDPhysMySQLDriverLink1: TFDPhysMySQLDriverLink;
+    TPlaylistItem = record;
+    VideoID: string;
+    PlaybackTime: Integer; // In seconds
+
+
     procedure FormCreate(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
@@ -52,6 +57,7 @@ type
     procedure FDConnection1BeforeConnect(Sender: TObject);
     procedure Button2Click(Sender: TObject);
     procedure Button3Click(Sender: TObject);
+
   private
     { Private declarations }
     FUpdatingTrackBar: Boolean;
@@ -68,6 +74,9 @@ type
 
 var
   Form12: TForm12;
+  Playlist: TArray<TPlaylistItem>;
+  CurrentItemIndex: Integer;
+  Stopwatch: TStopwatch;
 
 implementation
 
@@ -147,6 +156,7 @@ end;
 procedure TForm12.FormCreate(Sender: TObject);
 
 begin
+ Stopwatch := TStopwatch.Create;
     // Connection settings
     FDConnection1.DriverName := 'MySQL';
     FDConnection1.Params.Values['Database'] := 'palsy_db';
@@ -155,7 +165,28 @@ begin
     FDConnection1.Params.Values['Server'] := 'localhost';
     FDConnection1.Connected := True;
 
+    FDQuery1.Connection := FDConnection1;
+    FDQuery1.SQL.Text := 'SELECT VideoID, PlaybackTime FROM YourTable';
+    FDQuery1.Open;
 
+    // Build the playlist
+    SetLength(Playlist, FDQuery1.RecordCount);
+    while not FDQuery1.Eof do
+    begin
+      Playlist[Query.RecNo-1].VideoID := Query.FieldByName('VideoID').AsString;
+      Playlist[Query.RecNo-1].PlaybackTime := Query.FieldByName('PlaybackTime').AsInteger;
+      Query.Next;
+    end;
+
+  // Start the first video
+  CurrentItemIndex := 0;
+  MediaPlayer1.FileName := GetVideoFilePath(Playlist[CurrentItemIndex].VideoID);
+  MediaPlayer1.Open;
+  MediaPlayer1.Play;
+  Stopwatch.Start;
+  Timer1.Interval := Playlist[CurrentItemIndex].PlaybackTime * 1000; // Convert seconds to milliseconds
+  Timer1.Enabled := True;
+end;
 
 FWatchedVideosCount := 0;
 FTotalPlaybackTime := 0;
@@ -166,7 +197,13 @@ FTotalPlaybackTime := 0;
 //FDQuery1.ExecSQL;
 //FDConnection1.Close;
  //FillFilesList;
- ListTxtFiles;
+
+
+
+//------------------------ListTxtFiles;
+
+
+
  //(trackbar.Max - trackBar.Position) + trackBar.Min;
  // MediaPlayer1.Volume.MaxValue := tbVolume.Max;
  //MediaPlayer1.Volume.MinValue :=  tbVolume.Min;
@@ -174,20 +211,45 @@ FTotalPlaybackTime := 0;
  tbVolume.Value := MediaPlayer1.Volume;
 end;
 
-procedure TForm12.Timer1Timer(Sender: TObject);
+
+function TForm12.GetVideoFilePath(VideoID: string): string;
 begin
-  // Check if the video playback has ended
-  if MediaPlayer1.CurrentTime >= MediaPlayer1.Duration then
-  begin
-    // Increment the counter
-    Inc(FWatchedVideosCount);
+  // Return the full path to the video file corresponding to the given ID
+  // This depends on how your video files are organized
+end;
 
-    // Update the TLabel
-    Label1.Text := Format('Watched Videos: %d', [FWatchedVideosCount]);
 
-    // Disable the timer to prevent counting the same video multiple times
-    //Timer1.Enabled := False;
-  end;
+
+procedure TForm12.Timer1Timer(Sender: TObject);
+
+begin
+  // Stop the current video
+  MediaPlayer1.Stop;
+
+  // Move to the next video
+  Inc(CurrentItemIndex);
+  if CurrentItemIndex >= Length(Playlist) then
+    CurrentItemIndex := 0;
+
+  // Start the next video
+  MediaPlayer1.FileName := GetVideoFilePath(Playlist[CurrentItemIndex].VideoID);
+  MediaPlayer1.Open;
+  MediaPlayer1.Play;
+  Stopwatch.Restart;
+  Timer1.Interval := Playlist[CurrentItemIndex].PlaybackTime * 1000; // Convert seconds to milliseconds
+//begin
+//  // Check if the video playback has ended
+//  if MediaPlayer1.CurrentTime >= MediaPlayer1.Duration then
+//  begin
+//    // Increment the counter
+//    Inc(FWatchedVideosCount);
+//
+//    // Update the TLabel
+//    Label1.Text := Format('Watched Videos: %d', [FWatchedVideosCount]);
+//
+//    // Disable the timer to prevent counting the same video multiple times
+//    //Timer1.Enabled := False;
+//  end;
 end;
 
 procedure TForm12.Timer2Timer(Sender: TObject);

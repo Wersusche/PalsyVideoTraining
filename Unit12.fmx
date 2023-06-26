@@ -54,12 +54,14 @@ object Form12: TForm12
     TabOrder = 9
   end
   object Timer1: TTimer
+    Enabled = False
     Interval = 500
     OnTimer = Timer1Timer
     Left = 600
     Top = 224
   end
   object Timer2: TTimer
+    Enabled = False
     OnTimer = Timer2Timer
     Left = 600
     Top = 8
@@ -122,6 +124,7 @@ object Form12: TForm12
     Viewport.Height = 196.000000000000000000
   end
   object Timer3: TTimer
+    Enabled = False
     Interval = 500
     OnTimer = Timer3Timer
     Left = 592
