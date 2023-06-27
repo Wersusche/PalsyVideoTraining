@@ -2,17 +2,53 @@ inherited Form12_LgXhdpiPh: TForm12_LgXhdpiPh
   ClientHeight = 695
   ClientWidth = 450
   DesignerMasterStyle = 0
+  inherited Label1: TLabel [0]
+  end
   inherited Button1: TButton
     Anchors = [akLeft, akTop, akRight]
   end
-  inherited tbProcess: TTrackBar
-    Size.Height = 27.781738281250000000
+  inherited MediaPlayerControl1: TMediaPlayerControl [3]
   end
-  inherited tbVolume: TTrackBar
+  inherited MediaPlayer1: TMediaPlayer [4]
+  end
+  inherited LabelTotalPlaybackTime: TLabel [5]
+  end
+  inherited Timer1: TTimer [6]
+  end
+  inherited Timer2: TTimer [7]
+  end
+  inherited tbProcess: TTrackBar [8]
+    Size.Height = 26.817108154296880000
+  end
+  inherited tbVolume: TTrackBar [9]
     Size.Width = 32.000000000000000000
   end
-  inherited ListBox1: TListBox
+  inherited bPlayClick: TButton [10]
+  end
+  inherited bStopClick: TButton [11]
+  end
+  inherited ListBox1: TListBox [12]
     Viewport.Width = 200.000000000000000000
     Viewport.Height = 200.000000000000000000
+  end
+  inherited Timer3: TTimer [13]
+  end
+  inherited Button2: TButton [14]
+  end
+  inherited Label2: TLabel [15]
+  end
+  inherited Timer4: TTimer [16]
+  end
+  inherited FDConnection1: TFDConnection [17]
+  end
+  inherited FDPhysSQLiteDriverLink1: TFDPhysSQLiteDriverLink [18]
+  end
+  inherited FDQuery1: TFDQuery [19]
+  end
+  inherited FDGUIxWaitCursor1: TFDGUIxWaitCursor [20]
+  end
+  inherited FDQuery2: TFDQuery [21]
+  end
+  inherited FDPhysMySQLDriverLink1: TFDPhysMySQLDriverLink [22]
   end
 end

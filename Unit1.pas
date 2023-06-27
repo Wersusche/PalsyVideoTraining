@@ -26,6 +26,7 @@ type
     procedure Button1Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure Button2Click(Sender: TObject);
+    procedure Button3Click(Sender: TObject);
   private
     { Private declarations }
         Path : string;
@@ -72,7 +73,7 @@ begin
     Application.CreateForm(TForm12, NextForm);
     NextForm.Show;
    //Form12.Show;
-     Self.hide;
+     Self.Destroy;
   end
   else
   begin
@@ -94,6 +95,27 @@ begin
    // Application.CreateForm(TForm12, NextForm);
     NextForm.Show;
     end;
+
+procedure TLoginForm.Button3Click(Sender: TObject);
+begin
+    FDConnection1.DriverName := 'MySQL';
+    FDConnection1.Params.Values['Database'] := 'palsy_db';
+    FDConnection1.Params.Values['User_Name'] := 'Wersus';
+    FDConnection1.Params.Values['Password'] := '';
+    FDConnection1.Params.Values['Server'] := 'localhost';
+    FDConnection1.Connected := True;
+
+    FDQuery1.Connection := FDConnection1;
+    FDQuery1.SQL.Text := 'SELECT P.idPatients, A.idvideos, A.dlitelnost, V.filename ' +
+                  'FROM patients P ' +
+                  'INNER JOIN appointments A ON P.idPatients = A.idPatients ' +
+                  'INNER JOIN videos V ON A.idvideos = V.idvideos ' +
+                  'WHERE P.Username = :UserName';
+      FDQuery1.ParamByName('UserName').AsString := 'Boris'; // Replace UserName with the actual user name
+      FDQuery1.Open;
+  ShowMessage(FDQuery1.FieldByName('filename').AsString);
+
+end;
 
 procedure TLoginForm.FormCreate(Sender: TObject);
 var

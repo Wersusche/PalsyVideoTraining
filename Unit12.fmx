@@ -8,15 +8,17 @@ object Form12: TForm12
   FormFactor.Height = 480
   FormFactor.Devices = [Desktop]
   OnCreate = FormCreate
+  OnClose = FormClose
+  OnDestroy = FormDestroy
   DesignerMasterStyle = 0
-  object Label1: TLabel
-    Position.X = 36.000000000000000000
-    Position.Y = 368.000000000000000000
+  object MediaPlayerControl1: TMediaPlayerControl
     Size.Width = 349.000000000000000000
-    Size.Height = 17.000000000000000000
+    Size.Height = 161.000000000000000000
     Size.PlatformDefault = False
-    Text = 'Label1'
-    TabOrder = 0
+    Align = Scale
+    MediaPlayer = MediaPlayer1
+    Position.X = 36.000000000000000000
+    Position.Y = 38.000000000000000000
   end
   object Button1: TButton
     Position.X = 528.000000000000000000
@@ -30,15 +32,6 @@ object Form12: TForm12
     TabOrder = 2
     Position.X = 368.000000000000000000
     Position.Y = 415.000000000000000000
-  end
-  object MediaPlayerControl1: TMediaPlayerControl
-    Size.Width = 349.000000000000000000
-    Size.Height = 161.000000000000000000
-    Size.PlatformDefault = False
-    Align = Scale
-    MediaPlayer = MediaPlayer1
-    Position.X = 36.000000000000000000
-    Position.Y = 38.000000000000000000
   end
   object MediaPlayer1: TMediaPlayer
     Left = 600
@@ -55,7 +48,6 @@ object Form12: TForm12
   end
   object Timer1: TTimer
     Enabled = False
-    Interval = 500
     OnTimer = Timer1Timer
     Left = 600
     Top = 224
@@ -143,6 +135,15 @@ object Form12: TForm12
     Text = 'Label2'
     TabOrder = 30
   end
+  object Label1: TLabel
+    Position.X = 28.000000000000000000
+    Position.Y = 368.000000000000000000
+    Size.Width = 220.000000000000000000
+    Size.Height = 39.000000000000000000
+    Size.PlatformDefault = False
+    Text = 'Label1'
+    TabOrder = 0
+  end
   object FDConnection1: TFDConnection
     Params.Strings = (
       'DriverID=MySQL'
@@ -175,5 +176,10 @@ object Form12: TForm12
   object FDPhysMySQLDriverLink1: TFDPhysMySQLDriverLink
     Left = 592
     Top = 392
+  end
+  object Timer4: TTimer
+    OnTimer = Timer4Timer
+    Left = 472
+    Top = 416
   end
 end

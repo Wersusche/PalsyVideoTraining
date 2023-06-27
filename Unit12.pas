@@ -38,11 +38,7 @@ type
     Label2: TLabel;
     FDQuery2: TFDQuery;
     FDPhysMySQLDriverLink1: TFDPhysMySQLDriverLink;
-    TPlaylistItem = record;
-    VideoID: string;
-    PlaybackTime: Integer; // In seconds
-
-
+    Timer4: TTimer;
     procedure FormCreate(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
@@ -57,6 +53,10 @@ type
     procedure FDConnection1BeforeConnect(Sender: TObject);
     procedure Button2Click(Sender: TObject);
     procedure Button3Click(Sender: TObject);
+    procedure Timer4Timer(Sender: TObject);
+    procedure Timer5Timer(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormDestroy(Sender: TObject);
 
   private
     { Private declarations }
@@ -70,6 +70,14 @@ type
   public
     { Public declarations }
     function GenerateRandomPassword: string;
+    function GetVideoFilePath(VideoID: string): string;
+  end;
+
+ type
+  TPlaylistItem = record
+    VideoID: string;
+    PlaybackTime: Integer; // In seconds
+    Videoname: string;
   end;
 
 var
@@ -153,7 +161,14 @@ begin
 Edit1.Text:= GenerateRandomPassword;
 end;
 
+procedure TForm12.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+mediaplayer1.Stop;
+end;
+
 procedure TForm12.FormCreate(Sender: TObject);
+var
+  Item: TPlaylistItem;
 
 begin
  Stopwatch := TStopwatch.Create;
@@ -163,30 +178,42 @@ begin
     FDConnection1.Params.Values['User_Name'] := 'Wersus';
     FDConnection1.Params.Values['Password'] := '';
     FDConnection1.Params.Values['Server'] := 'localhost';
+    FDConnection1.Params.Values['CharacterSet'] := 'utf8mb4'; // or 'utf8mb4';
     FDConnection1.Connected := True;
 
     FDQuery1.Connection := FDConnection1;
-    FDQuery1.SQL.Text := 'SELECT VideoID, PlaybackTime FROM YourTable';
-    FDQuery1.Open;
-
+    FDQuery1.SQL.Text := 'SELECT P.idPatients, A.idvideos, A.dlitelnost, V.filename, V.video_name ' +
+                  'FROM patients P ' +
+                  'INNER JOIN appointments A ON P.idPatients = A.idPatients ' +
+                  'INNER JOIN videos V ON A.idvideos = V.idvideos ' +
+                  'WHERE P.Username = :UserName';
+      FDQuery1.ParamByName('UserName').AsString := 'Boris'; // Replace UserName with the actual user name
+      FDQuery1.Open;
+      label2.Text := FDQuery1.FieldByName('video_name').AsString;
     // Build the playlist
     SetLength(Playlist, FDQuery1.RecordCount);
     while not FDQuery1.Eof do
     begin
-      Playlist[Query.RecNo-1].VideoID := Query.FieldByName('VideoID').AsString;
-      Playlist[Query.RecNo-1].PlaybackTime := Query.FieldByName('PlaybackTime').AsInteger;
-      Query.Next;
+      Playlist[FDQuery1.RecNo-1].VideoID := FDQuery1.FieldByName('filename').AsString;
+      Playlist[FDQuery1.RecNo-1].PlaybackTime := FDQuery1.FieldByName('dlitelnost').AsInteger;
+      Playlist[FDQuery1.RecNo-1].Videoname := FDQuery1.FieldByName('video_name').AsString;
+      FDQuery1.Next;
     end;
+
+    for var I := 0 to High(Playlist) do
+  begin
+    Item := Playlist[I];
+    ListBox1.Items.Add(Format('Упражнение: %s, Время: %d сек', [Item.Videoname, Item.PlaybackTime]));
+  end;
 
   // Start the first video
   CurrentItemIndex := 0;
   MediaPlayer1.FileName := GetVideoFilePath(Playlist[CurrentItemIndex].VideoID);
-  MediaPlayer1.Open;
+  //MediaPlayer1.Open;
   MediaPlayer1.Play;
   Stopwatch.Start;
-  Timer1.Interval := Playlist[CurrentItemIndex].PlaybackTime * 1000; // Convert seconds to milliseconds
+  Timer1.Interval := 1000; // Convert seconds to milliseconds
   Timer1.Enabled := True;
-end;
 
 FWatchedVideosCount := 0;
 FTotalPlaybackTime := 0;
@@ -212,31 +239,72 @@ FTotalPlaybackTime := 0;
 end;
 
 
-function TForm12.GetVideoFilePath(VideoID: string): string;
+procedure TForm12.FormDestroy(Sender: TObject);
 begin
-  // Return the full path to the video file corresponding to the given ID
-  // This depends on how your video files are organized
+mediaplayer1.Stop;
+end;
+
+function TForm12.GetVideoFilePath(VideoID: string): string;
+const
+  VideoFolder = 'C:\path\to\your\videos'; // Replace with the actual path
+  VideoExtension = '.mp4'; // Replace with the actual extension if different
+
+begin
+  case TOSVersion.Platform of
+    TOSVersion.TPlatform.pfWindows:
+      Path := '..\..\Videos\';
+    TOSVersion.TPlatform.pfMacOS:
+      Path := TPath.GetFullPath('../Resources/StartUp');
+    TOSVersion.TPlatform.pfiOS, TOSVersion.TPlatform.pfAndroid:
+      Path := TPath.GetDocumentsPath;
+    TOSVersion.TPlatform.pfWinRT, TOSVersion.TPlatform.pfLinux:
+      raise Exception.Create('Unexpected platform');
+  end;
+  Result := TPath.Combine(Path, VideoID + VideoExtension);
+end;
+
+procedure TForm12.Timer1Timer(Sender: TObject);
+  label
+  nextvd;
+
+begin
+    if Stopwatch.Elapsed.TotalSeconds >= Playlist[CurrentItemIndex].PlaybackTime  then
+    goto nextvd;
+    if (MediaPlayer1.CurrentTime >= MediaPlayer1.Duration)   then
+    if Stopwatch.Elapsed.TotalSeconds < Playlist[CurrentItemIndex].PlaybackTime then
+      begin
+      MediaPlayer1.CurrentTime := 0;
+      MediaPlayer1.Play;
+    end
+
+    else
+begin
+  // Stop the current video
+   nextvd:
+  MediaPlayer1.Stop;
+   // Move to the next video
+  Inc(CurrentItemIndex);
+  if CurrentItemIndex >= Length(Playlist) then
+    begin
+    CurrentItemIndex := 0;
+    MediaPlayer1.Stop;
+    Timer1.Enabled:= False;
+    Stopwatch.Stop;
+    ShowMessage('Ты молодец! На сегодня всё!');
+    end
+else
+begin
+   // Start the next video
+  MediaPlayer1.FileName := GetVideoFilePath(Playlist[CurrentItemIndex].VideoID);
+ // MediaPlayer1.Open;
+  MediaPlayer1.Play;
+  Stopwatch.reset;
+  Stopwatch.Start;
+end;
+  //Timer1.Interval := Playlist[CurrentItemIndex].PlaybackTime * 1000; // Convert seconds to milliseconds
 end;
 
 
-
-procedure TForm12.Timer1Timer(Sender: TObject);
-
-begin
-  // Stop the current video
-  MediaPlayer1.Stop;
-
-  // Move to the next video
-  Inc(CurrentItemIndex);
-  if CurrentItemIndex >= Length(Playlist) then
-    CurrentItemIndex := 0;
-
-  // Start the next video
-  MediaPlayer1.FileName := GetVideoFilePath(Playlist[CurrentItemIndex].VideoID);
-  MediaPlayer1.Open;
-  MediaPlayer1.Play;
-  Stopwatch.Restart;
-  Timer1.Interval := Playlist[CurrentItemIndex].PlaybackTime * 1000; // Convert seconds to milliseconds
 //begin
 //  // Check if the video playback has ended
 //  if MediaPlayer1.CurrentTime >= MediaPlayer1.Duration then
@@ -266,10 +334,6 @@ end;
 procedure TForm12.Timer3Timer(Sender: TObject);
 begin
 
-//     if tbProcess.Max <> MediaPlayer1.Duration then
-//    tbProcess.Max := MediaPlayer1.Duration;
-//  if tbProcess.Value <> MediaPlayer1.CurrentTime then
-//    tbProcess.Value := MediaPlayer1.CurrentTime;
 
  if Assigned(MediaPlayer1.Media) and (MediaPlayer1.State = TMediaState.Playing) then
   begin
@@ -303,6 +367,23 @@ begin
 
 end;
 
+procedure TForm12.Timer4Timer(Sender: TObject);
+  var
+  RemainingTime: Integer;
+begin
+  // Calculate the remaining time in seconds
+  RemainingTime := Round(Playlist[CurrentItemIndex].PlaybackTime - Stopwatch.Elapsed.TotalSeconds);
+  // Update the label
+  Label1.Text := Format('Remaining time: %d sec', [RemainingTime]);
+end;
+
+procedure TForm12.Timer5Timer(Sender: TObject);
+begin
+//if MediaPlayer1.CurrentTime >= MediaPlayer1.Duration then
+//MediaPlayer1.CurrentTime:=0;
+//MediaPlayer1.Play;
+end;
+
 procedure TForm12.FDConnection1BeforeConnect(Sender: TObject);
 begin
   {$IF DEFINED(iOS) or DEFINED(ANDROID)}
@@ -315,7 +396,7 @@ procedure TForm12.ListBox1ItemClick(const Sender: TCustomListBox;
   const Item: TListBoxItem);
 begin
   //MediaPlayer1.Stop;
-  MediaPlayer1.FileName := TPath.Combine(Path, Item.Text);
+ // MediaPlayer1.FileName := TPath.Combine(Path, Item.Text);
 
   //tbVolume.Value:= MediaPlayer1.Volume*100;
 end;
