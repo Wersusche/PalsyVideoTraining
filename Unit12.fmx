@@ -2,8 +2,8 @@ object Form12: TForm12
   Left = 0
   Top = 0
   Caption = 'Z'
-  ClientHeight = 480
-  ClientWidth = 640
+  ClientHeight = 613
+  ClientWidth = 928
   FormFactor.Width = 320
   FormFactor.Height = 480
   FormFactor.Devices = [Desktop]
@@ -11,31 +11,11 @@ object Form12: TForm12
   OnClose = FormClose
   OnDestroy = FormDestroy
   DesignerMasterStyle = 0
-  object MediaPlayerControl1: TMediaPlayerControl
-    Size.Width = 349.000000000000000000
-    Size.Height = 161.000000000000000000
-    Size.PlatformDefault = False
-    Align = Scale
-    MediaPlayer = MediaPlayer1
-    Position.X = 36.000000000000000000
-    Position.Y = 38.000000000000000000
-  end
-  object Button1: TButton
-    Position.X = 528.000000000000000000
-    Position.Y = 435.000000000000000000
-    TabOrder = 1
-    Text = 'Button1'
-    OnClick = Button1Click
-  end
   object Edit1: TEdit
     Touch.InteractiveGestures = [LongTap, DoubleTap]
-    TabOrder = 2
+    TabOrder = 1
     Position.X = 368.000000000000000000
     Position.Y = 415.000000000000000000
-  end
-  object MediaPlayer1: TMediaPlayer
-    Left = 600
-    Top = 160
   end
   object LabelTotalPlaybackTime: TLabel
     Position.X = 159.000000000000000000
@@ -44,7 +24,7 @@ object Form12: TForm12
     Size.Height = 33.000000000000000000
     Size.PlatformDefault = False
     Text = 'LabelTotalPlaybackTime'
-    TabOrder = 9
+    TabOrder = 8
   end
   object Timer1: TTimer
     Enabled = False
@@ -62,58 +42,25 @@ object Form12: TForm12
     Align = Scale
     CanParentFocus = True
     Orientation = Horizontal
-    Position.X = 36.000000000000000000
-    Position.Y = 280.000000000000000000
-    Size.Width = 349.000000000000000000
+    Position.X = 52.200000762939450000
+    Position.Y = 357.583343505859400000
+    Size.Width = 506.050109863281300000
     Size.Height = 19.000000000000000000
     Size.PlatformDefault = False
-    TabOrder = 16
+    TabOrder = 15
     OnChange = tbProcessChange
   end
   object tbVolume: TTrackBar
     Align = Scale
     CanParentFocus = True
     Orientation = Vertical
-    Position.X = 400.000000000000000000
-    Position.Y = 38.000000000000000000
+    Position.X = 76.000000000000000000
+    Position.Y = 399.000000000000000000
     Size.Width = 19.000000000000000000
-    Size.Height = 161.000000000000000000
+    Size.Height = 205.000000000000000000
     Size.PlatformDefault = False
-    TabOrder = 17
+    TabOrder = 16
     OnChange = tbVolumeChange
-  end
-  object bPlayClick: TButton
-    Align = Scale
-    Anchors = [akLeft, akTop]
-    Position.X = 464.000000000000000000
-    Position.Y = 328.000000000000000000
-    Size.Width = 80.000000000000000000
-    Size.Height = 24.000000000000000000
-    Size.PlatformDefault = False
-    TabOrder = 18
-    Text = #1053#1072#1095#1072#1090#1100' '#1091#1087#1088#1072#1078#1085#1077#1085#1080#1077
-    OnClick = bPlayClickClick
-  end
-  object bStopClick: TButton
-    Align = Scale
-    Position.X = 464.000000000000000000
-    Position.Y = 368.000000000000000000
-    TabOrder = 19
-    Text = 'bStopClick'
-    OnClick = bStopClickClick
-  end
-  object ListBox1: TListBox
-    Align = Scale
-    Position.X = 427.000000000000000000
-    Position.Y = 38.000000000000000000
-    TabOrder = 20
-    DisableFocusEffect = True
-    DefaultItemStyles.ItemStyle = ''
-    DefaultItemStyles.GroupHeaderStyle = ''
-    DefaultItemStyles.GroupFooterStyle = ''
-    OnItemClick = ListBox1ItemClick
-    Viewport.Width = 196.000000000000000000
-    Viewport.Height = 196.000000000000000000
   end
   object Timer3: TTimer
     Enabled = False
@@ -122,18 +69,11 @@ object Form12: TForm12
     Left = 592
     Top = 288
   end
-  object Button2: TButton
-    Position.X = 304.000000000000000000
-    Position.Y = 360.000000000000000000
-    TabOrder = 29
-    Text = 'Button2'
-    OnClick = Button2Click
-  end
   object Label2: TLabel
     Position.X = 136.000000000000000000
     Position.Y = 328.000000000000000000
     Text = 'Label2'
-    TabOrder = 30
+    TabOrder = 25
   end
   object Label1: TLabel
     Position.X = 28.000000000000000000
@@ -143,6 +83,101 @@ object Form12: TForm12
     Size.PlatformDefault = False
     Text = 'Label1'
     TabOrder = 0
+  end
+  object Timer4: TTimer
+    OnTimer = Timer4Timer
+    Left = 472
+    Top = 416
+  end
+  object Layoutvideo: TLayout
+    Align = Client
+    Size.Width = 704.000000000000000000
+    Size.Height = 512.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 37
+    object MediaPlayer1: TMediaPlayer
+      Left = 600
+      Top = 160
+    end
+    object MediaPlayerControl1: TMediaPlayerControl
+      Size.Width = 704.000000000000000000
+      Size.Height = 512.000000000000000000
+      Size.PlatformDefault = False
+      Align = Client
+      MediaPlayer = MediaPlayer1
+    end
+  end
+  object Layoutitems: TLayout
+    Align = Right
+    Position.X = 704.000000000000000000
+    Size.Width = 224.000000000000000000
+    Size.Height = 512.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 38
+    object ListBox1: TListBox
+      Align = Client
+      Size.Width = 224.000000000000000000
+      Size.Height = 257.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 20
+      DisableFocusEffect = True
+      DefaultItemStyles.ItemStyle = ''
+      DefaultItemStyles.GroupHeaderStyle = ''
+      DefaultItemStyles.GroupFooterStyle = ''
+      OnItemClick = ListBox1ItemClick
+      Viewport.Width = 220.000000000000000000
+      Viewport.Height = 253.000000000000000000
+    end
+    object Layout2: TLayout
+      Align = Bottom
+      Position.Y = 257.000000000000000000
+      Size.Width = 224.000000000000000000
+      Size.Height = 255.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 21
+    end
+  end
+  object Layout1: TLayout
+    Align = Bottom
+    Position.Y = 512.000000000000000000
+    Size.Width = 928.000000000000000000
+    Size.Height = 101.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 40
+    object Button2: TButton
+      Position.X = 312.000000000000000000
+      Position.Y = 23.000000000000000000
+      TabOrder = 27
+      Text = 'Button2'
+      OnClick = Button2Click
+    end
+    object Button1: TButton
+      Position.X = 208.000000000000000000
+      Position.Y = 23.000000000000000000
+      TabOrder = 1
+      Text = 'Button1'
+      OnClick = Button1Click
+    end
+    object bStopClick: TButton
+      Position.X = 727.636413574218800000
+      Position.Y = 8.000000000000000000
+      Size.Width = 166.090881347656300000
+      Size.Height = 31.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 19
+      Text = 'bStopClick'
+      OnClick = bStopClickClick
+    end
+    object bPlayClick: TButton
+      Position.X = 503.000000000000000000
+      Position.Y = 24.000000000000000000
+      Size.Width = 166.000000000000000000
+      Size.Height = 33.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 18
+      Text = #1053#1072#1095#1072#1090#1100' '#1091#1087#1088#1072#1078#1085#1077#1085#1080#1077
+      OnClick = bPlayClickClick
+    end
   end
   object FDConnection1: TFDConnection
     Params.Strings = (
@@ -176,10 +211,5 @@ object Form12: TForm12
   object FDPhysMySQLDriverLink1: TFDPhysMySQLDriverLink
     Left = 592
     Top = 392
-  end
-  object Timer4: TTimer
-    OnTimer = Timer4Timer
-    Left = 472
-    Top = 416
   end
 end

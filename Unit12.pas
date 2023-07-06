@@ -39,6 +39,10 @@ type
     FDQuery2: TFDQuery;
     FDPhysMySQLDriverLink1: TFDPhysMySQLDriverLink;
     Timer4: TTimer;
+    Layoutvideo: TLayout;
+    Layoutitems: TLayout;
+    Layout1: TLayout;
+    Layout2: TLayout;
     procedure FormCreate(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
@@ -64,7 +68,7 @@ type
      Path: string;
     FWatchedVideosCount: Integer;
     FTotalPlaybackTime: Double; // In seconds
-
+    Pusername : string;
     procedure ListTxtFiles;
 
   public
@@ -89,6 +93,8 @@ var
 implementation
 
 {$R *.fmx}
+
+uses Unit1;
 {$R *.LgXhdpiPh.fmx ANDROID}
 
 procedure TForm12.ListTxtFiles;
@@ -171,6 +177,7 @@ var
   Item: TPlaylistItem;
 
 begin
+Pusername :=LoginForm.Pusername;
  Stopwatch := TStopwatch.Create;
     // Connection settings
     FDConnection1.DriverName := 'MySQL';
@@ -187,7 +194,7 @@ begin
                   'INNER JOIN appointments A ON P.idPatients = A.idPatients ' +
                   'INNER JOIN videos V ON A.idvideos = V.idvideos ' +
                   'WHERE P.Username = :UserName';
-      FDQuery1.ParamByName('UserName').AsString := 'Boris'; // Replace UserName with the actual user name
+      FDQuery1.ParamByName('UserName').AsString := Pusername; // Replace UserName with the actual user name
       FDQuery1.Open;
       label2.Text := FDQuery1.FieldByName('video_name').AsString;
     // Build the playlist
@@ -205,7 +212,7 @@ begin
     Item := Playlist[I];
     ListBox1.Items.Add(Format('Упражнение: %s, Время: %d сек', [Item.Videoname, Item.PlaybackTime]));
   end;
-
+ //----------------------------------------------------------------------------------------------------------
   // Start the first video
   CurrentItemIndex := 0;
   MediaPlayer1.FileName := GetVideoFilePath(Playlist[CurrentItemIndex].VideoID);

@@ -33,7 +33,9 @@ type
 
       public
     { Public declarations }
+         Pusername : string;
      function ValidateCredentials(const Username, Password: string): Boolean;
+
       end;
 
   const
@@ -70,9 +72,10 @@ begin
   begin
     // Credentials are valid
     //Form12 := TForm12.Create(Application); // Assuming the main form class is TMainForm
+    Pusername := UsernameEdit.Text;
     Application.CreateForm(TForm12, NextForm);
     NextForm.Show;
-   //Form12.Show;
+    //Form12.Show;
      Self.Destroy;
   end
   else
