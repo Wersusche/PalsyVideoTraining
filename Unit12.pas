@@ -23,12 +23,11 @@ type
     FDPhysSQLiteDriverLink1: TFDPhysSQLiteDriverLink;
     FDQuery1: TFDQuery;
     MediaPlayer1: TMediaPlayer;
-    MediaPlayerControl1: TMediaPlayerControl;
+    Z: TMediaPlayerControl;
     Timer1: TTimer;
     Timer2: TTimer;
     LabelTotalPlaybackTime: TLabel;
     tbVolume: TTrackBar;
-    tbProcess: TTrackBar;
     bPlayClick: TButton;
     bStopClick: TButton;
     ListBox1: TListBox;
@@ -51,7 +50,6 @@ type
     procedure bStopClickClick(Sender: TObject);
     procedure ListBox1ItemClick(const Sender: TCustomListBox;
       const Item: TListBoxItem);
-    procedure tbProcessChange(Sender: TObject);
     procedure tbVolumeChange(Sender: TObject);
     procedure Timer3Timer(Sender: TObject);
     procedure FDConnection1BeforeConnect(Sender: TObject);
@@ -129,13 +127,37 @@ end;
 
 procedure TForm12.bPlayClickClick(Sender: TObject);
 begin
- MediaPlayer1.Volume := ((tbVolume.Max - tbVolume.value) + tbVolume.Min)/100;
- MediaPlayer1.Play;
+  if bPlayClick.Text = 'Начать упражнение' then
+  begin
+   // Start the first video
+  CurrentItemIndex := 0;
+  MediaPlayer1.FileName := GetVideoFilePath(Playlist[CurrentItemIndex].VideoID);
+  //MediaPlayer1.Open;
+  MediaPlayer1.Play;
+  Stopwatch.Start;
+  Timer1.Interval := 100; // Convert seconds to milliseconds
+  Timer1.Enabled := True;
+
+FWatchedVideosCount := 0;
+FTotalPlaybackTime := 0;
+  MediaPlayer1.Volume:=100;
+ tbVolume.Value := MediaPlayer1.Volume;
+ bPlayClick.Text := 'Продолжить упражнение'
+ end
+ else if bPlayClick.Text = 'Продолжить упражнение' then
+ begin
+  MediaPlayer1.Play;
+  Stopwatch.Start;
+  end
+ //MediaPlayer1.Volume := ((tbVolume.Max - tbVolume.value) + tbVolume.Min)/100;
+ //MediaPlayer1.Play;
 end;
 
 procedure TForm12.bStopClickClick(Sender: TObject);
 begin
+Stopwatch.Stop;
 MediaPlayer1.Stop;
+bPlayClick.Text := 'Продолжить упражнение'
 end;
 
 procedure TForm12.Button1Click(Sender: TObject);
@@ -169,7 +191,12 @@ end;
 
 procedure TForm12.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
-mediaplayer1.Stop;
+timer1.Enabled := False;
+timer2.Enabled := False;
+timer3.Enabled := False;
+timer4.Enabled := False;
+Mediaplayer1.Stop;
+Application.Terminate;
 end;
 
 procedure TForm12.FormCreate(Sender: TObject);
@@ -178,13 +205,13 @@ var
 
 begin
 Pusername :=LoginForm.Pusername;
- Stopwatch := TStopwatch.Create;
+Stopwatch := TStopwatch.Create;
     // Connection settings
     FDConnection1.DriverName := 'MySQL';
     FDConnection1.Params.Values['Database'] := 'palsy_db';
-    FDConnection1.Params.Values['User_Name'] := 'Wersus';
-    FDConnection1.Params.Values['Password'] := '';
-    FDConnection1.Params.Values['Server'] := 'localhost';
+    FDConnection1.Params.Values['User_Name'] := 'wersusche';
+    FDConnection1.Params.Values['Password'] := 'tyjer1987';
+    FDConnection1.Params.Values['Server'] := 'db4free.net';
     FDConnection1.Params.Values['CharacterSet'] := 'utf8mb4'; // or 'utf8mb4';
     FDConnection1.Connected := True;
 
@@ -213,42 +240,14 @@ Pusername :=LoginForm.Pusername;
     ListBox1.Items.Add(Format('Упражнение: %s, Время: %d сек', [Item.Videoname, Item.PlaybackTime]));
   end;
  //----------------------------------------------------------------------------------------------------------
-  // Start the first video
-  CurrentItemIndex := 0;
-  MediaPlayer1.FileName := GetVideoFilePath(Playlist[CurrentItemIndex].VideoID);
-  //MediaPlayer1.Open;
-  MediaPlayer1.Play;
-  Stopwatch.Start;
-  Timer1.Interval := 1000; // Convert seconds to milliseconds
-  Timer1.Enabled := True;
 
-FWatchedVideosCount := 0;
-FTotalPlaybackTime := 0;
-//FDConnection1.Open;
-//FDQuery1.SQL.Text := 'CREATE TABLE IF NOT EXISTS push_count (id INTEGER PRIMARY KEY, count INTEGER);';
-//FDQuery1.ExecSQL;
-//FDQuery1.SQL.Text := 'INSERT OR IGNORE INTO push_count (id, count) VALUES (1, 0);';
-//FDQuery1.ExecSQL;
-//FDConnection1.Close;
- //FillFilesList;
-
-
-
-//------------------------ListTxtFiles;
-
-
-
- //(trackbar.Max - trackBar.Position) + trackBar.Min;
- // MediaPlayer1.Volume.MaxValue := tbVolume.Max;
- //MediaPlayer1.Volume.MinValue :=  tbVolume.Min;
-  MediaPlayer1.Volume:=100;
- tbVolume.Value := MediaPlayer1.Volume;
 end;
 
 
 procedure TForm12.FormDestroy(Sender: TObject);
 begin
 mediaplayer1.Stop;
+Application.Terminate;
 end;
 
 function TForm12.GetVideoFilePath(VideoID: string): string;
@@ -342,19 +341,7 @@ procedure TForm12.Timer3Timer(Sender: TObject);
 begin
 
 
- if Assigned(MediaPlayer1.Media) and (MediaPlayer1.State = TMediaState.Playing) then
-  begin
-  if tbProcess.Max <> MediaPlayer1.Duration then
-  tbProcess.Max := MediaPlayer1.Duration;
-   FUpdatingTrackBar := True;
-    try
-    tbProcess.Value := MediaPlayer1.CurrentTime;
-   finally
-    FUpdatingTrackBar := False;
-  end;
-  end;
-
-  if (MediaPlayer1.Media = nil) or ((MediaPlayer1.State = TMediaState.Stopped) and (MediaPlayer1.CurrentTime >= MediaPlayer1.Duration)) then
+   if (MediaPlayer1.Media = nil) or ((MediaPlayer1.State = TMediaState.Stopped) and (MediaPlayer1.CurrentTime >= MediaPlayer1.Duration)) then
   begin
   if ListBox1.Items.Count > 0 then
   begin
@@ -366,8 +353,7 @@ begin
   end;
 
    MediaPlayer1.FileName :=  TPath.Combine(Path, ListBox1.Items.Strings[ListBox1.ItemIndex]);
-   tbProcess.Max := MediaPlayer1.Duration;
-   MediaPlayer1.CurrentTime := 0;
+    MediaPlayer1.CurrentTime := 0;
    MediaPlayer1.Volume := ((tbVolume.Max - tbVolume.value) + tbVolume.Min)/100;
    //MediaPlayer1.Play;
   end;
@@ -408,18 +394,11 @@ begin
   //tbVolume.Value:= MediaPlayer1.Volume*100;
 end;
 
-procedure TForm12.tbProcessChange(Sender: TObject);
-begin
-if not FUpdatingTrackBar then
-begin
-  //MediaPlayer1.Stop;
-  MediaPlayer1.CurrentTime :=  Round(tbProcess.Value);
- end;
-end;
+
 
 procedure TForm12.tbVolumeChange(Sender: TObject);
 begin
-MediaPlayer1.Volume := ((tbVolume.Max - tbVolume.value) + tbVolume.Min)/100;
+MediaPlayer1.Volume := ((tbVolume.Max - tbVolume.value) + tbVolume.Min)/50;
 end;
 
 

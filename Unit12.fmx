@@ -38,51 +38,12 @@ object Form12: TForm12
     Left = 600
     Top = 8
   end
-  object tbProcess: TTrackBar
-    Align = Scale
-    CanParentFocus = True
-    Orientation = Horizontal
-    Position.X = 52.200000762939450000
-    Position.Y = 357.583343505859400000
-    Size.Width = 506.050109863281300000
-    Size.Height = 19.000000000000000000
-    Size.PlatformDefault = False
-    TabOrder = 15
-    OnChange = tbProcessChange
-  end
-  object tbVolume: TTrackBar
-    Align = Scale
-    CanParentFocus = True
-    Orientation = Vertical
-    Position.X = 76.000000000000000000
-    Position.Y = 399.000000000000000000
-    Size.Width = 19.000000000000000000
-    Size.Height = 205.000000000000000000
-    Size.PlatformDefault = False
-    TabOrder = 16
-    OnChange = tbVolumeChange
-  end
   object Timer3: TTimer
     Enabled = False
     Interval = 500
     OnTimer = Timer3Timer
     Left = 592
     Top = 288
-  end
-  object Label2: TLabel
-    Position.X = 136.000000000000000000
-    Position.Y = 328.000000000000000000
-    Text = 'Label2'
-    TabOrder = 25
-  end
-  object Label1: TLabel
-    Position.X = 28.000000000000000000
-    Position.Y = 368.000000000000000000
-    Size.Width = 220.000000000000000000
-    Size.Height = 39.000000000000000000
-    Size.PlatformDefault = False
-    Text = 'Label1'
-    TabOrder = 0
   end
   object Timer4: TTimer
     OnTimer = Timer4Timer
@@ -94,12 +55,12 @@ object Form12: TForm12
     Size.Width = 704.000000000000000000
     Size.Height = 512.000000000000000000
     Size.PlatformDefault = False
-    TabOrder = 37
+    TabOrder = 36
     object MediaPlayer1: TMediaPlayer
       Left = 600
       Top = 160
     end
-    object MediaPlayerControl1: TMediaPlayerControl
+    object Z: TMediaPlayerControl
       Size.Width = 704.000000000000000000
       Size.Height = 512.000000000000000000
       Size.PlatformDefault = False
@@ -113,7 +74,7 @@ object Form12: TForm12
     Size.Width = 224.000000000000000000
     Size.Height = 512.000000000000000000
     Size.PlatformDefault = False
-    TabOrder = 38
+    TabOrder = 37
     object ListBox1: TListBox
       Align = Client
       Size.Width = 224.000000000000000000
@@ -143,7 +104,7 @@ object Form12: TForm12
     Size.Width = 928.000000000000000000
     Size.Height = 101.000000000000000000
     Size.PlatformDefault = False
-    TabOrder = 40
+    TabOrder = 39
     object Button2: TButton
       Position.X = 312.000000000000000000
       Position.Y = 23.000000000000000000
@@ -159,13 +120,13 @@ object Form12: TForm12
       OnClick = Button1Click
     end
     object bStopClick: TButton
-      Position.X = 727.636413574218800000
-      Position.Y = 8.000000000000000000
-      Size.Width = 166.090881347656300000
+      Position.X = 704.000000000000000000
+      Position.Y = 24.000000000000000000
+      Size.Width = 166.000000000000000000
       Size.Height = 31.000000000000000000
       Size.PlatformDefault = False
       TabOrder = 19
-      Text = 'bStopClick'
+      Text = #1054#1089#1090#1072#1085#1086#1074#1080#1090#1100' '#1091#1087#1088#1072#1078#1085#1077#1085#1080#1077
       OnClick = bStopClickClick
     end
     object bPlayClick: TButton
@@ -178,6 +139,33 @@ object Form12: TForm12
       Text = #1053#1072#1095#1072#1090#1100' '#1091#1087#1088#1072#1078#1085#1077#1085#1080#1077
       OnClick = bPlayClickClick
     end
+  end
+  object Label2: TLabel
+    Position.X = 750.000000000000000000
+    Position.Y = 296.000000000000000000
+    Text = 'Label2'
+    TabOrder = 24
+  end
+  object Label1: TLabel
+    Position.X = 712.000000000000000000
+    Position.Y = 344.000000000000000000
+    Size.Width = 220.000000000000000000
+    Size.Height = 39.000000000000000000
+    Size.PlatformDefault = False
+    Text = 'Label1'
+    TabOrder = 0
+  end
+  object tbVolume: TTrackBar
+    Align = Scale
+    CanParentFocus = True
+    Orientation = Vertical
+    Position.X = 892.000000000000000000
+    Position.Y = 391.000000000000000000
+    Size.Width = 19.000000000000000000
+    Size.Height = 205.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 15
+    OnChange = tbVolumeChange
   end
   object FDConnection1: TFDConnection
     Params.Strings = (

@@ -103,9 +103,9 @@ procedure TLoginForm.Button3Click(Sender: TObject);
 begin
     FDConnection1.DriverName := 'MySQL';
     FDConnection1.Params.Values['Database'] := 'palsy_db';
-    FDConnection1.Params.Values['User_Name'] := 'Wersus';
-    FDConnection1.Params.Values['Password'] := '';
-    FDConnection1.Params.Values['Server'] := 'localhost';
+    FDConnection1.Params.Values['User_Name'] := 'wersusche';
+    FDConnection1.Params.Values['Password'] := 'tyjer1987';
+    FDConnection1.Params.Values['Server'] := 'db4free.net';
     FDConnection1.Connected := True;
 
     FDQuery1.Connection := FDConnection1;
@@ -130,9 +130,9 @@ begin
     // Connection settings
     FDConnection1.DriverName := 'MySQL';
     FDConnection1.Params.Values['Database'] := 'palsy_db';
-    FDConnection1.Params.Values['User_Name'] := 'Wersus';
-    FDConnection1.Params.Values['Password'] := '';
-    FDConnection1.Params.Values['Server'] := 'localhost';
+    FDConnection1.Params.Values['User_Name'] := 'wersusche';
+    FDConnection1.Params.Values['Password'] := 'tyjer1987';
+    FDConnection1.Params.Values['Server'] := 'db4free.net';
     FDConnection1.Connected := True;
 
 
