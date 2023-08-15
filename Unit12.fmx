@@ -1,7 +1,7 @@
 object Form12: TForm12
   Left = 0
   Top = 0
-  Caption = 'Z'
+  Caption = #1054#1082#1085#1086' '#1091#1087#1088#1072#1078#1085#1077#1085#1080#1081
   ClientHeight = 613
   ClientWidth = 928
   FormFactor.Width = 320
@@ -46,6 +46,7 @@ object Form12: TForm12
     Top = 288
   end
   object Timer4: TTimer
+    Enabled = False
     OnTimer = Timer4Timer
     Left = 472
     Top = 416
@@ -60,7 +61,7 @@ object Form12: TForm12
       Left = 600
       Top = 160
     end
-    object Z: TMediaPlayerControl
+    object MediaplayerControl: TMediaPlayerControl
       Size.Width = 704.000000000000000000
       Size.Height = 512.000000000000000000
       Size.PlatformDefault = False
@@ -120,6 +121,7 @@ object Form12: TForm12
       OnClick = Button1Click
     end
     object bStopClick: TButton
+      Enabled = False
       Position.X = 704.000000000000000000
       Position.Y = 24.000000000000000000
       Size.Width = 166.000000000000000000
@@ -130,6 +132,7 @@ object Form12: TForm12
       OnClick = bStopClickClick
     end
     object bPlayClick: TButton
+      Enabled = False
       Position.X = 503.000000000000000000
       Position.Y = 24.000000000000000000
       Size.Width = 166.000000000000000000
@@ -199,5 +202,10 @@ object Form12: TForm12
   object FDPhysMySQLDriverLink1: TFDPhysMySQLDriverLink
     Left = 592
     Top = 392
+  end
+  object FDQuery3: TFDQuery
+    Connection = FDConnection1
+    Left = 488
+    Top = 208
   end
 end

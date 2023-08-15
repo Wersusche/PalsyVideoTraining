@@ -23,7 +23,7 @@ type
     FDPhysSQLiteDriverLink1: TFDPhysSQLiteDriverLink;
     FDQuery1: TFDQuery;
     MediaPlayer1: TMediaPlayer;
-    Z: TMediaPlayerControl;
+    MediaplayerControl: TMediaPlayerControl;
     Timer1: TTimer;
     Timer2: TTimer;
     LabelTotalPlaybackTime: TLabel;
@@ -42,6 +42,7 @@ type
     Layoutitems: TLayout;
     Layout1: TLayout;
     Layout2: TLayout;
+    FDQuery3: TFDQuery;
     procedure FormCreate(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
@@ -202,6 +203,7 @@ end;
 procedure TForm12.FormCreate(Sender: TObject);
 var
   Item: TPlaylistItem;
+  Count: Integer;
 
 begin
 Pusername :=LoginForm.Pusername;
@@ -214,17 +216,20 @@ Stopwatch := TStopwatch.Create;
     FDConnection1.Params.Values['Server'] := 'db4free.net';
     FDConnection1.Params.Values['CharacterSet'] := 'utf8mb4'; // or 'utf8mb4';
     FDConnection1.Connected := True;
-
     FDQuery1.Connection := FDConnection1;
     FDQuery1.SQL.Text := 'SELECT P.idPatients, A.idvideos, A.dlitelnost, V.filename, V.video_name ' +
                   'FROM patients P ' +
                   'INNER JOIN appointments A ON P.idPatients = A.idPatients ' +
                   'INNER JOIN videos V ON A.idvideos = V.idvideos ' +
-                  'WHERE P.Username = :UserName';
+                  'WHERE P.Username = :UserName AND CURDATE() BETWEEN A.Starttime AND A.Endtime';
       FDQuery1.ParamByName('UserName').AsString := Pusername; // Replace UserName with the actual user name
       FDQuery1.Open;
       label2.Text := FDQuery1.FieldByName('video_name').AsString;
+     Count := FDQuery1.Fields[0].AsInteger;
     // Build the playlist
+
+    if FDQuery1.RecordCount > 0 then
+    begin
     SetLength(Playlist, FDQuery1.RecordCount);
     while not FDQuery1.Eof do
     begin
@@ -239,8 +244,15 @@ Stopwatch := TStopwatch.Create;
     Item := Playlist[I];
     ListBox1.Items.Add(Format('Упражнение: %s, Время: %d сек', [Item.Videoname, Item.PlaybackTime]));
   end;
- //----------------------------------------------------------------------------------------------------------
-
+  FDQuery1.Free;
+ bplayclick.Enabled:=true;
+ bstopclick.Enabled:=true;
+ Timer4.Enabled := true;
+    end
+    else
+   begin
+   ShowMessage('Кажется у тебя сегодня не запланировано упражнений! Если нужно позаниматься - попробуй позвонить своему врачу!');
+   end;
 end;
 
 
@@ -296,8 +308,22 @@ begin
     MediaPlayer1.Stop;
     Timer1.Enabled:= False;
     Stopwatch.Stop;
+    FDQuery3.Connection := FDConnection1;
+    FDQuery3.SQL.Text := 'UPDATE appointments A ' +
+                     'INNER JOIN patients P ON P.idPatients = A.idPatients ' +
+                     'INNER JOIN videos V ON A.idvideos = V.idvideos ' +
+                     'SET A.sdelanovden = A.sdelanovden + 1, A.sdelanovsego = A.sdelanovsego + 1, A.lastsession = NOW()' +
+                     'WHERE P.Username = :UserName AND CURDATE() BETWEEN A.Starttime AND A.Endtime';
+    FDQuery3.ParamByName('UserName').AsString := Pusername; // Replace UserName with the actual user name
+    FDQuery3.ExecSQL;
     ShowMessage('Ты молодец! На сегодня всё!');
-    end
+ timer1.Enabled := false;
+  timer2.Enabled := false;
+   timer3.Enabled := false;
+    timer4.Enabled := false;
+ bplayclick.Enabled:=false;
+ bstopclick.Enabled:=false;
+   end
 else
 begin
    // Start the next video
