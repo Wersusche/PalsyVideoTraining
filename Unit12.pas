@@ -16,24 +16,18 @@ uses
 
 type
   TForm12 = class(TForm)
-    Label1: TLabel;
-    Button1: TButton;
-    Edit1: TEdit;
     FDConnection1: TFDConnection;
     FDPhysSQLiteDriverLink1: TFDPhysSQLiteDriverLink;
     FDQuery1: TFDQuery;
     MediaPlayer1: TMediaPlayer;
     MediaplayerControl: TMediaPlayerControl;
     Timer1: TTimer;
-    Timer2: TTimer;
-    LabelTotalPlaybackTime: TLabel;
     tbVolume: TTrackBar;
     bPlayClick: TButton;
     bStopClick: TButton;
     ListBox1: TListBox;
     Timer3: TTimer;
     FDGUIxWaitCursor1: TFDGUIxWaitCursor;
-    Button2: TButton;
     Label2: TLabel;
     FDQuery2: TFDQuery;
     FDPhysMySQLDriverLink1: TFDPhysMySQLDriverLink;
@@ -43,10 +37,11 @@ type
     Layout1: TLayout;
     Layout2: TLayout;
     FDQuery3: TFDQuery;
+    Edit1: TEdit;
+    Button3: TButton;
+    ListBoxGroupHeader1: TListBoxGroupHeader;
     procedure FormCreate(Sender: TObject);
-    procedure Button1Click(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
-    procedure Timer2Timer(Sender: TObject);
     procedure bPlayClickClick(Sender: TObject);
     procedure bStopClickClick(Sender: TObject);
     procedure ListBox1ItemClick(const Sender: TCustomListBox;
@@ -68,6 +63,8 @@ type
     FWatchedVideosCount: Integer;
     FTotalPlaybackTime: Double; // In seconds
     Pusername : string;
+    Fullexercisetime: TTime;
+    Hour1, Min1, Sec1, MSec1: Word;
     procedure ListTxtFiles;
 
   public
@@ -138,7 +135,8 @@ begin
   Stopwatch.Start;
   Timer1.Interval := 100; // Convert seconds to milliseconds
   Timer1.Enabled := True;
-
+  Timer4.Interval := 1000;
+  Timer4.Enabled := true;
 FWatchedVideosCount := 0;
 FTotalPlaybackTime := 0;
   MediaPlayer1.Volume:=100;
@@ -149,6 +147,7 @@ FTotalPlaybackTime := 0;
  begin
   MediaPlayer1.Play;
   Stopwatch.Start;
+   Timer4.Enabled := true;
   end
  //MediaPlayer1.Volume := ((tbVolume.Max - tbVolume.value) + tbVolume.Min)/100;
  //MediaPlayer1.Play;
@@ -157,20 +156,9 @@ end;
 procedure TForm12.bStopClickClick(Sender: TObject);
 begin
 Stopwatch.Stop;
+Timer4.Enabled := false;
 MediaPlayer1.Stop;
 bPlayClick.Text := 'Продолжить упражнение'
-end;
-
-procedure TForm12.Button1Click(Sender: TObject);
-begin
-FDConnection1.Open;
-FDQuery1.SQL.Text := 'UPDATE push_count SET count = count + 1 WHERE id = 1;';
-FDQuery1.ExecSQL;
-FDQuery1.SQL.Text := 'SELECT count FROM push_count WHERE id = 1;';
-FDQuery1.Open;
-Edit1.Text := FDQuery1.FieldByName('count').AsString;
-FDQuery1.Close;
-FDConnection1.Close;
 end;
 
 procedure TForm12.Button2Click(Sender: TObject);
@@ -193,7 +181,7 @@ end;
 procedure TForm12.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
 timer1.Enabled := False;
-timer2.Enabled := False;
+
 timer3.Enabled := False;
 timer4.Enabled := False;
 Mediaplayer1.Stop;
@@ -206,10 +194,11 @@ var
   DateQuery: TFDQuery;
   DateTimesessionFromDB, NowfromDB: TDateTime;
   Hour, Min, Sec, MSec: Word;
-  
+  //Fullexercisetime: TTime;
 begin
 Pusername :=LoginForm.Pusername;
 Stopwatch := TStopwatch.Create;
+Fullexercisetime := 0;
     // Connection settings
     FDConnection1.DriverName := 'MySQL';
     FDConnection1.Params.Values['Database'] := 'palsy_db';
@@ -247,13 +236,17 @@ if FDQuery1.RecordCount > 0 then
     for var I := 0 to High(Playlist) do
   begin
     Item := Playlist[I];
+    Fullexercisetime := Fullexercisetime + Item.PlaybackTime;
     DecodeTime(Item.PlaybackTime, Hour, Min, Sec, MSec);
     ListBox1.Items.Add(Format('Упражнение: %s, Время: %d мин %d сек', [Item.Videoname, Min, Sec]));
+  ListBox1.ListItems[ListBox1.Items.Count-1].WordWrap:=true;
   end;
   FDQuery1.Free;
  bplayclick.Enabled:=true;
  bstopclick.Enabled:=true;
- Timer4.Enabled := true;
+  DecodeTime(Fullexercisetime, Hour1, Min1, Sec1, MSec1);
+ label2.Text := Format('Общее оставшееся время занятия: %d мин %d сек', [Min1, Sec1]);
+
   end
   else
   begin
@@ -320,12 +313,12 @@ var
   nextvd;
       
 begin
-  DecodeTime(T, Hour, Min, Sec, MSec);
+  DecodeTime(Playlist[CurrentItemIndex].PlaybackTime, Hour, Min, Sec, MSec);
   TimeInSeconds := Min * 60 + Sec;
-    if Stopwatch.Elapsed.TotalSeconds >= Playlist[CurrentItemIndex].PlaybackTime  then
+    if Stopwatch.Elapsed.TotalSeconds >= TimeInSeconds  then
     goto nextvd;
     if (MediaPlayer1.CurrentTime >= MediaPlayer1.Duration)   then
-    if Stopwatch.Elapsed.TotalSeconds < Playlist[CurrentItemIndex].PlaybackTime then
+    if Stopwatch.Elapsed.TotalSeconds < TimeInSeconds  then
       begin
       MediaPlayer1.CurrentTime := 0;
       MediaPlayer1.Play;
@@ -354,7 +347,7 @@ begin
     FDQuery3.ExecSQL;
     ShowMessage('Ты молодец! Занятие окончено!');
  timer1.Enabled := false;
-  timer2.Enabled := false;
+
    timer3.Enabled := false;
     timer4.Enabled := false;
  bplayclick.Enabled:=false;
@@ -369,35 +362,11 @@ begin
   Stopwatch.reset;
   Stopwatch.Start;
 end;
-  //Timer1.Interval := Playlist[CurrentItemIndex].PlaybackTime * 1000; // Convert seconds to milliseconds
-end;
-
-
-//begin
-//  // Check if the video playback has ended
-//  if MediaPlayer1.CurrentTime >= MediaPlayer1.Duration then
-//  begin
-//    // Increment the counter
-//    Inc(FWatchedVideosCount);
-//
-//    // Update the TLabel
-//    Label1.Text := Format('Watched Videos: %d', [FWatchedVideosCount]);
-//
-//    // Disable the timer to prevent counting the same video multiple times
-//    //Timer1.Enabled := False;
-//  end;
-end;
-
-procedure TForm12.Timer2Timer(Sender: TObject);
-begin
-// Update the total playback time only if the video is playing
-  if MediaPlayer1.State = TMediaState.Playing then
-  begin
-    FTotalPlaybackTime := FTotalPlaybackTime + (Timer1.Interval / 500);
-  end;
-  LabelTotalPlaybackTime.Text := Format('Total Playback Time: %.1f s', [FTotalPlaybackTime]);
 
 end;
+
+end;
+
 
 procedure TForm12.Timer3Timer(Sender: TObject);
 begin
@@ -424,12 +393,20 @@ end;
 
 procedure TForm12.Timer4Timer(Sender: TObject);
   var
-  RemainingTime: Integer;
+  RemainingTime: Int64;
+
 begin
   // Calculate the remaining time in seconds
-  RemainingTime := Round(Playlist[CurrentItemIndex].PlaybackTime - Stopwatch.Elapsed.TotalSeconds);
+ // RemainingTime := Round(Playlist[CurrentItemIndex].PlaybackTime - Stopwatch.Elapsed.TotalSeconds);
   // Update the label
-  Label1.Text := Format('Remaining time: %d sec', [RemainingTime]);
+ RemainingTime :=  Min1 * 60 + Sec1;
+ Dec(RemainingTime);
+ Min1 := RemainingTime div 60;
+ Sec1 := RemainingTime mod 60;
+ label2.Text := Format('Общее оставшееся время занятия: %d мин %d сек', [Min1, Sec1]);
+ if RemainingTime <=0 then
+ timer4.Enabled := false;
+
 end;
 
 procedure TForm12.Timer5Timer(Sender: TObject);

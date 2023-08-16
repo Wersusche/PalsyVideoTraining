@@ -22,7 +22,6 @@ type
     FDConnection1: TFDConnection;
     FDQuery1: TFDQuery;
     FDPhysMySQLDriverLink1: TFDPhysMySQLDriverLink;
-    Button2: TButton;
     procedure Button1Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure Button2Click(Sender: TObject);
