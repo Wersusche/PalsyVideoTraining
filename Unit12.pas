@@ -3,7 +3,7 @@ unit Unit12;
 interface
 
 uses
-  System.SysUtils, System.Types, System.UITypes, System.Classes,
+  System.SysUtils, System.Types, System.UITypes, System.Classes, System.DateUtils,
   System.Variants, FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs, FMX.TabControl,
   FMX.Media, FMX.Objects,FMX.Controls.Presentation, FMX.StdCtrls, FMX.Layouts, FMX.ListBox,
   FireDAC.Stan.Intf, FireDAC.Stan.Option, FireDAC.Stan.Error, FireDAC.UI.Intf,
@@ -79,7 +79,7 @@ type
  type
   TPlaylistItem = record
     VideoID: string;
-    PlaybackTime: Integer; // In seconds
+    PlaybackTime: TTime; // In seconds
     Videoname: string;
   end;
 
@@ -203,8 +203,10 @@ end;
 procedure TForm12.FormCreate(Sender: TObject);
 var
   Item: TPlaylistItem;
-  Count: Integer;
-
+  DateQuery: TFDQuery;
+  DateTimesessionFromDB, NowfromDB: TDateTime;
+  Hour, Min, Sec, MSec: Word;
+  
 begin
 Pusername :=LoginForm.Pusername;
 Stopwatch := TStopwatch.Create;
@@ -217,24 +219,27 @@ Stopwatch := TStopwatch.Create;
     FDConnection1.Params.Values['CharacterSet'] := 'utf8mb4'; // or 'utf8mb4';
     FDConnection1.Connected := True;
     FDQuery1.Connection := FDConnection1;
-    FDQuery1.SQL.Text := 'SELECT P.idPatients, A.idvideos, A.dlitelnost, V.filename, V.video_name ' +
+    FDQuery1.SQL.Text := 'SELECT P.idPatients, A.idvideos, A.dlitelnost, A.Lastsession, V.filename, V.video_name, NOW() ' +
                   'FROM patients P ' +
                   'INNER JOIN appointments A ON P.idPatients = A.idPatients ' +
                   'INNER JOIN videos V ON A.idvideos = V.idvideos ' +
-                  'WHERE P.Username = :UserName AND CURDATE() BETWEEN A.Starttime AND A.Endtime';
+                  'WHERE P.Username = :UserName AND CURDATE() BETWEEN A.Starttime AND A.Endtime AND A.sdelanovden < A.kolvden';
       FDQuery1.ParamByName('UserName').AsString := Pusername; // Replace UserName with the actual user name
       FDQuery1.Open;
-      label2.Text := FDQuery1.FieldByName('video_name').AsString;
-     Count := FDQuery1.Fields[0].AsInteger;
-    // Build the playlist
+      label2.Text := FDQuery1.FieldByName('Lastsession').AsString;
+      DateTimesessionFromDB := FDQuery1.FieldByName('Lastsession').AsDateTime;
+      NowfromDB := FDQuery1.FieldByName('NOW()').AsDateTime;
+       // Build the playlist
 
-    if FDQuery1.RecordCount > 0 then
-    begin
+if FDQuery1.RecordCount > 0 then
+ begin
+ if (HoursBetween(DateTimesessionFromDB, NowfromDB)) >= 0 then
+  begin
     SetLength(Playlist, FDQuery1.RecordCount);
     while not FDQuery1.Eof do
     begin
       Playlist[FDQuery1.RecNo-1].VideoID := FDQuery1.FieldByName('filename').AsString;
-      Playlist[FDQuery1.RecNo-1].PlaybackTime := FDQuery1.FieldByName('dlitelnost').AsInteger;
+      Playlist[FDQuery1.RecNo-1].PlaybackTime := FDQuery1.FieldByName('dlitelnost').AsDateTime;
       Playlist[FDQuery1.RecNo-1].Videoname := FDQuery1.FieldByName('video_name').AsString;
       FDQuery1.Next;
     end;
@@ -242,17 +247,43 @@ Stopwatch := TStopwatch.Create;
     for var I := 0 to High(Playlist) do
   begin
     Item := Playlist[I];
-    ListBox1.Items.Add(Format('Упражнение: %s, Время: %d сек', [Item.Videoname, Item.PlaybackTime]));
+    DecodeTime(Item.PlaybackTime, Hour, Min, Sec, MSec);
+    ListBox1.Items.Add(Format('Упражнение: %s, Время: %d мин %d сек', [Item.Videoname, Min, Sec]));
   end;
   FDQuery1.Free;
  bplayclick.Enabled:=true;
  bstopclick.Enabled:=true;
  Timer4.Enabled := true;
+  end
+  else
+  begin
+   ShowMessage('Кажется прошло меньше 1 часа между занятиями! Жду тебя чуть позже!');
+   Application.Terminate;
+  end;
     end
     else
    begin
-   ShowMessage('Кажется у тебя сегодня не запланировано упражнений! Если нужно позаниматься - попробуй позвонить своему врачу!');
-   end;
+  DateQuery := TFDQuery.Create(nil);
+    DateQuery.Connection := FDConnection1;
+       DateQuery.SQL.Text := 'SELECT P.idPatients, A.idvideos, A.dlitelnost, V.filename, V.video_name ' +
+                  'FROM patients P ' +
+                  'INNER JOIN appointments A ON P.idPatients = A.idPatients ' +
+                  'INNER JOIN videos V ON A.idvideos = V.idvideos ' +
+                  'WHERE P.Username = :UserName AND CURDATE() BETWEEN A.Starttime AND A.Endtime';
+      DateQuery.ParamByName('UserName').AsString := Pusername; // Replace UserName with the actual user name
+      DateQuery.Open;
+            
+      if DateQuery.IsEmpty then
+      begin
+   ShowMessage('Кажется у тебя сегодня не запланировано упражнений! Если считаешь, что нужно позаниматься - попробуй позвонить своему врачу!');
+   Application.Terminate;
+      end
+     else
+     begin
+   ShowMessage('Кажется ты сегодня сделал все нужные упражнения! Возвращайся завтра!');
+   Application.Terminate;
+     end;
+    end;
 end;
 
 
@@ -282,10 +313,15 @@ begin
 end;
 
 procedure TForm12.Timer1Timer(Sender: TObject);
+var
+  Hour, Min, Sec, MSec: Word;
+  TimeInSeconds: double;
   label
   nextvd;
-
+      
 begin
+  DecodeTime(T, Hour, Min, Sec, MSec);
+  TimeInSeconds := Min * 60 + Sec;
     if Stopwatch.Elapsed.TotalSeconds >= Playlist[CurrentItemIndex].PlaybackTime  then
     goto nextvd;
     if (MediaPlayer1.CurrentTime >= MediaPlayer1.Duration)   then
@@ -294,7 +330,7 @@ begin
       MediaPlayer1.CurrentTime := 0;
       MediaPlayer1.Play;
     end
-
+    
     else
 begin
   // Stop the current video
@@ -312,11 +348,11 @@ begin
     FDQuery3.SQL.Text := 'UPDATE appointments A ' +
                      'INNER JOIN patients P ON P.idPatients = A.idPatients ' +
                      'INNER JOIN videos V ON A.idvideos = V.idvideos ' +
-                     'SET A.sdelanovden = A.sdelanovden + 1, A.sdelanovsego = A.sdelanovsego + 1, A.lastsession = NOW()' +
-                     'WHERE P.Username = :UserName AND CURDATE() BETWEEN A.Starttime AND A.Endtime';
+                     'SET A.sdelanovden = A.sdelanovden + 1, A.sdelanovsego = A.sdelanovsego + 1, A.lastsession = UTC_TIMESTAMP()' +
+                     'WHERE P.Username = :UserName AND CURDATE() BETWEEN A.Starttime AND A.Endtime AND A.sdelanovden < A.kolvden';
     FDQuery3.ParamByName('UserName').AsString := Pusername; // Replace UserName with the actual user name
     FDQuery3.ExecSQL;
-    ShowMessage('Ты молодец! На сегодня всё!');
+    ShowMessage('Ты молодец! Занятие окончено!');
  timer1.Enabled := false;
   timer2.Enabled := false;
    timer3.Enabled := false;

@@ -20,6 +20,7 @@ type
     Edit1: TEdit;
     Button1: TButton;
     procedure Button1Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
   private
     { Private declarations }
   public
@@ -39,6 +40,16 @@ begin
   FDQuery1.Params.ParamByName('NumberValue').AsInteger := StrToInt(Edit1.Text);
   FDQuery1.ExecSQL;
   FDConnection1.Connected := False;
+end;
+
+procedure TForm13.FormCreate(Sender: TObject);
+begin
+ FDConnection1.DriverName := 'MySQL';
+    FDConnection1.Params.Values['Database'] := 'palsy_db';
+    FDConnection1.Params.Values['User_Name'] := 'wersusche';
+    FDConnection1.Params.Values['Password'] := 'tyjer1987';
+    FDConnection1.Params.Values['Server'] := 'db4free.net';
+    FDConnection1.Params.Values['CharacterSet'] := 'utf8mb4'
 end;
 
 end.
