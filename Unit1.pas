@@ -164,7 +164,7 @@ begin
 
   function TLoginForm.ValidateCredentials(const Username, Password: string): Boolean;
 var
-     hashedPassword: string;
+ hashedPassword: string;
  // IdMD5: TIdHashMessageDigest5;
 begin
   Result := False;

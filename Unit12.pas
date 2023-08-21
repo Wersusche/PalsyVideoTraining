@@ -222,7 +222,7 @@ Fullexercisetime := 0;
 
 if FDQuery1.RecordCount > 0 then
  begin
- if (HoursBetween(DateTimesessionFromDB, NowfromDB)) >= 0 then
+ if (HoursBetween(DateTimesessionFromDB, NowfromDB)) >= 1 then
   begin
     SetLength(Playlist, FDQuery1.RecordCount);
     while not FDQuery1.Eof do

@@ -9,37 +9,196 @@ object Form13: TForm13
   FormFactor.Devices = [Desktop]
   OnCreate = FormCreate
   DesignerMasterStyle = 0
-  object Edit1: TEdit
-    Touch.InteractiveGestures = [LongTap, DoubleTap]
-    TabOrder = 2
-    Position.X = 280.000000000000000000
-    Position.Y = 160.000000000000000000
-  end
-  object Button1: TButton
-    Position.X = 464.000000000000000000
-    Position.Y = 160.000000000000000000
-    TabOrder = 3
-    Text = 'Button1'
-    OnClick = Button1Click
+  object TabControl1: TTabControl
+    Align = Client
+    Size.Width = 640.000000000000000000
+    Size.Height = 480.000000000000000000
+    Size.PlatformDefault = False
+    TabIndex = 0
+    TabOrder = 4
+    TabPosition = PlatformDefault
+    Sizes = (
+      640s
+      454s
+      640s
+      454s
+      640s
+      454s)
+    object Tab_overview: TTabItem
+      CustomIcon = <
+        item
+        end>
+      IsSelected = True
+      Size.Width = 118.000000000000000000
+      Size.Height = 26.000000000000000000
+      Size.PlatformDefault = False
+      StyleLookup = ''
+      TabOrder = 0
+      Text = #1054#1073#1079#1086#1088' '#1087#1072#1094#1080#1077#1085#1090#1086#1074
+      ExplicitSize.cx = 118.000000000000000000
+      ExplicitSize.cy = 26.000000000000000000
+      object ListView1: TListView
+        ItemAppearanceClassName = 'TListItemAppearance'
+        ItemEditAppearanceClassName = 'TListItemDeleteAppearance'
+        HeaderAppearanceClassName = 'TListHeaderObjects'
+        FooterAppearanceClassName = 'TListHeaderObjects'
+        Position.X = 16.000000000000000000
+        Position.Y = 38.000000000000000000
+        Size.Width = 505.000000000000000000
+        Size.Height = 211.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 0
+        SearchVisible = True
+      end
+    end
+    object TabItem3: TTabItem
+      CustomIcon = <
+        item
+        end>
+      IsSelected = False
+      Size.Width = 69.000000000000000000
+      Size.Height = 26.000000000000000000
+      Size.PlatformDefault = False
+      StyleLookup = ''
+      TabOrder = 0
+      Text = 'TabItem3'
+      ExplicitSize.cx = 69.000000000000000000
+      ExplicitSize.cy = 26.000000000000000000
+    end
+    object Tab_newpatient: TTabItem
+      CustomIcon = <
+        item
+        end>
+      IsSelected = False
+      Size.Width = 107.000000000000000000
+      Size.Height = 26.000000000000000000
+      Size.PlatformDefault = False
+      StyleLookup = ''
+      TabOrder = 0
+      Text = #1053#1086#1074#1099#1081' '#1087#1072#1094#1080#1077#1085#1090
+      ExplicitSize.cx = 107.000000000000000000
+      ExplicitSize.cy = 26.000000000000000000
+      object Button1: TButton
+        Position.X = 416.000000000000000000
+        Position.Y = 318.000000000000000000
+        Size.Width = 185.000000000000000000
+        Size.Height = 35.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 0
+        Text = #1042#1085#1077#1089#1090#1080' '#1087#1086#1083#1100#1079#1086#1074#1072#1090#1077#1083#1103
+        OnClick = Button1Click
+      end
+      object GroupBox1: TGroupBox
+        Position.X = 40.000000000000000000
+        Position.Y = 181.000000000000000000
+        Size.Width = 401.000000000000000000
+        Size.Height = 100.000000000000000000
+        Size.PlatformDefault = False
+        Text = #1059#1095#1077#1090#1085#1099#1077' '#1076#1072#1085#1085#1099#1077
+        TabOrder = 2
+        object enterLogin: TEdit
+          Touch.InteractiveGestures = [LongTap, DoubleTap]
+          TabOrder = 1
+          Position.X = 16.000000000000000000
+          Position.Y = 30.000000000000000000
+          Size.Width = 169.000000000000000000
+          Size.Height = 22.000000000000000000
+          Size.PlatformDefault = False
+          TextPrompt = #1042#1074#1077#1076#1080#1090#1077' '#1083#1086#1075#1080#1085
+          OnTyping = enterLoginTyping
+          object EnterPassword: TEdit
+            Touch.InteractiveGestures = [LongTap, DoubleTap]
+            TabOrder = 1
+            Position.Y = 32.000000000000000000
+            Size.Width = 169.000000000000000000
+            Size.Height = 22.000000000000000000
+            Size.PlatformDefault = False
+            TextPrompt = #1042#1074#1077#1076#1080#1090#1077' '#1087#1072#1088#1086#1083#1100
+            OnTyping = EnterPasswordTyping
+          end
+        end
+        object CheckBox1: TCheckBox
+          IsChecked = True
+          Position.X = 193.000000000000000000
+          Position.Y = 32.000000000000000000
+          Size.Width = 200.000000000000000000
+          Size.Height = 19.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 38
+          Text = #1057#1075#1077#1085#1077#1088#1080#1088#1086#1074#1072#1090#1100' '#1072#1074#1090#1086#1084#1072#1090#1080#1095#1077#1089#1082#1080
+        end
+      end
+      object GroupBox2: TGroupBox
+        Position.X = 40.000000000000000000
+        Position.Y = 30.000000000000000000
+        Size.Width = 385.000000000000000000
+        Size.Height = 131.000000000000000000
+        Size.PlatformDefault = False
+        Text = #1051#1080#1095#1085#1099#1077' '#1076#1072#1085#1085#1099#1077
+        TabOrder = 1
+        object enterSurname: TEdit
+          Touch.InteractiveGestures = [LongTap, DoubleTap]
+          TabOrder = 36
+          Position.X = 16.000000000000000000
+          Position.Y = 30.000000000000000000
+          TextPrompt = #1060#1072#1084#1080#1083#1080#1103
+          object enterName: TEdit
+            Touch.InteractiveGestures = [LongTap, DoubleTap]
+            TabOrder = 1
+            Position.X = 120.000000000000000000
+            TextPrompt = #1048#1084#1103
+            object enterName2: TEdit
+              Touch.InteractiveGestures = [LongTap, DoubleTap]
+              TabOrder = 1
+              Position.X = 120.000000000000000000
+              Size.Width = 113.000000000000000000
+              Size.Height = 22.000000000000000000
+              Size.PlatformDefault = False
+              TextPrompt = #1054#1090#1095#1077#1089#1090#1074#1086' - '#1086#1087#1094#1080#1103
+            end
+          end
+        end
+        object DateEdit1: TDateEdit
+          Date = 45159.000000000000000000
+          Position.X = 16.000000000000000000
+          Position.Y = 78.000000000000000000
+          TabOrder = 38
+        end
+      end
+    end
   end
   object FDConnection1: TFDConnection
     Params.Strings = (
       'DriverID=SQLite'
       'Database=.\pushcount.db')
     LoginPrompt = False
-    Left = 40
-    Top = 40
+    Left = 520
+    Top = 424
   end
   object FDQuery1: TFDQuery
     Connection = FDConnection1
     SQL.Strings = (
       'INSERT INTO push_count (count) VALUES (:NumberValue)')
-    Left = 136
-    Top = 40
+    Left = 592
+    Top = 432
     ParamData = <
       item
         Name = 'NUMBERVALUE'
         ParamType = ptInput
       end>
+  end
+  object FDPhysMySQLDriverLink1: TFDPhysMySQLDriverLink
+    Left = 424
+    Top = 424
+  end
+  object FDQuery2: TFDQuery
+    Connection = FDConnection1
+    Left = 360
+    Top = 408
+  end
+  object FDQuery3: TFDQuery
+    Connection = FDConnection1
+    Left = 288
+    Top = 408
   end
 end
