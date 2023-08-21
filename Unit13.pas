@@ -37,10 +37,12 @@ type
     FDQuery2: TFDQuery;
     CheckBox1: TCheckBox;
     FDQuery3: TFDQuery;
+    Edit1: TEdit;
     procedure FormCreate(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure enterLoginTyping(Sender: TObject);
     procedure EnterPasswordTyping(Sender: TObject);
+    procedure ListView1DblClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -100,6 +102,7 @@ Newusername : string;
     FDQuery2.ExecSQL;
    finally
     FDQuery2.Close;
+   ShowMessage('ќб€зательно передайте пациенту учетные данные!')
    end;
 
   end
@@ -128,6 +131,7 @@ Newusername : string;
     FDQuery2.ExecSQL;
         finally
     FDQuery2.Close;
+    ShowMessage('ќб€зательно передайте пациенту учетные данные!')
         end;
       end;
     end;
@@ -135,9 +139,10 @@ Newusername : string;
 
 
 procedure TForm13.FormCreate(Sender: TObject);
+var
+ LItem: TListItem;
 begin
-  ListView1.Items.Clear;
-
+ ListView1.ItemAppearanceObjects.ItemObjects.Accessory.Visible := False;
  FDConnection1.DriverName := 'MySQL';
     FDConnection1.Params.Values['Database'] := 'palsy_db';
     FDConnection1.Params.Values['User_Name'] := 'wersusche';
@@ -146,20 +151,23 @@ begin
     FDConnection1.Params.Values['CharacterSet'] := 'utf8mb4';
         // Connection settings
 
-FDQuery1.SQL.Text := 'SELECT Name, Surname FROM patients';
+FDQuery1.SQL.Text := 'SELECT Name, Surname, idPatients FROM patients';
 FDQuery1.Open;
+
+ListView1.Items.BeginUpdate;
+ListView1.Items.Clear;
 while not FDQuery1.Eof do
 begin
   with ListView1.Items.Add do
   begin
    Text := FDQuery1.FieldByName('Surname').AsString + ' ' +
             FDQuery1.FieldByName('Name').AsString;
-   Detail:= FDQuery1.FieldByName('Surname').AsString;
-
+   Tag := FDQuery1.FieldByName('idPatients').AsInteger;
   end;
   FDQuery1.Next;
 end;
-
+ListView1.Items.EndUpdate;
+FDQuery1.Close;
 end;
 
 
@@ -265,4 +273,34 @@ begin
     Result := BaseUserName + IntToStr(Counter);
   end;
 end;
+
+procedure TForm13.ListView1DblClick(Sender: TObject);
+  var
+  SelectedID: Integer;
+begin
+  // Check if an item is selected
+  if Assigned(ListView1.Selected) then
+  begin
+    // Get the ID stored in the selected item's Tag property
+    SelectedID := ListView1.Selected.Tag;
+
+    // Fetch the details based on the selected ID
+    FDQuery1.Close;
+    FDQuery1.SQL.Text := 'SELECT Birthdate FROM patients WHERE idPatients = :ID';
+    FDQuery1.ParamByName('ID').AsInteger := SelectedID;
+    FDQuery1.Open;
+    try
+      if not FDQuery1.Eof then
+      begin
+        // Assuming column_name_1 should go to Edit1 and column_name_2 to Edit2
+        Edit1.Text := FDQuery1.FieldByName('Birthdate').AsString;
+
+      end;
+    finally
+      FDQuery1.Close;
+    end;
+  end;
+
+end;
+
 end.
