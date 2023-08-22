@@ -13,7 +13,9 @@ uses
   FireDAC.DApt.Intf, FireDAC.DApt, FireDAC.Comp.DataSet, FMX.StdCtrls,
   FMX.Controls.Presentation, FMX.Edit, FMX.TabControl, FMX.ListView.Types,
   FMX.ListView.Appearances, FMX.ListView.Adapters.Base, FMX.ListView,
-  FireDAC.Phys.MySQLDef, FireDAC.Phys.MySQL, System.Hash, FMX.DateTimeCtrls, StrUtils, System.Generics.Collections;
+  FireDAC.Phys.MySQLDef, FireDAC.Phys.MySQL, System.Hash, FMX.DateTimeCtrls,
+  StrUtils, System.Generics.Collections, System.DateUtils, FMX.Layouts,
+  FMX.ListBox;
 
 type
   TForm13 = class(TForm)
@@ -38,6 +40,11 @@ type
     CheckBox1: TCheckBox;
     FDQuery3: TFDQuery;
     Edit1: TEdit;
+    GroupBox3: TGroupBox;
+    GroupBox4: TGroupBox;
+    Label1: TLabel;
+    GroupBox5: TGroupBox;
+    ListView2: TListView;
     procedure FormCreate(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure enterLoginTyping(Sender: TObject);
@@ -139,10 +146,9 @@ Newusername : string;
 
 
 procedure TForm13.FormCreate(Sender: TObject);
-var
- LItem: TListItem;
 begin
  ListView1.ItemAppearanceObjects.ItemObjects.Accessory.Visible := False;
+ ListView2.ItemAppearanceObjects.ItemObjects.Accessory.Visible := False;
  FDConnection1.DriverName := 'MySQL';
     FDConnection1.Params.Values['Database'] := 'palsy_db';
     FDConnection1.Params.Values['User_Name'] := 'wersusche';
@@ -250,7 +256,7 @@ var
 begin
   Result := '';
   for C in AText do
-    if C in ['a'..'z', 'A'..'Z','0'..'9'] then
+    if CharInSet(C,['a'..'z', 'A'..'Z','0'..'9']) then
       Result := Result + C;
 end;
 
@@ -277,8 +283,11 @@ end;
 procedure TForm13.ListView1DblClick(Sender: TObject);
   var
   SelectedID: Integer;
+  YearsDiff: Double;
+    ListItem: TListViewItem;
 begin
   // Check if an item is selected
+  ListView2.Items.Clear;
   if Assigned(ListView1.Selected) then
   begin
     // Get the ID stored in the selected item's Tag property
@@ -286,21 +295,36 @@ begin
 
     // Fetch the details based on the selected ID
     FDQuery1.Close;
-    FDQuery1.SQL.Text := 'SELECT Birthdate FROM patients WHERE idPatients = :ID';
+    FDQuery1.SQL.Text := 'SELECT p.Name, p.Surname, p.Secname, p.Birthdate, d.Disorder_name,d.Disorder_type FROM patients p LEFT JOIN patient_disorders pd ON p.idPatients = pd.patient_id LEFT JOIN disorders d ON pd.disorder_id = d.idDisorders WHERE p.idPatients = :ID';
     FDQuery1.ParamByName('ID').AsInteger := SelectedID;
     FDQuery1.Open;
-    try
+        try
       if not FDQuery1.Eof then
       begin
+        YearsDiff := YearSpan(Now(),FDQuery1.FieldByName('Birthdate').AsDateTime);
         // Assuming column_name_1 should go to Edit1 and column_name_2 to Edit2
-        Edit1.Text := FDQuery1.FieldByName('Birthdate').AsString;
+        Label1.Text := Format('%s %s %s %s г.р. (%d лет %d мес.)', [FDQuery1.FieldByName('Surname').AsString, FDQuery1.FieldByName('Name').AsString,
+        FDQuery1.FieldByName('Secname').AsString, FDQuery1.FieldByName('Birthdate').AsString, Trunc(YearsDiff),
+        Round(Frac(YearsDiff) * 12)]);
 
-      end;
+    while not FDQuery1.Eof do
+    begin
+  ListItem := ListView2.Items.Add;
+    ListItem := ListView2.Items.Add;
+  ListItem.Text := FDQuery1.FieldByName('Disorder_name').AsString;
+  ListItem.Detail := FDQuery1.FieldByName('Disorder_type').AsString;
+    FDQuery1.Next;
+    end;
+
+       end;
     finally
       FDQuery1.Close;
     end;
+
   end;
 
 end;
 
 end.
+
+

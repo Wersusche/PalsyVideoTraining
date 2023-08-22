@@ -37,28 +37,76 @@ object Form13: TForm13
       Text = #1054#1073#1079#1086#1088' '#1087#1072#1094#1080#1077#1085#1090#1086#1074
       ExplicitSize.cx = 118.000000000000000000
       ExplicitSize.cy = 26.000000000000000000
-      object ListView1: TListView
-        ItemAppearanceClassName = 'TListItemAppearance'
-        ItemEditAppearanceClassName = 'TListItemDeleteAppearance'
-        HeaderAppearanceClassName = 'TListHeaderObjects'
-        FooterAppearanceClassName = 'TListHeaderObjects'
-        Position.X = 16.000000000000000000
+      object GroupBox3: TGroupBox
+        Position.X = 20.000000000000000000
         Position.Y = 38.000000000000000000
-        Size.Width = 505.000000000000000000
-        Size.Height = 291.000000000000000000
+        Size.Width = 437.000000000000000000
+        Size.Height = 387.000000000000000000
         Size.PlatformDefault = False
+        Text = #1057#1087#1080#1089#1086#1082' '#1087#1072#1094#1080#1077#1085#1090#1086#1074
         TabOrder = 0
-        OnDblClick = ListView1DblClick
-        SearchVisible = True
+        object ListView1: TListView
+          ItemAppearanceClassName = 'TListItemAppearance'
+          ItemEditAppearanceClassName = 'TListItemDeleteAppearance'
+          HeaderAppearanceClassName = 'TListHeaderObjects'
+          FooterAppearanceClassName = 'TListHeaderObjects'
+          Position.X = 24.000000000000000000
+          Position.Y = 30.000000000000000000
+          Size.Width = 337.000000000000000000
+          Size.Height = 291.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 0
+          OnDblClick = ListView1DblClick
+          SearchVisible = True
+        end
       end
-      object Edit1: TEdit
-        Touch.InteractiveGestures = [LongTap, DoubleTap]
-        TabOrder = 1
-        Position.X = 856.000000000000000000
-        Position.Y = 254.000000000000000000
-        Size.Width = 132.000000000000000000
-        Size.Height = 91.000000000000000000
+      object GroupBox4: TGroupBox
+        Position.X = 504.000000000000000000
+        Position.Y = 38.000000000000000000
+        Size.Width = 553.000000000000000000
+        Size.Height = 555.000000000000000000
         Size.PlatformDefault = False
+        Text = #1057#1074#1086#1076#1085#1099#1077' '#1076#1072#1085#1085#1099#1077' '#1087#1086' '#1087#1072#1094#1080#1077#1085#1090#1091
+        TabOrder = 1
+        object Edit1: TEdit
+          Touch.InteractiveGestures = [LongTap, DoubleTap]
+          StyleLookup = 'transparentedit'
+          TabOrder = 1
+          Position.X = 48.000000000000000000
+          Position.Y = 406.000000000000000000
+          Size.Width = 505.000000000000000000
+          Size.Height = 35.000000000000000000
+          Size.PlatformDefault = False
+        end
+        object Label1: TLabel
+          Position.X = 16.000000000000000000
+          Position.Y = 24.000000000000000000
+          Size.Width = 505.000000000000000000
+          Size.Height = 35.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 38
+        end
+        object GroupBox5: TGroupBox
+          Position.X = 16.000000000000000000
+          Position.Y = 88.000000000000000000
+          Size.Width = 505.000000000000000000
+          Size.Height = 185.000000000000000000
+          Size.PlatformDefault = False
+          Text = #1055#1072#1090#1086#1083#1086#1075#1080#1080
+          TabOrder = 39
+          object ListView2: TListView
+            ItemAppearanceClassName = 'TListItemRightDetailAppearance'
+            ItemEditAppearanceClassName = 'TListItemRightDetailDeleteAppearance'
+            HeaderAppearanceClassName = 'TListHeaderObjects'
+            FooterAppearanceClassName = 'TListHeaderObjects'
+            Position.X = 8.000000000000000000
+            Position.Y = 24.000000000000000000
+            Size.Width = 489.000000000000000000
+            Size.Height = 153.000000000000000000
+            Size.PlatformDefault = False
+            TabOrder = 38
+          end
+        end
       end
     end
     object TabItem3: TTabItem
@@ -182,15 +230,15 @@ object Form13: TForm13
       'DriverID=SQLite'
       'Database=.\pushcount.db')
     LoginPrompt = False
-    Left = 520
-    Top = 424
+    Left = 248
+    Top = 512
   end
   object FDQuery1: TFDQuery
     Connection = FDConnection1
     SQL.Strings = (
       'INSERT INTO push_count (count) VALUES (:NumberValue)')
-    Left = 592
-    Top = 432
+    Left = 320
+    Top = 520
     ParamData = <
       item
         Name = 'NUMBERVALUE'
@@ -198,17 +246,17 @@ object Form13: TForm13
       end>
   end
   object FDPhysMySQLDriverLink1: TFDPhysMySQLDriverLink
-    Left = 424
-    Top = 424
+    Left = 168
+    Top = 520
   end
   object FDQuery2: TFDQuery
     Connection = FDConnection1
-    Left = 360
-    Top = 408
+    Left = 112
+    Top = 520
   end
   object FDQuery3: TFDQuery
     Connection = FDConnection1
-    Left = 288
-    Top = 408
+    Left = 56
+    Top = 520
   end
 end
