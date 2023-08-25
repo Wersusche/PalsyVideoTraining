@@ -1,9 +1,6 @@
 ﻿[FDPhysMySQLDriverLink1]
 Coordinates=517,1,168,36
 
-[FDQuery2]
-Coordinates=256,188,73,58
-
 [Tab_newpatient]
 Coordinates=105,324,106,36
 
@@ -22,9 +19,6 @@ Coordinates=10,324,85,36
 [enterLogin]
 Coordinates=182,256,75,58
 
-[FDQuery1]
-Coordinates=329,10,73,58
-
 [CheckBox1]
 Coordinates=339,188,80,58
 
@@ -40,9 +34,6 @@ Visible=True
 
 [Button1]
 Coordinates=99,188,59,58
-
-[FDQuery3]
-Coordinates=10,256,73,58
 
 [enterName]
 Coordinates=168,188,78,58
@@ -61,4 +52,13 @@ Coordinates=373,256,94,36
 
 []
 Coordinates=136,1,91,36
+
+[FDQuery_patientlist]
+Coordinates=329,10,73,58
+
+[FDQuery_newpatient]
+Coordinates=256,188,73,58
+
+[FDQuery_patientpersonal]
+Coordinates=10,256,73,58
 

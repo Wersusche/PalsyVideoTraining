@@ -15,12 +15,13 @@ uses
   FMX.ListView.Appearances, FMX.ListView.Adapters.Base, FMX.ListView,
   FireDAC.Phys.MySQLDef, FireDAC.Phys.MySQL, System.Hash, FMX.DateTimeCtrls,
   StrUtils, System.Generics.Collections, System.DateUtils, FMX.Layouts,
-  FMX.ListBox;
+  FMX.ListBox, System.Rtti, FMX.Grid.Style, FMX.Grid, FMX.ScrollBox, FMX.Objects,
+  FMX.MultiView, FMX.TreeView, FMX.ExtCtrls, System.Math;
 
 type
   TForm13 = class(TForm)
     FDConnection1: TFDConnection;
-    FDQuery1: TFDQuery;
+    FDQuery_patientlist: TFDQuery;
     TabControl1: TTabControl;
     Tab_newpatient: TTabItem;
     Tab_overview: TTabItem;
@@ -36,20 +37,43 @@ type
     DateEdit1: TDateEdit;
     GroupBox1: TGroupBox;
     GroupBox2: TGroupBox;
-    FDQuery2: TFDQuery;
+    FDQuery_newpatient: TFDQuery;
     CheckBox1: TCheckBox;
-    FDQuery3: TFDQuery;
+    FDQuery_patientpersonal: TFDQuery;
     Edit1: TEdit;
     GroupBox3: TGroupBox;
     GroupBox4: TGroupBox;
     Label1: TLabel;
     GroupBox5: TGroupBox;
     ListView2: TListView;
+    GroupBox6: TGroupBox;
+    TabControl2: TTabControl;
+    “екущие: TTabItem;
+    ѕрошлые: TTabItem;
+    FDQuery_patappointments: TFDQuery;
+    ListView3: TListView;
+    StringGrid1: TStringGrid;
+    StringColumn2: TStringColumn;
+    DateTimeColumn1: TDateTimeColumn;
+    DateTimeColumn2: TDateTimeColumn;
+    IntegerColumn1: TIntegerColumn;
+    IntegerColumn2: TIntegerColumn;
+    ComboBox1: TComboBox;
+    ListBoxItem1: TListBoxItem;
+    ListBoxItem2: TListBoxItem;
+    ListBoxItem3: TListBoxItem;
+    TreeView1: TTreeView;
+    ListBox1: TListBox;
+    Button2: TButton;
+    FDQuery_disorders: TFDQuery;
     procedure FormCreate(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure enterLoginTyping(Sender: TObject);
     procedure EnterPasswordTyping(Sender: TObject);
     procedure ListView1DblClick(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure TreeView1DblClick(Sender: TObject);
+    procedure TreeView1ChangeCheck(Sender: TObject);
   private
     { Private declarations }
   public
@@ -93,22 +117,22 @@ Newusername : string;
   enterPassword.Text := GenerateRandomPassword;
 
     try
-    FDQuery2.Connection := FDConnection1; // Replace with your TFDConnection component's name
+    FDQuery_newpatient.Connection := FDConnection1; // Replace with your TFDConnection component's name
 
     // Prepare the SQL statement
-    FDQuery2.SQL.Text := 'INSERT INTO patients (Name, Surname, Secname, Birthdate, Username, Password) VALUES (:Name, :Surname, :Secname, :DateOfBirth, :AssiUsername, :AssiPassword)';
+    FDQuery_newpatient.SQL.Text := 'INSERT INTO patients (Name, Surname, Secname, Birthdate, Username, Password) VALUES (:Name, :Surname, :Secname, :DateOfBirth, :AssiUsername, :AssiPassword)';
 
     //  Assign parameters
-    FDQuery2.ParamByName('Name').AsString := enterName.Text;
-    FDQuery2.ParamByName('Surname').AsString := enterSurname.Text;
-    FDQuery2.ParamByName('Secname').AsString := enterName2.Text;
-    FDQuery2.ParamByName('DateOfBirth').AsDate := DateEdit1.Date;
-    FDQuery2.ParamByName('AssiUsername').AsString := NewUserName;
-    FDQuery2.ParamByName('AssiPassword').AsString := hashedPassword;
+    FDQuery_newpatient.ParamByName('Name').AsString := enterName.Text;
+    FDQuery_newpatient.ParamByName('Surname').AsString := enterSurname.Text;
+    FDQuery_newpatient.ParamByName('Secname').AsString := enterName2.Text;
+    FDQuery_newpatient.ParamByName('DateOfBirth').AsDate := DateEdit1.Date;
+    FDQuery_newpatient.ParamByName('AssiUsername').AsString := NewUserName;
+    FDQuery_newpatient.ParamByName('AssiPassword').AsString := hashedPassword;
     // Execute the SQL statement
-    FDQuery2.ExecSQL;
+    FDQuery_newpatient.ExecSQL;
    finally
-    FDQuery2.Close;
+    FDQuery_newpatient.Close;
    ShowMessage('ќб€зательно передайте пациенту учетные данные!')
    end;
 
@@ -122,22 +146,22 @@ Newusername : string;
       begin
   hashedPassword := THashMD5.GetHashString(enterPassword.Text);
         try
-    FDQuery2.Connection := FDConnection1; // Replace with your TFDConnection component's name
+    FDQuery_newpatient.Connection := FDConnection1; // Replace with your TFDConnection component's name
 
     // Prepare the SQL statement
-    FDQuery2.SQL.Text := 'INSERT INTO patients (Name, Surname, Secname, Birthdate, Username, Password) VALUES (:Name, :Surname, :Secname, :DateOfBirth, :AssiUsername, :AssiPassword)';
+    FDQuery_newpatient.SQL.Text := 'INSERT INTO patients (Name, Surname, Secname, Birthdate, Username, Password) VALUES (:Name, :Surname, :Secname, :DateOfBirth, :AssiUsername, :AssiPassword)';
 
     //  Assign parameters
-    FDQuery2.ParamByName('Name').AsString := enterName.Text;
-    FDQuery2.ParamByName('Surname').AsString := enterSurname.Text;
-    FDQuery2.ParamByName('Secname').AsString := enterName2.Text;
-    FDQuery2.ParamByName('DateOfBirth').AsDate := DateEdit1.Date;
-    FDQuery2.ParamByName('AssiUsername').AsString := enterLogin.Text;
-    FDQuery2.ParamByName('AssiPassword').AsString := hashedPassword;
+    FDQuery_newpatient.ParamByName('Name').AsString := enterName.Text;
+    FDQuery_newpatient.ParamByName('Surname').AsString := enterSurname.Text;
+    FDQuery_newpatient.ParamByName('Secname').AsString := enterName2.Text;
+    FDQuery_newpatient.ParamByName('DateOfBirth').AsDate := DateEdit1.Date;
+    FDQuery_newpatient.ParamByName('AssiUsername').AsString := enterLogin.Text;
+    FDQuery_newpatient.ParamByName('AssiPassword').AsString := hashedPassword;
     // Execute the SQL statement
-    FDQuery2.ExecSQL;
+    FDQuery_newpatient.ExecSQL;
         finally
-    FDQuery2.Close;
+    FDQuery_newpatient.Close;
     ShowMessage('ќб€зательно передайте пациенту учетные данные!')
         end;
       end;
@@ -149,6 +173,7 @@ procedure TForm13.FormCreate(Sender: TObject);
 begin
  ListView1.ItemAppearanceObjects.ItemObjects.Accessory.Visible := False;
  ListView2.ItemAppearanceObjects.ItemObjects.Accessory.Visible := False;
+ ListView3.ItemAppearanceObjects.ItemObjects.Accessory.Visible := False;
  FDConnection1.DriverName := 'MySQL';
     FDConnection1.Params.Values['Database'] := 'palsy_db';
     FDConnection1.Params.Values['User_Name'] := 'wersusche';
@@ -157,23 +182,23 @@ begin
     FDConnection1.Params.Values['CharacterSet'] := 'utf8mb4';
         // Connection settings
 
-FDQuery1.SQL.Text := 'SELECT Name, Surname, idPatients FROM patients';
-FDQuery1.Open;
+FDQuery_patientlist.SQL.Text := 'SELECT Name, Surname, idPatients FROM patients';
+FDQuery_patientlist.Open;
 
 ListView1.Items.BeginUpdate;
 ListView1.Items.Clear;
-while not FDQuery1.Eof do
+while not FDQuery_patientlist.Eof do
 begin
   with ListView1.Items.Add do
   begin
-   Text := FDQuery1.FieldByName('Surname').AsString + ' ' +
-            FDQuery1.FieldByName('Name').AsString;
-   Tag := FDQuery1.FieldByName('idPatients').AsInteger;
+   Text := FDQuery_patientlist.FieldByName('Surname').AsString + ' ' +
+            FDQuery_patientlist.FieldByName('Name').AsString;
+   Tag := FDQuery_patientlist.FieldByName('idPatients').AsInteger;
   end;
-  FDQuery1.Next;
+  FDQuery_patientlist.Next;
 end;
 ListView1.Items.EndUpdate;
-FDQuery1.Close;
+FDQuery_patientlist.Close;
 end;
 
 
@@ -212,6 +237,36 @@ end;
 
 
 
+
+procedure TForm13.Button2Click(Sender: TObject);
+var
+  CurrentType: string;
+  CurrentTypeNode, DisorderNode: TTreeViewItem;
+begin
+FDQuery_disorders.SQL.Text := 'SELECT d.idDisorders, d.Disorder_name, d.Disorder_type FROM disorders d ORDER BY Disorder_Type';
+FDQuery_disorders.Open;
+CurrentType := '';
+TreeView1.Clear;
+
+while not FDQuery_disorders.Eof do
+    begin
+ if CurrentType <> FDQuery_disorders.FieldByName('Disorder_type').AsString then
+    begin
+      CurrentType := FDQuery_disorders.FieldByName('Disorder_type').AsString;
+      CurrentTypeNode := TTreeViewItem.Create(TreeView1);
+      CurrentTypeNode.Text := CurrentType;
+      TreeView1.AddObject(CurrentTypeNode);
+    end;
+
+    DisorderNode := TTreeViewItem.Create(CurrentTypeNode);
+    DisorderNode.Text := FDQuery_disorders.FieldByName('Disorder_name').AsString;
+    CurrentTypeNode.AddObject(DisorderNode);
+
+    FDQuery_disorders.Next;
+  end;
+
+  FDQuery_disorders.Close;
+end;
 
 function TForm13.CheckExistenceFunc(const AUserName: string; AConnection: TFDConnection): Boolean;
 var
@@ -284,45 +339,130 @@ procedure TForm13.ListView1DblClick(Sender: TObject);
   var
   SelectedID: Integer;
   YearsDiff: Double;
-    ListItem: TListViewItem;
+  ListItem, ListItem2: TListViewItem;
+  Row: Integer;
+    DailyExerciseCount, TotalExerciseCount: Integer;
+  DaysPassed, ProjectedExerciseCount: Integer;
+    CompletionRate: Double;
 begin
   // Check if an item is selected
   ListView2.Items.Clear;
+  ListView3.Items.Clear;
   if Assigned(ListView1.Selected) then
   begin
     // Get the ID stored in the selected item's Tag property
     SelectedID := ListView1.Selected.Tag;
 
     // Fetch the details based on the selected ID
-    FDQuery1.Close;
-    FDQuery1.SQL.Text := 'SELECT p.Name, p.Surname, p.Secname, p.Birthdate, d.Disorder_name,d.Disorder_type FROM patients p LEFT JOIN patient_disorders pd ON p.idPatients = pd.patient_id LEFT JOIN disorders d ON pd.disorder_id = d.idDisorders WHERE p.idPatients = :ID';
-    FDQuery1.ParamByName('ID').AsInteger := SelectedID;
-    FDQuery1.Open;
+    FDQuery_patientpersonal.Close;
+    FDQuery_patientpersonal.SQL.Text := 'SELECT p.Name, p.Surname, p.Secname, p.Birthdate, d.Disorder_name, d.Disorder_type ' +
+                                         'FROM patients p ' +
+                                         'LEFT JOIN patient_disorders pd ON p.idPatients = pd.patient_id ' +
+                                         'LEFT JOIN disorders d ON pd.disorder_id = d.idDisorders ' +
+                                         'WHERE p.idPatients = :ID';
+
+    FDQuery_patientpersonal.ParamByName('ID').AsInteger := SelectedID;
+    FDQuery_patientpersonal.Open;
         try
-      if not FDQuery1.Eof then
+      if not FDQuery_patientpersonal.Eof then
       begin
-        YearsDiff := YearSpan(Now(),FDQuery1.FieldByName('Birthdate').AsDateTime);
+        YearsDiff := YearSpan(Now(),FDQuery_patientpersonal.FieldByName('Birthdate').AsDateTime);
         // Assuming column_name_1 should go to Edit1 and column_name_2 to Edit2
-        Label1.Text := Format('%s %s %s %s г.р. (%d лет %d мес.)', [FDQuery1.FieldByName('Surname').AsString, FDQuery1.FieldByName('Name').AsString,
-        FDQuery1.FieldByName('Secname').AsString, FDQuery1.FieldByName('Birthdate').AsString, Trunc(YearsDiff),
+        Label1.Text := Format('%s %s %s %s г.р. (%d лет %d мес.)', [FDQuery_patientpersonal.FieldByName('Surname').AsString,
+         FDQuery_patientpersonal.FieldByName('Name').AsString,
+        FDQuery_patientpersonal.FieldByName('Secname').AsString,
+        FDQuery_patientpersonal.FieldByName('Birthdate').AsString, Trunc(YearsDiff),
         Round(Frac(YearsDiff) * 12)]);
 
-    while not FDQuery1.Eof do
+    while not FDQuery_patientpersonal.Eof do
     begin
   ListItem := ListView2.Items.Add;
-    ListItem := ListView2.Items.Add;
-  ListItem.Text := FDQuery1.FieldByName('Disorder_name').AsString;
-  ListItem.Detail := FDQuery1.FieldByName('Disorder_type').AsString;
-    FDQuery1.Next;
+  ListItem.Text := FDQuery_patientpersonal.FieldByName('Disorder_name').AsString;
+  ListItem.Detail := FDQuery_patientpersonal.FieldByName('Disorder_type').AsString;
+    FDQuery_patientpersonal.Next;
+    end;
+    end;
+      finally
+      FDQuery_patientpersonal.Close;
     end;
 
-       end;
-    finally
-      FDQuery1.Close;
-    end;
+    FDQuery_patappointments.Close;
+    FDQuery_patappointments.SQL.Text := 'SELECT a.Starttime, a.Endtime, a.kolvden, a.sdelanovsego, v.video_name ' +
+                                         'FROM appointments a ' +
+                                         'LEFT JOIN videos v ON a.idvideos = v.idvideos ' +
+                                         'WHERE a.idPatients = :ID';
+      FDQuery_patappointments.ParamByName('ID').AsInteger := SelectedID;
+       FDQuery_patappointments.Open;
+           StringGrid1.RowCount := 0;
+      ListView3.BeginUpdate;
+  try
+    // Assume FDQuery1 has been prepared and opened to select your fields
+    while not FDQuery_patappointments.EOF do
+    begin
+    if InRange(Now(), FDQuery_patappointments.FieldByName('Starttime').AsDateTime, FDQuery_patappointments.FieldByName('Endtime').AsDateTime) then
+     begin
+      ListItem2 := ListView3.Items.Add;
+      ListItem2.Text := FDQuery_patappointments.FieldByName('video_name').AsString;
+      ListItem2.Detail := 'c '+ FDQuery_patappointments.FieldByName('Starttime').AsString + ' по ' +
+                             FDQuery_patappointments.FieldByName('Endtime').AsString  + ', количество раз в день: ' +
+                             FDQuery_patappointments.FieldByName('kolvden').AsString + ', сделано всего: ' +
+                   FDQuery_patappointments.FieldByName('sdelanovsego').AsString ;
 
+
+
+        // Calculate the number of days from the start date to the current date
+    DaysPassed := DaysBetween(Now(), FDQuery_patappointments.FieldByName('Starttime').AsDateTime);
+
+    // Calculate how many exercises should have been done by now
+    ProjectedExerciseCount := DaysPassed * DailyExerciseCount;
+
+    // Calculate the completion rate
+    if ProjectedExerciseCount > 0 then
+      CompletionRate := (TotalExerciseCount / ProjectedExerciseCount) * 100
+    else
+      CompletionRate := 0;
+     var  Background: TListItemSimpleControl;
+      // Show a warning MessageBox
+      Background := ListItem2.Objects.FindObjectT<TListItemSimpleControl>('background');
+
+    if CompletionRate < 70 then
+    begin
+        ListItem2.Objects.TextObject.TextColor:= TAlphaColors.Red;
+      ListItem2.Objects.DetailObject.TextColor := TAlphaColors.Green;
+    end;
+     FDQuery_patappointments.Next;
+     end
+     else
+      FDQuery_patappointments.Next;
+    end;
+      finally
+    ListView3.EndUpdate;
+    FDQuery_patappointments.Close;
   end;
+  end;
+end;
 
+
+
+procedure TForm13.TreeView1ChangeCheck(Sender: TObject);
+begin
+if TTreeViewItem(Sender).Count > 0 then
+begin
+TTreeViewItem(Sender).IsChecked := False;
+end;
+end;
+
+procedure TForm13.TreeView1DblClick(Sender: TObject);
+begin
+var
+  SelectedItem: TTreeViewItem;
+begin
+  SelectedItem := TreeView1.Selected;
+  if Assigned(SelectedItem) then
+  begin
+    SelectedItem.IsExpanded := not SelectedItem.IsExpanded;
+  end;
+end;
 end;
 
 end.
