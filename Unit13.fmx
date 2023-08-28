@@ -39,10 +39,11 @@
       ExplicitSize.cx = 118.000000000000000000
       ExplicitSize.cy = 26.000000000000000000
       object GroupBox3: TGroupBox
-        Position.X = 20.000000000000000000
-        Position.Y = 38.000000000000000000
-        Size.Width = 389.000000000000000000
-        Size.Height = 387.000000000000000000
+        Align = Scale
+        Position.X = 16.000000000000000000
+        Position.Y = 30.000000000000000000
+        Size.Width = 385.000000000000000000
+        Size.Height = 476.000000000000000000
         Size.PlatformDefault = False
         Text = #1057#1087#1080#1089#1086#1082' '#1087#1072#1094#1080#1077#1085#1090#1086#1074
         TabOrder = 0
@@ -51,6 +52,7 @@
           ItemEditAppearanceClassName = 'TListItemDeleteAppearance'
           HeaderAppearanceClassName = 'TListHeaderObjects'
           FooterAppearanceClassName = 'TListHeaderObjects'
+          Align = Scale
           Position.X = 24.000000000000000000
           Position.Y = 30.000000000000000000
           Size.Width = 337.000000000000000000
@@ -62,8 +64,9 @@
         end
       end
       object GroupBox4: TGroupBox
-        Position.X = 504.000000000000000000
-        Position.Y = 38.000000000000000000
+        Align = Scale
+        Position.X = 488.000000000000000000
+        Position.Y = 14.000000000000000000
         Size.Width = 553.000000000000000000
         Size.Height = 555.000000000000000000
         Size.PlatformDefault = False
@@ -129,6 +132,8 @@
               489s
               158s
               489s
+              158s
+              489s
               158s)
             object Текущие: TTabItem
               CustomIcon = <
@@ -143,7 +148,7 @@
               Text = #1058#1077#1082#1091#1097#1080#1077
               ExplicitSize.cx = 68.000000000000000000
               ExplicitSize.cy = 26.000000000000000000
-              object ListView3: TListView
+              object ListView_now: TListView
                 ItemAppearanceClassName = 'TImageListItemBottomDetailAppearance'
                 ItemEditAppearanceClassName = 'TImageListItemBottomDetailShowCheckAppearance'
                 HeaderAppearanceClassName = 'TListHeaderObjects'
@@ -151,7 +156,7 @@
                 Position.X = 16.000000000000000000
                 Position.Y = 24.000000000000000000
                 Size.Width = 465.000000000000000000
-                Size.Height = 96.000000000000000000
+                Size.Height = 121.000000000000000000
                 Size.PlatformDefault = False
                 TabOrder = 0
               end
@@ -169,35 +174,41 @@
               Text = #1055#1088#1086#1096#1083#1099#1077
               ExplicitSize.cx = 74.000000000000000000
               ExplicitSize.cy = 26.000000000000000000
-              object StringGrid1: TStringGrid
-                CanFocus = True
-                ClipChildren = True
-                Position.Y = 8.000000000000000000
-                Size.Width = 481.000000000000000000
-                Size.Height = 100.000000000000000000
+              object ListView_old: TListView
+                ItemAppearanceClassName = 'TImageListItemBottomDetailAppearance'
+                ItemEditAppearanceClassName = 'TImageListItemBottomDetailShowCheckAppearance'
+                HeaderAppearanceClassName = 'TListHeaderObjects'
+                FooterAppearanceClassName = 'TListHeaderObjects'
+                Position.X = 16.000000000000000000
+                Position.Y = 32.000000000000000000
+                Size.Width = 465.000000000000000000
+                Size.Height = 96.000000000000000000
                 Size.PlatformDefault = False
                 TabOrder = 0
-                Viewport.Width = 461.000000000000000000
-                Viewport.Height = 75.000000000000000000
-                object StringColumn2: TStringColumn
-                  Header = #1053#1072#1079#1074#1072#1085#1080#1077' '#1091#1087#1088#1072#1078#1085#1077#1085#1080#1103
-                  Size.Width = 114.000000000000000000
-                end
-                object DateTimeColumn1: TDateTimeColumn
-                  Header = #1053#1072#1095#1072#1083#1086
-                end
-                object DateTimeColumn2: TDateTimeColumn
-                  Header = #1050#1086#1085#1077#1094
-                  Size.Width = 82.000000000000000000
-                end
-                object IntegerColumn1: TIntegerColumn
-                  Header = #1056#1072#1079' '#1074' '#1076#1077#1085#1100
-                  Size.Width = 69.000000000000000000
-                end
-                object IntegerColumn2: TIntegerColumn
-                  Header = #1057#1076#1077#1083#1072#1085#1086' '#1074#1089#1077#1075#1086
-                  Size.Width = 87.000000000000000000
-                end
+              end
+            end
+            object Будущие: TTabItem
+              CustomIcon = <
+                item
+                end>
+              IsSelected = False
+              Size.Width = 69.000000000000000000
+              Size.Height = 26.000000000000000000
+              Size.PlatformDefault = False
+              StyleLookup = ''
+              TabOrder = 0
+              Text = #1041#1091#1076#1091#1097#1080#1077
+              object ListView_next: TListView
+                ItemAppearanceClassName = 'TImageListItemBottomDetailAppearance'
+                ItemEditAppearanceClassName = 'TImageListItemBottomDetailShowCheckAppearance'
+                HeaderAppearanceClassName = 'TListHeaderObjects'
+                FooterAppearanceClassName = 'TListHeaderObjects'
+                Position.X = 8.000000000000000000
+                Position.Y = 32.000000000000000000
+                Size.Width = 465.000000000000000000
+                Size.Height = 96.000000000000000000
+                Size.PlatformDefault = False
+                TabOrder = 0
               end
             end
           end
@@ -379,8 +390,8 @@
       'DriverID=SQLite'
       'Database=.\pushcount.db')
     LoginPrompt = False
-    Left = 272
-    Top = 568
+    Left = 200
+    Top = 584
   end
   object FDQuery_patientlist: TFDQuery
     Connection = FDConnection1
@@ -395,18 +406,18 @@
       end>
   end
   object FDPhysMySQLDriverLink1: TFDPhysMySQLDriverLink
-    Left = 168
-    Top = 520
+    Left = 152
+    Top = 600
   end
   object FDQuery_newpatient: TFDQuery
     Connection = FDConnection1
-    Left = 368
-    Top = 496
+    Left = 336
+    Top = 616
   end
   object FDQuery_patientpersonal: TFDQuery
     Connection = FDConnection1
-    Left = 72
-    Top = 480
+    Left = 24
+    Top = 544
   end
   object FDQuery_patappointments: TFDQuery
     Connection = FDConnection1

@@ -51,13 +51,7 @@ type
     Текущие: TTabItem;
     Прошлые: TTabItem;
     FDQuery_patappointments: TFDQuery;
-    ListView3: TListView;
-    StringGrid1: TStringGrid;
-    StringColumn2: TStringColumn;
-    DateTimeColumn1: TDateTimeColumn;
-    DateTimeColumn2: TDateTimeColumn;
-    IntegerColumn1: TIntegerColumn;
-    IntegerColumn2: TIntegerColumn;
+    ListView_now: TListView;
     ComboBox1: TComboBox;
     ListBoxItem1: TListBoxItem;
     ListBoxItem2: TListBoxItem;
@@ -66,6 +60,9 @@ type
     ListBox1: TListBox;
     Button2: TButton;
     FDQuery_disorders: TFDQuery;
+    Будущие: TTabItem;
+    ListView_old: TListView;
+    ListView_next: TListView;
     procedure FormCreate(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure enterLoginTyping(Sender: TObject);
@@ -173,7 +170,7 @@ procedure TForm13.FormCreate(Sender: TObject);
 begin
  ListView1.ItemAppearanceObjects.ItemObjects.Accessory.Visible := False;
  ListView2.ItemAppearanceObjects.ItemObjects.Accessory.Visible := False;
- ListView3.ItemAppearanceObjects.ItemObjects.Accessory.Visible := False;
+ ListView_now.ItemAppearanceObjects.ItemObjects.Accessory.Visible := False;
  FDConnection1.DriverName := 'MySQL';
     FDConnection1.Params.Values['Database'] := 'palsy_db';
     FDConnection1.Params.Values['User_Name'] := 'wersusche';
@@ -347,7 +344,7 @@ procedure TForm13.ListView1DblClick(Sender: TObject);
 begin
   // Check if an item is selected
   ListView2.Items.Clear;
-  ListView3.Items.Clear;
+  ListView_now.Items.Clear;
   if Assigned(ListView1.Selected) then
   begin
     // Get the ID stored in the selected item's Tag property
@@ -393,15 +390,14 @@ begin
                                          'WHERE a.idPatients = :ID';
       FDQuery_patappointments.ParamByName('ID').AsInteger := SelectedID;
        FDQuery_patappointments.Open;
-           StringGrid1.RowCount := 0;
-      ListView3.BeginUpdate;
+      ListView_now.BeginUpdate;
   try
     // Assume FDQuery1 has been prepared and opened to select your fields
     while not FDQuery_patappointments.EOF do
     begin
     if InRange(Now(), FDQuery_patappointments.FieldByName('Starttime').AsDateTime, FDQuery_patappointments.FieldByName('Endtime').AsDateTime) then
      begin
-      ListItem2 := ListView3.Items.Add;
+      ListItem2 := ListView_now.Items.Add;
       ListItem2.Text := FDQuery_patappointments.FieldByName('video_name').AsString;
       ListItem2.Detail := 'c '+ FDQuery_patappointments.FieldByName('Starttime').AsString + ' по ' +
                              FDQuery_patappointments.FieldByName('Endtime').AsString  + ', количество раз в день: ' +
@@ -428,7 +424,7 @@ begin
     if CompletionRate < 70 then
     begin
         ListItem2.Objects.TextObject.TextColor:= TAlphaColors.Red;
-      ListItem2.Objects.DetailObject.TextColor := TAlphaColors.Green;
+      ListItem2.Objects.DetailObject.TextColor := TAlphaColors.Red;
     end;
      FDQuery_patappointments.Next;
      end
@@ -436,7 +432,7 @@ begin
       FDQuery_patappointments.Next;
     end;
       finally
-    ListView3.EndUpdate;
+    ListView_now.EndUpdate;
     FDQuery_patappointments.Close;
   end;
   end;

@@ -32,7 +32,7 @@ object Form12: TForm12
   end
   object Layoutvideo: TLayout
     Align = Client
-    Size.Width = 672.000000000000000000
+    Size.Width = 624.000000000000000000
     Size.Height = 512.000000000000000000
     Size.PlatformDefault = False
     TabOrder = 32
@@ -41,7 +41,7 @@ object Form12: TForm12
       Top = 160
     end
     object MediaplayerControl: TMediaPlayerControl
-      Size.Width = 672.000000000000000000
+      Size.Width = 624.000000000000000000
       Size.Height = 512.000000000000000000
       Size.PlatformDefault = False
       Align = Client
@@ -50,15 +50,15 @@ object Form12: TForm12
   end
   object Layoutitems: TLayout
     Align = Right
-    Position.X = 672.000000000000000000
-    Size.Width = 256.000000000000000000
+    Position.X = 624.000000000000000000
+    Size.Width = 304.000000000000000000
     Size.Height = 512.000000000000000000
     Size.PlatformDefault = False
     TabOrder = 33
     object ListBox1: TListBox
       Align = Client
-      Size.Width = 256.000000000000000000
-      Size.Height = 257.000000000000000000
+      Size.Width = 304.000000000000000000
+      Size.Height = 265.000000000000000000
       Size.PlatformDefault = False
       StyleLookup = 'ListBox1Style1'
       TabOrder = 20
@@ -67,8 +67,8 @@ object Form12: TForm12
       DefaultItemStyles.GroupHeaderStyle = ''
       DefaultItemStyles.GroupFooterStyle = ''
       OnItemClick = ListBox1ItemClick
-      Viewport.Width = 252.000000000000000000
-      Viewport.Height = 253.000000000000000000
+      Viewport.Width = 300.000000000000000000
+      Viewport.Height = 261.000000000000000000
       object ListBoxGroupHeader1: TListBoxGroupHeader
         TabOrder = 0
         Text = #1057#1087#1080#1089#1086#1082' '#1091#1087#1088#1072#1078#1085#1077#1085#1080#1081':'
@@ -76,9 +76,9 @@ object Form12: TForm12
     end
     object Layout2: TLayout
       Align = Bottom
-      Position.Y = 257.000000000000000000
-      Size.Width = 256.000000000000000000
-      Size.Height = 255.000000000000000000
+      Position.Y = 265.000000000000000000
+      Size.Width = 304.000000000000000000
+      Size.Height = 247.000000000000000000
       Size.PlatformDefault = False
       TabOrder = 21
       object Label2: TLabel
@@ -129,12 +129,14 @@ object Form12: TForm12
       Size.Width = 188.000000000000000000
       Size.Height = 22.000000000000000000
       Size.PlatformDefault = False
+      Visible = False
     end
     object Button3: TButton
       Position.X = 304.000000000000000000
       Position.Y = 24.000000000000000000
       TabOrder = 27
       Text = 'Button3'
+      Visible = False
       OnClick = Button3Click
     end
   end
