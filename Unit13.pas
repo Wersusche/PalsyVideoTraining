@@ -63,6 +63,7 @@ type
     Будущие: TTabItem;
     ListView_old: TListView;
     ListView_next: TListView;
+    GroupBox7: TGroupBox;
     procedure FormCreate(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure enterLoginTyping(Sender: TObject);
@@ -71,6 +72,7 @@ type
     procedure Button2Click(Sender: TObject);
     procedure TreeView1DblClick(Sender: TObject);
     procedure TreeView1ChangeCheck(Sender: TObject);
+
   private
     { Private declarations }
   public
@@ -79,7 +81,7 @@ type
     function CheckExistenceFunc(const AUserName: string; AConnection: TFDConnection): Boolean;
     function GenerateUserName(const FirstName, LastName: string; AConnection: TFDConnection): string;
     function FilterNonEnglishCharacters(const AText: string): string;
-
+    function  AddAppointmentToListView(ListView_now: TListView; FDQuery_patappointments: TFDQuery): TListViewItem;
      end;
 
 var
@@ -168,9 +170,12 @@ Newusername : string;
 
 procedure TForm13.FormCreate(Sender: TObject);
 begin
+  groupbox4.Visible:=false;
  ListView1.ItemAppearanceObjects.ItemObjects.Accessory.Visible := False;
  ListView2.ItemAppearanceObjects.ItemObjects.Accessory.Visible := False;
  ListView_now.ItemAppearanceObjects.ItemObjects.Accessory.Visible := False;
+ ListView_old.ItemAppearanceObjects.ItemObjects.Accessory.Visible := False;
+ ListView_next.ItemAppearanceObjects.ItemObjects.Accessory.Visible := False;
  FDConnection1.DriverName := 'MySQL';
     FDConnection1.Params.Values['Database'] := 'palsy_db';
     FDConnection1.Params.Values['User_Name'] := 'wersusche';
@@ -336,7 +341,7 @@ procedure TForm13.ListView1DblClick(Sender: TObject);
   var
   SelectedID: Integer;
   YearsDiff: Double;
-  ListItem, ListItem2: TListViewItem;
+  ListItem, ListItem2, listnow, listnext, listold: TListViewItem;
   Row: Integer;
     DailyExerciseCount, TotalExerciseCount: Integer;
   DaysPassed, ProjectedExerciseCount: Integer;
@@ -347,6 +352,8 @@ begin
   ListView_now.Items.Clear;
   if Assigned(ListView1.Selected) then
   begin
+     GroupBox7.Visible :=false;
+     GroupBox4.Visible :=true;
     // Get the ID stored in the selected item's Tag property
     SelectedID := ListView1.Selected.Tag;
 
@@ -366,7 +373,7 @@ begin
         YearsDiff := YearSpan(Now(),FDQuery_patientpersonal.FieldByName('Birthdate').AsDateTime);
         // Assuming column_name_1 should go to Edit1 and column_name_2 to Edit2
         Label1.Text := Format('%s %s %s %s г.р. (%d лет %d мес.)', [FDQuery_patientpersonal.FieldByName('Surname').AsString,
-         FDQuery_patientpersonal.FieldByName('Name').AsString,
+        FDQuery_patientpersonal.FieldByName('Name').AsString,
         FDQuery_patientpersonal.FieldByName('Secname').AsString,
         FDQuery_patientpersonal.FieldByName('Birthdate').AsString, Trunc(YearsDiff),
         Round(Frac(YearsDiff) * 12)]);
@@ -396,18 +403,13 @@ begin
     while not FDQuery_patappointments.EOF do
     begin
     if InRange(Now(), FDQuery_patappointments.FieldByName('Starttime').AsDateTime, FDQuery_patappointments.FieldByName('Endtime').AsDateTime) then
-     begin
-      ListItem2 := ListView_now.Items.Add;
-      ListItem2.Text := FDQuery_patappointments.FieldByName('video_name').AsString;
-      ListItem2.Detail := 'c '+ FDQuery_patappointments.FieldByName('Starttime').AsString + ' по ' +
-                             FDQuery_patappointments.FieldByName('Endtime').AsString  + ', количество раз в день: ' +
-                             FDQuery_patappointments.FieldByName('kolvden').AsString + ', сделано всего: ' +
-                   FDQuery_patappointments.FieldByName('sdelanovsego').AsString ;
+        begin
+     listnow:= AddAppointmentToListView(ListView_now, FDQuery_patappointments);
 
-
-
-        // Calculate the number of days from the start date to the current date
+     // Calculate the number of days from the start date to the current date
     DaysPassed := DaysBetween(Now(), FDQuery_patappointments.FieldByName('Starttime').AsDateTime);
+    DailyExerciseCount := FDQuery_patappointments.FieldByName('kolvden').AsInteger;
+    TotalExerciseCount := FDQuery_patappointments.FieldByName('sdelanovsego').AsInteger;
 
     // Calculate how many exercises should have been done by now
     ProjectedExerciseCount := DaysPassed * DailyExerciseCount;
@@ -417,21 +419,26 @@ begin
       CompletionRate := (TotalExerciseCount / ProjectedExerciseCount) * 100
     else
       CompletionRate := 0;
-     var  Background: TListItemSimpleControl;
-      // Show a warning MessageBox
-      Background := ListItem2.Objects.FindObjectT<TListItemSimpleControl>('background');
 
     if CompletionRate < 70 then
     begin
-        ListItem2.Objects.TextObject.TextColor:= TAlphaColors.Red;
-      ListItem2.Objects.DetailObject.TextColor := TAlphaColors.Red;
+     listnow.Objects.TextObject.TextColor:= TAlphaColors.Red;
+     listnow.Objects.DetailObject.TextColor := TAlphaColors.Red;
     end;
      FDQuery_patappointments.Next;
-     end
-     else
+       end
+     else if Now() > FDQuery_patappointments.FieldByName('Starttime').AsDateTime then
+      begin
+      listold:= AddAppointmentToListView(ListView_old, FDQuery_patappointments);
       FDQuery_patappointments.Next;
+      end
+      else if Now() < FDQuery_patappointments.FieldByName('Starttime').AsDateTime then
+      begin
+      listnext:= AddAppointmentToListView(ListView_next, FDQuery_patappointments);
+      FDQuery_patappointments.Next;
+      end;
     end;
-      finally
+     finally
     ListView_now.EndUpdate;
     FDQuery_patappointments.Close;
   end;
@@ -461,6 +468,18 @@ begin
 end;
 end;
 
+
+function TForm13.AddAppointmentToListView(ListView_now: TListView; FDQuery_patappointments: TFDQuery): TListViewItem;
+var
+  ListItem2: TListViewItem;
+begin
+  Result := ListView_now.Items.Add;
+  Result.Text := FDQuery_patappointments.FieldByName('video_name').AsString;
+  Result.Detail := 'c ' + FDQuery_patappointments.FieldByName('Starttime').AsString +
+                      ' по ' + FDQuery_patappointments.FieldByName('Endtime').AsString +
+                      ', количество раз в день: ' + FDQuery_patappointments.FieldByName('kolvden').AsString +
+                      ', сделано всего: ' + FDQuery_patappointments.FieldByName('sdelanovsego').AsString;
+end;
 end.
 
 

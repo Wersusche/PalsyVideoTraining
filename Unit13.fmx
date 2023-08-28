@@ -41,9 +41,9 @@
       object GroupBox3: TGroupBox
         Align = Scale
         Position.X = 16.000000000000000000
-        Position.Y = 30.000000000000000000
-        Size.Width = 385.000000000000000000
-        Size.Height = 476.000000000000000000
+        Position.Y = 14.000000000000000000
+        Size.Width = 385.000030517578100000
+        Size.Height = 476.000061035156300000
         Size.PlatformDefault = False
         Text = #1057#1087#1080#1089#1086#1082' '#1087#1072#1094#1080#1077#1085#1090#1086#1074
         TabOrder = 0
@@ -53,10 +53,10 @@
           HeaderAppearanceClassName = 'TListHeaderObjects'
           FooterAppearanceClassName = 'TListHeaderObjects'
           Align = Scale
-          Position.X = 24.000000000000000000
-          Position.Y = 30.000000000000000000
-          Size.Width = 337.000000000000000000
-          Size.Height = 339.000000000000000000
+          Position.X = 24.000003814697270000
+          Position.Y = 30.000003814697270000
+          Size.Width = 337.000030517578100000
+          Size.Height = 339.000030517578100000
           Size.PlatformDefault = False
           TabOrder = 0
           OnDblClick = ListView1DblClick
@@ -66,12 +66,13 @@
       object GroupBox4: TGroupBox
         Align = Scale
         Position.X = 488.000000000000000000
-        Position.Y = 14.000000000000000000
+        Position.Y = 24.000000000000000000
         Size.Width = 553.000000000000000000
         Size.Height = 555.000000000000000000
         Size.PlatformDefault = False
         Text = #1057#1074#1086#1076#1085#1099#1077' '#1076#1072#1085#1085#1099#1077' '#1087#1086' '#1087#1072#1094#1080#1077#1085#1090#1091
-        TabOrder = 1
+        Visible = False
+        TabOrder = 2
         object Edit1: TEdit
           Touch.InteractiveGestures = [LongTap, DoubleTap]
           StyleLookup = 'transparentedit'
@@ -198,6 +199,8 @@
               StyleLookup = ''
               TabOrder = 0
               Text = #1041#1091#1076#1091#1097#1080#1077
+              ExplicitSize.cx = 69.000000000000000000
+              ExplicitSize.cy = 26.000000000000000000
               object ListView_next: TListView
                 ItemAppearanceClassName = 'TImageListItemBottomDetailAppearance'
                 ItemEditAppearanceClassName = 'TImageListItemBottomDetailShowCheckAppearance'
@@ -213,6 +216,16 @@
             end
           end
         end
+      end
+      object GroupBox7: TGroupBox
+        Align = Scale
+        Position.X = 488.000000000000000000
+        Position.Y = 24.000000000000000000
+        Size.Width = 553.000000000000000000
+        Size.Height = 555.000000000000000000
+        Size.PlatformDefault = False
+        Text = #1057#1074#1086#1076#1085#1099#1077' '#1076#1072#1085#1085#1099#1077' '#1087#1086' '#1087#1072#1094#1080#1077#1085#1090#1072#1084
+        TabOrder = 1
       end
     end
     object TabItem3: TTabItem
