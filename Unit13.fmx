@@ -40,9 +40,9 @@
       ExplicitSize.cy = 26.000000000000000000
       object GroupBox3: TGroupBox
         Align = Scale
-        Position.X = 16.000000000000000000
+        Position.X = 16.000001907348630000
         Position.Y = 14.000000000000000000
-        Size.Width = 385.000030517578100000
+        Size.Width = 385.000061035156300000
         Size.Height = 476.000061035156300000
         Size.PlatformDefault = False
         Text = #1057#1087#1080#1089#1086#1082' '#1087#1072#1094#1080#1077#1085#1090#1086#1074
@@ -53,7 +53,7 @@
           HeaderAppearanceClassName = 'TListHeaderObjects'
           FooterAppearanceClassName = 'TListHeaderObjects'
           Align = Scale
-          Position.X = 24.000003814697270000
+          Position.X = 24.000005722045900000
           Position.Y = 30.000003814697270000
           Size.Width = 337.000030517578100000
           Size.Height = 339.000030517578100000
@@ -219,13 +219,64 @@
       end
       object GroupBox7: TGroupBox
         Align = Scale
-        Position.X = 488.000000000000000000
+        Position.X = 488.000030517578100000
         Position.Y = 24.000000000000000000
         Size.Width = 553.000000000000000000
         Size.Height = 555.000000000000000000
         Size.PlatformDefault = False
         Text = #1057#1074#1086#1076#1085#1099#1077' '#1076#1072#1085#1085#1099#1077' '#1087#1086' '#1087#1072#1094#1080#1077#1085#1090#1072#1084
         TabOrder = 1
+        object Label_allusers: TLabel
+          Position.X = 16.000000000000000000
+          Position.Y = 32.000000000000000000
+          Size.Width = 449.000000000000000000
+          Size.Height = 33.000000000000000000
+          Size.PlatformDefault = False
+          Text = '12331'
+          TabOrder = 40
+        end
+        object Label_activeusers: TLabel
+          Position.X = 16.000000000000000000
+          Position.Y = 73.000000000000000000
+          Size.Width = 449.000000000000000000
+          Size.Height = 33.000000000000000000
+          Size.PlatformDefault = False
+          Text = '123312'
+          TabOrder = 39
+        end
+        object Label_badusers: TLabel
+          Position.X = 16.000000000000000000
+          Position.Y = 129.000000000000000000
+          Size.Width = 449.000000000000000000
+          Size.Height = 33.000000000000000000
+          Size.PlatformDefault = False
+          Text = '1313'
+          TabOrder = 38
+        end
+        object ComboBox2: TComboBox
+          Position.X = 72.000000000000000000
+          Position.Y = 288.000000000000000000
+          TabOrder = 41
+          object ListBoxItem4: TListBoxItem
+            TabOrder = 0
+            Text = 'ListBoxItem4'
+          end
+          object ListBoxItem5: TListBoxItem
+            TabOrder = 1
+            Text = 'ListBoxItem5'
+          end
+          object ListBoxItem6: TListBoxItem
+            Size.Width = 19.000000000000000000
+            Size.Height = 19.000000000000000000
+            Size.PlatformDefault = False
+            TabOrder = 2
+            Text = 'ListBoxItem6'
+          end
+          object ListBoxItem7: TListBoxItem
+            TabOrder = 3
+            Text = 'ListBoxItem7'
+          end
+        end
       end
     end
     object TabItem3: TTabItem
@@ -441,5 +492,10 @@
     Connection = FDConnection1
     Left = 480
     Top = 576
+  end
+  object FDQuery_totalpatients: TFDQuery
+    Connection = FDConnection1
+    Left = 224
+    Top = 568
   end
 end

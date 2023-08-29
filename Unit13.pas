@@ -64,6 +64,15 @@ type
     ListView_old: TListView;
     ListView_next: TListView;
     GroupBox7: TGroupBox;
+    Label_allusers: TLabel;
+    FDQuery_totalpatients: TFDQuery;
+    Label_activeusers: TLabel;
+    Label_badusers: TLabel;
+    ComboBox2: TComboBox;
+    ListBoxItem4: TListBoxItem;
+    ListBoxItem5: TListBoxItem;
+    ListBoxItem6: TListBoxItem;
+    ListBoxItem7: TListBoxItem;
     procedure FormCreate(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure enterLoginTyping(Sender: TObject);
@@ -170,7 +179,7 @@ Newusername : string;
 
 procedure TForm13.FormCreate(Sender: TObject);
 begin
-  groupbox4.Visible:=false;
+ groupbox4.Visible:=false;
  ListView1.ItemAppearanceObjects.ItemObjects.Accessory.Visible := False;
  ListView2.ItemAppearanceObjects.ItemObjects.Accessory.Visible := False;
  ListView_now.ItemAppearanceObjects.ItemObjects.Accessory.Visible := False;
@@ -201,6 +210,18 @@ begin
 end;
 ListView1.Items.EndUpdate;
 FDQuery_patientlist.Close;
+FDQuery_totalpatients.SQL.Text := 'SELECT (SELECT COUNT(idPatients) FROM patients) AS total_patients, ' +
+                                  '(SELECT COUNT(DISTINCT a.idPatients) FROM appointments a WHERE NOW() ' +
+                                   'BETWEEN a.Starttime AND a.Endtime) AS active_patients, ' +
+                                   '(SELECT COUNT(DISTINCT subquery.idPatients) FROM ( ' +
+                                   'SELECT a.idAppointments,  a.idPatients, a.sdelanovsego, ' +
+                                   'SUM(DATEDIFF(NOW(), a.starttime) * a.kolvden) AS ideal_appointments FROM appointments a ' +
+                                   'WHERE NOW() BETWEEN a.starttime AND a.endtime GROUP BY a.idPatients, a.idAppointments, a.sdelanovsego ' +
+                                   'HAVING  a.sdelanovsego <= (0.7*ideal_appointments) ) as subquery) AS bad_patients';
+FDQuery_totalpatients.Open;
+Label_allusers.Text:= Format('Всего пациентов в базе: %d', [FDQuery_totalpatients.FieldByName('total_patients').AsInteger]);
+Label_activeusers.Text:= Format('Пациентов с назначенными упражнениями:  %d', [FDQuery_totalpatients.FieldByName('active_patients').AsInteger]);
+Label_badusers.Text:= Format('Пациентов с выполнением менее 70 %%:  %d', [FDQuery_totalpatients.FieldByName('bad_patients').AsInteger]);
 end;
 
 
