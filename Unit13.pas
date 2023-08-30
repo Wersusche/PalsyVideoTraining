@@ -63,16 +63,17 @@ type
     Ѕудущие: TTabItem;
     ListView_old: TListView;
     ListView_next: TListView;
+    FDQuery_totalpatients: TFDQuery;
+    FDQuery_openactusers: TFDQuery;
     GroupBox7: TGroupBox;
     Label_allusers: TLabel;
-    FDQuery_totalpatients: TFDQuery;
     Label_activeusers: TLabel;
     Label_badusers: TLabel;
+    FDQuery_baduserslist: TFDQuery;
     ComboBox2: TComboBox;
-    ListBoxItem4: TListBoxItem;
-    ListBoxItem5: TListBoxItem;
-    ListBoxItem6: TListBoxItem;
-    ListBoxItem7: TListBoxItem;
+    ComboBox3: TComboBox;
+    ListView3: TListView;
+    Button3: TButton;
     procedure FormCreate(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure enterLoginTyping(Sender: TObject);
@@ -81,9 +82,12 @@ type
     procedure Button2Click(Sender: TObject);
     procedure TreeView1DblClick(Sender: TObject);
     procedure TreeView1ChangeCheck(Sender: TObject);
-
+    procedure Populateuserdata(ListView: TListView);
+    procedure Button3Click(Sender: TObject);
+    procedure ListView3DblClick(Sender: TObject);
   private
     { Private declarations }
+
   public
     { Public declarations }
     function GenerateRandomPassword: string;
@@ -91,6 +95,7 @@ type
     function GenerateUserName(const FirstName, LastName: string; AConnection: TFDConnection): string;
     function FilterNonEnglishCharacters(const AText: string): string;
     function  AddAppointmentToListView(ListView_now: TListView; FDQuery_patappointments: TFDQuery): TListViewItem;
+
      end;
 
 var
@@ -182,6 +187,7 @@ begin
  groupbox4.Visible:=false;
  ListView1.ItemAppearanceObjects.ItemObjects.Accessory.Visible := False;
  ListView2.ItemAppearanceObjects.ItemObjects.Accessory.Visible := False;
+  ListView3.ItemAppearanceObjects.ItemObjects.Accessory.Visible := False;
  ListView_now.ItemAppearanceObjects.ItemObjects.Accessory.Visible := False;
  ListView_old.ItemAppearanceObjects.ItemObjects.Accessory.Visible := False;
  ListView_next.ItemAppearanceObjects.ItemObjects.Accessory.Visible := False;
@@ -222,6 +228,43 @@ FDQuery_totalpatients.Open;
 Label_allusers.Text:= Format('¬сего пациентов в базе: %d', [FDQuery_totalpatients.FieldByName('total_patients').AsInteger]);
 Label_activeusers.Text:= Format('ѕациентов с назначенными упражнени€ми:  %d', [FDQuery_totalpatients.FieldByName('active_patients').AsInteger]);
 Label_badusers.Text:= Format('ѕациентов с выполнением менее 70 %%:  %d', [FDQuery_totalpatients.FieldByName('bad_patients').AsInteger]);
+
+Combobox2.ItemIndex := Combobox2.Items.Add('ѕациентов с назначенными упражнени€ми: '+ FDQuery_totalpatients.FieldByName('active_patients').AsString);
+Combobox3.ItemIndex := Combobox3.Items.Add('ѕациентов с выполнением менее 70 %: ' + FDQuery_totalpatients.FieldByName('bad_patients').AsString);
+
+FDQuery_openactusers.SQL.Text :=   '(SELECT DISTINCT a.idPatients, p.Name, p.Surname FROM appointments a JOIN patients p ON a.idPatients = p.idPatients WHERE NOW() ' +
+                                   'BETWEEN a.Starttime AND a.Endtime) ';
+FDQuery_openactusers.Open;
+ FDQuery_openactusers.First;
+while not FDQuery_openactusers.Eof do
+begin
+
+ with ListView3.Items.Add do
+  begin
+   Text := FDQuery_openactusers.FieldByName('Surname').AsString + ' ' + FDQuery_openactusers.FieldByName('Name').AsString;
+   Tag := FDQuery_openactusers.FieldByName('idPatients').AsInteger;
+  end;
+
+  FDQuery_openactusers.Next;
+end;
+
+
+FDQuery_baduserslist.SQL.Text :=   'SELECT DISTINCT subquery.idPatients, subquery.Name, subquery.Surname ' +
+                                   'FROM ( SELECT a.idAppointments,  a.idPatients, a.sdelanovsego, p.Name, p.Surname, ' +
+                                   'SUM(DATEDIFF(NOW(), a.starttime) * a.kolvden) AS ideal_appointments FROM appointments a ' +
+    								               'JOIN patients p ON a.idPatients = p.idPatients ' +
+                                   'WHERE NOW() BETWEEN a.starttime AND a.endtime GROUP BY a.idPatients, a.idAppointments, a.sdelanovsego ' +
+                                   'HAVING  a.sdelanovsego <= (0.7*ideal_appointments) ) as subquery ';
+FDQuery_baduserslist.Open;
+ FDQuery_baduserslist.First;
+while not FDQuery_baduserslist.Eof do
+begin
+  ComboBox3.Items.Add(FDQuery_baduserslist.FieldByName('Surname').AsString+ ' ' + FDQuery_baduserslist.FieldByName('Name').AsString);
+  FDQuery_baduserslist.Next;
+end;
+// Close the query
+FDQuery_openactusers.Close;
+FDQuery_totalpatients.Close;
 end;
 
 
@@ -289,6 +332,13 @@ while not FDQuery_disorders.Eof do
   end;
 
   FDQuery_disorders.Close;
+end;
+
+procedure TForm13.Button3Click(Sender: TObject);
+begin
+Groupbox4.Visible:=False;
+Groupbox7.Visible := True;
+Button3.Visible := False;
 end;
 
 function TForm13.CheckExistenceFunc(const AUserName: string; AConnection: TFDConnection): Boolean;
@@ -359,7 +409,55 @@ begin
 end;
 
 procedure TForm13.ListView1DblClick(Sender: TObject);
-  var
+begin
+Populateuserdata(Listview1);
+end;
+
+
+
+procedure TForm13.ListView3DblClick(Sender: TObject);
+begin
+Populateuserdata(Listview3);
+end;
+
+procedure TForm13.TreeView1ChangeCheck(Sender: TObject);
+begin
+if TTreeViewItem(Sender).Count > 0 then
+begin
+TTreeViewItem(Sender).IsChecked := False;
+end;
+end;
+
+procedure TForm13.TreeView1DblClick(Sender: TObject);
+begin
+var
+  SelectedItem: TTreeViewItem;
+begin
+  SelectedItem := TreeView1.Selected;
+  if Assigned(SelectedItem) then
+  begin
+    SelectedItem.IsExpanded := not SelectedItem.IsExpanded;
+  end;
+end;
+end;
+
+
+function TForm13.AddAppointmentToListView(ListView_now: TListView; FDQuery_patappointments: TFDQuery): TListViewItem;
+var
+  ListItem2: TListViewItem;
+begin
+  Result := ListView_now.Items.Add;
+  Result.Text := FDQuery_patappointments.FieldByName('video_name').AsString;
+  Result.Detail := 'c ' + FDQuery_patappointments.FieldByName('Starttime').AsString +
+                      ' по ' + FDQuery_patappointments.FieldByName('Endtime').AsString +
+                      ', количество раз в день: ' + FDQuery_patappointments.FieldByName('kolvden').AsString +
+                      ', сделано всего: ' + FDQuery_patappointments.FieldByName('sdelanovsego').AsString;
+end;
+
+
+  procedure TForm13.Populateuserdata(ListView: TListView);
+
+ var
   SelectedID: Integer;
   YearsDiff: Double;
   ListItem, ListItem2, listnow, listnext, listold: TListViewItem;
@@ -371,12 +469,15 @@ begin
   // Check if an item is selected
   ListView2.Items.Clear;
   ListView_now.Items.Clear;
-  if Assigned(ListView1.Selected) then
+  ListView_old.Items.Clear;
+  ListView_next.Items.Clear;
+  if Assigned(ListView.Selected) then
   begin
      GroupBox7.Visible :=false;
      GroupBox4.Visible :=true;
+     Button3.Visible := True;
     // Get the ID stored in the selected item's Tag property
-    SelectedID := ListView1.Selected.Tag;
+    SelectedID := ListView.Selected.Tag;
 
     // Fetch the details based on the selected ID
     FDQuery_patientpersonal.Close;
@@ -466,41 +567,6 @@ begin
   end;
 end;
 
-
-
-procedure TForm13.TreeView1ChangeCheck(Sender: TObject);
-begin
-if TTreeViewItem(Sender).Count > 0 then
-begin
-TTreeViewItem(Sender).IsChecked := False;
-end;
-end;
-
-procedure TForm13.TreeView1DblClick(Sender: TObject);
-begin
-var
-  SelectedItem: TTreeViewItem;
-begin
-  SelectedItem := TreeView1.Selected;
-  if Assigned(SelectedItem) then
-  begin
-    SelectedItem.IsExpanded := not SelectedItem.IsExpanded;
-  end;
-end;
-end;
-
-
-function TForm13.AddAppointmentToListView(ListView_now: TListView; FDQuery_patappointments: TFDQuery): TListViewItem;
-var
-  ListItem2: TListViewItem;
-begin
-  Result := ListView_now.Items.Add;
-  Result.Text := FDQuery_patappointments.FieldByName('video_name').AsString;
-  Result.Detail := 'c ' + FDQuery_patappointments.FieldByName('Starttime').AsString +
-                      ' по ' + FDQuery_patappointments.FieldByName('Endtime').AsString +
-                      ', количество раз в день: ' + FDQuery_patappointments.FieldByName('kolvden').AsString +
-                      ', сделано всего: ' + FDQuery_patappointments.FieldByName('sdelanovsego').AsString;
-end;
 end.
 
 

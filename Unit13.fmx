@@ -42,7 +42,7 @@
         Align = Scale
         Position.X = 16.000001907348630000
         Position.Y = 14.000000000000000000
-        Size.Width = 385.000061035156300000
+        Size.Width = 385.000091552734400000
         Size.Height = 476.000061035156300000
         Size.PlatformDefault = False
         Text = #1057#1087#1080#1089#1086#1082' '#1087#1072#1094#1080#1077#1085#1090#1086#1074
@@ -53,7 +53,7 @@
           HeaderAppearanceClassName = 'TListHeaderObjects'
           FooterAppearanceClassName = 'TListHeaderObjects'
           Align = Scale
-          Position.X = 24.000005722045900000
+          Position.X = 24.000007629394530000
           Position.Y = 30.000003814697270000
           Size.Width = 337.000030517578100000
           Size.Height = 339.000030517578100000
@@ -219,9 +219,9 @@
       end
       object GroupBox7: TGroupBox
         Align = Scale
-        Position.X = 488.000030517578100000
-        Position.Y = 24.000000000000000000
-        Size.Width = 553.000000000000000000
+        Position.X = 488.000000000000000000
+        Position.Y = 14.000000000000000000
+        Size.Width = 552.999938964843800000
         Size.Height = 555.000000000000000000
         Size.PlatformDefault = False
         Text = #1057#1074#1086#1076#1085#1099#1077' '#1076#1072#1085#1085#1099#1077' '#1087#1086' '#1087#1072#1094#1080#1077#1085#1090#1072#1084
@@ -254,29 +254,46 @@
           TabOrder = 38
         end
         object ComboBox2: TComboBox
-          Position.X = 72.000000000000000000
-          Position.Y = 288.000000000000000000
+          Position.X = 120.000000000000000000
+          Position.Y = 425.000000000000000000
+          Size.Width = 369.000000000000000000
+          Size.Height = 37.000000000000000000
+          Size.PlatformDefault = False
           TabOrder = 41
-          object ListBoxItem4: TListBoxItem
-            TabOrder = 0
-            Text = 'ListBoxItem4'
-          end
-          object ListBoxItem5: TListBoxItem
-            TabOrder = 1
-            Text = 'ListBoxItem5'
-          end
-          object ListBoxItem6: TListBoxItem
-            Size.Width = 19.000000000000000000
-            Size.Height = 19.000000000000000000
+          object ComboBox3: TComboBox
+            Position.Y = 64.000000000000000000
+            Size.Width = 369.000000000000000000
+            Size.Height = 37.000000000000000000
             Size.PlatformDefault = False
-            TabOrder = 2
-            Text = 'ListBoxItem6'
-          end
-          object ListBoxItem7: TListBoxItem
-            TabOrder = 3
-            Text = 'ListBoxItem7'
+            TabOrder = 41
           end
         end
+        object ListView3: TListView
+          ItemAppearanceClassName = 'TListItemAppearance'
+          ItemEditAppearanceClassName = 'TListItemDeleteAppearance'
+          HeaderAppearanceClassName = 'TListHeaderObjects'
+          FooterAppearanceClassName = 'TListHeaderObjects'
+          Align = Scale
+          Position.X = 64.000000000000000000
+          Position.Y = 170.000000000000000000
+          Size.Width = 449.000000000000000000
+          Size.Height = 95.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 0
+          OnDblClick = ListView3DblClick
+          SearchVisible = True
+        end
+      end
+      object Button3: TButton
+        Position.X = 424.000000000000000000
+        Position.Y = 30.000000000000000000
+        Size.Width = 56.000000000000000000
+        Size.Height = 22.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 3
+        Text = #8592' '#1053#1072#1079#1072#1076
+        Visible = False
+        OnClick = Button3Click
       end
     end
     object TabItem3: TTabItem
@@ -475,8 +492,8 @@
   end
   object FDQuery_newpatient: TFDQuery
     Connection = FDConnection1
-    Left = 336
-    Top = 616
+    Left = 320
+    Top = 608
   end
   object FDQuery_patientpersonal: TFDQuery
     Connection = FDConnection1
@@ -497,5 +514,15 @@
     Connection = FDConnection1
     Left = 224
     Top = 568
+  end
+  object FDQuery_openactusers: TFDQuery
+    Connection = FDConnection1
+    Left = 432
+    Top = 240
+  end
+  object FDQuery_baduserslist: TFDQuery
+    Connection = FDConnection1
+    Left = 432
+    Top = 304
   end
 end
