@@ -71,7 +71,6 @@
         Size.Height = 555.000000000000000000
         Size.PlatformDefault = False
         Text = #1057#1074#1086#1076#1085#1099#1077' '#1076#1072#1085#1085#1099#1077' '#1087#1086' '#1087#1072#1094#1080#1077#1085#1090#1091
-        Visible = False
         TabOrder = 2
         object Edit1: TEdit
           Touch.InteractiveGestures = [LongTap, DoubleTap]
@@ -216,15 +215,28 @@
             end
           end
         end
+        object TreeView2: TTreeView
+          Position.X = -63.000000000000000000
+          Position.Y = 243.000000000000000000
+          Size.Width = 440.000000000000000000
+          Size.Height = 155.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 4
+          ShowCheckboxes = True
+          OnChangeCheck = TreeView2ChangeCheck
+          Viewport.Width = 436.000000000000000000
+          Viewport.Height = 151.000000000000000000
+        end
       end
       object GroupBox7: TGroupBox
         Align = Scale
-        Position.X = 488.000000000000000000
+        Position.X = 488.000030517578100000
         Position.Y = 14.000000000000000000
-        Size.Width = 552.999938964843800000
+        Size.Width = 553.000000000000000000
         Size.Height = 555.000000000000000000
         Size.PlatformDefault = False
         Text = #1057#1074#1086#1076#1085#1099#1077' '#1076#1072#1085#1085#1099#1077' '#1087#1086' '#1087#1072#1094#1080#1077#1085#1090#1072#1084
+        Visible = False
         TabOrder = 1
         object Label_allusers: TLabel
           Position.X = 16.000000000000000000
@@ -253,28 +265,13 @@
           Text = '1313'
           TabOrder = 38
         end
-        object ComboBox2: TComboBox
-          Position.X = 120.000000000000000000
-          Position.Y = 425.000000000000000000
-          Size.Width = 369.000000000000000000
-          Size.Height = 37.000000000000000000
-          Size.PlatformDefault = False
-          TabOrder = 41
-          object ComboBox3: TComboBox
-            Position.Y = 64.000000000000000000
-            Size.Width = 369.000000000000000000
-            Size.Height = 37.000000000000000000
-            Size.PlatformDefault = False
-            TabOrder = 41
-          end
-        end
         object ListView3: TListView
           ItemAppearanceClassName = 'TListItemAppearance'
           ItemEditAppearanceClassName = 'TListItemDeleteAppearance'
           HeaderAppearanceClassName = 'TListHeaderObjects'
           FooterAppearanceClassName = 'TListHeaderObjects'
           Align = Scale
-          Position.X = 64.000000000000000000
+          Position.X = 64.000007629394530000
           Position.Y = 170.000000000000000000
           Size.Width = 449.000000000000000000
           Size.Height = 95.000000000000000000
@@ -296,72 +293,59 @@
         OnClick = Button3Click
       end
     end
-    object TabItem3: TTabItem
+    object Tab_cure: TTabItem
       CustomIcon = <
         item
         end>
       IsSelected = False
-      Size.Width = 69.000000000000000000
+      Size.Width = 136.000000000000000000
       Size.Height = 26.000000000000000000
       Size.PlatformDefault = False
       StyleLookup = ''
       TabOrder = 0
-      Text = 'TabItem3'
+      Text = #1053#1072#1079#1085#1072#1095#1077#1085#1080#1077' '#1083#1077#1095#1077#1085#1080#1103
       ExplicitSize.cx = 69.000000000000000000
       ExplicitSize.cy = 26.000000000000000000
-      object ComboBox1: TComboBox
-        Position.X = 144.000000000000000000
-        Position.Y = 86.000000000000000000
-        Size.Width = 305.000000000000000000
-        Size.Height = 22.000000000000000000
-        Size.PlatformDefault = False
-        TabOrder = 0
-        object ListBoxItem1: TListBoxItem
-          TabOrder = 0
-          Text = 'ListBoxItem1'
-        end
-        object ListBoxItem2: TListBoxItem
-          TabOrder = 1
-          Text = 'ListBoxItem2'
-        end
-        object ListBoxItem3: TListBoxItem
-          TabOrder = 2
-          Text = 'ListBoxItem3'
-        end
-      end
       object TreeView1: TTreeView
-        Position.X = 80.000000000000000000
-        Position.Y = 126.000000000000000000
+        Position.X = 464.000000000000000000
+        Position.Y = 22.000000000000000000
         Size.Width = 361.000000000000000000
         Size.Height = 267.000000000000000000
         Size.PlatformDefault = False
         TabOrder = 1
-        OnDblClick = TreeView1DblClick
         ShowCheckboxes = True
         OnChangeCheck = TreeView1ChangeCheck
         Viewport.Width = 357.000000000000000000
         Viewport.Height = 263.000000000000000000
       end
-      object ListBox1: TListBox
-        Position.X = 664.000000000000000000
-        Position.Y = 166.000000000000000000
-        Size.Width = 281.000000000000000000
-        Size.Height = 200.000000000000000000
-        Size.PlatformDefault = False
-        TabOrder = 2
-        DisableFocusEffect = True
-        DefaultItemStyles.ItemStyle = ''
-        DefaultItemStyles.GroupHeaderStyle = ''
-        DefaultItemStyles.GroupFooterStyle = ''
-        Viewport.Width = 277.000000000000000000
-        Viewport.Height = 196.000000000000000000
-      end
       object Button2: TButton
-        Position.X = 608.000000000000000000
-        Position.Y = 78.000000000000000000
-        TabOrder = 3
+        Position.X = 912.000000000000000000
+        Position.Y = 38.000000000000000000
+        TabOrder = 2
         Text = 'Button2'
         OnClick = Button2Click
+      end
+      object ListView_cure: TListView
+        ItemAppearanceClassName = 'TListItemAppearance'
+        ItemEditAppearanceClassName = 'TListItemDeleteAppearance'
+        HeaderAppearanceClassName = 'TListHeaderObjects'
+        FooterAppearanceClassName = 'TListHeaderObjects'
+        Align = Scale
+        Position.X = 14.000000000000000000
+        Position.Y = 22.000000000000000000
+        Size.Width = 387.000000000000000000
+        Size.Height = 409.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 0
+        OnDblClick = ListView1DblClick
+        SearchVisible = True
+      end
+      object Button4: TButton
+        Position.X = 872.000000000000000000
+        Position.Y = 182.000000000000000000
+        TabOrder = 3
+        Text = 'Button4'
+        OnClick = Button4Click
       end
     end
     object Tab_newpatient: TTabItem
@@ -517,12 +501,16 @@
   end
   object FDQuery_openactusers: TFDQuery
     Connection = FDConnection1
-    Left = 432
-    Top = 240
+    Left = 696
+    Top = 600
   end
   object FDQuery_baduserslist: TFDQuery
     Connection = FDConnection1
-    Left = 432
-    Top = 304
+    Left = 600
+    Top = 584
+  end
+  object Text1: TText
+    Position.X = 384.000000000000000000
+    Position.Y = 16.000000000000000000
   end
 end

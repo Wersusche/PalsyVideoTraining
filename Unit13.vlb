@@ -41,9 +41,6 @@ Coordinates=168,188,78,58
 [EnterPassword]
 Coordinates=412,10,102,58
 
-[TabItem3]
-Coordinates=477,256,69,36
-
 [enterName2]
 Coordinates=429,188,85,58
 
@@ -61,4 +58,7 @@ Coordinates=256,188,73,58
 
 [FDQuery_patientpersonal]
 Coordinates=10,256,73,58
+
+[Tab_cure]
+Coordinates=477,256,69,36
 
