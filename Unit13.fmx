@@ -15,7 +15,7 @@
     Size.Width = 1085.000000000000000000
     Size.Height = 660.000000000000000000
     Size.PlatformDefault = False
-    TabIndex = 0
+    TabIndex = 1
     TabOrder = 4
     TabPosition = PlatformDefault
     Sizes = (
@@ -29,7 +29,7 @@
       CustomIcon = <
         item
         end>
-      IsSelected = True
+      IsSelected = False
       Size.Width = 118.000000000000000000
       Size.Height = 26.000000000000000000
       Size.PlatformDefault = False
@@ -40,8 +40,8 @@
       ExplicitSize.cy = 26.000000000000000000
       object GroupBox3: TGroupBox
         Align = Scale
-        Position.X = 16.000001907348630000
-        Position.Y = 14.000000000000000000
+        Position.X = 24.000000000000000000
+        Position.Y = 16.000000000000000000
         Size.Width = 385.000091552734400000
         Size.Height = 476.000061035156300000
         Size.PlatformDefault = False
@@ -53,8 +53,8 @@
           HeaderAppearanceClassName = 'TListHeaderObjects'
           FooterAppearanceClassName = 'TListHeaderObjects'
           Align = Scale
-          Position.X = 24.000007629394530000
-          Position.Y = 30.000003814697270000
+          Position.X = 23.000000000000000000
+          Position.Y = 29.000000000000000000
           Size.Width = 337.000030517578100000
           Size.Height = 339.000030517578100000
           Size.PlatformDefault = False
@@ -65,7 +65,7 @@
       end
       object GroupBox4: TGroupBox
         Align = Scale
-        Position.X = 488.000000000000000000
+        Position.X = 488.000030517578100000
         Position.Y = 24.000000000000000000
         Size.Width = 553.000000000000000000
         Size.Height = 555.000000000000000000
@@ -98,18 +98,6 @@
           Size.PlatformDefault = False
           Text = #1055#1072#1090#1086#1083#1086#1075#1080#1080
           TabOrder = 39
-          object ListView2: TListView
-            ItemAppearanceClassName = 'TListItemRightDetailAppearance'
-            ItemEditAppearanceClassName = 'TListItemRightDetailDeleteAppearance'
-            HeaderAppearanceClassName = 'TListHeaderObjects'
-            FooterAppearanceClassName = 'TListHeaderObjects'
-            Position.X = 8.000000000000000000
-            Position.Y = 24.000000000000000000
-            Size.Width = 489.000000000000000000
-            Size.Height = 153.000000000000000000
-            Size.PlatformDefault = False
-            TabOrder = 38
-          end
         end
         object GroupBox6: TGroupBox
           Position.X = 16.000000000000000000
@@ -148,17 +136,15 @@
               Text = #1058#1077#1082#1091#1097#1080#1077
               ExplicitSize.cx = 68.000000000000000000
               ExplicitSize.cy = 26.000000000000000000
-              object ListView_now: TListView
-                ItemAppearanceClassName = 'TImageListItemBottomDetailAppearance'
-                ItemEditAppearanceClassName = 'TImageListItemBottomDetailShowCheckAppearance'
-                HeaderAppearanceClassName = 'TListHeaderObjects'
-                FooterAppearanceClassName = 'TListHeaderObjects'
-                Position.X = 16.000000000000000000
-                Position.Y = 24.000000000000000000
+              object TreeView_now: TTreeView
+                Position.X = 8.000000000000000000
+                Position.Y = 8.000000000000000000
                 Size.Width = 465.000000000000000000
-                Size.Height = 121.000000000000000000
+                Size.Height = 137.000000000000000000
                 Size.PlatformDefault = False
                 TabOrder = 0
+                Viewport.Width = 461.000000000000000000
+                Viewport.Height = 133.000000000000000000
               end
             end
             object Прошлые: TTabItem
@@ -174,17 +160,15 @@
               Text = #1055#1088#1086#1096#1083#1099#1077
               ExplicitSize.cx = 74.000000000000000000
               ExplicitSize.cy = 26.000000000000000000
-              object ListView_old: TListView
-                ItemAppearanceClassName = 'TImageListItemBottomDetailAppearance'
-                ItemEditAppearanceClassName = 'TImageListItemBottomDetailShowCheckAppearance'
-                HeaderAppearanceClassName = 'TListHeaderObjects'
-                FooterAppearanceClassName = 'TListHeaderObjects'
-                Position.X = 16.000000000000000000
-                Position.Y = 32.000000000000000000
+              object TreeView_old: TTreeView
+                Position.X = 8.000000000000000000
+                Position.Y = 8.000000000000000000
                 Size.Width = 465.000000000000000000
-                Size.Height = 96.000000000000000000
+                Size.Height = 137.000000000000000000
                 Size.PlatformDefault = False
-                TabOrder = 0
+                TabOrder = 40
+                Viewport.Width = 461.000000000000000000
+                Viewport.Height = 133.000000000000000000
               end
             end
             object Будущие: TTabItem
@@ -200,31 +184,29 @@
               Text = #1041#1091#1076#1091#1097#1080#1077
               ExplicitSize.cx = 69.000000000000000000
               ExplicitSize.cy = 26.000000000000000000
-              object ListView_next: TListView
-                ItemAppearanceClassName = 'TImageListItemBottomDetailAppearance'
-                ItemEditAppearanceClassName = 'TImageListItemBottomDetailShowCheckAppearance'
-                HeaderAppearanceClassName = 'TListHeaderObjects'
-                FooterAppearanceClassName = 'TListHeaderObjects'
+              object TreeView_next: TTreeView
                 Position.X = 8.000000000000000000
-                Position.Y = 32.000000000000000000
+                Position.Y = 16.000000000000000000
                 Size.Width = 465.000000000000000000
-                Size.Height = 96.000000000000000000
+                Size.Height = 129.000000000000000000
                 Size.PlatformDefault = False
-                TabOrder = 0
+                TabOrder = 40
+                Viewport.Width = 461.000000000000000000
+                Viewport.Height = 125.000000000000000000
               end
             end
           end
         end
         object TreeView2: TTreeView
-          Position.X = -63.000000000000000000
-          Position.Y = 243.000000000000000000
-          Size.Width = 440.000000000000000000
+          Position.X = 24.000000000000000000
+          Position.Y = 91.000000000000000000
+          Size.Width = 481.000000000000000000
           Size.Height = 155.000000000000000000
           Size.PlatformDefault = False
           TabOrder = 4
           ShowCheckboxes = True
           OnChangeCheck = TreeView2ChangeCheck
-          Viewport.Width = 436.000000000000000000
+          Viewport.Width = 477.000000000000000000
           Viewport.Height = 151.000000000000000000
         end
       end
@@ -297,7 +279,7 @@
       CustomIcon = <
         item
         end>
-      IsSelected = False
+      IsSelected = True
       Size.Width = 136.000000000000000000
       Size.Height = 26.000000000000000000
       Size.PlatformDefault = False
@@ -307,8 +289,8 @@
       ExplicitSize.cx = 69.000000000000000000
       ExplicitSize.cy = 26.000000000000000000
       object TreeView1: TTreeView
-        Position.X = 464.000000000000000000
-        Position.Y = 22.000000000000000000
+        Position.X = 680.000000000000000000
+        Position.Y = 254.000000000000000000
         Size.Width = 361.000000000000000000
         Size.Height = 267.000000000000000000
         Size.PlatformDefault = False
@@ -331,9 +313,9 @@
         HeaderAppearanceClassName = 'TListHeaderObjects'
         FooterAppearanceClassName = 'TListHeaderObjects'
         Align = Scale
-        Position.X = 14.000000000000000000
+        Position.X = 14.000000953674320000
         Position.Y = 22.000000000000000000
-        Size.Width = 387.000000000000000000
+        Size.Width = 387.000030517578100000
         Size.Height = 409.000000000000000000
         Size.PlatformDefault = False
         TabOrder = 0
@@ -362,8 +344,8 @@
       ExplicitSize.cx = 107.000000000000000000
       ExplicitSize.cy = 26.000000000000000000
       object Button1: TButton
-        Position.X = 416.000000000000000000
-        Position.Y = 318.000000000000000000
+        Position.X = 256.000000000000000000
+        Position.Y = 334.000000000000000000
         Size.Width = 185.000000000000000000
         Size.Height = 35.000000000000000000
         Size.PlatformDefault = False
@@ -412,9 +394,9 @@
         end
       end
       object GroupBox2: TGroupBox
-        Position.X = 40.000000000000000000
+        Position.X = 41.000000000000000000
         Position.Y = 30.000000000000000000
-        Size.Width = 385.000000000000000000
+        Size.Width = 400.000000000000000000
         Size.Height = 131.000000000000000000
         Size.PlatformDefault = False
         Text = #1051#1080#1095#1085#1099#1077' '#1076#1072#1085#1085#1099#1077
@@ -443,9 +425,15 @@
         end
         object DateEdit1: TDateEdit
           Date = 45159.000000000000000000
-          Position.X = 16.000000000000000000
+          Position.X = 136.000000000000000000
           Position.Y = 78.000000000000000000
           TabOrder = 38
+        end
+        object Label2: TLabel
+          Position.X = 16.000000000000000000
+          Position.Y = 80.000000000000000000
+          Text = #1044#1072#1090#1072' '#1088#1086#1078#1076#1077#1085#1080#1103':'
+          TabOrder = 39
         end
       end
     end
@@ -508,9 +496,5 @@
     Connection = FDConnection1
     Left = 600
     Top = 584
-  end
-  object Text1: TText
-    Position.X = 384.000000000000000000
-    Position.Y = 16.000000000000000000
   end
 end

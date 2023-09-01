@@ -45,19 +45,15 @@ type
     GroupBox4: TGroupBox;
     Label1: TLabel;
     GroupBox5: TGroupBox;
-    ListView2: TListView;
     GroupBox6: TGroupBox;
     TabControl2: TTabControl;
     Текущие: TTabItem;
     Прошлые: TTabItem;
     FDQuery_patappointments: TFDQuery;
-    ListView_now: TListView;
     TreeView1: TTreeView;
     Button2: TButton;
     FDQuery_disorders: TFDQuery;
     Будущие: TTabItem;
-    ListView_old: TListView;
-    ListView_next: TListView;
     FDQuery_totalpatients: TFDQuery;
     FDQuery_openactusers: TFDQuery;
     GroupBox7: TGroupBox;
@@ -68,9 +64,12 @@ type
     ListView3: TListView;
     Button3: TButton;
     ListView_cure: TListView;
-    Text1: TText;
     Button4: TButton;
     TreeView2: TTreeView;
+    TreeView_now: TTreeView;
+    TreeView_old: TTreeView;
+    TreeView_next: TTreeView;
+    Label2: TLabel;
     procedure FormCreate(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure enterLoginTyping(Sender: TObject);
@@ -78,11 +77,12 @@ type
     procedure ListView1DblClick(Sender: TObject);
     procedure Button2Click(Sender: TObject);
     procedure TreeView1ChangeCheck(Sender: TObject);
-    procedure Populateuserdata(ListView: TListView);
+    procedure Populateuserdata(Listview: TListView);
     procedure Button3Click(Sender: TObject);
     procedure ListView3DblClick(Sender: TObject);
     procedure Button4Click(Sender: TObject);
     procedure TreeView2ChangeCheck(Sender: TObject);
+    procedure Populateinitiallist(const ListView: TListView);
   private
     { Private declarations }
 
@@ -92,7 +92,7 @@ type
     function CheckExistenceFunc(const AUserName: string; AConnection: TFDConnection): Boolean;
     function GenerateUserName(const FirstName, LastName: string; AConnection: TFDConnection): string;
     function FilterNonEnglishCharacters(const AText: string): string;
-    function  AddAppointmentToListView(ListView_now: TListView; FDQuery_patappointments: TFDQuery): TListViewItem;
+    function  AddAppointmentToListView(Treeview: TTreeview; FDQuery_patappointments: TFDQuery): TTreeViewItem;
 
      end;
 
@@ -178,18 +178,32 @@ Newusername : string;
       end;
     end;
 
+ procedure TForm13.Populateinitiallist(const ListView: TListView);
+begin
+FDQuery_patientlist.SQL.Text := 'SELECT Name, Surname, idPatients FROM patients';
+FDQuery_patientlist.Open;
+ListView.Items.Clear;
+ListView.Items.BeginUpdate;
+while not FDQuery_patientlist.Eof do
+begin
+  with ListView.Items.Add do
+  begin
+   Text := FDQuery_patientlist.FieldByName('Surname').AsString + ' ' +
+            FDQuery_patientlist.FieldByName('Name').AsString;
+   Tag := FDQuery_patientlist.FieldByName('idPatients').AsInteger;
+  end;
+    FDQuery_patientlist.Next;
+end;
+  ListView.Items.EndUpdate;
+  FDQuery_patientlist.Close;
+  end;
 
-
-procedure TForm13.FormCreate(Sender: TObject);
+  procedure TForm13.FormCreate(Sender: TObject);
 begin
  groupbox4.Visible:=false;
  ListView1.ItemAppearanceObjects.ItemObjects.Accessory.Visible := False;
- ListView2.ItemAppearanceObjects.ItemObjects.Accessory.Visible := False;
-  ListView3.ItemAppearanceObjects.ItemObjects.Accessory.Visible := False;
- ListView_now.ItemAppearanceObjects.ItemObjects.Accessory.Visible := False;
- ListView_old.ItemAppearanceObjects.ItemObjects.Accessory.Visible := False;
- ListView_next.ItemAppearanceObjects.ItemObjects.Accessory.Visible := False;
-  ListView_cure.ItemAppearanceObjects.ItemObjects.Accessory.Visible := False;
+ ListView3.ItemAppearanceObjects.ItemObjects.Accessory.Visible := False;
+ ListView_cure.ItemAppearanceObjects.ItemObjects.Accessory.Visible := False;
  FDConnection1.DriverName := 'MySQL';
     FDConnection1.Params.Values['Database'] := 'palsy_db';
     FDConnection1.Params.Values['User_Name'] := 'wersusche';
@@ -198,32 +212,11 @@ begin
     FDConnection1.Params.Values['CharacterSet'] := 'utf8mb4';
         // Connection settings
 
-FDQuery_patientlist.SQL.Text := 'SELECT Name, Surname, idPatients FROM patients';
-FDQuery_patientlist.Open;
 
-ListView1.Items.BeginUpdate;
-ListView1.Items.Clear;
-ListView_cure.Items.Clear;
-ListView_cure.Items.BeginUpdate;
-while not FDQuery_patientlist.Eof do
-begin
-  with ListView1.Items.Add do
-  begin
-   Text := FDQuery_patientlist.FieldByName('Surname').AsString + ' ' +
-            FDQuery_patientlist.FieldByName('Name').AsString;
-   Tag := FDQuery_patientlist.FieldByName('idPatients').AsInteger;
-  end;
-  with ListView_cure.Items.Add do
-  begin
-   Text := FDQuery_patientlist.FieldByName('Surname').AsString + ' ' +
-            FDQuery_patientlist.FieldByName('Name').AsString;
-   Tag := FDQuery_patientlist.FieldByName('idPatients').AsInteger;
-  end;
-  FDQuery_patientlist.Next;
-end;
-ListView1.Items.EndUpdate;
-ListView_cure.Items.EndUpdate;
-FDQuery_patientlist.Close;
+Populateinitiallist(Listview1);
+Populateinitiallist(Listview_cure);
+
+
 FDQuery_totalpatients.SQL.Text := 'SELECT (SELECT COUNT(idPatients) FROM patients) AS total_patients, ' +
                                   '(SELECT COUNT(DISTINCT a.idPatients) FROM appointments a WHERE NOW() ' +
                                    'BETWEEN a.Starttime AND a.Endtime) AS active_patients, ' +
@@ -483,36 +476,69 @@ TTreeViewItem(Sender).IsChecked := False;
 end;
 end;
 
-function TForm13.AddAppointmentToListView(ListView_now: TListView; FDQuery_patappointments: TFDQuery): TListViewItem;
+function TForm13.AddAppointmentToListView(Treeview: TTreeView; FDQuery_patappointments: TFDQuery): TTreeViewItem;
 var
-  ListItem2: TListViewItem;
+  ParentNode, ChildNode: TTreeViewItem;
 begin
-  Result := ListView_now.Items.Add;
-  Result.Text := FDQuery_patappointments.FieldByName('video_name').AsString;
-  Result.Detail := 'c ' + FDQuery_patappointments.FieldByName('Starttime').AsString +
-                      ' по ' + FDQuery_patappointments.FieldByName('Endtime').AsString +
-                      ', количество раз в день: ' + FDQuery_patappointments.FieldByName('kolvden').AsString +
-                      ', сделано всего: ' + FDQuery_patappointments.FieldByName('sdelanovsego').AsString;
-  
-end;
+   TreeView.BeginUpdate;
+
+    ParentNode := TTreeViewItem.Create(TreeView);
+    ParentNode.Parent := TreeView;
+    ParentNode.Text := 'Назначение с ' + FDQuery_patappointments.FieldByName('Starttime').AsString +
+                       ' по ' + FDQuery_patappointments.FieldByName('Endtime').AsString;
+  if (InRange(Now(), FDQuery_patappointments.FieldByName('Starttime').AsDateTime, FDQuery_patappointments.FieldByName('Endtime').AsDateTime) and
+   (FDQuery_patappointments.FieldByName('done_percent').AsInteger < 70)) or
+  ((Now() > FDQuery_patappointments.FieldByName('Endtime').AsDateTime) and (FDQuery_patappointments.FieldByName('done_percent').AsInteger < 70)) then
+
+  begin
+   ParentNode.StyledSettings := ParentNode.StyledSettings -  [TStyledSetting.FontColor];
+   ParentNode.TextSettings.FontColor := TAlphaColorRec.Red;
+   end;
+
+    // Create child nodes for the details
+    ChildNode := TTreeViewItem.Create(ParentNode);
+    ChildNode.Parent := ParentNode;
+    ChildNode.Text := 'Упражнение: ' + FDQuery_patappointments.FieldByName('video_name').AsString;
+
+    ChildNode := TTreeViewItem.Create(ParentNode);
+    ChildNode.Parent := ParentNode;
+    ChildNode.Text := 'Количество в день: ' + FDQuery_patappointments.FieldByName('kolvden').AsString;
+
+    ChildNode := TTreeViewItem.Create(ParentNode);
+    ChildNode.Parent := ParentNode;
+    ChildNode.Text := 'Сделано всего: ' + FDQuery_patappointments.FieldByName('sdelanovsego').AsString;
+
+    ChildNode := TTreeViewItem.Create(ParentNode);
+    ChildNode.Parent := ParentNode;
+    ChildNode.Text := 'Процент выполнения: ' + FDQuery_patappointments.FieldByName('done_percent').AsString + '%';
+
+    TreeView.EndUpdate;
+
+  end;
 
 
-  procedure TForm13.Populateuserdata(ListView: TListView);
 
- var
+
+  procedure TForm13.Populateuserdata(Listview: TListView);
+  var
   SelectedID: Integer;
   YearsDiff: Double;
-  ListItem, ListItem2, listnow, listnext, listold: TListViewItem;
+  ListItem, ListItem2, listnow, listnext, listold: TTreeViewItem;
   Row: Integer;
     DailyExerciseCount, TotalExerciseCount: Integer;
   DaysPassed, ProjectedExerciseCount: Integer;
     CompletionRate: Double;
+      ParentNode, ChildNode: TTreeViewItem;
+  TypeField, NameField: TField;
+      TypeDict: TDictionary<string, TTreeViewItem>;
+        DisorderType, DisorderName: string;
+        NoDisorders: Boolean;
 begin
   // Check if an item is selected
-  ListView2.Items.Clear;
-  ListView_now.Items.Clear;
-  ListView_old.Items.Clear;
-  ListView_next.Items.Clear;
+  TreeView2.Clear;
+  TreeView_now.Clear;
+  TreeView_old.Clear;
+  TreeView_next.Clear;
   if Assigned(ListView.Selected) then
   begin
      GroupBox7.Visible :=false;
@@ -521,7 +547,7 @@ begin
     // Get the ID stored in the selected item's Tag property
     SelectedID := ListView.Selected.Tag;
 
-    // Fetch the details based on the selected ID
+
     FDQuery_patientpersonal.Close;
     FDQuery_patientpersonal.SQL.Text := 'SELECT p.Name, p.Surname, p.Secname, p.Birthdate, d.Disorder_name, d.Disorder_type ' +
                                          'FROM patients p ' +
@@ -531,7 +557,7 @@ begin
 
     FDQuery_patientpersonal.ParamByName('ID').AsInteger := SelectedID;
     FDQuery_patientpersonal.Open;
-        try
+   try
       if not FDQuery_patientpersonal.Eof then
       begin
         YearsDiff := YearSpan(Now(),FDQuery_patientpersonal.FieldByName('Birthdate').AsDateTime);
@@ -541,69 +567,98 @@ begin
         FDQuery_patientpersonal.FieldByName('Secname').AsString,
         FDQuery_patientpersonal.FieldByName('Birthdate').AsString, Trunc(YearsDiff),
         Round(Frac(YearsDiff) * 12)]);
+      end;
 
-    while not FDQuery_patientpersonal.Eof do
+      TreeView2.BeginUpdate;
+  TypeDict := TDictionary<string, TTreeViewItem>.Create;
+  NoDisorders := True;
+  try
+    TreeView2.Clear;
+     while not FDQuery_patientpersonal.Eof do
+         begin
+     TypeField := FDQuery_patientpersonal.FindField('Disorder_type');
+      NameField := FDQuery_patientpersonal.FindField('Disorder_name');
+
+    if Assigned(TypeField) and not TypeField.IsNull and
+    Assigned(NameField) and not NameField.IsNull then
+      // Check if we've moved on to a new Disorder_type
+       begin
+       NoDisorders := False;
+        DisorderType := TypeField.AsString;
+        DisorderName := NameField.AsString;
+
+        // Look for existing parent TreeView item for this Disorder_type
+        if not TypeDict.TryGetValue(DisorderType, ParentNode) then
+        begin
+          // Create a new parent TreeView item for this Disorder_type
+          ParentNode := TTreeViewItem.Create(TreeView2);
+          ParentNode.Parent := TreeView2;
+          ParentNode.Text := DisorderType;
+          ParentNode.Expand;  // Expand the parent item to show children
+          // Add to dictionary for future lookup
+          TypeDict.Add(DisorderType, ParentNode);
+        end;
+
+        // Create child item for Disorder_name
+        ChildNode := TTreeViewItem.Create(ParentNode);
+        ChildNode.Parent := ParentNode;
+        ChildNode.Text := DisorderName;
+      end;
+
+      FDQuery_patientpersonal.Next;
+    end;
+    if NoDisorders then
     begin
-  ListItem := ListView2.Items.Add;
-  ListItem.Text := FDQuery_patientpersonal.FieldByName('Disorder_name').AsString;
-  ListItem.Detail := FDQuery_patientpersonal.FieldByName('Disorder_type').AsString;
-    FDQuery_patientpersonal.Next;
+      ParentNode := TTreeViewItem.Create(TreeView2);
+      ParentNode.Parent := TreeView2;
+      ParentNode.Text := 'У пациента не указаны патологии!';
     end;
-    end;
-      finally
-      FDQuery_patientpersonal.Close;
-    end;
+
+  finally
+    TreeView2.EndUpdate;
+    TypeDict.Free;
+  end;
+
+        finally
+  FDQuery_patientpersonal.Close;
+        end;
 
     FDQuery_patappointments.Close;
-    FDQuery_patappointments.SQL.Text := 'SELECT a.Starttime, a.Endtime, a.kolvden, a.sdelanovsego, v.video_name ' +
+    FDQuery_patappointments.SQL.Text := 'SELECT a.Starttime, a.Endtime, a.kolvden, a.sdelanovsego, a.done_percent, v.video_name ' +
                                          'FROM appointments a ' +
                                          'LEFT JOIN videos v ON a.idvideos = v.idvideos ' +
                                          'WHERE a.idPatients = :ID';
       FDQuery_patappointments.ParamByName('ID').AsInteger := SelectedID;
        FDQuery_patappointments.Open;
-      ListView_now.BeginUpdate;
+
   try
     // Assume FDQuery1 has been prepared and opened to select your fields
     while not FDQuery_patappointments.EOF do
     begin
     if InRange(Now(), FDQuery_patappointments.FieldByName('Starttime').AsDateTime, FDQuery_patappointments.FieldByName('Endtime').AsDateTime) then
         begin
-     listnow:= AddAppointmentToListView(ListView_now, FDQuery_patappointments);
+     listnow:= AddAppointmentToListView(TreeView_now, FDQuery_patappointments);
 
-     // Calculate the number of days from the start date to the current date
-    DaysPassed := DaysBetween(Now(), FDQuery_patappointments.FieldByName('Starttime').AsDateTime);
-    DailyExerciseCount := FDQuery_patappointments.FieldByName('kolvden').AsInteger;
-    TotalExerciseCount := FDQuery_patappointments.FieldByName('sdelanovsego').AsInteger;
-
-    // Calculate how many exercises should have been done by now
-    ProjectedExerciseCount := DaysPassed * DailyExerciseCount;
-
-    // Calculate the completion rate
-    if ProjectedExerciseCount > 0 then
-      CompletionRate := (TotalExerciseCount / ProjectedExerciseCount) * 100
-    else
-      CompletionRate := 0;
-
-    if CompletionRate < 70 then
-    begin
-     listnow.Objects.TextObject.TextColor:= TAlphaColors.Red;
-     listnow.Objects.DetailObject.TextColor := TAlphaColors.Red;
-    end;
+//    if CompletionRate < 70 then
+//    begin
+//     listnow.Objects.TextObject.TextColor:= TAlphaColors.Red;
+//     listnow.Objects.DetailObject.TextColor := TAlphaColors.Red;
+//    end;
      FDQuery_patappointments.Next;
        end
-     else if Now() > FDQuery_patappointments.FieldByName('Starttime').AsDateTime then
+     else if Now() > FDQuery_patappointments.FieldByName('Endtime').AsDateTime then
       begin
-      listold:= AddAppointmentToListView(ListView_old, FDQuery_patappointments);
+      listold:= AddAppointmentToListView(TreeView_old, FDQuery_patappointments);
       FDQuery_patappointments.Next;
       end
       else if Now() < FDQuery_patappointments.FieldByName('Starttime').AsDateTime then
       begin
-      listnext:= AddAppointmentToListView(ListView_next, FDQuery_patappointments);
+      listnext:= AddAppointmentToListView(TreeView_next, FDQuery_patappointments);
       FDQuery_patappointments.Next;
       end;
     end;
      finally
-    ListView_now.EndUpdate;
+
     FDQuery_patappointments.Close;
   end;
   end;
