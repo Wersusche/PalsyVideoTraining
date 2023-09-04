@@ -51,7 +51,6 @@ type
     Прошлые: TTabItem;
     FDQuery_patappointments: TFDQuery;
     TreeView1: TTreeView;
-    Button2: TButton;
     FDQuery_disorders: TFDQuery;
     Будущие: TTabItem;
     FDQuery_totalpatients: TFDQuery;
@@ -64,25 +63,39 @@ type
     ListView3: TListView;
     Button3: TButton;
     ListView_cure: TListView;
-    Button4: TButton;
     TreeView2: TTreeView;
     TreeView_now: TTreeView;
     TreeView_old: TTreeView;
     TreeView_next: TTreeView;
     Label2: TLabel;
+    Button5: TButton;
+    Button_alter_appoint: TButton;
+    Button_alter_disorders: TButton;
+    GroupBox8: TGroupBox;
+    TabControl3: TTabControl;
+    Patspecials: TTabItem;
+    Lechenie: TTabItem;
+    Button2: TButton;
+    FDQuery_sortdisorders: TFDQuery;
     procedure FormCreate(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure enterLoginTyping(Sender: TObject);
     procedure EnterPasswordTyping(Sender: TObject);
-    procedure ListView1DblClick(Sender: TObject);
     procedure Button2Click(Sender: TObject);
     procedure TreeView1ChangeCheck(Sender: TObject);
     procedure Populateuserdata(Listview: TListView);
     procedure Button3Click(Sender: TObject);
     procedure ListView3DblClick(Sender: TObject);
-    procedure Button4Click(Sender: TObject);
     procedure TreeView2ChangeCheck(Sender: TObject);
     procedure Populateinitiallist(const ListView: TListView);
+    procedure Button5Click(Sender: TObject);
+    procedure Populatedisorderslist(const TreeView: TTreeView);
+    procedure ListView_cureChange(Sender: TObject);
+    procedure ListView_cureClick(Sender: TObject);
+    procedure CheckTreeViewItemsForPatient(TreeItem: TTreeViewItem; DisorderIDs: TList<Integer>);
+     procedure UncheckAllTreeViewItems(TreeItem: TTreeViewItem);
+    procedure Button_alter_disordersClick(Sender: TObject);
+    procedure ListView1DblClick(Sender: TObject);
   private
     { Private declarations }
 
@@ -215,7 +228,7 @@ begin
 
 Populateinitiallist(Listview1);
 Populateinitiallist(Listview_cure);
-
+Populatedisorderslist(Treeview1);
 
 FDQuery_totalpatients.SQL.Text := 'SELECT (SELECT COUNT(idPatients) FROM patients) AS total_patients, ' +
                                   '(SELECT COUNT(DISTINCT a.idPatients) FROM appointments a WHERE NOW() ' +
@@ -302,34 +315,11 @@ end;
 
 
 procedure TForm13.Button2Click(Sender: TObject);
-var
-  CurrentType: string;
-  CurrentTypeNode, DisorderNode: TTreeViewItem;
+
 begin
-FDQuery_disorders.SQL.Text := 'SELECT d.idDisorders, d.Disorder_name, d.Disorder_type FROM disorders d ORDER BY Disorder_Type';
-FDQuery_disorders.Open;
-CurrentType := '';
-TreeView1.Clear;
-
-while not FDQuery_disorders.Eof do
-    begin
- if CurrentType <> FDQuery_disorders.FieldByName('Disorder_type').AsString then
-    begin
-      CurrentType := FDQuery_disorders.FieldByName('Disorder_type').AsString;
-      CurrentTypeNode := TTreeViewItem.Create(TreeView1);
-      CurrentTypeNode.Text := CurrentType;
-      TreeView1.AddObject(CurrentTypeNode);
-    end;
-
-    DisorderNode := TTreeViewItem.Create(CurrentTypeNode);
-    DisorderNode.Text := FDQuery_disorders.FieldByName('Disorder_name').AsString;
-    CurrentTypeNode.AddObject(DisorderNode);
-
-    FDQuery_disorders.Next;
+Populatedisorderslist(Treeview1);
   end;
 
-  FDQuery_disorders.Close;
-end;
 
 procedure TForm13.Button3Click(Sender: TObject);
 begin
@@ -340,46 +330,58 @@ end;
 
 
 
-procedure TForm13.Button4Click(Sender: TObject);
-var
-  ParentNode, ChildNode: TTreeViewItem;
+procedure TForm13.Button5Click(Sender: TObject);
 begin
-  TreeView2.Clear;
-  FDQuery_patappointments.Close;
-    FDQuery_patappointments.SQL.Text := 'SELECT a.Starttime, a.Endtime, a.kolvden, a.sdelanovsego, v.video_name ' +
-                                         'FROM appointments a ' +
-                                         'LEFT JOIN videos v ON a.idvideos = v.idvideos ' +
-                                         'WHERE a.idPatients = 1';
-      FDQuery_patappointments.open;
-while not FDQuery_patappointments.Eof do
-  begin
- // Create a new parent node for each appointment
-    ParentNode := TTreeViewItem.Create(TreeView2);
-    ParentNode.Parent := TreeView2;
-    ParentNode.Text := 'Назначение с ' + FDQuery_patappointments.FieldByName('Starttime').AsString +
-                       ' по ' + FDQuery_patappointments.FieldByName('Endtime').AsString;
-
-    // Create child nodes for the details
-    ChildNode := TTreeViewItem.Create(ParentNode);
-    ChildNode.Parent := ParentNode;
-    ChildNode.Text := 'Упражнение: ' + FDQuery_patappointments.FieldByName('video_name').AsString;
-
-    ChildNode := TTreeViewItem.Create(ParentNode);
-    ChildNode.Parent := ParentNode;
-    ChildNode.Text := 'Количество в день: ' + FDQuery_patappointments.FieldByName('kolvden').AsString;
-
-    ChildNode := TTreeViewItem.Create(ParentNode);
-    ChildNode.Parent := ParentNode;
-    ChildNode.Text := 'Сделано всего: ' + FDQuery_patappointments.FieldByName('sdelanovsego').AsString;
-
-    // Move to the next record
-    FDQuery_patappointments.Next;
-  end;
-
-  // Close the query
-  FDQuery_patappointments.Close;
-
+Populateinitiallist(Listview_cure);
+TabControl3.Enabled := ListView_cure.ItemIndex <> -1;
 end;
+
+procedure TForm13.Button_alter_disordersClick(Sender: TObject);
+var
+  i, j: Integer;
+  TreeItem, ChildItem: TTreeViewItem;
+  ListViewTag, TreeViewTag: Integer;
+  FDQuery: TFDQuery; // Assuming you have this object set up for your database
+begin
+  if ListView_cure.Selected <> nil then
+  begin
+    ListViewTag := ListView_cure.Selected.Tag; // patient_id
+    FDQuery := TFDQuery.Create(nil); // Create a new query object
+    try
+      FDQuery.Connection := FDConnection1; // Assign the FireDAC connection
+
+      for i := 0 to TreeView1.Count - 1 do
+      begin
+        TreeItem := TreeView1.Items[i];
+        for j := 0 to TreeItem.Count - 1 do
+        begin
+          ChildItem := TreeItem.Items[j];
+          TreeViewTag := ChildItem.Tag;
+          if ChildItem.IsChecked then
+          begin
+             // Prepare the SQL query for insertion
+            FDQuery.SQL.Text := 'INSERT IGNORE INTO patient_disorders (patient_id, disorder_id) VALUES (:pid, :did)';
+          end
+          else
+          begin
+            // Prepare the SQL query for deletion
+            FDQuery.SQL.Text := 'DELETE FROM patient_disorders WHERE patient_id = :pid AND disorder_id = :did';
+          end;
+            // Prepare the SQL query
+            FDQuery.ParamByName('pid').AsInteger := ListViewTag;
+            FDQuery.ParamByName('did').AsInteger := TreeViewTag;
+
+            // Execute the SQL command
+            FDQuery.ExecSQL;
+          end;
+        end;
+      finally
+      FDQuery.Free; // Free the query object
+    end;
+  end
+  else
+  Showmessage('Пациент не выбран!');
+  end;
 
 function TForm13.CheckExistenceFunc(const AUserName: string; AConnection: TFDConnection): Boolean;
 var
@@ -450,14 +452,51 @@ end;
 
 procedure TForm13.ListView1DblClick(Sender: TObject);
 begin
-Populateuserdata(Listview1);
+Populateuserdata(Listview1)
 end;
-
-
 
 procedure TForm13.ListView3DblClick(Sender: TObject);
 begin
 Populateuserdata(Listview3);
+end;
+
+procedure TForm13.ListView_cureChange(Sender: TObject);
+var
+  i: Integer;
+  DisorderIDs: TList<Integer>;
+  TreeItem: TTreeViewItem;
+
+begin
+TabControl3.Enabled := ListView_cure.ItemIndex <> -1;
+  for i := 0 to TreeView1.Count - 1 do
+  begin
+    UncheckAllTreeViewItems(TreeView1.Items[i]);
+  end;
+
+DisorderIDs := TList<Integer>.Create;
+FDQuery_sortdisorders.SQL.Text := 'SELECT disorder_id FROM patient_disorders where patient_id = :ID';
+FDQuery_sortdisorders.ParamByName('ID').AsInteger := ListView_cure.Selected.Tag;
+FDQuery_sortdisorders.Open;
+
+      while not FDQuery_sortdisorders.Eof do
+      begin
+        DisorderIDs.Add(FDQuery_sortdisorders.FieldByName('disorder_id').AsInteger);
+        FDQuery_sortdisorders.Next;
+      end;
+
+      FDQuery_sortdisorders.Close;
+
+for i := 0 to TreeView1.Count - 1 do
+  begin
+    CheckTreeViewItemsForPatient(TreeView1.Items[i], DisorderIDs);
+  end;
+
+end;
+
+procedure TForm13.ListView_cureClick(Sender: TObject);
+
+begin
+TabControl3.Enabled := ListView_cure.ItemIndex <> -1;
 end;
 
 procedure TForm13.TreeView1ChangeCheck(Sender: TObject);
@@ -663,6 +702,79 @@ begin
   end;
   end;
 end;
+
+ procedure TForm13.Populatedisorderslist(const TreeView: TTreeView);
+var
+  CurrentType: string;
+  CurrentTypeNode, DisorderNode: TTreeViewItem;
+begin
+FDQuery_disorders.SQL.Text := 'SELECT d.idDisorders, d.Disorder_name, d.Disorder_type FROM disorders d ORDER BY Disorder_Type';
+FDQuery_disorders.Open;
+CurrentType := '';
+TreeView.Clear;
+
+while not FDQuery_disorders.Eof do
+    begin
+ if CurrentType <> FDQuery_disorders.FieldByName('Disorder_type').AsString then
+    begin
+      CurrentType := FDQuery_disorders.FieldByName('Disorder_type').AsString;
+      CurrentTypeNode := TTreeViewItem.Create(TreeView1);
+      CurrentTypeNode.Text := CurrentType;
+      TreeView.AddObject(CurrentTypeNode);
+    end;
+
+    DisorderNode := TTreeViewItem.Create(CurrentTypeNode);
+    DisorderNode.Text := FDQuery_disorders.FieldByName('Disorder_name').AsString;
+    DisorderNode.Tag :=  FDQuery_disorders.FieldByName('idDisorders').AsInteger;
+    CurrentTypeNode.AddObject(DisorderNode);
+
+    FDQuery_disorders.Next;
+  end;
+
+  FDQuery_disorders.Close;
+ end;
+
+
+ procedure TForm13.CheckTreeViewItemsForPatient(TreeItem: TTreeViewItem; DisorderIDs: TList<Integer>);
+ var
+  i: Integer;
+  ChildItem: TTreeViewItem;
+ begin
+   // Check if this item should be checked
+  if DisorderIDs.Contains(TreeItem.Tag) then
+  begin
+    TreeItem.IsChecked := True;
+    TreeItem.ParentItem.IsExpanded := True;
+  end
+  else
+  begin
+   TreeItem.IsExpanded := False;
+  end;
+
+  // Recursively call this procedure for all child items
+  for i := 0 to TreeItem.Count - 1 do
+  begin
+    ChildItem := TreeItem.Items[i];
+    CheckTreeViewItemsForPatient(ChildItem, DisorderIDs);
+  end;
+ end;
+
+ procedure TForm13.UncheckAllTreeViewItems(TreeItem: TTreeViewItem);
+var
+  i: Integer;
+  ChildItem: TTreeViewItem;
+begin
+  // Uncheck this item
+  TreeItem.IsChecked := False;
+
+  // Recursively call this procedure for all child items
+  for i := 0 to TreeItem.Count - 1 do
+  begin
+    ChildItem := TreeItem.Items[i];
+    UncheckAllTreeViewItems(ChildItem);
+  end;
+end;
+
 
 end.
 

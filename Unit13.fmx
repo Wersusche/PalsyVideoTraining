@@ -15,7 +15,7 @@
     Size.Width = 1085.000000000000000000
     Size.Height = 660.000000000000000000
     Size.PlatformDefault = False
-    TabIndex = 1
+    TabIndex = 0
     TabOrder = 4
     TabPosition = PlatformDefault
     Sizes = (
@@ -29,7 +29,7 @@
       CustomIcon = <
         item
         end>
-      IsSelected = False
+      IsSelected = True
       Size.Width = 118.000000000000000000
       Size.Height = 26.000000000000000000
       Size.PlatformDefault = False
@@ -40,7 +40,7 @@
       ExplicitSize.cy = 26.000000000000000000
       object GroupBox3: TGroupBox
         Align = Scale
-        Position.X = 24.000000000000000000
+        Position.X = 24.000003814697270000
         Position.Y = 16.000000000000000000
         Size.Width = 385.000091552734400000
         Size.Height = 476.000061035156300000
@@ -65,12 +65,13 @@
       end
       object GroupBox4: TGroupBox
         Align = Scale
-        Position.X = 488.000030517578100000
+        Position.X = 488.000061035156300000
         Position.Y = 24.000000000000000000
-        Size.Width = 553.000000000000000000
+        Size.Width = 552.999938964843800000
         Size.Height = 555.000000000000000000
         Size.PlatformDefault = False
         Text = #1057#1074#1086#1076#1085#1099#1077' '#1076#1072#1085#1085#1099#1077' '#1087#1086' '#1087#1072#1094#1080#1077#1085#1090#1091
+        Visible = False
         TabOrder = 2
         object Edit1: TEdit
           Touch.InteractiveGestures = [LongTap, DoubleTap]
@@ -88,16 +89,27 @@
           Size.Width = 505.000000000000000000
           Size.Height = 35.000000000000000000
           Size.PlatformDefault = False
-          TabOrder = 38
+          TabOrder = 36
         end
         object GroupBox5: TGroupBox
           Position.X = 16.000000000000000000
-          Position.Y = 67.000000000000000000
+          Position.Y = 61.000000000000000000
           Size.Width = 505.000000000000000000
           Size.Height = 185.000000000000000000
           Size.PlatformDefault = False
           Text = #1055#1072#1090#1086#1083#1086#1075#1080#1080
-          TabOrder = 39
+          TabOrder = 38
+          object TreeView2: TTreeView
+            Position.X = 8.000000000000000000
+            Position.Y = 22.000000000000000000
+            Size.Width = 481.000000000000000000
+            Size.Height = 155.000000000000000000
+            Size.PlatformDefault = False
+            TabOrder = 4
+            OnChangeCheck = TreeView2ChangeCheck
+            Viewport.Width = 477.000000000000000000
+            Viewport.Height = 151.000000000000000000
+          end
         end
         object GroupBox6: TGroupBox
           Position.X = 16.000000000000000000
@@ -106,7 +118,7 @@
           Size.Height = 216.000000000000000000
           Size.PlatformDefault = False
           Text = #1047#1072#1087#1080#1089#1080
-          TabOrder = 40
+          TabOrder = 39
           object TabControl2: TTabControl
             Position.X = 8.000000000000000000
             Position.Y = 24.000000000000000000
@@ -197,28 +209,15 @@
             end
           end
         end
-        object TreeView2: TTreeView
-          Position.X = 24.000000000000000000
-          Position.Y = 91.000000000000000000
-          Size.Width = 481.000000000000000000
-          Size.Height = 155.000000000000000000
-          Size.PlatformDefault = False
-          TabOrder = 4
-          ShowCheckboxes = True
-          OnChangeCheck = TreeView2ChangeCheck
-          Viewport.Width = 477.000000000000000000
-          Viewport.Height = 151.000000000000000000
-        end
       end
       object GroupBox7: TGroupBox
         Align = Scale
-        Position.X = 488.000030517578100000
+        Position.X = 448.000000000000000000
         Position.Y = 14.000000000000000000
-        Size.Width = 553.000000000000000000
+        Size.Width = 593.000000000000000000
         Size.Height = 555.000000000000000000
         Size.PlatformDefault = False
         Text = #1057#1074#1086#1076#1085#1099#1077' '#1076#1072#1085#1085#1099#1077' '#1087#1086' '#1087#1072#1094#1080#1077#1085#1090#1072#1084
-        Visible = False
         TabOrder = 1
         object Label_allusers: TLabel
           Position.X = 16.000000000000000000
@@ -241,7 +240,7 @@
         object Label_badusers: TLabel
           Position.X = 16.000000000000000000
           Position.Y = 129.000000000000000000
-          Size.Width = 449.000000000000000000
+          Size.Width = 209.000000000000000000
           Size.Height = 33.000000000000000000
           Size.PlatformDefault = False
           Text = '1313'
@@ -253,9 +252,9 @@
           HeaderAppearanceClassName = 'TListHeaderObjects'
           FooterAppearanceClassName = 'TListHeaderObjects'
           Align = Scale
-          Position.X = 64.000007629394530000
-          Position.Y = 170.000000000000000000
-          Size.Width = 449.000000000000000000
+          Position.X = 233.000000000000000000
+          Position.Y = 129.000000000000000000
+          Size.Width = 352.000000000000000000
           Size.Height = 95.000000000000000000
           Size.PlatformDefault = False
           TabOrder = 0
@@ -279,55 +278,133 @@
       CustomIcon = <
         item
         end>
-      IsSelected = True
-      Size.Width = 136.000000000000000000
+      IsSelected = False
+      Size.Width = 221.000000000000000000
       Size.Height = 26.000000000000000000
       Size.PlatformDefault = False
       StyleLookup = ''
       TabOrder = 0
-      Text = #1053#1072#1079#1085#1072#1095#1077#1085#1080#1077' '#1083#1077#1095#1077#1085#1080#1103
+      Text = #1054#1089#1086#1073#1077#1085#1085#1086#1089#1090#1080' '#1080' '#1085#1072#1079#1085#1072#1095#1077#1085#1080#1077' '#1083#1077#1095#1077#1085#1080#1103
       ExplicitSize.cx = 69.000000000000000000
       ExplicitSize.cy = 26.000000000000000000
-      object TreeView1: TTreeView
-        Position.X = 680.000000000000000000
-        Position.Y = 254.000000000000000000
-        Size.Width = 361.000000000000000000
-        Size.Height = 267.000000000000000000
-        Size.PlatformDefault = False
-        TabOrder = 1
-        ShowCheckboxes = True
-        OnChangeCheck = TreeView1ChangeCheck
-        Viewport.Width = 357.000000000000000000
-        Viewport.Height = 263.000000000000000000
-      end
-      object Button2: TButton
-        Position.X = 912.000000000000000000
-        Position.Y = 38.000000000000000000
-        TabOrder = 2
-        Text = 'Button2'
-        OnClick = Button2Click
-      end
-      object ListView_cure: TListView
-        ItemAppearanceClassName = 'TListItemAppearance'
-        ItemEditAppearanceClassName = 'TListItemDeleteAppearance'
-        HeaderAppearanceClassName = 'TListHeaderObjects'
-        FooterAppearanceClassName = 'TListHeaderObjects'
-        Align = Scale
-        Position.X = 14.000000953674320000
-        Position.Y = 22.000000000000000000
-        Size.Width = 387.000030517578100000
-        Size.Height = 409.000000000000000000
+      object Button5: TButton
+        Position.X = 22.000000000000000000
+        Position.Y = 427.000000000000000000
+        Size.Width = 105.000000000000000000
+        Size.Height = 51.000000000000000000
         Size.PlatformDefault = False
         TabOrder = 0
-        OnDblClick = ListView1DblClick
-        SearchVisible = True
+        Text = #1057#1073#1088#1086#1089#1080#1090#1100' '#1089#1087#1080#1089#1086#1082' '#1087#1072#1094#1080#1077#1085#1090#1086#1074
+        TextSettings.WordWrap = True
+        OnClick = Button5Click
       end
-      object Button4: TButton
-        Position.X = 872.000000000000000000
-        Position.Y = 182.000000000000000000
-        TabOrder = 3
-        Text = 'Button4'
-        OnClick = Button4Click
+      object GroupBox8: TGroupBox
+        Position.X = 22.000000000000000000
+        Position.Y = 30.000000000000000000
+        Size.Width = 307.000000000000000000
+        Size.Height = 371.000000000000000000
+        Size.PlatformDefault = False
+        Text = #1042#1099#1073#1088#1072#1090#1100' '#1087#1072#1094#1080#1077#1085#1090#1072
+        TabOrder = 1
+        object ListView_cure: TListView
+          ItemAppearanceClassName = 'TListItemAppearance'
+          ItemEditAppearanceClassName = 'TListItemDeleteAppearance'
+          HeaderAppearanceClassName = 'TListHeaderObjects'
+          FooterAppearanceClassName = 'TListHeaderObjects'
+          Align = Scale
+          Position.X = 17.000000000000000000
+          Position.Y = 24.000000000000000000
+          Size.Width = 272.000000000000000000
+          Size.Height = 329.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 0
+          OnClick = ListView_cureClick
+          OnChange = ListView_cureChange
+          SearchVisible = True
+        end
+      end
+      object TabControl3: TTabControl
+        Enabled = False
+        Position.X = 600.000000000000000000
+        Position.Y = 30.000000000000000000
+        Size.Width = 465.000000000000000000
+        Size.Height = 579.000000000000000000
+        Size.PlatformDefault = False
+        TabIndex = 0
+        TabOrder = 2
+        TabPosition = PlatformDefault
+        Sizes = (
+          465s
+          553s
+          465s
+          553s)
+        object Lechenie: TTabItem
+          CustomIcon = <
+            item
+            end>
+          IsSelected = True
+          Size.Width = 68.000000000000000000
+          Size.Height = 26.000000000000000000
+          Size.PlatformDefault = False
+          StyleLookup = ''
+          TabOrder = 0
+          Text = #1051#1077#1095#1077#1085#1080#1077
+          object Button_alter_appoint: TButton
+            Position.X = 23.000000000000000000
+            Position.Y = 478.000000000000000000
+            Size.Width = 153.000000000000000000
+            Size.Height = 43.000000000000000000
+            Size.PlatformDefault = False
+            TabOrder = 0
+            Text = #1042#1085#1077#1089#1090#1080' '#1080#1079#1084#1077#1085#1077#1085#1080#1103' '#1074' '#1082#1091#1088#1089' '#1083#1077#1095#1077#1085#1080#1103
+            TextSettings.WordWrap = True
+          end
+        end
+        object Patspecials: TTabItem
+          CustomIcon = <
+            item
+            end>
+          IsSelected = False
+          Size.Width = 148.000000000000000000
+          Size.Height = 26.000000000000000000
+          Size.PlatformDefault = False
+          StyleLookup = ''
+          TabOrder = 0
+          Text = #1054#1089#1086#1073#1077#1085#1085#1086#1089#1090#1080' '#1087#1072#1094#1080#1077#1085#1090#1072
+          object TreeView1: TTreeView
+            Position.X = 16.000000000000000000
+            Position.Y = 8.000000000000000000
+            Size.Width = 433.000000000000000000
+            Size.Height = 267.000000000000000000
+            Size.PlatformDefault = False
+            TabOrder = 1
+            ShowCheckboxes = True
+            OnChangeCheck = TreeView1ChangeCheck
+            Viewport.Width = 429.000000000000000000
+            Viewport.Height = 263.000000000000000000
+          end
+          object Button_alter_disorders: TButton
+            Position.X = 24.000000000000000000
+            Position.Y = 465.000000000000000000
+            Size.Width = 153.000000000000000000
+            Size.Height = 43.000000000000000000
+            Size.PlatformDefault = False
+            TabOrder = 2
+            Text = #1042#1085#1077#1089#1090#1080' '#1080#1079#1084#1077#1085#1077#1085#1080#1103' '#1074' '#1086#1089#1086#1073#1077#1085#1085#1086#1089#1090#1080
+            TextSettings.WordWrap = True
+            OnClick = Button_alter_disordersClick
+          end
+          object Button2: TButton
+            Position.X = 16.000000000000000000
+            Position.Y = 294.000000000000000000
+            Size.Width = 185.000000000000000000
+            Size.Height = 33.000000000000000000
+            Size.PlatformDefault = False
+            TabOrder = 3
+            Text = #1057#1073#1088#1086#1089#1080#1090#1100' '#1089#1087#1080#1089#1086#1082
+            OnClick = Button2Click
+          end
+        end
       end
     end
     object Tab_newpatient: TTabItem
@@ -479,22 +556,27 @@
   end
   object FDQuery_disorders: TFDQuery
     Connection = FDConnection1
-    Left = 480
-    Top = 576
+    Left = 408
+    Top = 608
   end
   object FDQuery_totalpatients: TFDQuery
     Connection = FDConnection1
-    Left = 224
-    Top = 568
+    Left = 144
+    Top = 520
   end
   object FDQuery_openactusers: TFDQuery
     Connection = FDConnection1
-    Left = 696
-    Top = 600
+    Left = 248
+    Top = 536
   end
   object FDQuery_baduserslist: TFDQuery
     Connection = FDConnection1
-    Left = 600
+    Left = 480
+    Top = 616
+  end
+  object FDQuery_sortdisorders: TFDQuery
+    Connection = FDConnection1
+    Left = 336
     Top = 584
   end
 end
