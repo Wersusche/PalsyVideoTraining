@@ -16,7 +16,7 @@ uses
   FireDAC.Phys.MySQLDef, FireDAC.Phys.MySQL, System.Hash, FMX.DateTimeCtrls,
   StrUtils, System.Generics.Collections, System.DateUtils, FMX.Layouts,
   FMX.ListBox, System.Rtti, FMX.Grid.Style, FMX.Grid, FMX.ScrollBox, FMX.Objects,
-  FMX.MultiView, FMX.TreeView, FMX.ExtCtrls, System.Math;
+  FMX.MultiView, FMX.TreeView, FMX.ExtCtrls, System.Math, FMX.Calendar;
 
 type
   TForm13 = class(TForm)
@@ -72,11 +72,27 @@ type
     Button_alter_appoint: TButton;
     Button_alter_disorders: TButton;
     GroupBox8: TGroupBox;
-    TabControl3: TTabControl;
+    Tabcontrol3: TTabControl;
     Patspecials: TTabItem;
     Lechenie: TTabItem;
     Button2: TButton;
     FDQuery_sortdisorders: TFDQuery;
+    TreeView_delcure: TTreeView;
+    FDQuery_loadapp: TFDQuery;
+    Button_delapp: TButton;
+    CheckBox_sorttreat: TCheckBox;
+    TreeView_exercises: TTreeView;
+    DateEdit_startofex: TDateEdit;
+    GroupBox9: TGroupBox;
+    GroupBox10: TGroupBox;
+    FDQuery_loadex: TFDQuery;
+    Label3: TLabel;
+    Label4: TLabel;
+    DateEdit_endofex: TDateEdit;
+    Label5: TLabel;
+    Edit2: TEdit;
+    Label6: TLabel;
+    Edit3: TEdit;
     procedure FormCreate(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure enterLoginTyping(Sender: TObject);
@@ -93,9 +109,16 @@ type
     procedure ListView_cureChange(Sender: TObject);
     procedure ListView_cureClick(Sender: TObject);
     procedure CheckTreeViewItemsForPatient(TreeItem: TTreeViewItem; DisorderIDs: TList<Integer>);
-     procedure UncheckAllTreeViewItems(TreeItem: TTreeViewItem);
+    procedure UncheckAllTreeViewItems(TreeItem: TTreeViewItem);
     procedure Button_alter_disordersClick(Sender: TObject);
     procedure ListView1DblClick(Sender: TObject);
+    procedure TreeView_delcureChangeCheck(Sender: TObject);
+    procedure Button_delappClick(Sender: TObject);
+    procedure Loadexercises(const TreeView: TTreeView);
+    procedure CheckBox_sorttreatChange(Sender: TObject);
+    procedure Edit2Typing(Sender: TObject);
+    procedure Edit3Typing(Sender: TObject);
+
   private
     { Private declarations }
 
@@ -106,7 +129,7 @@ type
     function GenerateUserName(const FirstName, LastName: string; AConnection: TFDConnection): string;
     function FilterNonEnglishCharacters(const AText: string): string;
     function  AddAppointmentToListView(Treeview: TTreeview; FDQuery_patappointments: TFDQuery): TTreeViewItem;
-
+    function FilterNonDecimalCharacters(const AText: string): string;
      end;
 
 var
@@ -383,6 +406,81 @@ begin
   Showmessage('Пациент не выбран!');
   end;
 
+procedure TForm13.Button_delappClick(Sender: TObject);
+var
+  i, j: Integer;
+  TreeItem: TTreeViewItem;
+  TreeViewTag: Integer;
+  FDQuery: TFDQuery; // Assuming you have this object set up for your database
+begin
+  if ListView_cure.Selected <> nil then
+  begin
+
+    FDQuery := TFDQuery.Create(nil); // Create a new query object
+    try
+      FDQuery.Connection := FDConnection1; // Assign the FireDAC connection
+
+      for i := 0 to TreeView_delcure.Count - 1 do
+      begin
+        TreeItem := TreeView_delcure.Items[i];
+        TreeViewTag := TreeItem.Tag;
+        if TreeItem.IsChecked then
+          begin
+             // Prepare the SQL query for insertion
+            FDQuery.SQL.Text := 'DELETE FROM appointments WHERE idAppointments = :did';
+
+                  // Prepare the SQL query
+          FDQuery.ParamByName('did').AsInteger := TreeViewTag;
+
+            // Execute the SQL command
+          FDQuery.ExecSQL;
+          end;
+          end;
+      finally
+      FDQuery.Free; // Free the query object
+
+    end;
+  end
+  else
+  begin
+  Showmessage('Пациент не выбран!');
+  end;
+
+  TreeView_delcure.Clear;
+  FDQuery_loadapp.Close;
+  FDQuery_loadapp.SQL.Text := 'SELECT a.Starttime, a.Endtime, a.kolvden, a.sdelanovsego, a.done_percent, v.video_name, a.idAppointments ' +
+                                         'FROM appointments a ' +
+                                         'LEFT JOIN videos v ON a.idvideos = v.idvideos ' +
+                                         'WHERE a.idPatients = :ID';
+
+    FDQuery_loadapp.ParamByName('ID').AsInteger := ListView_cure.Selected.Tag;
+    FDQuery_loadapp.Open;
+
+     try
+    // Assume FDQuery1 has been prepared and opened to select your fields
+    while not FDQuery_loadapp.EOF do
+    begin
+    if (InRange(Now(), FDQuery_loadapp.FieldByName('Starttime').AsDateTime, FDQuery_loadapp.FieldByName('Endtime').AsDateTime)) or
+         (Now() < FDQuery_loadapp.FieldByName('Starttime').AsDateTime) then
+        begin
+     AddAppointmentToListView(TreeView_delcure, FDQuery_loadapp);
+     FDQuery_loadapp.Next;
+      end
+      else
+      FDQuery_loadapp.Next;
+    end;
+     finally
+
+    FDQuery_loadapp.Close;
+
+   end;
+end;
+
+procedure TForm13.CheckBox_sorttreatChange(Sender: TObject);
+begin
+Loadexercises(TreeView_exercises);
+end;
+
 function TForm13.CheckExistenceFunc(const AUserName: string; AConnection: TFDConnection): Boolean;
 var
   FDQuery: TFDQuery;
@@ -465,9 +563,9 @@ var
   i: Integer;
   DisorderIDs: TList<Integer>;
   TreeItem: TTreeViewItem;
-
 begin
 TabControl3.Enabled := ListView_cure.ItemIndex <> -1;
+TreeView_delcure.Clear;
   for i := 0 to TreeView1.Count - 1 do
   begin
     UncheckAllTreeViewItems(TreeView1.Items[i]);
@@ -490,6 +588,40 @@ for i := 0 to TreeView1.Count - 1 do
   begin
     CheckTreeViewItemsForPatient(TreeView1.Items[i], DisorderIDs);
   end;
+
+    FDQuery_loadapp.Close;
+    FDQuery_loadapp.SQL.Text := 'SELECT a.Starttime, a.Endtime, a.kolvden, a.sdelanovsego, a.done_percent, v.video_name, a.idAppointments ' +
+                                         'FROM appointments a ' +
+                                         'LEFT JOIN videos v ON a.idvideos = v.idvideos ' +
+                                         'WHERE a.idPatients = :ID';
+
+    FDQuery_loadapp.ParamByName('ID').AsInteger := ListView_cure.Selected.Tag;
+    FDQuery_loadapp.Open;
+
+     try
+    // Assume FDQuery1 has been prepared and opened to select your fields
+    while not FDQuery_loadapp.EOF do
+    begin
+    if (InRange(Now(), FDQuery_loadapp.FieldByName('Starttime').AsDateTime, FDQuery_loadapp.FieldByName('Endtime').AsDateTime)) or
+         (Now() < FDQuery_loadapp.FieldByName('Starttime').AsDateTime) then
+        begin
+     AddAppointmentToListView(TreeView_delcure, FDQuery_loadapp);
+     FDQuery_loadapp.Next;
+      end
+      else
+      FDQuery_loadapp.Next;
+    end;
+     finally
+     FDQuery_loadapp.Close;
+
+   Loadexercises(TreeView_exercises);
+
+  end;
+
+
+
+
+
 
 end;
 
@@ -515,6 +647,26 @@ TTreeViewItem(Sender).IsChecked := False;
 end;
 end;
 
+procedure TForm13.TreeView_delcureChangeCheck(Sender: TObject);
+begin
+
+if TTreeViewItem(Sender).Count = 0 then
+begin
+TTreeViewItem(Sender).IsChecked := False;
+end;
+
+  for var i := 0 to TreeView_delcure.Count - 1 do
+  begin
+    if TTreeViewItem(Sender).IsChecked then
+    begin
+      Button_delapp.enabled := True;
+      Exit;
+    end
+    else
+    Button_delapp.enabled := False;
+  end;
+end;
+
 function TForm13.AddAppointmentToListView(Treeview: TTreeView; FDQuery_patappointments: TFDQuery): TTreeViewItem;
 var
   ParentNode, ChildNode: TTreeViewItem;
@@ -525,6 +677,7 @@ begin
     ParentNode.Parent := TreeView;
     ParentNode.Text := 'Назначение с ' + FDQuery_patappointments.FieldByName('Starttime').AsString +
                        ' по ' + FDQuery_patappointments.FieldByName('Endtime').AsString;
+    ParentNode.Tag := FDQuery_patappointments.FieldByName('idAppointments').AsInteger;
   if (InRange(Now(), FDQuery_patappointments.FieldByName('Starttime').AsDateTime, FDQuery_patappointments.FieldByName('Endtime').AsDateTime) and
    (FDQuery_patappointments.FieldByName('done_percent').AsInteger < 70)) or
   ((Now() > FDQuery_patappointments.FieldByName('Endtime').AsDateTime) and (FDQuery_patappointments.FieldByName('done_percent').AsInteger < 70)) then
@@ -663,7 +816,7 @@ begin
         end;
 
     FDQuery_patappointments.Close;
-    FDQuery_patappointments.SQL.Text := 'SELECT a.Starttime, a.Endtime, a.kolvden, a.sdelanovsego, a.done_percent, v.video_name ' +
+    FDQuery_patappointments.SQL.Text := 'SELECT a.Starttime, a.Endtime, a.kolvden, a.sdelanovsego, a.done_percent, v.video_name, a.idAppointments ' +
                                          'FROM appointments a ' +
                                          'LEFT JOIN videos v ON a.idvideos = v.idvideos ' +
                                          'WHERE a.idPatients = :ID';
@@ -695,6 +848,7 @@ begin
       listnext:= AddAppointmentToListView(TreeView_next, FDQuery_patappointments);
       FDQuery_patappointments.Next;
       end;
+
     end;
      finally
 
@@ -759,7 +913,19 @@ while not FDQuery_disorders.Eof do
   end;
  end;
 
- procedure TForm13.UncheckAllTreeViewItems(TreeItem: TTreeViewItem);
+ procedure TForm13.Edit2Typing(Sender: TObject);
+begin
+  Edit2.Text := FilterNonDecimalCharacters(Edit2.Text);
+  Edit2.CaretPosition := Edit2.Text.Length;  // move the caret to the end
+end;
+
+procedure TForm13.Edit3Typing(Sender: TObject);
+begin
+  Edit3.Text := FilterNonDecimalCharacters(Edit3.Text);
+  Edit3.CaretPosition := Edit3.Text.Length;  // move the caret to the end
+end;
+
+procedure TForm13.UncheckAllTreeViewItems(TreeItem: TTreeViewItem);
 var
   i: Integer;
   ChildItem: TTreeViewItem;
@@ -775,6 +941,77 @@ begin
   end;
 end;
 
+ procedure TForm13.Loadexercises(const TreeView: TTreeView);
+var
+  FDQuery: TFDQuery;
+  TreeItem: TTreeViewItem;
+begin
+  FDQuery := TFDQuery.Create(nil);
+    try
+    FDQuery.Connection := FDConnection1;
+    if CheckBox_sorttreat.IsChecked then
+    begin
+    FDQuery.SQL.Text := 'SELECT v.video_name ' +
+                  'FROM videos v ' +
+                  'WHERE v.idvideos NOT IN (SELECT dv.videos_id FROM disorder_videos dv ' +
+                  'INNER JOIN patient_disorders pd ON dv.disorder_id = pd.disorder_id ' +
+                  'WHERE pd.patient_id = :PatientID) ';
+
+
+//    FDQuery.SQL.Text := 'SELECT v.video_name ' +
+//                  'FROM videos v ' +
+//                  'INNER JOIN disorder_videos dv ON v.idvideos = dv.videos_id  ' +
+//                  'INNER JOIN patient_disorders pd ON dv.disorder_id = pd.disorder_id ' +
+//                  'WHERE pd.patient_id = :PatientID';
+
+    FDQuery.ParamByName('PatientID').AsInteger := ListView_cure.Selected.Tag; ;
+    FDQuery.Open;
+    TreeView.Clear;
+    while not FDQuery.Eof do
+    begin
+      TreeItem := TTreeViewItem.Create(TreeView);
+      TreeItem.Parent := TreeView;
+      TreeItem.Text := FDQuery.FieldByName('video_name').AsString;
+      FDQuery.Next;
+    end;
+    end
+    else if not CheckBox_sorttreat.IsChecked then
+    begin
+    FDQuery.SQL.Text := 'SELECT v.video_name ' +
+                  'FROM videos v ';
+
+
+//    FDQuery.SQL.Text := 'SELECT v.video_name ' +
+//                  'FROM videos v ' +
+//                  'INNER JOIN disorder_videos dv ON v.idvideos = dv.videos_id  ' +
+//                  'INNER JOIN patient_disorders pd ON dv.disorder_id = pd.disorder_id ' +
+//                  'WHERE pd.patient_id = :PatientID';
+
+    FDQuery.Open;
+    TreeView.Clear;
+    while not FDQuery.Eof do
+    begin
+      TreeItem := TTreeViewItem.Create(TreeView);
+      TreeItem.Parent := TreeView;
+      TreeItem.Text := FDQuery.FieldByName('video_name').AsString;
+      FDQuery.Next;
+    end;
+    end;
+
+  finally
+    FDQuery.Free;
+  end;
+end;
+
+function TForm13.FilterNonDecimalCharacters(const AText: string): string;
+var
+  C: Char;
+begin
+  Result := '';
+  for C in AText do
+    if CharInSet(C,['0'..'9']) then
+      Result := Result + C;
+end;
 
 end.
 
