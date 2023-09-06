@@ -118,6 +118,10 @@ type
     procedure CheckBox_sorttreatChange(Sender: TObject);
     procedure Edit2Typing(Sender: TObject);
     procedure Edit3Typing(Sender: TObject);
+    procedure DateEdit_startofexChange(Sender: TObject);
+    procedure DateEdit_endofexChange(Sender: TObject);
+    procedure SaveExercisesToDB;
+    procedure Button_alter_appointClick(Sender: TObject);
 
   private
     { Private declarations }
@@ -237,6 +241,8 @@ end;
   procedure TForm13.FormCreate(Sender: TObject);
 begin
  groupbox4.Visible:=false;
+ DateEdit_startofex.Date := Now;
+ DateEdit_endofex.Date := Now;
  ListView1.ItemAppearanceObjects.ItemObjects.Accessory.Visible := False;
  ListView3.ItemAppearanceObjects.ItemObjects.Accessory.Visible := False;
  ListView_cure.ItemAppearanceObjects.ItemObjects.Accessory.Visible := False;
@@ -357,6 +363,11 @@ procedure TForm13.Button5Click(Sender: TObject);
 begin
 Populateinitiallist(Listview_cure);
 TabControl3.Enabled := ListView_cure.ItemIndex <> -1;
+end;
+
+procedure TForm13.Button_alter_appointClick(Sender: TObject);
+begin
+SaveExercisesToDB;
 end;
 
 procedure TForm13.Button_alter_disordersClick(Sender: TObject);
@@ -913,7 +924,26 @@ while not FDQuery_disorders.Eof do
   end;
  end;
 
- procedure TForm13.Edit2Typing(Sender: TObject);
+ procedure TForm13.DateEdit_endofexChange(Sender: TObject);
+begin
+  if DateEdit_endofex.DateTime < DateEdit_startofex.DateTime then
+    DateEdit_startofex.DateTime := DateEdit_endofex.DateTime;
+end;
+
+procedure TForm13.DateEdit_startofexChange(Sender: TObject);
+begin
+   if DateEdit_startofex.DateTime < Now then
+   begin
+    DateEdit_startofex.DateTime := Now;
+   end;
+
+   if DateEdit_startofex.DateTime > DateEdit_endofex.DateTime then
+   begin
+    DateEdit_endofex.DateTime := DateEdit_startofex.DateTime
+   end;
+end;
+
+procedure TForm13.Edit2Typing(Sender: TObject);
 begin
   Edit2.Text := FilterNonDecimalCharacters(Edit2.Text);
   Edit2.CaretPosition := Edit2.Text.Length;  // move the caret to the end
@@ -951,7 +981,7 @@ begin
     FDQuery.Connection := FDConnection1;
     if CheckBox_sorttreat.IsChecked then
     begin
-    FDQuery.SQL.Text := 'SELECT v.video_name ' +
+    FDQuery.SQL.Text := 'SELECT v.video_name, v.idvideos ' +
                   'FROM videos v ' +
                   'WHERE v.idvideos NOT IN (SELECT dv.videos_id FROM disorder_videos dv ' +
                   'INNER JOIN patient_disorders pd ON dv.disorder_id = pd.disorder_id ' +
@@ -972,12 +1002,13 @@ begin
       TreeItem := TTreeViewItem.Create(TreeView);
       TreeItem.Parent := TreeView;
       TreeItem.Text := FDQuery.FieldByName('video_name').AsString;
+      TreeItem.Tag := FDQuery.FieldByName('idvideos').AsInteger;
       FDQuery.Next;
     end;
     end
     else if not CheckBox_sorttreat.IsChecked then
     begin
-    FDQuery.SQL.Text := 'SELECT v.video_name ' +
+    FDQuery.SQL.Text := 'SELECT v.video_name, v.idvideos ' +
                   'FROM videos v ';
 
 
@@ -994,6 +1025,7 @@ begin
       TreeItem := TTreeViewItem.Create(TreeView);
       TreeItem.Parent := TreeView;
       TreeItem.Text := FDQuery.FieldByName('video_name').AsString;
+      TreeItem.Tag := FDQuery.FieldByName('idvideos').AsInteger;
       FDQuery.Next;
     end;
     end;
@@ -1012,6 +1044,83 @@ begin
     if CharInSet(C,['0'..'9']) then
       Result := Result + C;
 end;
+
+
+
+  procedure TForm13.SaveExercisesToDB;
+var
+  i: Integer;
+  TreeItem: TTreeViewItem;
+  ExerciseID,PatientID, ExerciseAmount, ExerciseLongevity: Integer;
+  StartDate, EndDate: TDateTime;
+  FDQuery: TFDQuery;
+  IntersectCount: Integer;
+   UserChoice: Integer;
+  label
+  insertentry;
+begin
+  // Collect data from other controls
+  ExerciseAmount := StrToIntDef(Edit2.Text, 0);
+  ExerciseLongevity := StrToIntDef(Edit3.Text, 0);
+  StartDate := DateEdit_startofex.Date;
+  EndDate := DateEdit_endofex.Date;
+  PatientID :=   ListView_cure.Selected.Tag;
+  // Create and prepare a FireDAC query
+  FDQuery := TFDQuery.Create(nil);
+  try
+    FDQuery.Connection := FDConnection1;  // Your FireDAC Connection component
+    // Loop through all TreeView items
+    for i := 0 to TreeView_exercises.Count - 1 do
+    begin
+      TreeItem := TreeView_exercises.Items[i];
+      if TreeItem.IsChecked then  // Check if the exercise is selected
+      begin
+        ExerciseID := TreeItem.Tag;
+
+
+        FDQuery.SQL.Text := 'SELECT COUNT(*) FROM appointments WHERE idPatients = :patient_id ' +
+                            'AND idvideos = :exercise_id AND ((:start_date BETWEEN Starttime AND Endtime) ' +
+                            'OR (:end_date BETWEEN Starttime AND Endtime) OR (Starttime BETWEEN :start_date AND :end_date) ' +
+                            'OR (Endtime BETWEEN :start_date AND :end_date))';
+
+        FDQuery.ParamByName('exercise_id').AsInteger := ExerciseID;
+        FDQuery.ParamByName('start_date').AsDate := StartDate;
+        FDQuery.ParamByName('end_date').AsDate := EndDate;
+        FDQuery.ParamByName('patient_id').AsInteger := PatientID;
+         FDQuery.Open;
+         IntersectCount := FDQuery.Fields[0].AsInteger;
+         if IntersectCount = 0 then
+         begin
+         insertentry:
+         FDQuery.Close;
+         FDQuery.SQL.Text := 'INSERT INTO appointments (Starttime, Endtime, idPatients, idvideos, kolvden, dlitelnost) VALUES (:start_date, :end_date, :patient_id, :exercise_id, :amount, :longevity)';
+          // Execute the query
+        FDQuery.ParamByName('exercise_id').AsInteger := ExerciseID;
+        FDQuery.ParamByName('amount').AsInteger := ExerciseAmount;
+        FDQuery.ParamByName('longevity').AsInteger := ExerciseLongevity;
+        FDQuery.ParamByName('start_date').AsDate := StartDate;
+        FDQuery.ParamByName('end_date').AsDate := EndDate;
+        FDQuery.ParamByName('patient_id').AsInteger := PatientID;
+        FDQuery.ExecSQL;
+         end
+         else
+         begin
+         UserChoice := MessageDlg('»меютс€ временные пересечени€ с существующими запис€ми в таблице у упражнени€ "' +
+         TreeItem.Text + '" в период с ' + datetostr(StartDate) + ' по ' + datetostr(EndDate) + '. ¬ы уверены, что хотите внести запись?',
+         TMsgDlgType.mtConfirmation, [TMsgDlgBtn.mbYes, TMsgDlgBtn.mbNo], 0);
+         if UserChoice = mrYes then
+         goto insertentry;
+         end;
+      end;
+    end;
+
+  finally
+    FDQuery.Free;
+  end;
+
+  ShowMessage('”пражнени€ внесены успешно!');
+end;
+
 
 end.
 
