@@ -93,6 +93,7 @@ type
     Edit2: TEdit;
     Label6: TLabel;
     Edit3: TEdit;
+    Button_optimize: TButton;
     procedure FormCreate(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure enterLoginTyping(Sender: TObject);
@@ -122,7 +123,10 @@ type
     procedure DateEdit_endofexChange(Sender: TObject);
     procedure SaveExercisesToDB;
     procedure Button_alter_appointClick(Sender: TObject);
-
+    procedure TreeView_exercisesChangeCheck(Sender: TObject);
+    procedure MergeTreeViewNodes(TreeView: TTreeView);
+    procedure Button_optimizeClick(Sender: TObject);
+    procedure CloneTreeItem(SourceItem, TargetParent: TTreeViewItem);
   private
     { Private declarations }
 
@@ -359,6 +363,11 @@ end;
 
 
 
+procedure TForm13.Button_optimizeClick(Sender: TObject);
+begin
+MergeTreeViewNodes(TreeView_delcure);
+end;
+
 procedure TForm13.Button5Click(Sender: TObject);
 begin
 Populateinitiallist(Listview_cure);
@@ -420,7 +429,7 @@ begin
 procedure TForm13.Button_delappClick(Sender: TObject);
 var
   i, j: Integer;
-  TreeItem: TTreeViewItem;
+  TreeItem, ChildItem: TTreeViewItem;
   TreeViewTag: Integer;
   FDQuery: TFDQuery; // Assuming you have this object set up for your database
 begin
@@ -431,26 +440,37 @@ begin
     try
       FDQuery.Connection := FDConnection1; // Assign the FireDAC connection
 
-      for i := 0 to TreeView_delcure.Count - 1 do
+ for i := 0 to TreeView_delcure.Count - 1 do
+  begin
+    TreeItem := TreeView_delcure.Items[i];
+    TreeViewTag := TreeItem.Tag;
+    if TreeItem.IsChecked then
+    begin
+      // Prepare and execute SQL query for parent item
+      FDQuery.SQL.Text := 'DELETE FROM appointments WHERE idAppointments = :did';
+      FDQuery.ParamByName('did').AsInteger := TreeViewTag;
+      FDQuery.ExecSQL;
+    end;
+
+    // Loop through child items
+    for j := 0 to TreeItem.Count - 1 do
+    begin
+      ChildItem := TreeItem.Items[j];
+      TreeViewTag := ChildItem.Tag;
+      if ChildItem.IsChecked then
       begin
-        TreeItem := TreeView_delcure.Items[i];
-        TreeViewTag := TreeItem.Tag;
-        if TreeItem.IsChecked then
-          begin
-             // Prepare the SQL query for insertion
-            FDQuery.SQL.Text := 'DELETE FROM appointments WHERE idAppointments = :did';
+        // Prepare and execute SQL query for child item
+        FDQuery.SQL.Text := 'DELETE FROM appointments WHERE idAppointments = :did';
+        FDQuery.ParamByName('did').AsInteger := TreeViewTag;
+        FDQuery.ExecSQL;
+      end;
+    end;
+  end;
 
-                  // Prepare the SQL query
-          FDQuery.ParamByName('did').AsInteger := TreeViewTag;
-
-            // Execute the SQL command
-          FDQuery.ExecSQL;
-          end;
-          end;
       finally
       FDQuery.Free; // Free the query object
 
-    end;
+      end;
   end
   else
   begin
@@ -678,9 +698,26 @@ end;
   end;
 end;
 
+procedure TForm13.TreeView_exercisesChangeCheck(Sender: TObject);
+  var
+  i: Integer;
+  ParentItem, ChildItem: TTreeViewItem;
+begin
+ParentItem := TTreeViewItem(Sender);
+if ParentItem.Count > 0 then
+begin
+for  i := 0 to ParentItem.Count - 1 do
+    begin
+      ChildItem := ParentItem.Items[i];
+      ChildItem.IsChecked := True;
+    end;
+//ParentItem.IsChecked := False;
+end;
+end;
+
 function TForm13.AddAppointmentToListView(Treeview: TTreeView; FDQuery_patappointments: TFDQuery): TTreeViewItem;
 var
-  ParentNode, ChildNode: TTreeViewItem;
+  ParentNode, ChildNode, ChildNode2: TTreeViewItem;
 begin
    TreeView.BeginUpdate;
 
@@ -702,18 +739,19 @@ begin
     ChildNode := TTreeViewItem.Create(ParentNode);
     ChildNode.Parent := ParentNode;
     ChildNode.Text := 'Упражнение: ' + FDQuery_patappointments.FieldByName('video_name').AsString;
+    ChildNode.Tag := FDQuery_patappointments.FieldByName('idAppointments').AsInteger;
 
-    ChildNode := TTreeViewItem.Create(ParentNode);
-    ChildNode.Parent := ParentNode;
-    ChildNode.Text := 'Количество в день: ' + FDQuery_patappointments.FieldByName('kolvden').AsString;
+    ChildNode2 := TTreeViewItem.Create(ChildNode);
+    ChildNode2.Parent := ChildNode;
+    ChildNode2.Text := 'Количество в день: ' + FDQuery_patappointments.FieldByName('kolvden').AsString;
 
-    ChildNode := TTreeViewItem.Create(ParentNode);
-    ChildNode.Parent := ParentNode;
-    ChildNode.Text := 'Сделано всего: ' + FDQuery_patappointments.FieldByName('sdelanovsego').AsString;
+    ChildNode2 := TTreeViewItem.Create(ChildNode);
+    ChildNode2.Parent := ChildNode;
+    ChildNode2.Text := 'Сделано всего: ' + FDQuery_patappointments.FieldByName('sdelanovsego').AsString;
 
-    ChildNode := TTreeViewItem.Create(ParentNode);
-    ChildNode.Parent := ParentNode;
-    ChildNode.Text := 'Процент выполнения: ' + FDQuery_patappointments.FieldByName('done_percent').AsString + '%';
+    ChildNode2 := TTreeViewItem.Create(ChildNode);
+    ChildNode2.Parent := ChildNode;
+    ChildNode2.Text := 'Процент выполнения: ' + FDQuery_patappointments.FieldByName('done_percent').AsString + '%';
 
     TreeView.EndUpdate;
 
@@ -772,7 +810,7 @@ begin
         Round(Frac(YearsDiff) * 12)]);
       end;
 
-      TreeView2.BeginUpdate;
+   TreeView2.BeginUpdate;
   TypeDict := TDictionary<string, TTreeViewItem>.Create;
   NoDisorders := True;
   try
@@ -975,17 +1013,20 @@ end;
 var
   FDQuery: TFDQuery;
   TreeItem: TTreeViewItem;
+  CurrentType: string;
+  CurrentTypeNode, ExerciseNode: TTreeViewItem;
 begin
   FDQuery := TFDQuery.Create(nil);
     try
     FDQuery.Connection := FDConnection1;
     if CheckBox_sorttreat.IsChecked then
     begin
-    FDQuery.SQL.Text := 'SELECT v.video_name, v.idvideos ' +
+    CurrentType := '';
+    FDQuery.SQL.Text := 'SELECT v.video_name, v.idvideos, v.ex_type ' +
                   'FROM videos v ' +
                   'WHERE v.idvideos NOT IN (SELECT dv.videos_id FROM disorder_videos dv ' +
                   'INNER JOIN patient_disorders pd ON dv.disorder_id = pd.disorder_id ' +
-                  'WHERE pd.patient_id = :PatientID) ';
+                  'WHERE pd.patient_id = :PatientID) ORDER BY v.ex_type';
 
 
 //    FDQuery.SQL.Text := 'SELECT v.video_name ' +
@@ -999,17 +1040,27 @@ begin
     TreeView.Clear;
     while not FDQuery.Eof do
     begin
-      TreeItem := TTreeViewItem.Create(TreeView);
-      TreeItem.Parent := TreeView;
-      TreeItem.Text := FDQuery.FieldByName('video_name').AsString;
-      TreeItem.Tag := FDQuery.FieldByName('idvideos').AsInteger;
-      FDQuery.Next;
+ if CurrentType <> FDQuery.FieldByName('ex_type').AsString then
+    begin
+      CurrentType := FDQuery.FieldByName('ex_type').AsString;
+      CurrentTypeNode := TTreeViewItem.Create(TreeView1);
+      CurrentTypeNode.Text := CurrentType;
+      TreeView.AddObject(CurrentTypeNode);
+      //CurrentTypeNode.IsExpanded := True;
     end;
+
+    ExerciseNode := TTreeViewItem.Create(CurrentTypeNode);
+    ExerciseNode.Text := FDQuery.FieldByName('video_name').AsString;
+    ExerciseNode.Tag :=  FDQuery.FieldByName('idvideos').AsInteger;
+    CurrentTypeNode.AddObject(ExerciseNode);
+    FDQuery.Next;
+  end;
+
     end
     else if not CheckBox_sorttreat.IsChecked then
     begin
-    FDQuery.SQL.Text := 'SELECT v.video_name, v.idvideos ' +
-                  'FROM videos v ';
+    FDQuery.SQL.Text := 'SELECT v.video_name, v.idvideos, v.ex_type ' +
+                  'FROM videos v ORDER BY v.ex_type ';
 
 
 //    FDQuery.SQL.Text := 'SELECT v.video_name ' +
@@ -1019,15 +1070,24 @@ begin
 //                  'WHERE pd.patient_id = :PatientID';
 
     FDQuery.Open;
+    CurrentType := '';
     TreeView.Clear;
     while not FDQuery.Eof do
     begin
-      TreeItem := TTreeViewItem.Create(TreeView);
-      TreeItem.Parent := TreeView;
-      TreeItem.Text := FDQuery.FieldByName('video_name').AsString;
-      TreeItem.Tag := FDQuery.FieldByName('idvideos').AsInteger;
-      FDQuery.Next;
+ if CurrentType <> FDQuery.FieldByName('ex_type').AsString then
+    begin
+      CurrentType := FDQuery.FieldByName('ex_type').AsString;
+      CurrentTypeNode := TTreeViewItem.Create(TreeView1);
+      CurrentTypeNode.Text := CurrentType;
+      TreeView.AddObject(CurrentTypeNode);
     end;
+
+    ExerciseNode := TTreeViewItem.Create(CurrentTypeNode);
+    ExerciseNode.Text := FDQuery.FieldByName('video_name').AsString;
+    ExerciseNode.Tag :=  FDQuery.FieldByName('idvideos').AsInteger;
+    CurrentTypeNode.AddObject(ExerciseNode);
+    FDQuery.Next;
+  end;
     end;
 
   finally
@@ -1050,7 +1110,7 @@ end;
   procedure TForm13.SaveExercisesToDB;
 var
   i: Integer;
-  TreeItem: TTreeViewItem;
+  TreeItem, ChildItem: TTreeViewItem;
   ExerciseID,PatientID, ExerciseAmount, ExerciseLongevity: Integer;
   StartDate, EndDate: TDateTime;
   FDQuery: TFDQuery;
@@ -1073,9 +1133,14 @@ begin
     for i := 0 to TreeView_exercises.Count - 1 do
     begin
       TreeItem := TreeView_exercises.Items[i];
-      if TreeItem.IsChecked then  // Check if the exercise is selected
+      for var j := 0 to TreeItem.Count - 1 do
+    begin
+      ChildItem := TreeItem.Items[j];
+
+      if ChildItem.IsChecked then
       begin
-        ExerciseID := TreeItem.Tag;
+
+        ExerciseID := ChildItem.Tag;
 
 
         FDQuery.SQL.Text := 'SELECT COUNT(*) FROM appointments WHERE idPatients = :patient_id ' +
@@ -1112,6 +1177,7 @@ begin
          goto insertentry;
          end;
       end;
+      end;
     end;
 
   finally
@@ -1121,7 +1187,66 @@ begin
   ShowMessage('Упражнения внесены успешно!');
 end;
 
+procedure TForm13.MergeTreeViewNodes(TreeView: TTreeView);
+var
+  ParentDict: TDictionary<String, TTreeViewItem>;
+  OriginalParentNode, NewParentNode, ChildNode, ClonedChildNode: TTreeViewItem;
+  i, j: Integer;
+  ParentName: String;
+begin
+  ParentDict := TDictionary<String, TTreeViewItem>.Create;
+  try
+    // Loop through the TreeView to collect all nodes and find unique parent node names
+    for i := TreeView.Count - 1 downto 0 do
+    begin
+      OriginalParentNode := TreeView.Items[i];
+      ParentName := OriginalParentNode.Text;
 
+      if not ParentDict.ContainsKey(ParentName) then
+      begin
+        // This is a new unique parent node, add it to the dictionary
+        ParentDict.Add(ParentName, OriginalParentNode);
+      end
+      else
+      begin
+        // This parent node already exists, let's merge
+        NewParentNode := ParentDict[ParentName];
+        NewParentNode.Tag := 0;
+        // Clone all children to the new parent node
+        for j := 0 to OriginalParentNode.Count - 1 do
+        begin
+          ChildNode := OriginalParentNode.Items[j];
+          CloneTreeItem(ChildNode, NewParentNode);
+          // Copy other properties as needed
+        end;
+
+        // Now we can remove the original parent node
+        OriginalParentNode.Free;
+      end;
+    end;
+  finally
+    ParentDict.Free;
+  end;
+end;
+
+
+procedure TForm13.CloneTreeItem(SourceItem, TargetParent: TTreeViewItem);
+var
+  NewItem, ChildItem: TTreeViewItem;
+  i: Integer;
+begin
+  NewItem := TTreeViewItem.Create(TargetParent);
+  NewItem.Parent := TargetParent;
+  NewItem.Text := SourceItem.Text;
+  NewItem.Tag := SourceItem.Tag;
+  // Copy other properties as needed
+
+  for i := 0 to SourceItem.Count - 1 do
+  begin
+    ChildItem := SourceItem.Items[i];
+    CloneTreeItem(ChildItem, NewItem);
+  end;
+end;
 end.
 
 
