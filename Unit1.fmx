@@ -2,54 +2,57 @@ object LoginForm: TLoginForm
   Left = 0
   Top = 0
   Caption = 'Form1'
-  ClientHeight = 480
-  ClientWidth = 640
+  ClientHeight = 634
+  ClientWidth = 1078
   FormFactor.Width = 320
   FormFactor.Height = 480
   FormFactor.Devices = [Desktop]
   OnCreate = FormCreate
   DesignerMasterStyle = 0
   object Label1: TLabel
-    Position.X = 168.000000000000000000
-    Position.Y = 183.000000000000000000
-    Size.Width = 129.000000000000000000
-    Size.Height = 33.000000000000000000
+    Position.X = 439.000000000000000000
+    Position.Y = 274.000000000000000000
+    Size.Width = 71.000000000000000000
+    Size.Height = 28.000000000000000000
     Size.PlatformDefault = False
     Text = #1051#1086#1075#1080#1085':'
     TabOrder = 0
-  end
-  object Label2: TLabel
-    Position.X = 168.000000000000000000
-    Position.Y = 224.000000000000000000
-    Text = #1055#1072#1088#1086#1083#1100':'
-    TabOrder = 1
-  end
-  object UsernameEdit: TEdit
-    Touch.InteractiveGestures = [LongTap, DoubleTap]
-    TabOrder = 2
-    Text = 'Boris'
-    Position.X = 248.000000000000000000
-    Position.Y = 183.000000000000000000
-    Size.Width = 144.000000000000000000
-    Size.Height = 22.000000000000000000
-    Size.PlatformDefault = False
-  end
-  object PasswordEdit: TEdit
-    Touch.InteractiveGestures = [LongTap, DoubleTap]
-    TabOrder = 3
-    Text = '123456'
-    Position.X = 248.000000000000000000
-    Position.Y = 224.000000000000000000
-    Size.Width = 144.000000000000000000
-    Size.Height = 22.000000000000000000
-    Size.PlatformDefault = False
-  end
-  object Button1: TButton
-    Position.X = 280.000000000000000000
-    Position.Y = 280.000000000000000000
-    TabOrder = 4
-    Text = #1042#1086#1081#1090#1080
-    OnClick = Button1Click
+    object UsernameEdit: TEdit
+      Touch.InteractiveGestures = [LongTap, DoubleTap]
+      TabOrder = 2
+      Text = 'Boris'
+      Position.X = 120.000000000000000000
+      Position.Y = 3.000000000000000000
+      Size.Width = 145.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
+    end
+    object Label2: TLabel
+      Position.X = -1.000000000000000000
+      Position.Y = 43.000000000000000000
+      Size.Width = 90.000000000000000000
+      Size.Height = 17.000000000000000000
+      Size.PlatformDefault = False
+      Text = #1055#1072#1088#1086#1083#1100':'
+      TabOrder = 1
+    end
+    object PasswordEdit: TEdit
+      Touch.InteractiveGestures = [LongTap, DoubleTap]
+      TabOrder = 3
+      Text = '123456'
+      Position.X = 119.000000000000000000
+      Position.Y = 46.000000000000000000
+      Size.Width = 145.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
+    end
+    object Button1: TButton
+      Position.X = 80.000000000000000000
+      Position.Y = 86.000000000000000000
+      TabOrder = 4
+      Text = #1042#1086#1081#1090#1080
+      OnClick = Button1Click
+    end
   end
   object FDConnection1: TFDConnection
     ConnectionName = 'localhost'

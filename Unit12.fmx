@@ -2,8 +2,8 @@ object Form12: TForm12
   Left = 0
   Top = 0
   Caption = #1054#1082#1085#1086' '#1091#1087#1088#1072#1078#1085#1077#1085#1080#1081
-  ClientHeight = 613
-  ClientWidth = 928
+  ClientHeight = 644
+  ClientWidth = 1101
   FormFactor.Width = 320
   FormFactor.Height = 480
   FormFactor.Devices = [Desktop]
@@ -32,8 +32,8 @@ object Form12: TForm12
   end
   object Layoutvideo: TLayout
     Align = Client
-    Size.Width = 624.000000000000000000
-    Size.Height = 512.000000000000000000
+    Size.Width = 797.000000000000000000
+    Size.Height = 543.000000000000000000
     Size.PlatformDefault = False
     TabOrder = 32
     object MediaPlayer1: TMediaPlayer
@@ -41,26 +41,25 @@ object Form12: TForm12
       Top = 160
     end
     object MediaplayerControl: TMediaPlayerControl
-      Size.Width = 624.000000000000000000
-      Size.Height = 512.000000000000000000
+      Size.Width = 797.000000000000000000
+      Size.Height = 543.000000000000000000
       Size.PlatformDefault = False
       Align = Client
-      Padding.Left = 5.000000000000000000
       MediaPlayer = MediaPlayer1
     end
   end
   object Layoutitems: TLayout
     Align = Right
     Padding.Right = 5.000000000000000000
-    Position.X = 624.000000000000000000
+    Position.X = 797.000000000000000000
     Size.Width = 304.000000000000000000
-    Size.Height = 512.000000000000000000
+    Size.Height = 543.000000000000000000
     Size.PlatformDefault = False
     TabOrder = 33
     object ListBox1: TListBox
       Align = Client
       Size.Width = 299.000000000000000000
-      Size.Height = 265.000000000000000000
+      Size.Height = 296.000000000000000000
       Size.PlatformDefault = False
       StyleLookup = 'ListBox1Style1'
       TabOrder = 20
@@ -70,7 +69,7 @@ object Form12: TForm12
       DefaultItemStyles.GroupFooterStyle = ''
       OnItemClick = ListBox1ItemClick
       Viewport.Width = 295.000000000000000000
-      Viewport.Height = 261.000000000000000000
+      Viewport.Height = 292.000000000000000000
       object ListBoxGroupHeader1: TListBoxGroupHeader
         TabOrder = 0
         Text = #1057#1087#1080#1089#1086#1082' '#1091#1087#1088#1072#1078#1085#1077#1085#1080#1081':'
@@ -78,7 +77,7 @@ object Form12: TForm12
     end
     object Layout2: TLayout
       Align = Bottom
-      Position.Y = 265.000000000000000000
+      Position.Y = 296.000000000000000000
       Size.Width = 299.000000000000000000
       Size.Height = 247.000000000000000000
       Size.PlatformDefault = False
@@ -99,8 +98,8 @@ object Form12: TForm12
     Padding.Left = 5.000000000000000000
     Padding.Right = 5.000000000000000000
     Padding.Bottom = 5.000000000000000000
-    Position.Y = 512.000000000000000000
-    Size.Width = 928.000000000000000000
+    Position.Y = 543.000000000000000000
+    Size.Width = 1101.000000000000000000
     Size.Height = 101.000000000000000000
     Size.PlatformDefault = False
     TabOrder = 35
@@ -149,10 +148,10 @@ object Form12: TForm12
     Align = Scale
     CanParentFocus = True
     Orientation = Vertical
-    Position.X = 892.000000000000000000
-    Position.Y = 391.000000000000000000
+    Position.X = 1058.289184570313000000
+    Position.Y = 410.773345947265600000
     Size.Width = 19.000000000000000000
-    Size.Height = 205.000000000000000000
+    Size.Height = 215.367156982421900000
     Size.PlatformDefault = False
     TabOrder = 12
     OnChange = tbVolumeChange

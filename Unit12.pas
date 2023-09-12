@@ -129,9 +129,16 @@ begin
   begin
    // Start the first video
   CurrentItemIndex := 0;
+  try
   MediaPlayer1.FileName := GetVideoFilePath(Playlist[CurrentItemIndex].VideoID);
   //MediaPlayer1.Open;
   MediaPlayer1.Play;
+  except
+  on E: Exception do
+  begin
+    ShowMessage('Unable to play the video. You may need to install additional codecs.');
+  end;
+  end;
   Stopwatch.Start;
   Timer1.Interval := 100; // Convert seconds to milliseconds
   Timer1.Enabled := True;
