@@ -40,6 +40,7 @@ type
     Edit1: TEdit;
     Button3: TButton;
     ListBoxGroupHeader1: TListBoxGroupHeader;
+    MediaPlayer2: TMediaPlayer;
     procedure FormCreate(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
     procedure bPlayClickClick(Sender: TObject);
@@ -316,19 +317,35 @@ procedure TForm12.Timer1Timer(Sender: TObject);
 var
   Hour, Min, Sec, MSec: Word;
   TimeInSeconds: double;
+  FirstLoop: Boolean;
   label
   nextvd;
       
 begin
   DecodeTime(Playlist[CurrentItemIndex].PlaybackTime, Hour, Min, Sec, MSec);
   TimeInSeconds := Min * 60 + Sec;
+
+  // Set FirstLoop to True when you start the entire sequence
+    FirstLoop := True;
+
     if Stopwatch.Elapsed.TotalSeconds >= TimeInSeconds  then
     goto nextvd;
     if (MediaPlayer1.CurrentTime >= MediaPlayer1.Duration)   then
     if Stopwatch.Elapsed.TotalSeconds < TimeInSeconds  then
       begin
+      FirstLoop := False;  // Reset for next iterations
       MediaPlayer1.CurrentTime := 0;
       MediaPlayer1.Play;
+            // If it's not the first loop, play the external audio track
+      if not FirstLoop then
+      begin
+      MediaPlayer1.Volume := 0; // Mute
+
+        MediaPlayer2.FileName := 'C:\Users\Cheptsov VV\Documents\Embarcadero\Studio\Projects\Palsy\Videos\Ulybka.mp3';
+        MediaPlayer2.Play;
+        MediaPlayer2.Volume := 100; // Full volume
+      end;
+
     end
     
     else
@@ -336,8 +353,11 @@ begin
   // Stop the current video
    nextvd:
   MediaPlayer1.Stop;
+  MediaPlayer2.Stop;
    // Move to the next video
   Inc(CurrentItemIndex);
+    // Reset the FirstLoop variable if you've moved to a new video
+     FirstLoop := True;
   if CurrentItemIndex >= Length(Playlist) then
     begin
     CurrentItemIndex := 0;
