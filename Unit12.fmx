@@ -41,11 +41,19 @@ object Form12: TForm12
       Top = 160
     end
     object MediaplayerControl: TMediaPlayerControl
-      Size.Width = 797.000000000000000000
-      Size.Height = 543.000000000000000000
+      Size.Width = 787.000000000000000000
+      Size.Height = 533.000000000000000000
       Size.PlatformDefault = False
       Align = Client
+      Padding.Left = 5.000000000000000000
+      Padding.Top = 5.000000000000000000
+      Padding.Right = 5.000000000000000000
+      Padding.Bottom = 5.000000000000000000
       MediaPlayer = MediaPlayer1
+      Margins.Left = 5.000000000000000000
+      Margins.Top = 5.000000000000000000
+      Margins.Right = 5.000000000000000000
+      Margins.Bottom = 5.000000000000000000
     end
   end
   object Layoutitems: TLayout
@@ -157,7 +165,7 @@ object Form12: TForm12
     OnChange = tbVolumeChange
   end
   object MediaPlayer2: TMediaPlayer
-    Left = 296
+    Left = 424
     Top = 575
   end
   object FDConnection1: TFDConnection
@@ -197,5 +205,29 @@ object Form12: TForm12
     Connection = FDConnection1
     Left = 488
     Top = 208
+  end
+  object Timer_startfading: TTimer
+    Enabled = False
+    Interval = 20
+    OnTimer = Timer_startfadingTimer
+    Left = 224
+    Top = 567
+  end
+  object Timer_for: TTimer
+    Left = 144
+    Top = 583
+  end
+  object Timer_startrising: TTimer
+    Enabled = False
+    Interval = 20
+    OnTimer = Timer_startrisingTimer
+    Left = 344
+    Top = 567
+  end
+  object Timer2: TTimer
+    Interval = 40
+    OnTimer = Timer2Timer
+    Left = 928
+    Top = 575
   end
 end

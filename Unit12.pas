@@ -41,6 +41,10 @@ type
     Button3: TButton;
     ListBoxGroupHeader1: TListBoxGroupHeader;
     MediaPlayer2: TMediaPlayer;
+    Timer_startfading: TTimer;
+    Timer_for: TTimer;
+    Timer_startrising: TTimer;
+    Timer2: TTimer;
     procedure FormCreate(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
     procedure bPlayClickClick(Sender: TObject);
@@ -56,22 +60,31 @@ type
     procedure Timer5Timer(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormDestroy(Sender: TObject);
+    procedure Timer_startfadingTimer(Sender: TObject);
+    procedure Timer_startrisingTimer(Sender: TObject);
+    procedure Timer2Timer(Sender: TObject);
 
   private
     { Private declarations }
     FUpdatingTrackBar: Boolean;
-     Path: string;
+    Path: string;
     FWatchedVideosCount: Integer;
+    CurrentVolume: Integer;
     FTotalPlaybackTime: Double; // In seconds
     Pusername : string;
     Fullexercisetime: TTime;
     Hour1, Min1, Sec1, MSec1: Word;
+    TargetMediaPlayer: TMediaPlayer;
     procedure ListTxtFiles;
+
 
   public
     { Public declarations }
     function GenerateRandomPassword: string;
     function GetVideoFilePath(VideoID: string): string;
+    function LoadRandomMP3 : string;
+    procedure StartFading(MediaPlayer: TMediaPlayer);
+    procedure StartRising(MediaPlayer: TMediaPlayer);
   end;
 
  type
@@ -137,7 +150,7 @@ begin
   except
   on E: Exception do
   begin
-    ShowMessage('Unable to play the video. You may need to install additional codecs.');
+    ShowMessage('Ќевозможно проиграть видео. ¬озможно вам требуетс€ установка дополнительных кодеков.');
   end;
   end;
   Stopwatch.Start;
@@ -147,7 +160,7 @@ begin
   Timer4.Enabled := true;
 FWatchedVideosCount := 0;
 FTotalPlaybackTime := 0;
-  MediaPlayer1.Volume:=100;
+  //MediaPlayer1.Volume:=100;
  tbVolume.Value := MediaPlayer1.Volume;
  bPlayClick.Text := 'ѕродолжить упражнение'
  end
@@ -204,6 +217,7 @@ var
   Hour, Min, Sec, MSec: Word;
   //Fullexercisetime: TTime;
 begin
+CurrentVolume := 100;
 Pusername :=LoginForm.Pusername;
 Stopwatch := TStopwatch.Create;
 Fullexercisetime := 0;
@@ -327,7 +341,6 @@ begin
 
   // Set FirstLoop to True when you start the entire sequence
     FirstLoop := True;
-
     if Stopwatch.Elapsed.TotalSeconds >= TimeInSeconds  then
     goto nextvd;
     if (MediaPlayer1.CurrentTime >= MediaPlayer1.Duration)   then
@@ -340,8 +353,7 @@ begin
       if not FirstLoop then
       begin
       MediaPlayer1.Volume := 0; // Mute
-
-        MediaPlayer2.FileName := 'C:\Users\Cheptsov VV\Documents\Embarcadero\Studio\Projects\Palsy\Videos\Ulybka.mp3';
+        MediaPlayer2.FileName := LoadRandomMP3;
         MediaPlayer2.Play;
         MediaPlayer2.Volume := 100; // Full volume
       end;
@@ -443,6 +455,32 @@ begin
 //MediaPlayer1.Play;
 end;
 
+procedure TForm12.Timer_startfadingTimer(Sender: TObject);
+begin
+  CurrentVolume := CurrentVolume - 1;
+  TargetMediaPlayer.Volume := CurrentVolume;
+
+  if CurrentVolume <= 0 then
+  begin
+    Timer_startfading.Enabled := False;
+    TargetMediaPlayer.Volume := 0; // Ensure it's zero
+    TargetMediaPlayer := nil;
+  end;
+end;
+
+procedure TForm12.Timer_startrisingTimer(Sender: TObject);
+begin
+  CurrentVolume := CurrentVolume + 1;
+  TargetMediaPlayer.Volume := CurrentVolume;
+
+  if CurrentVolume <= 100 then
+  begin
+    Timer_startfading.Enabled := False;
+    TargetMediaPlayer.Volume := 100; // Ensure it's zero
+    TargetMediaPlayer := nil;
+  end;
+end;
+
 procedure TForm12.FDConnection1BeforeConnect(Sender: TObject);
 begin
   {$IF DEFINED(iOS) or DEFINED(ANDROID)}
@@ -464,7 +502,7 @@ end;
 
 procedure TForm12.tbVolumeChange(Sender: TObject);
 begin
-MediaPlayer1.Volume := ((tbVolume.Max - tbVolume.value) + tbVolume.Min)/50;
+MediaPlayer1.Volume := ((tbVolume.Max - tbVolume.value) + tbVolume.Min)/100;
 end;
 
 
@@ -482,41 +520,68 @@ begin
     Result := Result + AllowedChars[Random(Length(AllowedChars)) + 1];
 end;
 
+  function TForm12.LoadRandomMP3;
+var
+  Files: TStringDynArray;
+  RandomFile: string;
+  RandomIndex: Integer;
+begin
+  Result :='';
+  // Retrieve all MP3 files from the folder
+  Files := TDirectory.GetFiles('..\..\Videos\Background_music', '*.mp3'); // Change the path accordingly
+
+  if Length(Files) = 0 then
+  begin
+    ShowMessage('No MP3 files found in the folder.');
+    Exit;
+  end;
+
+  // Generate a random index
+  Randomize;
+  RandomIndex := Random(Length(Files));
+
+  // Pick a random file
+  Result := Files[RandomIndex];
+
+  // Load the random MP3 file into MediaPlayer2
+
+end;
+
+ procedure TForm12.StartFading(MediaPlayer: TMediaPlayer);
+begin
+  CurrentVolume := 100;
+  TargetMediaPlayer := MediaPlayer;
+  Timer_startfading.Enabled := True;
+end;
+
+
+procedure TForm12.StartRising(MediaPlayer: TMediaPlayer);
+begin
+  CurrentVolume := 0;
+  TargetMediaPlayer := MediaPlayer;
+  Timer_startrising.Enabled := True;
+end;
+
+
+
+procedure TForm12.Timer2Timer(Sender: TObject);
+begin
+
+    if Stopwatch.Elapsed.TotalSeconds >= 7 then
+    begin
+
+  CurrentVolume := CurrentVolume - 1;
+  mediaplayer1.Volume := CurrentVolume;
+
+  if CurrentVolume <= 0 then
+  begin
+    Timer_startfading.Enabled := False;
+    mediaplayer1.Volume := 0; // Ensure it's zero
+    TargetMediaPlayer := nil;
+  end;
+    //StartFading(MediaPlayer1);
+    end;
+end;
 
 end.
 
-
-
-
-//
-//uses
-//  ..., System.Diagnostics;
-//
-//var
-//  Form1: TForm1;
-//  Stopwatch: TStopwatch;
-//
-//implementation
-//
-//procedure TForm1.FormCreate(Sender: TObject);
-//begin
-//  Stopwatch := TStopwatch.StartNew; // Start the stopwatch
-//  MediaPlayer1.FileName := 'YourVideoFile.mp4'; // Set your video file
-//  MediaPlayer1.Open;
-//  MediaPlayer1.Play;
-//  Timer1.Enabled := True;
-//end;
-//
-//procedure TForm1.Timer1Timer(Sender: TObject);
-//begin
-//  if Stopwatch.Elapsed.TotalSeconds >= 60 then // Check if 60 seconds have passed
-//  begin
-//    Timer1.Enabled := False; // Disable the timer
-//    MediaPlayer1.Stop;
-//  end
-//  else
-//  begin
-//    MediaPlayer1.Position := 0; // Rewind the video
-//    MediaPlayer1.Play;
-//  end;
-//end;
