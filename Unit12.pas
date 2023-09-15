@@ -12,7 +12,7 @@ uses
   FireDAC.Stan.ExprFuncs, FireDAC.Phys.SQLiteWrapper.Stat, FireDAC.FMXUI.Wait,
   Data.DB, FireDAC.Comp.Client, FMX.Edit, FireDAC.Stan.Param, FireDAC.DatS,
   FireDAC.DApt.Intf, FireDAC.DApt, FireDAC.Comp.DataSet, System.IOUtils,
-  FireDAC.Comp.UI, FireDAC.Phys.MySQL, FireDAC.Phys.MySQLDef, System.Diagnostics;
+  FireDAC.Comp.UI, FireDAC.Phys.MySQL, FireDAC.Phys.MySQLDef, System.Diagnostics, System.IniFiles;
 
 type
   TForm12 = class(TForm)
@@ -26,7 +26,6 @@ type
     bPlayClick: TButton;
     bStopClick: TButton;
     ListBox1: TListBox;
-    Timer3: TTimer;
     FDGUIxWaitCursor1: TFDGUIxWaitCursor;
     Label2: TLabel;
     FDQuery2: TFDQuery;
@@ -44,7 +43,8 @@ type
     Timer_startfading: TTimer;
     Timer_for: TTimer;
     Timer_startrising: TTimer;
-    Timer2: TTimer;
+    Button1: TButton;
+    Button2: TButton;
     procedure FormCreate(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
     procedure bPlayClickClick(Sender: TObject);
@@ -63,19 +63,24 @@ type
     procedure Timer_startfadingTimer(Sender: TObject);
     procedure Timer_startrisingTimer(Sender: TObject);
     procedure Timer2Timer(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
 
   private
     { Private declarations }
     FUpdatingTrackBar: Boolean;
     Path: string;
     FWatchedVideosCount: Integer;
-    CurrentVolume: Integer;
+    CurrentVolume: Extended;
     FTotalPlaybackTime: Double; // In seconds
     Pusername : string;
     Fullexercisetime: TTime;
     Hour1, Min1, Sec1, MSec1: Word;
     TargetMediaPlayer: TMediaPlayer;
+    Stopwatch: TStopwatch;
+    IsMP3Loaded: Boolean;
+    FirstLoop: Boolean;
     procedure ListTxtFiles;
+    procedure Nextvideoload;
 
 
   public
@@ -94,11 +99,15 @@ type
     Videoname: string;
   end;
 
+  const
+  INI_FILE = 'MyApp.ini';
+  INI_SECTION = 'LastValues';
+
 var
   Form12: TForm12;
   Playlist: TArray<TPlaylistItem>;
   CurrentItemIndex: Integer;
-  Stopwatch: TStopwatch;
+
 
 implementation
 
@@ -147,6 +156,7 @@ begin
   MediaPlayer1.FileName := GetVideoFilePath(Playlist[CurrentItemIndex].VideoID);
   //MediaPlayer1.Open;
   MediaPlayer1.Play;
+  FirstLoop := True;
   except
   on E: Exception do
   begin
@@ -160,7 +170,6 @@ begin
   Timer4.Enabled := true;
 FWatchedVideosCount := 0;
 FTotalPlaybackTime := 0;
-  //MediaPlayer1.Volume:=100;
  tbVolume.Value := MediaPlayer1.Volume;
  bPlayClick.Text := 'Продолжить упражнение'
  end
@@ -182,16 +191,14 @@ MediaPlayer1.Stop;
 bPlayClick.Text := 'Продолжить упражнение'
 end;
 
+procedure TForm12.Button1Click(Sender: TObject);
+begin
+StartFading(Mediaplayer1);
+end;
+
 procedure TForm12.Button2Click(Sender: TObject);
 begin
-FDConnection1.Connected := true;
-FDQuery2.Open;
-  if not FDQuery2.IsEmpty then
-    Label2.Text := FDQuery2.FieldByName('count').AsString
-  else
-    Label2.Text := 'No data found';
-  FDQuery2.Close;
-  FDConnection1.Connected := False;
+startrising(MediaPlayer1);
 end;
 
 procedure TForm12.Button3Click(Sender: TObject);
@@ -203,7 +210,6 @@ procedure TForm12.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
 timer1.Enabled := False;
 
-timer3.Enabled := False;
 timer4.Enabled := False;
 Mediaplayer1.Stop;
 Application.Terminate;
@@ -215,9 +221,42 @@ var
   DateQuery: TFDQuery;
   DateTimesessionFromDB, NowfromDB: TDateTime;
   Hour, Min, Sec, MSec: Word;
-  //Fullexercisetime: TTime;
+   IniFile: TIniFile;
+  LastVolume: extended;
+  inifilename : string;
 begin
-CurrentVolume := 100;
+
+
+Case TOSVersion.Platform of
+    TOSVersion.TPlatform.pfWindows:
+  Path := ExtractFilePath(ParamStr(0));
+ TOSVersion.TPlatform.pfiOS, TOSVersion.TPlatform.pfAndroid:
+    Path := TPath.Combine(TPath.GetDocumentsPath, 'MyApp.ini');
+  TOSVersion.TPlatform.pfMacOS:
+    Path := TPath.Combine(TPath.GetFullPath('../Resources/StartUp'), 'MyApp.ini');
+  TOSVersion.TPlatform.pfWinRT, TOSVersion.TPlatform.pfLinux:
+    raise Exception.Create('Unexpected platform');
+end;
+
+ inifilename := TPath.Combine(Path, 'MyApp.ini');
+
+  try
+   IniFile := TIniFile.Create(inifilename);
+    try
+    LastVolume := strtofloat(IniFile.ReadString(INI_SECTION, 'MyVolume', ''));
+    tbVolume.value := LastVolume;
+    except
+        // If conversion fails, set to default value 1
+        tbVolume.Value := 1;
+    end;
+
+   finally
+    IniFile.Free;
+  end;
+
+
+IsMP3Loaded := False;
+CurrentVolume := tbVolume.Value;
 Pusername :=LoginForm.Pusername;
 Stopwatch := TStopwatch.Create;
 Fullexercisetime := 0;
@@ -310,13 +349,13 @@ end;
 
 function TForm12.GetVideoFilePath(VideoID: string): string;
 const
-  VideoFolder = 'C:\path\to\your\videos'; // Replace with the actual path
+  VideoFolder = '..\Videos'; // Replace with the actual path
   VideoExtension = '.mp4'; // Replace with the actual extension if different
 
 begin
   case TOSVersion.Platform of
     TOSVersion.TPlatform.pfWindows:
-      Path := '..\..\Videos\';
+     Path := ExtractFilePath(ParamStr(0));
     TOSVersion.TPlatform.pfMacOS:
       Path := TPath.GetFullPath('../Resources/StartUp');
     TOSVersion.TPlatform.pfiOS, TOSVersion.TPlatform.pfAndroid:
@@ -324,85 +363,57 @@ begin
     TOSVersion.TPlatform.pfWinRT, TOSVersion.TPlatform.pfLinux:
       raise Exception.Create('Unexpected platform');
   end;
-  Result := TPath.Combine(Path, VideoID + VideoExtension);
+  Result := TPath.Combine(TPath.Combine(Path, 'Videos'), VideoID + VideoExtension);
 end;
 
 procedure TForm12.Timer1Timer(Sender: TObject);
 var
   Hour, Min, Sec, MSec: Word;
   TimeInSeconds: double;
-  FirstLoop: Boolean;
-  label
-  nextvd;
-      
+
 begin
   DecodeTime(Playlist[CurrentItemIndex].PlaybackTime, Hour, Min, Sec, MSec);
   TimeInSeconds := Min * 60 + Sec;
 
-  // Set FirstLoop to True when you start the entire sequence
-    FirstLoop := True;
+    if Stopwatch.Elapsed.TotalSeconds >= TimeInSeconds-3  then
+    begin
+      startfading(Mediaplayer2);
+    end;
+
     if Stopwatch.Elapsed.TotalSeconds >= TimeInSeconds  then
-    goto nextvd;
+    begin
+    Nextvideoload;
+    end;
+
     if (MediaPlayer1.CurrentTime >= MediaPlayer1.Duration)   then
-    if Stopwatch.Elapsed.TotalSeconds < TimeInSeconds  then
-      begin
-      FirstLoop := False;  // Reset for next iterations
+       begin
       MediaPlayer1.CurrentTime := 0;
       MediaPlayer1.Play;
+
             // If it's not the first loop, play the external audio track
       if not FirstLoop then
       begin
-      MediaPlayer1.Volume := 0; // Mute
+       MediaPlayer1.Volume := 0;  // Mute the main player
+      // Load and play the MP3 only if it hasn't been loaded yet
+      if not IsMP3Loaded then
+      begin
         MediaPlayer2.FileName := LoadRandomMP3;
         MediaPlayer2.Play;
-        MediaPlayer2.Volume := 100; // Full volume
+        IsMP3Loaded := True;  // MP3 is now loaded
+      end
+      else
+      begin
+        // MP3 is already loaded, just continue playing it
+        MediaPlayer2.Play;
       end;
-
+     MediaPlayer2.Volume := tbVolume.Value;  // Full volume for MediaPlayer2
     end
-    
-    else
-begin
-  // Stop the current video
-   nextvd:
-  MediaPlayer1.Stop;
-  MediaPlayer2.Stop;
-   // Move to the next video
-  Inc(CurrentItemIndex);
-    // Reset the FirstLoop variable if you've moved to a new video
-     FirstLoop := True;
-  if CurrentItemIndex >= Length(Playlist) then
+      else
     begin
-    CurrentItemIndex := 0;
-    MediaPlayer1.Stop;
-    Timer1.Enabled:= False;
-    Stopwatch.Stop;
-    FDQuery3.Connection := FDConnection1;
-    FDQuery3.SQL.Text := 'UPDATE appointments A ' +
-                     'INNER JOIN patients P ON P.idPatients = A.idPatients ' +
-                     'INNER JOIN videos V ON A.idvideos = V.idvideos ' +
-                     'SET A.sdelanovden = A.sdelanovden + 1, A.sdelanovsego = A.sdelanovsego + 1, A.lastsession = UTC_TIMESTAMP()' +
-                     'WHERE P.Username = :UserName AND CURDATE() BETWEEN A.Starttime AND A.Endtime AND A.sdelanovden < A.kolvden';
-    FDQuery3.ParamByName('UserName').AsString := Pusername; // Replace UserName with the actual user name
-    FDQuery3.ExecSQL;
-    ShowMessage('Ты молодец! Занятие окончено!');
- timer1.Enabled := false;
+      FirstLoop := False;  // Not the first loop anymore
+    end;
+  end;
 
-   timer3.Enabled := false;
-    timer4.Enabled := false;
- bplayclick.Enabled:=false;
- bstopclick.Enabled:=false;
-   end
-else
-begin
-   // Start the next video
-  MediaPlayer1.FileName := GetVideoFilePath(Playlist[CurrentItemIndex].VideoID);
- // MediaPlayer1.Open;
-  MediaPlayer1.Play;
-  Stopwatch.reset;
-  Stopwatch.Start;
-end;
-
-end;
 
 end;
 
@@ -457,9 +468,8 @@ end;
 
 procedure TForm12.Timer_startfadingTimer(Sender: TObject);
 begin
-  CurrentVolume := CurrentVolume - 1;
+  CurrentVolume := CurrentVolume - 0.2;
   TargetMediaPlayer.Volume := CurrentVolume;
-
   if CurrentVolume <= 0 then
   begin
     Timer_startfading.Enabled := False;
@@ -470,13 +480,13 @@ end;
 
 procedure TForm12.Timer_startrisingTimer(Sender: TObject);
 begin
-  CurrentVolume := CurrentVolume + 1;
+  CurrentVolume := CurrentVolume + 0.2;
   TargetMediaPlayer.Volume := CurrentVolume;
 
-  if CurrentVolume <= 100 then
+  if CurrentVolume >= tbVolume.Value then
   begin
-    Timer_startfading.Enabled := False;
-    TargetMediaPlayer.Volume := 100; // Ensure it's zero
+    Timer_startrising.Enabled := False;
+    TargetMediaPlayer.Volume := tbVolume.Value; // Ensure it's zero
     TargetMediaPlayer := nil;
   end;
 end;
@@ -501,8 +511,9 @@ end;
 
 
 procedure TForm12.tbVolumeChange(Sender: TObject);
+
 begin
-MediaPlayer1.Volume := ((tbVolume.Max - tbVolume.value) + tbVolume.Min)/100;
+  MediaPlayer1.Volume := tbVolume.value;
 end;
 
 
@@ -528,7 +539,8 @@ var
 begin
   Result :='';
   // Retrieve all MP3 files from the folder
-  Files := TDirectory.GetFiles('..\..\Videos\Background_music', '*.mp3'); // Change the path accordingly
+  Path := ExtractFilePath(ParamStr(0));
+  Files := TDirectory.GetFiles(TPath.Combine(Path, 'Videos\Background_music'), '*.mp3'); // Change the path accordingly
 
   if Length(Files) = 0 then
   begin
@@ -549,7 +561,7 @@ end;
 
  procedure TForm12.StartFading(MediaPlayer: TMediaPlayer);
 begin
-  CurrentVolume := 100;
+  CurrentVolume := tbVolume.Value;
   TargetMediaPlayer := MediaPlayer;
   Timer_startfading.Enabled := True;
 end;
@@ -567,21 +579,67 @@ end;
 procedure TForm12.Timer2Timer(Sender: TObject);
 begin
 
-    if Stopwatch.Elapsed.TotalSeconds >= 7 then
-    begin
+      CurrentVolume := CurrentVolume - 0.1;
+      if CurrentVolume < 0 then CurrentVolume := 0;
+      mediaplayer1.Volume := CurrentVolume;
+      mediaplayer2.Volume := CurrentVolume;
 
-  CurrentVolume := CurrentVolume - 1;
-  mediaplayer1.Volume := CurrentVolume;
-
-  if CurrentVolume <= 0 then
-  begin
-    Timer_startfading.Enabled := False;
-    mediaplayer1.Volume := 0; // Ensure it's zero
-    TargetMediaPlayer := nil;
-  end;
-    //StartFading(MediaPlayer1);
     end;
-end;
 
+  procedure TForm12.Nextvideoload;
+  var
+IniFile: TIniFile;
+
+inifilename : string;
+  begin
+ MediaPlayer1.Stop;
+  MediaPlayer2.Stop;
+   // Move to the next video
+  Inc(CurrentItemIndex);
+    // Reset the FirstLoop variable if you've moved to a new video
+     FirstLoop := True;
+  if CurrentItemIndex >= Length(Playlist) then
+    begin
+    CurrentItemIndex := 0;
+    MediaPlayer1.Stop;
+    MediaPlayer2.Stop;
+    Timer1.Enabled:= False;
+    Stopwatch.Stop;
+    FDQuery3.Connection := FDConnection1;
+    FDQuery3.SQL.Text := 'UPDATE appointments A ' +
+                     'INNER JOIN patients P ON P.idPatients = A.idPatients ' +
+                     'INNER JOIN videos V ON A.idvideos = V.idvideos ' +
+                     'SET A.sdelanovden = A.sdelanovden + 1, A.sdelanovsego = A.sdelanovsego + 1, A.lastsession = UTC_TIMESTAMP()' +
+                     'WHERE P.Username = :UserName AND CURDATE() BETWEEN A.Starttime AND A.Endtime AND A.sdelanovden < A.kolvden';
+    FDQuery3.ParamByName('UserName').AsString := Pusername; // Replace UserName with the actual user name
+    FDQuery3.ExecSQL;
+
+  inifilename := TPath.Combine(Path, 'MyApp.ini');
+   try
+   IniFile := TIniFile.Create(inifilename);
+   IniFile.WriteString(INI_SECTION, 'MyVolume', floattostr(tbVolume.Value));
+
+  finally
+    IniFile.Free;
+   end;
+
+  ShowMessage('Ты молодец! Занятие окончено!');
+ timer1.Enabled := false;
+ timer4.Enabled := false;
+ bplayclick.Enabled:=false;
+ bstopclick.Enabled:=false;
+   end
+else
+begin
+   // Start the next video
+  MediaPlayer1.FileName := GetVideoFilePath(Playlist[CurrentItemIndex].VideoID);
+ // MediaPlayer1.Open;
+  MediaPlayer1.Play;
+  Startrising(Mediaplayer1);
+ // MediaPlayer1.Volume := tbVolume.Value;
+  Stopwatch.reset;
+  Stopwatch.Start;
+end;
+  end;
 end.
 

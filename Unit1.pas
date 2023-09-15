@@ -51,7 +51,7 @@ uses Unit12;
 
 procedure TLoginForm.Button1Click(Sender: TObject);
 var
-    IniFile: TIniFile;
+IniFile: TIniFile;
 LastValuelogin, LastValuepass: string;
 inifilename : string;
 Nextform : TForm12;
@@ -81,8 +81,7 @@ begin
   begin
     // Invalid credentials
     ShowMessage('Неправильный логин или пароль.');
-
-  end;
+    end;
 
 
  end;
@@ -136,19 +135,18 @@ begin
 
 
 
-  Case TOSVersion.Platform of
+Case TOSVersion.Platform of
     TOSVersion.TPlatform.pfWindows:
-      Path := TPath.Combine('..', '..');
-    TOSVersion.TPlatform.pfMacOS:
-      Path := TPath.Combine(TPath.GetFullPath('../Resources/StartUp'), 'MyApp.ini');
-    TOSVersion.TPlatform.pfiOS, TOSVersion.TPlatform.pfAndroid:
-      Path := TPath.Combine(TPath.GetDocumentsPath, 'MyApp.ini');
-    TOSVersion.TPlatform.pfWinRT, TOSVersion.TPlatform.pfLinux:
-      raise Exception.Create('Unexpected platform');
-  end;
+  Path := ExtractFilePath(ParamStr(0));
+ TOSVersion.TPlatform.pfiOS, TOSVersion.TPlatform.pfAndroid:
+    Path := TPath.Combine(TPath.GetDocumentsPath, 'MyApp.ini');
+  TOSVersion.TPlatform.pfMacOS:
+    Path := TPath.Combine(TPath.GetFullPath('../Resources/StartUp'), 'MyApp.ini');
+  TOSVersion.TPlatform.pfWinRT, TOSVersion.TPlatform.pfLinux:
+    raise Exception.Create('Unexpected platform');
+end;
 
    inifilename := TPath.Combine(Path, 'MyApp.ini');
-
   try
    IniFile := TIniFile.Create(inifilename);
     LastValuepass := IniFile.ReadString(INI_SECTION, 'MyPassword', '');

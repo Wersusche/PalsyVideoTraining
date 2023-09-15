@@ -13,16 +13,10 @@ object Form12: TForm12
   DesignerMasterStyle = 0
   object Timer1: TTimer
     Enabled = False
+    Interval = 500
     OnTimer = Timer1Timer
     Left = 600
     Top = 224
-  end
-  object Timer3: TTimer
-    Enabled = False
-    Interval = 500
-    OnTimer = Timer3Timer
-    Left = 592
-    Top = 288
   end
   object Timer4: TTimer
     Enabled = False
@@ -99,6 +93,20 @@ object Form12: TForm12
         Text = 'Label2'
         TabOrder = 24
       end
+      object Button1: TButton
+        Position.X = 88.000000000000000000
+        Position.Y = 120.000000000000000000
+        TabOrder = 25
+        Text = 'Button1'
+        OnClick = Button1Click
+      end
+      object Button2: TButton
+        Position.X = 144.000000000000000000
+        Position.Y = 184.000000000000000000
+        TabOrder = 26
+        Text = 'Button2'
+        OnClick = Button2Click
+      end
     end
   end
   object Layout1: TLayout
@@ -155,18 +163,38 @@ object Form12: TForm12
   object tbVolume: TTrackBar
     Align = Scale
     CanParentFocus = True
-    Orientation = Vertical
-    Position.X = 1058.289184570313000000
-    Position.Y = 410.773345947265600000
-    Size.Width = 19.000000000000000000
-    Size.Height = 215.367156982421900000
+    Max = 1.000000000000000000
+    Orientation = Horizontal
+    Position.X = 8.000000000000000000
+    Position.Y = 567.000000000000000000
+    Size.Width = 273.000000000000000000
+    Size.Height = 19.000000000000000000
     Size.PlatformDefault = False
     TabOrder = 12
     OnChange = tbVolumeChange
   end
   object MediaPlayer2: TMediaPlayer
-    Left = 424
+    Left = 440
+    Top = 559
+  end
+  object Timer_startfading: TTimer
+    Enabled = False
+    Interval = 500
+    OnTimer = Timer_startfadingTimer
+    Left = 248
+    Top = 591
+  end
+  object Timer_for: TTimer
+    Interval = 500
+    Left = 904
     Top = 575
+  end
+  object Timer_startrising: TTimer
+    Enabled = False
+    Interval = 500
+    OnTimer = Timer_startrisingTimer
+    Left = 344
+    Top = 567
   end
   object FDConnection1: TFDConnection
     Params.Strings = (
@@ -205,29 +233,5 @@ object Form12: TForm12
     Connection = FDConnection1
     Left = 488
     Top = 208
-  end
-  object Timer_startfading: TTimer
-    Enabled = False
-    Interval = 20
-    OnTimer = Timer_startfadingTimer
-    Left = 224
-    Top = 567
-  end
-  object Timer_for: TTimer
-    Left = 144
-    Top = 583
-  end
-  object Timer_startrising: TTimer
-    Enabled = False
-    Interval = 20
-    OnTimer = Timer_startrisingTimer
-    Left = 344
-    Top = 567
-  end
-  object Timer2: TTimer
-    Interval = 40
-    OnTimer = Timer2Timer
-    Left = 928
-    Top = 575
   end
 end

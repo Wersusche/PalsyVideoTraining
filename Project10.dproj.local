@@ -1,12 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <BorlandProject>
 	<Transactions>
+    <Transaction>1899.12.30 00:00:00.000.614,C:\Users\Wersus\Downloads\libmysql.dll\LIBMYSQL.DLL=</Transaction>
     <Transaction>1899.12.30 00:00:00.000.738,=C:\Users\Cheptsov VV\Documents\Embarcadero\Studio\Projects\Unit12.pas</Transaction>
     <Transaction>1899.12.30 00:00:00.000.576,C:\Users\Cheptsov VV\Documents\Embarcadero\Studio\Projects\Project10.dproj=C:\Users\Cheptsov VV\Documents\Embarcadero\Studio\Projects\Project10.dproj</Transaction>
     <Transaction>1899.12.30 00:00:00.000.478,=C:\Users\Cheptsov VV\Documents\Embarcadero\Studio\Projects\Palsy\Unit1.pas</Transaction>
     <Transaction>1899.12.30 00:00:00.000.248,=C:\Users\Cheptsov VV\Downloads\vecteezy_video-countdown-counter-with-rounded-corners-for-10-to-1-on_5965601_897.mp4</Transaction>
     <Transaction>1899.12.30 00:00:00.000.956,=C:\Users\Wersus\Downloads\libmysql.dll\LIBMYSQL.DLL</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.614,C:\Users\Wersus\Downloads\libmysql.dll\LIBMYSQL.DLL=</Transaction>
+    <Transaction>2023.09.15 09:58:47.013,=C:\Users\Cheptsov VV\Documents\Embarcadero\Studio\Projects\Palsy\Unit2.pas</Transaction>
+    <Transaction>2023.09.15 09:59:09.723,=C:\Users\Cheptsov VV\Documents\Embarcadero\Studio\Projects\Palsy\Unit2.pas</Transaction>
   </Transactions>
 	<ActiveMobileDevice>
 		<NoProfile Android64="" Android=""/>

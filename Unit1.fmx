@@ -38,7 +38,7 @@ object LoginForm: TLoginForm
     end
     object PasswordEdit: TEdit
       Touch.InteractiveGestures = [LongTap, DoubleTap]
-      TabOrder = 3
+      TabOrder = 4
       Text = '123456'
       Position.X = 119.000000000000000000
       Position.Y = 46.000000000000000000
@@ -49,7 +49,7 @@ object LoginForm: TLoginForm
     object Button1: TButton
       Position.X = 80.000000000000000000
       Position.Y = 86.000000000000000000
-      TabOrder = 4
+      TabOrder = 5
       Text = #1042#1086#1081#1090#1080
       OnClick = Button1Click
     end

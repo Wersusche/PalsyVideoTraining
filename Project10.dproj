@@ -54,6 +54,12 @@
         <Cfg_1>true</Cfg_1>
         <Base>true</Base>
     </PropertyGroup>
+    <PropertyGroup Condition="('$(Platform)'=='Android64' and '$(Cfg_1)'=='true') or '$(Cfg_1_Android64)'!=''">
+        <Cfg_1_Android64>true</Cfg_1_Android64>
+        <CfgParent>Cfg_1</CfgParent>
+        <Cfg_1>true</Cfg_1>
+        <Base>true</Base>
+    </PropertyGroup>
     <PropertyGroup Condition="('$(Platform)'=='Win32' and '$(Cfg_1)'=='true') or '$(Cfg_1_Win32)'!=''">
         <Cfg_1_Win32>true</Cfg_1_Win32>
         <CfgParent>Cfg_1</CfgParent>
@@ -104,6 +110,9 @@
         <Icns_MainIcns>$(BDS)\bin\delphi_PROJECTICNS.icns</Icns_MainIcns>
         <SanitizedProjectName>Project10</SanitizedProjectName>
         <OrientationLandscapeLeft>true</OrientationLandscapeLeft>
+        <PostBuildEvent><![CDATA[xcopy /E /Y "C:\Users\Cheptsov VV\Documents\Embarcadero\Studio\Projects\Palsy\Resources\*" "$(OUTPUTDIR)"
+xcopy /E /Y "C:\Users\Cheptsov VV\Documents\Embarcadero\Studio\Projects\Palsy\Videos\*" "$(OUTPUTDIR)\Videos\"
+$(PostBuildEvent)]]></PostBuildEvent>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Android)'!=''">
         <DCC_UsePackage>FlexCel_Report;fmx;DbxCommonDriver;bindengine;IndyIPCommon;emsclient;FireDACCommonDriver;FMX_FlexCel_Components;IndyProtocols;IndyIPClient;dbxcds;bindcompfmx;FlexCel_Pdf;ibmonitor;FireDACSqliteDriver;DbxClientDriver;soapmidas;fmxFireDAC;dbexpress;inet;DataSnapCommon;fmxase;FMX_FlexCel_Core;dbrtl;FireDACDBXDriver;FlexCel_XlsAdapter;CustomIPTransport;DBXInterBaseDriver;IndySystem;ibxbindings;FlexCel_Core;bindcomp;FireDACCommon;FlexCel_Render;IndyCore;RESTBackendComponents;bindcompdbx;rtl;RESTComponents;DBXSqliteDriver;IndyIPServer;dsnapxml;DataSnapClient;DataSnapProviderClient;DataSnapFireDAC;emsclientfiredac;FireDAC;FireDACDSDriver;xmlrtl;tethering;ibxpress;dsnap;CloudService;DataSnapNativeClient;soaprtl;soapserver;FireDACIBDriver;$(DCC_UsePackage)</DCC_UsePackage>
@@ -126,6 +135,8 @@
         <Android_NotificationIcon72>$(BDS)\bin\Artwork\Android\FM_NotificationIcon_72x72.png</Android_NotificationIcon72>
         <Android_NotificationIcon96>$(BDS)\bin\Artwork\Android\FM_NotificationIcon_96x96.png</Android_NotificationIcon96>
         <EnabledSysJars>annotation-1.2.0.dex.jar;asynclayoutinflater-1.0.0.dex.jar;billing-4.0.0.dex.jar;browser-1.0.0.dex.jar;cloud-messaging.dex.jar;collection-1.0.0.dex.jar;coordinatorlayout-1.0.0.dex.jar;core-1.5.0-rc02.dex.jar;core-common-2.0.1.dex.jar;core-runtime-2.0.1.dex.jar;cursoradapter-1.0.0.dex.jar;customview-1.0.0.dex.jar;documentfile-1.0.0.dex.jar;drawerlayout-1.0.0.dex.jar;firebase-annotations-16.0.0.dex.jar;firebase-common-20.0.0.dex.jar;firebase-components-17.0.0.dex.jar;firebase-datatransport-18.0.0.dex.jar;firebase-encoders-17.0.0.dex.jar;firebase-encoders-json-18.0.0.dex.jar;firebase-iid-interop-17.1.0.dex.jar;firebase-installations-17.0.0.dex.jar;firebase-installations-interop-17.0.0.dex.jar;firebase-measurement-connector-19.0.0.dex.jar;firebase-messaging-22.0.0.dex.jar;fmx.dex.jar;fragment-1.0.0.dex.jar;google-play-licensing.dex.jar;interpolator-1.0.0.dex.jar;javax.inject-1.dex.jar;legacy-support-core-ui-1.0.0.dex.jar;legacy-support-core-utils-1.0.0.dex.jar;lifecycle-common-2.0.0.dex.jar;lifecycle-livedata-2.0.0.dex.jar;lifecycle-livedata-core-2.0.0.dex.jar;lifecycle-runtime-2.0.0.dex.jar;lifecycle-service-2.0.0.dex.jar;lifecycle-viewmodel-2.0.0.dex.jar;listenablefuture-1.0.dex.jar;loader-1.0.0.dex.jar;localbroadcastmanager-1.0.0.dex.jar;play-services-ads-20.1.0.dex.jar;play-services-ads-base-20.1.0.dex.jar;play-services-ads-identifier-17.0.0.dex.jar;play-services-ads-lite-20.1.0.dex.jar;play-services-base-17.5.0.dex.jar;play-services-basement-17.6.0.dex.jar;play-services-cloud-messaging-16.0.0.dex.jar;play-services-drive-17.0.0.dex.jar;play-services-games-21.0.0.dex.jar;play-services-location-18.0.0.dex.jar;play-services-maps-17.0.1.dex.jar;play-services-measurement-base-18.0.0.dex.jar;play-services-measurement-sdk-api-18.0.0.dex.jar;play-services-places-placereport-17.0.0.dex.jar;play-services-stats-17.0.0.dex.jar;play-services-tasks-17.2.0.dex.jar;print-1.0.0.dex.jar;room-common-2.1.0.dex.jar;room-runtime-2.1.0.dex.jar;slidingpanelayout-1.0.0.dex.jar;sqlite-2.0.1.dex.jar;sqlite-framework-2.0.1.dex.jar;swiperefreshlayout-1.0.0.dex.jar;transport-api-3.0.0.dex.jar;transport-backend-cct-3.0.0.dex.jar;transport-runtime-3.0.0.dex.jar;user-messaging-platform-1.0.0.dex.jar;versionedparcelable-1.1.1.dex.jar;viewpager-1.0.0.dex.jar;work-runtime-2.1.0.dex.jar</EnabledSysJars>
+        <VerInfo_Build>1</VerInfo_Build>
+        <Android_NotificationAccentColor>#000000</Android_NotificationAccentColor>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Android64)'!=''">
         <DCC_UsePackage>FlexCel_Report;fmx;DbxCommonDriver;bindengine;IndyIPCommon;emsclient;FireDACCommonDriver;FMX_FlexCel_Components;IndyProtocols;IndyIPClient;dbxcds;bindcompfmx;FlexCel_Pdf;ibmonitor;FireDACSqliteDriver;DbxClientDriver;soapmidas;fmxFireDAC;dbexpress;inet;DataSnapCommon;FMX_FlexCel_Core;dbrtl;FireDACDBXDriver;FlexCel_XlsAdapter;CustomIPTransport;DBXInterBaseDriver;IndySystem;ibxbindings;FlexCel_Core;bindcomp;FireDACCommon;FlexCel_Render;IndyCore;RESTBackendComponents;bindcompdbx;rtl;RESTComponents;DBXSqliteDriver;IndyIPServer;dsnapxml;DataSnapClient;DataSnapProviderClient;DataSnapFireDAC;emsclientfiredac;FireDAC;FireDACDSDriver;xmlrtl;tethering;ibxpress;dsnap;CloudService;DataSnapNativeClient;soaprtl;soapserver;FireDACIBDriver;$(DCC_UsePackage)</DCC_UsePackage>
@@ -213,6 +224,7 @@
         <Manifest_File>$(BDS)\bin\default_app.manifest</Manifest_File>
         <UWP_DelphiLogo44>$(BDS)\bin\Artwork\Windows\UWP\delphi_UwpDefault_44.png</UWP_DelphiLogo44>
         <UWP_DelphiLogo150>$(BDS)\bin\Artwork\Windows\UWP\delphi_UwpDefault_150.png</UWP_DelphiLogo150>
+        <BRCC_OutputDir>.\Win32\Release</BRCC_OutputDir>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win64)'!=''">
         <DCC_UsePackage>vclwinx;DataSnapServer;FlexCel_Report;fmx;emshosting;vclie;DbxCommonDriver;bindengine;IndyIPCommon;VCLRESTComponents;DBXMSSQLDriver;FireDACCommonODBC;emsclient;FireDACCommonDriver;FMX_FlexCel_Components;appanalytics;IndyProtocols;vclx;IndyIPClient;dbxcds;vcledge;bindcompvclwinx;emsedge;bindcompfmx;FlexCel_Pdf;DBXFirebirdDriver;inetdb;ibmonitor;FireDACSqliteDriver;DbxClientDriver;FireDACASADriver;soapmidas;vclactnband;fmxFireDAC;dbexpress;FireDACInfxDriver;PowerPDFDR;DBXMySQLDriver;VclSmp;inet;DataSnapCommon;vcltouch;fmxase;DBXOdbcDriver;FMX_FlexCel_Core;dbrtl;FireDACDBXDriver;FireDACOracleDriver;fmxdae;FlexCel_XlsAdapter;FireDACMSAccDriver;VCL_FlexCel_Core;CustomIPTransport;FireDACMSSQLDriver;DataSnapIndy10ServerTransport;DataSnapConnectors;vcldsnap;DBXInterBaseDriver;FireDACMongoDBDriver;IndySystem;FireDACTDataDriver;vcldb;ibxbindings;FlexCel_Core;vclFireDAC;bindcomp;FireDACCommon;DataSnapServerMidas;FireDACODBCDriver;emsserverresource;FlexCel_Render;IndyCore;RESTBackendComponents;bindcompdbx;rtl;FireDACMySQLDriver;FireDACADSDriver;VCL_FlexCel_Components;RESTComponents;DBXSqliteDriver;vcl;IndyIPServer;dsnapxml;dsnapcon;DataSnapClient;DataSnapProviderClient;adortl;DBXSybaseASEDriver;DBXDb2Driver;vclimg;DataSnapFireDAC;emsclientfiredac;FireDACPgDriver;FireDAC;FireDACDSDriver;inetdbxpress;xmlrtl;tethering;ibxpress;bindcompvcl;dsnap;CloudService;DBXSybaseASADriver;DBXOracleDriver;FireDACDb2Driver;DBXInformixDriver;vclib;fmxobj;bindcompvclsmp;DataSnapNativeClient;DatasnapConnectorsFreePascal;soaprtl;soapserver;FireDACIBDriver;$(DCC_UsePackage)</DCC_UsePackage>
@@ -237,6 +249,9 @@
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Android)'!=''">
         <VerInfo_Build>1</VerInfo_Build>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Cfg_1_Android64)'!=''">
+        <VerInfo_Build>1</VerInfo_Build>
         <Android_NotificationAccentColor>#000000</Android_NotificationAccentColor>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Win32)'!=''">
@@ -256,6 +271,8 @@
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2_Win32)'!=''">
         <AppDPIAwarenessMode>PerMonitorV2</AppDPIAwarenessMode>
+        <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
+        <VerInfo_Locale>1033</VerInfo_Locale>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2_Win64)'!=''">
         <AppDPIAwarenessMode>PerMonitorV2</AppDPIAwarenessMode>
@@ -312,6 +329,10 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="$(BDS)\bin\Artwork\Android\FM_LauncherIcon_144x144.png" Configuration="Release" Class="Android_LauncherIcon144">
+                    <Platform Name="All Platforms">
+                        <Enabled>false</Enabled>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
                     <Platform Name="Android">
                         <RemoteName>ic_launcher.png</RemoteName>
                         <Overwrite>true</Overwrite>
@@ -330,6 +351,10 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="$(BDS)\bin\Artwork\Android\FM_LauncherIcon_192x192.png" Configuration="Release" Class="Android_LauncherIcon192">
+                    <Platform Name="All Platforms">
+                        <Enabled>false</Enabled>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
                     <Platform Name="Android">
                         <RemoteName>ic_launcher.png</RemoteName>
                         <Overwrite>true</Overwrite>
@@ -348,6 +373,10 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="$(BDS)\bin\Artwork\Android\FM_LauncherIcon_36x36.png" Configuration="Release" Class="Android_LauncherIcon36">
+                    <Platform Name="All Platforms">
+                        <Enabled>false</Enabled>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
                     <Platform Name="Android">
                         <RemoteName>ic_launcher.png</RemoteName>
                         <Overwrite>true</Overwrite>
@@ -366,6 +395,10 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="$(BDS)\bin\Artwork\Android\FM_LauncherIcon_48x48.png" Configuration="Release" Class="Android_LauncherIcon48">
+                    <Platform Name="All Platforms">
+                        <Enabled>false</Enabled>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
                     <Platform Name="Android">
                         <RemoteName>ic_launcher.png</RemoteName>
                         <Overwrite>true</Overwrite>
@@ -384,6 +417,10 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="$(BDS)\bin\Artwork\Android\FM_LauncherIcon_72x72.png" Configuration="Release" Class="Android_LauncherIcon72">
+                    <Platform Name="All Platforms">
+                        <Enabled>false</Enabled>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
                     <Platform Name="Android">
                         <RemoteName>ic_launcher.png</RemoteName>
                         <Overwrite>true</Overwrite>
@@ -402,6 +439,10 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="$(BDS)\bin\Artwork\Android\FM_LauncherIcon_96x96.png" Configuration="Release" Class="Android_LauncherIcon96">
+                    <Platform Name="All Platforms">
+                        <Enabled>false</Enabled>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
                     <Platform Name="Android">
                         <RemoteName>ic_launcher.png</RemoteName>
                         <Overwrite>true</Overwrite>
@@ -420,6 +461,10 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="$(BDS)\bin\Artwork\Android\FM_NotificationIcon_24x24.png" Configuration="Release" Class="Android_NotificationIcon24">
+                    <Platform Name="All Platforms">
+                        <Enabled>false</Enabled>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
                     <Platform Name="Android">
                         <RemoteName>ic_notification.png</RemoteName>
                         <Overwrite>true</Overwrite>
@@ -438,6 +483,10 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="$(BDS)\bin\Artwork\Android\FM_NotificationIcon_36x36.png" Configuration="Release" Class="Android_NotificationIcon36">
+                    <Platform Name="All Platforms">
+                        <Enabled>false</Enabled>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
                     <Platform Name="Android">
                         <RemoteName>ic_notification.png</RemoteName>
                         <Overwrite>true</Overwrite>
@@ -456,6 +505,10 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="$(BDS)\bin\Artwork\Android\FM_NotificationIcon_48x48.png" Configuration="Release" Class="Android_NotificationIcon48">
+                    <Platform Name="All Platforms">
+                        <Enabled>false</Enabled>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
                     <Platform Name="Android">
                         <RemoteName>ic_notification.png</RemoteName>
                         <Overwrite>true</Overwrite>
@@ -474,6 +527,10 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="$(BDS)\bin\Artwork\Android\FM_NotificationIcon_72x72.png" Configuration="Release" Class="Android_NotificationIcon72">
+                    <Platform Name="All Platforms">
+                        <Enabled>false</Enabled>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
                     <Platform Name="Android">
                         <RemoteName>ic_notification.png</RemoteName>
                         <Overwrite>true</Overwrite>
@@ -492,6 +549,10 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="$(BDS)\bin\Artwork\Android\FM_NotificationIcon_96x96.png" Configuration="Release" Class="Android_NotificationIcon96">
+                    <Platform Name="All Platforms">
+                        <Enabled>false</Enabled>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
                     <Platform Name="Android">
                         <RemoteName>ic_notification.png</RemoteName>
                         <Overwrite>true</Overwrite>
@@ -510,6 +571,10 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="$(BDS)\bin\Artwork\Android\FM_SplashImage_426x320.png" Configuration="Release" Class="Android_SplashImage426">
+                    <Platform Name="All Platforms">
+                        <Enabled>false</Enabled>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
                     <Platform Name="Android">
                         <RemoteName>splash_image.png</RemoteName>
                         <Overwrite>true</Overwrite>
@@ -528,6 +593,10 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="$(BDS)\bin\Artwork\Android\FM_SplashImage_470x320.png" Configuration="Release" Class="Android_SplashImage470">
+                    <Platform Name="All Platforms">
+                        <Enabled>false</Enabled>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
                     <Platform Name="Android">
                         <RemoteName>splash_image.png</RemoteName>
                         <Overwrite>true</Overwrite>
@@ -546,6 +615,10 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="$(BDS)\bin\Artwork\Android\FM_SplashImage_640x480.png" Configuration="Release" Class="Android_SplashImage640">
+                    <Platform Name="All Platforms">
+                        <Enabled>false</Enabled>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
                     <Platform Name="Android">
                         <RemoteName>splash_image.png</RemoteName>
                         <Overwrite>true</Overwrite>
@@ -564,6 +637,10 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="$(BDS)\bin\Artwork\Android\FM_SplashImage_960x720.png" Configuration="Release" Class="Android_SplashImage960">
+                    <Platform Name="All Platforms">
+                        <Enabled>false</Enabled>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
                     <Platform Name="Android">
                         <RemoteName>splash_image.png</RemoteName>
                         <Overwrite>true</Overwrite>
@@ -588,6 +665,10 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="$(BDS)\lib\android\debug\armeabi\libnative-activity.so" Configuration="Release" Class="AndroidLibnativeArmeabiFile">
+                    <Platform Name="All Platforms">
+                        <Enabled>false</Enabled>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
                     <Platform Name="Android">
                         <RemoteName>libProject10.so</RemoteName>
                         <Overwrite>true</Overwrite>
@@ -606,6 +687,10 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="$(BDS)\lib\android\debug\mips\libnative-activity.so" Configuration="Release" Class="AndroidLibnativeMipsFile">
+                    <Platform Name="All Platforms">
+                        <Enabled>false</Enabled>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
                     <Platform Name="Android">
                         <RemoteName>libProject10.so</RemoteName>
                         <Overwrite>true</Overwrite>
@@ -627,7 +712,17 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="$(NDKBasePath)\prebuilt\android-arm\gdbserver\gdbserver" Configuration="Release" Class="AndroidGDBServer">
+                    <Platform Name="All Platforms">
+                        <Enabled>false</Enabled>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
                     <Platform Name="Android">
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="All Platforms\Release\Project10" Configuration="Release" Class="ProjectOutput">
+                    <Platform Name="All Platforms">
+                        <RemoteName>Project10</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
@@ -718,44 +813,76 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Android\Release\AndroidManifest.xml" Configuration="Release" Class="ProjectAndroidManifest">
+                    <Platform Name="All Platforms">
+                        <Enabled>false</Enabled>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
                     <Platform Name="Android">
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Android\Release\colors.xml" Configuration="Release" Class="Android_Colors">
+                    <Platform Name="All Platforms">
+                        <Enabled>false</Enabled>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
                     <Platform Name="Android">
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Android\Release\libProject10.so" Configuration="Release" Class="ProjectOutput">
+                    <Platform Name="All Platforms">
+                        <Enabled>false</Enabled>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
                     <Platform Name="Android">
                         <RemoteName>libProject10.so</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Android\Release\Project10.classes" Configuration="Release" Class="AndroidClasses">
+                    <Platform Name="All Platforms">
+                        <Enabled>false</Enabled>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
                     <Platform Name="Android">
                         <Operation>64</Operation>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Android\Release\splash_image_def.xml" Configuration="Release" Class="AndroidSplashImageDef">
+                    <Platform Name="All Platforms">
+                        <Enabled>false</Enabled>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
                     <Platform Name="Android">
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Android\Release\strings.xml" Configuration="Release" Class="Android_Strings">
+                    <Platform Name="All Platforms">
+                        <Enabled>false</Enabled>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
                     <Platform Name="Android">
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Android\Release\styles-v21.xml" Configuration="Release" Class="AndroidSplashStylesV21">
+                    <Platform Name="All Platforms">
+                        <Enabled>false</Enabled>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
                     <Platform Name="Android">
                         <RemoteName>styles.xml</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Android\Release\styles.xml" Configuration="Release" Class="AndroidSplashStyles">
+                    <Platform Name="All Platforms">
+                        <Enabled>false</Enabled>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
                     <Platform Name="Android">
                         <Overwrite>true</Overwrite>
                     </Platform>
@@ -773,14 +900,29 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="libmysql.dll" Configuration="Release" Class="File">
+                    <Platform Name="All Platforms">
+                        <Enabled>false</Enabled>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
                     <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
                         <RemoteName>libmysql.dll</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="libmysql.dll" Configuration="Release" Class="File">
+                    <Platform Name="All Platforms">
+                        <Enabled>false</Enabled>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
                     <Platform Name="Win64">
                         <RemoteName>libmysql.dll</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="MyApp.ini" Configuration="Release" Class="File">
+                    <Platform Name="Win32">
+                        <RemoteName>MyApp.ini</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
@@ -817,6 +959,10 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Videos\king.mp4" Configuration="Release" Class="File">
+                    <Platform Name="All Platforms">
+                        <Enabled>false</Enabled>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
                     <Platform Name="Android">
                         <RemoteName>king.mp4</RemoteName>
                         <Overwrite>true</Overwrite>
@@ -869,6 +1015,10 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Videos\plecho_act_1.mp4" Configuration="Release" Class="File">
+                    <Platform Name="All Platforms">
+                        <Enabled>false</Enabled>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
                     <Platform Name="Android">
                         <RemoteName>plecho_act_1.mp4</RemoteName>
                         <Overwrite>true</Overwrite>
@@ -921,6 +1071,10 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Videos\plecho_act_2.mp4" Configuration="Release" Class="File">
+                    <Platform Name="All Platforms">
+                        <Enabled>false</Enabled>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
                     <Platform Name="Android">
                         <RemoteName>plecho_act_2.mp4</RemoteName>
                         <Overwrite>true</Overwrite>
@@ -973,6 +1127,10 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Videos\plecho_act_3.mp4" Configuration="Release" Class="File">
+                    <Platform Name="All Platforms">
+                        <Enabled>false</Enabled>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
                     <Platform Name="Android">
                         <RemoteName>plecho_act_3.mp4</RemoteName>
                         <Overwrite>true</Overwrite>
@@ -1025,6 +1183,10 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Videos\plecho_act_4.mp4" Configuration="Release" Class="File">
+                    <Platform Name="All Platforms">
+                        <Enabled>false</Enabled>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
                     <Platform Name="Android">
                         <RemoteName>plecho_act_4.mp4</RemoteName>
                         <Overwrite>true</Overwrite>
@@ -1077,6 +1239,10 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Videos\plecho_act_5.mp4" Configuration="Release" Class="File">
+                    <Platform Name="All Platforms">
+                        <Enabled>false</Enabled>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
                     <Platform Name="Android">
                         <RemoteName>plecho_act_5.mp4</RemoteName>
                         <Overwrite>true</Overwrite>
@@ -1129,6 +1295,10 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Videos\plecho_pass_1.mp4" Configuration="Release" Class="File">
+                    <Platform Name="All Platforms">
+                        <Enabled>false</Enabled>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
                     <Platform Name="Android">
                         <RemoteName>plecho_pass_1.mp4</RemoteName>
                         <Overwrite>true</Overwrite>
@@ -1181,6 +1351,10 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Videos\plecho_pass_2.mp4" Configuration="Release" Class="File">
+                    <Platform Name="All Platforms">
+                        <Enabled>false</Enabled>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
                     <Platform Name="Android">
                         <RemoteName>plecho_pass_2.mp4</RemoteName>
                         <Overwrite>true</Overwrite>
@@ -1233,6 +1407,10 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Videos\plecho_pass_3.mp4" Configuration="Release" Class="File">
+                    <Platform Name="All Platforms">
+                        <Enabled>false</Enabled>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
                     <Platform Name="Android">
                         <RemoteName>plecho_pass_3.mp4</RemoteName>
                         <Overwrite>true</Overwrite>
@@ -1285,6 +1463,10 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Videos\plecho_pass_4.mp4" Configuration="Release" Class="File">
+                    <Platform Name="All Platforms">
+                        <Enabled>false</Enabled>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
                     <Platform Name="Android">
                         <RemoteName>plecho_pass_4.mp4</RemoteName>
                         <Overwrite>true</Overwrite>
@@ -1302,6 +1484,7 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                     <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
                         <RemoteName>plecho_pass_4.mp4</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
@@ -1337,6 +1520,10 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Videos\plecho_pass_5.mp4" Configuration="Release" Class="File">
+                    <Platform Name="All Platforms">
+                        <Enabled>false</Enabled>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
                     <Platform Name="Android">
                         <RemoteName>plecho_pass_5.mp4</RemoteName>
                         <Overwrite>true</Overwrite>
@@ -1389,6 +1576,10 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Videos\time.mp4" Configuration="Release" Class="File">
+                    <Platform Name="All Platforms">
+                        <Enabled>false</Enabled>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
                     <Platform Name="Android">
                         <RemoteName>time.mp4</RemoteName>
                         <Overwrite>true</Overwrite>
@@ -1414,14 +1605,23 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
+                <DeployFile LocalName="Win32\Debug\MyApp.ini" Configuration="Debug" Class="File">
+                    <Platform Name="Win32">
+                        <RemoteName>MyApp.ini</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile LocalName="Win32\Debug\Project10.exe" Configuration="Debug" Class="ProjectOutput">
                     <Platform Name="Win32">
-                        <Enabled>false</Enabled>
                         <RemoteName>Project10.exe</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Win32\Release\Project10.exe" Configuration="Release" Class="ProjectOutput">
+                    <Platform Name="All Platforms">
+                        <Enabled>false</Enabled>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
                     <Platform Name="Win32">
                         <RemoteName>Project10.exe</RemoteName>
                         <Overwrite>true</Overwrite>
@@ -1434,6 +1634,10 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Win64\Release\Project10.exe" Configuration="Release" Class="ProjectOutput">
+                    <Platform Name="All Platforms">
+                        <Enabled>false</Enabled>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
                     <Platform Name="Win64">
                         <RemoteName>Project10.exe</RemoteName>
                         <Overwrite>true</Overwrite>
@@ -2276,4 +2480,100 @@
     <Import Project="$(BDS)\Bin\CodeGear.Delphi.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Delphi.Targets')"/>
     <Import Project="$(APPDATA)\Embarcadero\$(BDSAPPDATABASEDIR)\$(PRODUCTVERSION)\UserTools.proj" Condition="Exists('$(APPDATA)\Embarcadero\$(BDSAPPDATABASEDIR)\$(PRODUCTVERSION)\UserTools.proj')"/>
     <Import Project="$(MSBuildProjectName).deployproj" Condition="Exists('$(MSBuildProjectName).deployproj')"/>
+    <PropertyGroup Condition="'$(Config)'=='Debug' And '$(Platform)'=='Android'">
+        <PreBuildEvent/>
+        <PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
+        <PreLinkEvent/>
+        <PreLinkEventIgnoreExitCode>False</PreLinkEventIgnoreExitCode>
+        <PostBuildEvent>xcopy /E /Y &quot;C:\Users\Cheptsov VV\Documents\Embarcadero\Studio\Projects\Palsy\Resources\*&quot; &quot;$(OUTPUTDIR)&quot;&amp;&amp;xcopy /E /Y &quot;C:\Users\Cheptsov VV\Documents\Embarcadero\Studio\Projects\Palsy\Videos\*&quot; &quot;$(OUTPUTDIR)\Videos\&quot;</PostBuildEvent>
+        <PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Config)'=='Debug' And '$(Platform)'=='Android64'">
+        <PreBuildEvent/>
+        <PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
+        <PreLinkEvent/>
+        <PreLinkEventIgnoreExitCode>False</PreLinkEventIgnoreExitCode>
+        <PostBuildEvent>xcopy /E /Y &quot;C:\Users\Cheptsov VV\Documents\Embarcadero\Studio\Projects\Palsy\Resources\*&quot; &quot;$(OUTPUTDIR)&quot;&amp;&amp;xcopy /E /Y &quot;C:\Users\Cheptsov VV\Documents\Embarcadero\Studio\Projects\Palsy\Videos\*&quot; &quot;$(OUTPUTDIR)\Videos\&quot;</PostBuildEvent>
+        <PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Config)'=='Debug' And '$(Platform)'=='iOSDevice64'">
+        <PreBuildEvent/>
+        <PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
+        <PreLinkEvent/>
+        <PreLinkEventIgnoreExitCode>False</PreLinkEventIgnoreExitCode>
+        <PostBuildEvent>xcopy /E /Y &quot;C:\Users\Cheptsov VV\Documents\Embarcadero\Studio\Projects\Palsy\Resources\*&quot; &quot;$(OUTPUTDIR)&quot;&amp;&amp;xcopy /E /Y &quot;C:\Users\Cheptsov VV\Documents\Embarcadero\Studio\Projects\Palsy\Videos\*&quot; &quot;$(OUTPUTDIR)\Videos\&quot;</PostBuildEvent>
+        <PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Config)'=='Debug' And '$(Platform)'=='iOSSimARM64'">
+        <PreBuildEvent/>
+        <PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
+        <PreLinkEvent/>
+        <PreLinkEventIgnoreExitCode>False</PreLinkEventIgnoreExitCode>
+        <PostBuildEvent>xcopy /E /Y &quot;C:\Users\Cheptsov VV\Documents\Embarcadero\Studio\Projects\Palsy\Resources\*&quot; &quot;$(OUTPUTDIR)&quot;&amp;&amp;xcopy /E /Y &quot;C:\Users\Cheptsov VV\Documents\Embarcadero\Studio\Projects\Palsy\Videos\*&quot; &quot;$(OUTPUTDIR)\Videos\&quot;</PostBuildEvent>
+        <PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Config)'=='Debug' And '$(Platform)'=='Win32'">
+        <PreBuildEvent/>
+        <PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
+        <PreLinkEvent/>
+        <PreLinkEventIgnoreExitCode>False</PreLinkEventIgnoreExitCode>
+        <PostBuildEvent>xcopy /E /Y &quot;C:\Users\Cheptsov VV\Documents\Embarcadero\Studio\Projects\Palsy\Resources\*&quot; &quot;$(OUTPUTDIR)&quot;&amp;&amp;xcopy /E /Y &quot;C:\Users\Cheptsov VV\Documents\Embarcadero\Studio\Projects\Palsy\Videos\*&quot; &quot;$(OUTPUTDIR)\Videos\&quot;</PostBuildEvent>
+        <PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Config)'=='Debug' And '$(Platform)'=='Win64'">
+        <PreBuildEvent/>
+        <PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
+        <PreLinkEvent/>
+        <PreLinkEventIgnoreExitCode>False</PreLinkEventIgnoreExitCode>
+        <PostBuildEvent>xcopy /E /Y &quot;C:\Users\Cheptsov VV\Documents\Embarcadero\Studio\Projects\Palsy\Resources\*&quot; &quot;$(OUTPUTDIR)&quot;&amp;&amp;xcopy /E /Y &quot;C:\Users\Cheptsov VV\Documents\Embarcadero\Studio\Projects\Palsy\Videos\*&quot; &quot;$(OUTPUTDIR)\Videos\&quot;</PostBuildEvent>
+        <PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Config)'=='Release' And '$(Platform)'=='Android'">
+        <PreBuildEvent/>
+        <PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
+        <PreLinkEvent/>
+        <PreLinkEventIgnoreExitCode>False</PreLinkEventIgnoreExitCode>
+        <PostBuildEvent>xcopy /E /Y &quot;C:\Users\Cheptsov VV\Documents\Embarcadero\Studio\Projects\Palsy\Resources\*&quot; &quot;$(OUTPUTDIR)&quot;&amp;&amp;xcopy /E /Y &quot;C:\Users\Cheptsov VV\Documents\Embarcadero\Studio\Projects\Palsy\Videos\*&quot; &quot;$(OUTPUTDIR)\Videos\&quot;</PostBuildEvent>
+        <PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Config)'=='Release' And '$(Platform)'=='Android64'">
+        <PreBuildEvent/>
+        <PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
+        <PreLinkEvent/>
+        <PreLinkEventIgnoreExitCode>False</PreLinkEventIgnoreExitCode>
+        <PostBuildEvent>xcopy /E /Y &quot;C:\Users\Cheptsov VV\Documents\Embarcadero\Studio\Projects\Palsy\Resources\*&quot; &quot;$(OUTPUTDIR)&quot;&amp;&amp;xcopy /E /Y &quot;C:\Users\Cheptsov VV\Documents\Embarcadero\Studio\Projects\Palsy\Videos\*&quot; &quot;$(OUTPUTDIR)\Videos\&quot;</PostBuildEvent>
+        <PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Config)'=='Release' And '$(Platform)'=='iOSDevice64'">
+        <PreBuildEvent/>
+        <PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
+        <PreLinkEvent/>
+        <PreLinkEventIgnoreExitCode>False</PreLinkEventIgnoreExitCode>
+        <PostBuildEvent>xcopy /E /Y &quot;C:\Users\Cheptsov VV\Documents\Embarcadero\Studio\Projects\Palsy\Resources\*&quot; &quot;$(OUTPUTDIR)&quot;&amp;&amp;xcopy /E /Y &quot;C:\Users\Cheptsov VV\Documents\Embarcadero\Studio\Projects\Palsy\Videos\*&quot; &quot;$(OUTPUTDIR)\Videos\&quot;</PostBuildEvent>
+        <PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Config)'=='Release' And '$(Platform)'=='iOSSimARM64'">
+        <PreBuildEvent/>
+        <PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
+        <PreLinkEvent/>
+        <PreLinkEventIgnoreExitCode>False</PreLinkEventIgnoreExitCode>
+        <PostBuildEvent>xcopy /E /Y &quot;C:\Users\Cheptsov VV\Documents\Embarcadero\Studio\Projects\Palsy\Resources\*&quot; &quot;$(OUTPUTDIR)&quot;&amp;&amp;xcopy /E /Y &quot;C:\Users\Cheptsov VV\Documents\Embarcadero\Studio\Projects\Palsy\Videos\*&quot; &quot;$(OUTPUTDIR)\Videos\&quot;</PostBuildEvent>
+        <PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Config)'=='Release' And '$(Platform)'=='Win32'">
+        <PreBuildEvent/>
+        <PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
+        <PreLinkEvent/>
+        <PreLinkEventIgnoreExitCode>False</PreLinkEventIgnoreExitCode>
+        <PostBuildEvent>xcopy /E /Y &quot;C:\Users\Cheptsov VV\Documents\Embarcadero\Studio\Projects\Palsy\Resources\*&quot; &quot;$(OUTPUTDIR)&quot;&amp;&amp;xcopy /E /Y &quot;C:\Users\Cheptsov VV\Documents\Embarcadero\Studio\Projects\Palsy\Videos\*&quot; &quot;$(OUTPUTDIR)\Videos\&quot;</PostBuildEvent>
+        <PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Config)'=='Release' And '$(Platform)'=='Win64'">
+        <PreBuildEvent/>
+        <PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
+        <PreLinkEvent/>
+        <PreLinkEventIgnoreExitCode>False</PreLinkEventIgnoreExitCode>
+        <PostBuildEvent>xcopy /E /Y &quot;C:\Users\Cheptsov VV\Documents\Embarcadero\Studio\Projects\Palsy\Resources\*&quot; &quot;$(OUTPUTDIR)&quot;&amp;&amp;xcopy /E /Y &quot;C:\Users\Cheptsov VV\Documents\Embarcadero\Studio\Projects\Palsy\Videos\*&quot; &quot;$(OUTPUTDIR)\Videos\&quot;</PostBuildEvent>
+        <PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
+    </PropertyGroup>
 </Project>
