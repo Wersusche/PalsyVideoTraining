@@ -613,7 +613,7 @@ begin
   MediaPlayer1.FileName := GetVideoFilePath(Playlist[CurrentItemIndex].VideoID);
  // MediaPlayer1.Open;
   MediaPlayer1.Play;
-  Startrising(Mediaplayer1);
+  //Startrising(Mediaplayer1);
  // MediaPlayer1.Volume := tbVolume.Value;
   Stopwatch.reset;
   Stopwatch.Start;

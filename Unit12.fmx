@@ -97,6 +97,7 @@ object Form12: TForm12
         Position.Y = 120.000000000000000000
         TabOrder = 25
         Text = 'Button1'
+        Visible = False
         OnClick = Button1Click
       end
       object Button2: TButton
@@ -104,6 +105,7 @@ object Form12: TForm12
         Position.Y = 184.000000000000000000
         TabOrder = 26
         Text = 'Button2'
+        Visible = False
         OnClick = Button2Click
       end
     end
