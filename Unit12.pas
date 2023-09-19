@@ -49,10 +49,7 @@ type
     procedure Timer1Timer(Sender: TObject);
     procedure bPlayClickClick(Sender: TObject);
     procedure bStopClickClick(Sender: TObject);
-    procedure ListBox1ItemClick(const Sender: TCustomListBox;
-      const Item: TListBoxItem);
     procedure tbVolumeChange(Sender: TObject);
-    procedure Timer3Timer(Sender: TObject);
     procedure FDConnection1BeforeConnect(Sender: TObject);
     procedure Button2Click(Sender: TObject);
     procedure Button3Click(Sender: TObject);
@@ -156,6 +153,7 @@ begin
   MediaPlayer1.FileName := GetVideoFilePath(Playlist[CurrentItemIndex].VideoID);
   //MediaPlayer1.Open;
   MediaPlayer1.Play;
+  //startrising(MediaPlayer1);
   FirstLoop := True;
   except
   on E: Exception do
@@ -170,17 +168,20 @@ begin
   Timer4.Enabled := true;
 FWatchedVideosCount := 0;
 FTotalPlaybackTime := 0;
- tbVolume.Value := MediaPlayer1.Volume;
+  MediaPlayer1.Volume:= tbVolume.Value ;
  bPlayClick.Text := 'Продолжить упражнение'
  end
  else if bPlayClick.Text = 'Продолжить упражнение' then
  begin
   MediaPlayer1.Play;
   Stopwatch.Start;
-   Timer4.Enabled := true;
+  Timer4.Enabled := true;
+  if not FirstLoop then
+  begin
+  MediaPlayer2.Play;
+  end;
   end
- //MediaPlayer1.Volume := ((tbVolume.Max - tbVolume.value) + tbVolume.Min)/100;
- //MediaPlayer1.Play;
+
 end;
 
 procedure TForm12.bStopClickClick(Sender: TObject);
@@ -188,6 +189,7 @@ begin
 Stopwatch.Stop;
 Timer4.Enabled := false;
 MediaPlayer1.Stop;
+MediaPlayer2.Stop;
 bPlayClick.Text := 'Продолжить упражнение'
 end;
 
@@ -375,10 +377,10 @@ begin
   DecodeTime(Playlist[CurrentItemIndex].PlaybackTime, Hour, Min, Sec, MSec);
   TimeInSeconds := Min * 60 + Sec;
 
-    if Stopwatch.Elapsed.TotalSeconds >= TimeInSeconds-3  then
-    begin
-      startfading(Mediaplayer2);
-    end;
+//    if Stopwatch.Elapsed.TotalSeconds >= 20  then
+//    begin
+//      startfading(Mediaplayer1);
+//    end;
 
     if Stopwatch.Elapsed.TotalSeconds >= TimeInSeconds  then
     begin
@@ -405,6 +407,11 @@ begin
       begin
         // MP3 is already loaded, just continue playing it
         MediaPlayer2.Play;
+        if (MediaPlayer2.CurrentTime >= MediaPlayer2.Duration)   then
+        begin
+        MediaPlayer2.FileName := LoadRandomMP3;
+        MediaPlayer2.Play;
+        end;
       end;
      MediaPlayer2.Volume := tbVolume.Value;  // Full volume for MediaPlayer2
     end
@@ -417,29 +424,6 @@ begin
 
 end;
 
-
-procedure TForm12.Timer3Timer(Sender: TObject);
-begin
-
-
-   if (MediaPlayer1.Media = nil) or ((MediaPlayer1.State = TMediaState.Stopped) and (MediaPlayer1.CurrentTime >= MediaPlayer1.Duration)) then
-  begin
-  if ListBox1.Items.Count > 0 then
-  begin
-    if ListBox1.ItemIndex < ListBox1.Items.Count - 1 then
-      ListBox1.ItemIndex := ListBox1.ItemIndex + 1
-    else
-      ListBox1.ItemIndex := 0;
-     // Do something with ItemText, e.g., show it in a label or memo
-  end;
-
-   MediaPlayer1.FileName :=  TPath.Combine(Path, ListBox1.Items.Strings[ListBox1.ItemIndex]);
-    MediaPlayer1.CurrentTime := 0;
-   MediaPlayer1.Volume := ((tbVolume.Max - tbVolume.value) + tbVolume.Min)/100;
-   //MediaPlayer1.Play;
-  end;
-
-end;
 
 procedure TForm12.Timer4Timer(Sender: TObject);
   var
@@ -499,21 +483,15 @@ begin
   {$ENDIF}
 end;
 
-procedure TForm12.ListBox1ItemClick(const Sender: TCustomListBox;
-  const Item: TListBoxItem);
-begin
-  //MediaPlayer1.Stop;
- // MediaPlayer1.FileName := TPath.Combine(Path, Item.Text);
-
-  //tbVolume.Value:= MediaPlayer1.Volume*100;
-end;
-
-
-
 procedure TForm12.tbVolumeChange(Sender: TObject);
 
 begin
-  MediaPlayer1.Volume := tbVolume.value;
+  if mediaplayer1.state = TMediaState.Playing then
+  MediaPlayer1.Volume := tbVolume.value
+  else if
+  mediaplayer2.state = TMediaState.Playing then
+  MediaPlayer2.Volume := tbVolume.value;
+
 end;
 
 
@@ -597,7 +575,7 @@ inifilename : string;
    // Move to the next video
   Inc(CurrentItemIndex);
     // Reset the FirstLoop variable if you've moved to a new video
-     FirstLoop := True;
+  FirstLoop := True;
   if CurrentItemIndex >= Length(Playlist) then
     begin
     CurrentItemIndex := 0;
