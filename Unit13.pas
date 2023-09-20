@@ -166,11 +166,9 @@ Newusername : string;
   if Checkbox1.IsChecked then
   begin
   NewUserName := GenerateUserName(enterSurname.Text, enterName.Text, FDConnection1);
-  hashedPassword := THashMD5.GetHashString(GenerateRandomPassword);
-
   enterLogin.Text := NewUserName;
   enterPassword.Text := GenerateRandomPassword;
-
+  hashedPassword := THashMD5.GetHashString(enterPassword.Text);
     try
     FDQuery_newpatient.Connection := FDConnection1; // Replace with your TFDConnection component's name
 
@@ -198,8 +196,14 @@ Newusername : string;
   ShowMessage('Введите все даннные')
      end
   else
-      begin
-  hashedPassword := THashMD5.GetHashString(enterPassword.Text);
+  begin
+    If CheckExistenceFunc(enterLogin.Text,FDConnection1) then
+    begin
+     ShowMessage('Имя пользователя уже существует')
+    end
+    else
+    begin
+    hashedPassword := THashMD5.GetHashString(enterPassword.Text);
         try
     FDQuery_newpatient.Connection := FDConnection1; // Replace with your TFDConnection component's name
 
@@ -219,6 +223,7 @@ Newusername : string;
     FDQuery_newpatient.Close;
     ShowMessage('Обязательно передайте пациенту учетные данные!')
         end;
+    end;
       end;
     end;
 

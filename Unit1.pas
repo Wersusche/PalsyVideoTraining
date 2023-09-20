@@ -10,7 +10,10 @@ uses
   FireDAC.Stan.Pool, FireDAC.Stan.Async, FireDAC.Phys, FireDAC.Phys.MySQL,
   FireDAC.Phys.MySQLDef, FireDAC.FMXUI.Wait, FireDAC.Stan.Param, FireDAC.DatS,
   FireDAC.DApt.Intf, FireDAC.DApt, Data.DB, FireDAC.Comp.DataSet,
-  FireDAC.Comp.Client, System.Hash, System.IniFiles, System.IOUtils;
+  FireDAC.Comp.Client, System.Hash, System.IniFiles, System.IOUtils,
+  Data.SqlExpr, Datasnap.DBClient, Datasnap.DSConnect, Data.DBXCommon, Data.DBXDataSnap, Data.DBXJSON, Datasnap.DSProxy,
+  Data.DbxHTTPLayer, REST.Types, REST.Client, Data.Bind.Components,
+  Data.Bind.ObjectScope, Datasnap.DSClientRest;
 
 type
   TLoginForm = class(TForm)
@@ -24,7 +27,6 @@ type
     FDPhysMySQLDriverLink1: TFDPhysMySQLDriverLink;
     procedure Button1Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
-    procedure Button2Click(Sender: TObject);
     procedure Button3Click(Sender: TObject);
   private
     { Private declarations }
@@ -87,15 +89,6 @@ begin
  end;
 
 
-
-procedure TLoginForm.Button2Click(Sender: TObject);
-var
-Nextform : TForm12;
-
-begin
-   // Application.CreateForm(TForm12, NextForm);
-    NextForm.Show;
-    end;
 
 procedure TLoginForm.Button3Click(Sender: TObject);
 begin
@@ -160,7 +153,7 @@ end;
   end;
 
 
-  function TLoginForm.ValidateCredentials(const Username, Password: string): Boolean;
+function TLoginForm.ValidateCredentials(const Username, Password: string): Boolean;
 var
  hashedPassword: string;
  // IdMD5: TIdHashMessageDigest5;

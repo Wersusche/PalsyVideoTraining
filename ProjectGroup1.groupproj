@@ -9,7 +9,7 @@
         <Projects Include="Project11.dproj">
             <Dependencies/>
         </Projects>
-        <Projects Include="Project12.dproj">
+        <Projects Include="Palsy.dproj">
             <Dependencies/>
         </Projects>
     </ItemGroup>
@@ -38,23 +38,23 @@
     <Target Name="Project11:Make">
         <MSBuild Projects="Project11.dproj" Targets="Make"/>
     </Target>
-    <Target Name="Project12">
-        <MSBuild Projects="Project12.dproj"/>
+    <Target Name="Palsy">
+        <MSBuild Projects="Palsy.dproj"/>
     </Target>
-    <Target Name="Project12:Clean">
-        <MSBuild Projects="Project12.dproj" Targets="Clean"/>
+    <Target Name="Palsy:Clean">
+        <MSBuild Projects="Palsy.dproj" Targets="Clean"/>
     </Target>
-    <Target Name="Project12:Make">
-        <MSBuild Projects="Project12.dproj" Targets="Make"/>
+    <Target Name="Palsy:Make">
+        <MSBuild Projects="Palsy.dproj" Targets="Make"/>
     </Target>
     <Target Name="Build">
-        <CallTarget Targets="Project10;Project11;Project12"/>
+        <CallTarget Targets="Project10;Project11;Palsy"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="Project10:Clean;Project11:Clean;Project12:Clean"/>
+        <CallTarget Targets="Project10:Clean;Project11:Clean;Palsy:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="Project10:Make;Project11:Make;Project12:Make"/>
+        <CallTarget Targets="Project10:Make;Project11:Make;Palsy:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>
