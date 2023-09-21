@@ -92,8 +92,11 @@ type
     Label5: TLabel;
     Edit2: TEdit;
     Label6: TLabel;
-    Edit3: TEdit;
+    Edit_sec: TEdit;
     Button_optimize: TButton;
+    Edit_min: TEdit;
+    label_min: TLabel;
+    Label_sec: TLabel;
     procedure FormCreate(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure enterLoginTyping(Sender: TObject);
@@ -118,7 +121,7 @@ type
     procedure Loadexercises(const TreeView: TTreeView);
     procedure CheckBox_sorttreatChange(Sender: TObject);
     procedure Edit2Typing(Sender: TObject);
-    procedure Edit3Typing(Sender: TObject);
+    procedure Edit_secTyping(Sender: TObject);
     procedure DateEdit_startofexChange(Sender: TObject);
     procedure DateEdit_endofexChange(Sender: TObject);
     procedure SaveExercisesToDB;
@@ -127,6 +130,7 @@ type
     procedure MergeTreeViewNodes(TreeView: TTreeView);
     procedure Button_optimizeClick(Sender: TObject);
     procedure CloneTreeItem(SourceItem, TargetParent: TTreeViewItem);
+    procedure Edit_minTyping(Sender: TObject);
   private
     { Private declarations }
 
@@ -276,7 +280,7 @@ FDQuery_totalpatients.SQL.Text := 'SELECT (SELECT COUNT(idPatients) FROM patient
 FDQuery_totalpatients.Open;
 Label_allusers.Text:= Format('Всего пациентов в базе: %d', [FDQuery_totalpatients.FieldByName('total_patients').AsInteger]);
 Label_activeusers.Text:= Format('Пациентов с назначенными упражнениями:  %d', [FDQuery_totalpatients.FieldByName('active_patients').AsInteger]);
-Label_badusers.Text:= Format('Пациентов с выполнением менее 70 %%:  %d', [FDQuery_totalpatients.FieldByName('bad_patients').AsInteger]);
+Label_badusers.Text:= Format('Пациентов с выполнением упражнений менее 70 %%:  %d', [FDQuery_totalpatients.FieldByName('bad_patients').AsInteger]);
 
 
 
@@ -319,13 +323,30 @@ end;
 function TForm13.GenerateRandomPassword: string;
 var
   i: Integer;
+  DigitsAtStart: Boolean;
 const
-  AllowedChars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
+  Letters = 'abcdefghijkmnopqrstuvwxyz';
+  Digits = '0123456789';
 begin
-  Randomize; // it's important to initialize the random number generator
+  Randomize;
   Result := '';
-  for i := 1 to 8 do
-    Result := Result + AllowedChars[Random(Length(AllowedChars)) + 1];
+
+  // Randomly decide if digits should be at the start
+  DigitsAtStart := Random(2) = 0; // This will be true approximately 50% of the time
+
+  if DigitsAtStart then
+    // Generate 2 digits
+    for i := 1 to 2 do
+      Result := Result + Digits[Random(10) + 1];
+
+  // Generate 4 letters
+  for i := 1 to 4 do
+    Result := Result + Letters[Random(Length(Letters)) + 1];
+
+  if not DigitsAtStart then
+    // Generate 2 digits
+    for i := 1 to 2 do
+      Result := Result + Digits[Random(10) + 1];
 end;
 
 
@@ -992,10 +1013,48 @@ begin
   Edit2.CaretPosition := Edit2.Text.Length;  // move the caret to the end
 end;
 
-procedure TForm13.Edit3Typing(Sender: TObject);
+procedure TForm13.Edit_minTyping(Sender: TObject);
+var
+Value : Integer;
 begin
-  Edit3.Text := FilterNonDecimalCharacters(Edit3.Text);
-  Edit3.CaretPosition := Edit3.Text.Length;  // move the caret to the end
+  Edit_sec.Text := FilterNonDecimalCharacters(Edit_sec.Text);
+  Edit_sec.CaretPosition := Edit_sec.Text.Length;  // move the caret to the end
+  if TryStrToInt(Edit_sec.Text, Value) then
+  begin
+    if Value > 60 then
+    begin
+      ShowMessage('Введите число между 0 и 60.');
+      Edit_sec.Text := Edit_sec.Text.Substring(0, Edit_sec.Text.Length - 1);
+      Edit_sec.CaretPosition := Edit_sec.Text.Length;  // move the caret to the end
+    end;
+  end
+  else
+  begin
+    // Handle cases where Edit_sec.Text is not a valid integer (e.g., it's empty)
+    // Here you can handle this case or just do nothing.
+  end;
+end;
+
+procedure TForm13.Edit_secTyping(Sender: TObject);
+var
+Value : Integer;
+begin
+  Edit_sec.Text := FilterNonDecimalCharacters(Edit_sec.Text);
+  Edit_sec.CaretPosition := Edit_sec.Text.Length;  // move the caret to the end
+  if TryStrToInt(Edit_sec.Text, Value) then
+  begin
+    if Value > 60 then
+    begin
+      ShowMessage('Введите число между 0 и 60.');
+      Edit_sec.Text := Edit_sec.Text.Substring(0, Edit_sec.Text.Length - 1);
+      Edit_sec.CaretPosition := Edit_sec.Text.Length;  // move the caret to the end
+    end;
+  end
+  else
+  begin
+    // Handle cases where Edit_sec.Text is not a valid integer (e.g., it's empty)
+    // Here you can handle this case or just do nothing.
+  end;
 end;
 
 procedure TForm13.UncheckAllTreeViewItems(TreeItem: TTreeViewItem);
@@ -1116,17 +1175,18 @@ end;
 var
   i: Integer;
   TreeItem, ChildItem: TTreeViewItem;
-  ExerciseID,PatientID, ExerciseAmount, ExerciseLongevity: Integer;
+  ExerciseID,PatientID, ExerciseAmount: Integer;
+  ExerciseLongevity: String;
   StartDate, EndDate: TDateTime;
   FDQuery: TFDQuery;
   IntersectCount: Integer;
-   UserChoice: Integer;
+  UserChoice: Integer;
   label
   insertentry;
 begin
   // Collect data from other controls
-  ExerciseAmount := StrToIntDef(Edit2.Text, 0);
-  ExerciseLongevity := StrToIntDef(Edit3.Text, 0);
+  ExerciseAmount := StrToIntDef(Edit2.Text, 1);
+  ExerciseLongevity := '00:'+Edit_min.Text+':'+Edit_sec.Text;
   StartDate := DateEdit_startofex.Date;
   EndDate := DateEdit_endofex.Date;
   PatientID :=   ListView_cure.Selected.Tag;
@@ -1167,7 +1227,7 @@ begin
           // Execute the query
         FDQuery.ParamByName('exercise_id').AsInteger := ExerciseID;
         FDQuery.ParamByName('amount').AsInteger := ExerciseAmount;
-        FDQuery.ParamByName('longevity').AsInteger := ExerciseLongevity;
+        FDQuery.ParamByName('longevity').AsString := ExerciseLongevity;
         FDQuery.ParamByName('start_date').AsDate := StartDate;
         FDQuery.ParamByName('end_date').AsDate := EndDate;
         FDQuery.ParamByName('patient_id').AsInteger := PatientID;

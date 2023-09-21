@@ -15,7 +15,7 @@
     Size.Width = 1081.000000000000000000
     Size.Height = 647.000000000000000000
     Size.PlatformDefault = False
-    TabIndex = 2
+    TabIndex = 0
     TabOrder = 4
     TabPosition = PlatformDefault
     Sizes = (
@@ -29,7 +29,7 @@
       CustomIcon = <
         item
         end>
-      IsSelected = False
+      IsSelected = True
       Size.Width = 118.000000000000000000
       Size.Height = 26.000000000000000000
       Size.PlatformDefault = False
@@ -98,7 +98,7 @@
           Size.Height = 185.000000000000000000
           Size.PlatformDefault = False
           Text = #1055#1072#1090#1086#1083#1086#1075#1080#1080
-          TabOrder = 38
+          TabOrder = 37
           object TreeView2: TTreeView
             Position.X = 8.000000000000000000
             Position.Y = 22.000000000000000000
@@ -118,7 +118,7 @@
           Size.Height = 216.000000000000000000
           Size.PlatformDefault = False
           Text = #1047#1072#1087#1080#1089#1080
-          TabOrder = 39
+          TabOrder = 38
           object TabControl2: TTabControl
             Position.X = 8.000000000000000000
             Position.Y = 24.000000000000000000
@@ -126,7 +126,7 @@
             Size.Height = 184.000000000000000000
             Size.PlatformDefault = False
             TabIndex = 0
-            TabOrder = 38
+            TabOrder = 37
             TabPosition = PlatformDefault
             Sizes = (
               489s
@@ -225,8 +225,7 @@
           Size.Width = 449.000000000000000000
           Size.Height = 33.000000000000000000
           Size.PlatformDefault = False
-          Text = '12331'
-          TabOrder = 40
+          TabOrder = 39
         end
         object Label_activeusers: TLabel
           Position.X = 16.000000000000000000
@@ -234,17 +233,15 @@
           Size.Width = 449.000000000000000000
           Size.Height = 33.000000000000000000
           Size.PlatformDefault = False
-          Text = '123312'
-          TabOrder = 39
+          TabOrder = 38
         end
         object Label_badusers: TLabel
           Position.X = 16.000000000000000000
           Position.Y = 129.000000000000000000
-          Size.Width = 209.000000000000000000
+          Size.Width = 353.000000000000000000
           Size.Height = 33.000000000000000000
           Size.PlatformDefault = False
-          Text = '1313'
-          TabOrder = 38
+          TabOrder = 37
         end
         object ListView3: TListView
           ItemAppearanceClassName = 'TListItemAppearance'
@@ -252,10 +249,10 @@
           HeaderAppearanceClassName = 'TListHeaderObjects'
           FooterAppearanceClassName = 'TListHeaderObjects'
           Align = Scale
-          Position.X = 232.141036987304700000
-          Position.Y = 126.354881286621100000
-          Size.Width = 350.702148437500000000
-          Size.Height = 93.052040100097660000
+          Position.X = 16.000000000000000000
+          Position.Y = 170.000000000000000000
+          Size.Width = 351.000000000000000000
+          Size.Height = 93.000000000000000000
           Size.PlatformDefault = False
           TabOrder = 0
           OnDblClick = ListView3DblClick
@@ -365,7 +362,7 @@
               Size.Width = 417.000000000000000000
               Size.Height = 139.000000000000000000
               Size.PlatformDefault = False
-              TabOrder = 38
+              TabOrder = 37
               ShowCheckboxes = True
               OnChangeCheck = TreeView_delcureChangeCheck
               Viewport.Width = 413.000000000000000000
@@ -378,7 +375,7 @@
               Size.Width = 104.000000000000000000
               Size.Height = 22.000000000000000000
               Size.PlatformDefault = False
-              TabOrder = 39
+              TabOrder = 38
               Text = #1059#1076#1072#1083#1080#1090#1100' '#1079#1072#1087#1080#1089#1080
               OnClick = Button_delappClick
             end
@@ -388,7 +385,7 @@
               Size.Width = 152.000000000000000000
               Size.Height = 22.000000000000000000
               Size.PlatformDefault = False
-              TabOrder = 40
+              TabOrder = 39
               Text = #1054#1087#1090#1080#1084#1080#1079#1080#1088#1086#1074#1072#1090#1100' '#1089#1087#1080#1089#1086#1082
               OnClick = Button_optimizeClick
             end
@@ -407,7 +404,7 @@
               Size.Width = 417.000000000000000000
               Size.Height = 100.000000000000000000
               Size.PlatformDefault = False
-              TabOrder = 38
+              TabOrder = 37
               ShowCheckboxes = True
               OnChangeCheck = TreeView_exercisesChangeCheck
               Viewport.Width = 413.000000000000000000
@@ -420,7 +417,7 @@
               Size.Width = 273.000000000000000000
               Size.Height = 22.000000000000000000
               Size.PlatformDefault = False
-              TabOrder = 39
+              TabOrder = 38
               Text = #1060#1080#1083#1100#1090#1088#1086#1074#1072#1090#1100' '#1074' '#1089#1086#1086#1090#1074#1077#1090#1089#1090#1074#1080#1080' '#1089' '#1087#1072#1090#1086#1083#1086#1075#1080#1103#1084#1080
               OnChange = CheckBox_sorttreatChange
             end
@@ -438,7 +435,7 @@
             object Label3: TLabel
               Position.Y = 173.000000000000000000
               Text = #1053#1072#1095#1072#1083#1086' '#1085#1072#1079#1085#1072#1095#1077#1085#1080#1103':'
-              TabOrder = 40
+              TabOrder = 39
             end
             object Label4: TLabel
               Position.X = 251.000000000000000000
@@ -447,7 +444,7 @@
               Size.Height = 17.000000000000000000
               Size.PlatformDefault = False
               Text = #1050#1086#1085#1077#1094':'
-              TabOrder = 41
+              TabOrder = 40
             end
             object DateEdit_startofex: TDateEdit
               Date = 45175.000000000000000000
@@ -458,7 +455,7 @@
               Size.Width = 107.000000000000000000
               Size.Height = 28.000000000000000000
               Size.PlatformDefault = False
-              TabOrder = 42
+              TabOrder = 41
             end
             object DateEdit_endofex: TDateEdit
               Date = 45174.000000000000000000
@@ -468,7 +465,7 @@
               Size.Width = 100.000000000000000000
               Size.Height = 30.000000000000000000
               Size.PlatformDefault = False
-              TabOrder = 43
+              TabOrder = 42
             end
             object Label5: TLabel
               Position.X = 8.000000000000000000
@@ -477,11 +474,11 @@
               Size.Height = 17.000000000000000000
               Size.PlatformDefault = False
               Text = #1050#1086#1083#1080#1095#1077#1089#1090#1074#1086' '#1088#1072#1079' '#1074' '#1076#1077#1085#1100':'
-              TabOrder = 44
+              TabOrder = 43
             end
             object Edit2: TEdit
               Touch.InteractiveGestures = [LongTap, DoubleTap]
-              TabOrder = 45
+              TabOrder = 44
               KeyboardType = DecimalNumberPad
               Text = '1'
               Position.X = 153.000000000000000000
@@ -494,16 +491,47 @@
               Size.Width = 137.000000000000000000
               Size.Height = 33.000000000000000000
               Size.PlatformDefault = False
-              Text = #1044#1083#1080#1090#1077#1083#1100#1085#1086#1089#1090#1100' '#1082#1072#1078#1076#1086#1075#1086' '#1091#1087#1088#1072#1078#1085#1077#1085#1080#1103', '#1089#1077#1082'.:'
-              TabOrder = 46
+              Text = #1044#1083#1080#1090#1077#1083#1100#1085#1086#1089#1090#1100' '#1082#1072#1078#1076#1086#1075#1086' '#1091#1087#1088#1072#1078#1085#1077#1085#1080#1103':'
+              TabOrder = 45
             end
-            object Edit3: TEdit
+            object Edit_sec: TEdit
+              Touch.InteractiveGestures = [LongTap, DoubleTap]
+              TabOrder = 46
+              Text = '50'
+              Position.X = 251.000000000000000000
+              Position.Y = 256.000000000000000000
+              Size.Width = 61.000000000000000000
+              Size.Height = 22.000000000000000000
+              Size.PlatformDefault = False
+              OnTyping = Edit_secTyping
+              object Label_sec: TLabel
+                Position.X = 69.000000000000000000
+                Position.Y = -2.000000000000000000
+                Size.Width = 41.000000000000000000
+                Size.Height = 27.000000000000000000
+                Size.PlatformDefault = False
+                Text = #1089#1077#1082'.'
+                TabOrder = 0
+              end
+            end
+            object Edit_min: TEdit
               Touch.InteractiveGestures = [LongTap, DoubleTap]
               TabOrder = 47
-              Text = '50'
-              Position.X = 152.000000000000000000
+              Text = '1'
+              Position.X = 161.000000000000000000
               Position.Y = 256.000000000000000000
-              OnTyping = Edit3Typing
+              Size.Width = 49.000000000000000000
+              Size.Height = 22.000000000000000000
+              Size.PlatformDefault = False
+              OnTyping = Edit_minTyping
+              object label_min: TLabel
+                Position.X = 56.000000000000000000
+                Size.Width = 65.000000000000000000
+                Size.Height = 22.000000000000000000
+                Size.PlatformDefault = False
+                Text = #1084#1080#1085'.'
+                TabOrder = 0
+              end
             end
           end
         end
@@ -560,7 +588,7 @@
       CustomIcon = <
         item
         end>
-      IsSelected = True
+      IsSelected = False
       Size.Width = 107.000000000000000000
       Size.Height = 26.000000000000000000
       Size.PlatformDefault = False
@@ -615,7 +643,7 @@
           Size.Width = 200.000000000000000000
           Size.Height = 19.000000000000000000
           Size.PlatformDefault = False
-          TabOrder = 38
+          TabOrder = 37
           Text = #1057#1075#1077#1085#1077#1088#1080#1088#1086#1074#1072#1090#1100' '#1072#1074#1090#1086#1084#1072#1090#1080#1095#1077#1089#1082#1080
         end
       end
@@ -653,13 +681,13 @@
           Date = 45159.000000000000000000
           Position.X = 136.000000000000000000
           Position.Y = 78.000000000000000000
-          TabOrder = 38
+          TabOrder = 37
         end
         object Label2: TLabel
           Position.X = 16.000000000000000000
           Position.Y = 80.000000000000000000
           Text = #1044#1072#1090#1072' '#1088#1086#1078#1076#1077#1085#1080#1103':'
-          TabOrder = 39
+          TabOrder = 38
         end
       end
     end

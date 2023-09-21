@@ -38,13 +38,13 @@ type
     FDQuery3: TFDQuery;
     Edit1: TEdit;
     Button3: TButton;
-    ListBoxGroupHeader1: TListBoxGroupHeader;
     MediaPlayer2: TMediaPlayer;
     Timer_startfading: TTimer;
     Timer_for: TTimer;
     Timer_startrising: TTimer;
     Button1: TButton;
     Button2: TButton;
+    ListBoxItem1: TListBoxItem;
     procedure FormCreate(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
     procedure bPlayClickClick(Sender: TObject);
@@ -94,6 +94,7 @@ type
     VideoID: string;
     PlaybackTime: TTime; // In seconds
     Videoname: string;
+    appointmentsID : integer;
   end;
 
   const
@@ -222,12 +223,12 @@ var
   Item: TPlaylistItem;
   DateQuery: TFDQuery;
   DateTimesessionFromDB, NowfromDB: TDateTime;
+  HoursDifference : Integer;
   Hour, Min, Sec, MSec: Word;
    IniFile: TIniFile;
   LastVolume: extended;
   inifilename : string;
 begin
-
 
 Case TOSVersion.Platform of
     TOSVersion.TPlatform.pfWindows:
@@ -271,50 +272,58 @@ Fullexercisetime := 0;
     FDConnection1.Params.Values['CharacterSet'] := 'utf8mb4'; // or 'utf8mb4';
     FDConnection1.Connected := True;
     FDQuery1.Connection := FDConnection1;
-    FDQuery1.SQL.Text := 'SELECT P.idPatients, A.idvideos, A.dlitelnost, A.Lastsession, V.filename, V.video_name, NOW() ' +
-                  'FROM patients P ' +
-                  'INNER JOIN appointments A ON P.idPatients = A.idPatients ' +
-                  'INNER JOIN videos V ON A.idvideos = V.idvideos ' +
-                  'WHERE P.Username = :UserName AND CURDATE() BETWEEN A.Starttime AND A.Endtime AND A.sdelanovden < A.kolvden';
+
+    FDQuery1.SQL.Text :=  'SELECT P.idPatients, A.idAppointments, A.idvideos, A.dlitelnost, A.Lastsession, V.filename, V.video_name, NOW() AS CurrentTime, ' +
+                          'TIMESTAMPDIFF(HOUR, A.Lastsession, NOW()) AS HoursDifference FROM patients P INNER JOIN ' +
+                          'appointments A ON P.idPatients = A.idPatients INNER JOIN videos V ON A.idvideos = V.idvideos ' +
+                          'WHERE P.Username = :UserName AND CURDATE() BETWEEN A.Starttime AND A.Endtime AND A.sdelanovden < A.kolvden ';
+                          //'HAVING HoursDifference > 2';
+
       FDQuery1.ParamByName('UserName').AsString := Pusername; // Replace UserName with the actual user name
       FDQuery1.Open;
-      label2.Text := FDQuery1.FieldByName('Lastsession').AsString;
-      DateTimesessionFromDB := FDQuery1.FieldByName('Lastsession').AsDateTime;
-      NowfromDB := FDQuery1.FieldByName('NOW()').AsDateTime;
        // Build the playlist
 
 if FDQuery1.RecordCount > 0 then
- begin
- if (HoursBetween(DateTimesessionFromDB, NowfromDB)) >= 1 then
+begin
+  SetLength(Playlist, 0);  // Initialize the playlist size
+
+  while not FDQuery1.Eof do
   begin
-    SetLength(Playlist, FDQuery1.RecordCount);
-    while not FDQuery1.Eof do
+    HoursDifference := FDQuery1.FieldByName('HoursDifference').AsInteger;
+
+    if HoursDifference >= 2 then
     begin
-      Playlist[FDQuery1.RecNo-1].VideoID := FDQuery1.FieldByName('filename').AsString;
-      Playlist[FDQuery1.RecNo-1].PlaybackTime := FDQuery1.FieldByName('dlitelnost').AsDateTime;
-      Playlist[FDQuery1.RecNo-1].Videoname := FDQuery1.FieldByName('video_name').AsString;
-      FDQuery1.Next;
-    end;
+      SetLength(Playlist, Length(Playlist) + 1);
+      Playlist[High(Playlist)].VideoID := FDQuery1.FieldByName('filename').AsString;
+      Playlist[High(Playlist)].PlaybackTime := FDQuery1.FieldByName('dlitelnost').AsDateTime;
+      Playlist[High(Playlist)].Videoname := FDQuery1.FieldByName('video_name').AsString;
+      Playlist[High(Playlist)].appointmentsID := FDQuery1.FieldByName('idAppointments').AsInteger;
+      end;
 
-    for var I := 0 to High(Playlist) do
-  begin
-    Item := Playlist[I];
-    Fullexercisetime := Fullexercisetime + Item.PlaybackTime;
-    DecodeTime(Item.PlaybackTime, Hour, Min, Sec, MSec);
-    ListBox1.Items.Add(Format('Упражнение: %s, Время: %d мин %d сек', [Item.Videoname, Min, Sec]));
-  ListBox1.ListItems[ListBox1.Items.Count-1].WordWrap:=true;
+    FDQuery1.Next;
   end;
-  FDQuery1.Free;
- bplayclick.Enabled:=true;
- bstopclick.Enabled:=true;
-  DecodeTime(Fullexercisetime, Hour1, Min1, Sec1, MSec1);
- label2.Text := Format('Общее оставшееся время занятия: %d мин %d сек', [Min1, Sec1]);
 
+  if Length(Playlist) > 0 then
+  begin
+    for var I := 0 to High(Playlist) do
+    begin
+      Item := Playlist[I];
+      Fullexercisetime := Fullexercisetime + Item.PlaybackTime;
+      DecodeTime(Item.PlaybackTime, Hour, Min, Sec, MSec);
+      ListBox1.Items.Add(Format('Упражнение: %s, Время: %d мин %d сек', [Item.Videoname, Min, Sec]));
+      ListBox1.ListItems[ListBox1.Items.Count-1].Tag := Item.appointmentsID;
+      ListBox1.ListItems[ListBox1.Items.Count-1].WordWrap:=true;
+    end;
+    FDQuery1.Free;
+    bplayclick.Enabled:=true;
+    bstopclick.Enabled:=true;
+    DecodeTime(Fullexercisetime, Hour1, Min1, Sec1, MSec1);
+    label2.Text := Format('Общее оставшееся время занятия: %d мин %d сек', [Min1, Sec1]);
   end
   else
   begin
-   ShowMessage('Кажется прошло меньше 1 часа между занятиями! Жду тебя чуть позже!');
-   Application.Terminate;
+    ShowMessage('Кажется прошло меньше 2 часов между занятиями! Жду тебя чуть позже!');
+    Application.Terminate;
   end;
     end
     else
@@ -488,9 +497,8 @@ procedure TForm12.tbVolumeChange(Sender: TObject);
 begin
   if mediaplayer1.state = TMediaState.Playing then
   MediaPlayer1.Volume := tbVolume.value
-  else if
-  mediaplayer2.state = TMediaState.Playing then
-  MediaPlayer2.Volume := tbVolume.value;
+  else
+   MediaPlayer2.Volume := tbVolume.value;
 
 end;
 
@@ -567,12 +575,19 @@ begin
   procedure TForm12.Nextvideoload;
   var
 IniFile: TIniFile;
-
 inifilename : string;
+apptag : integer;
   begin
  MediaPlayer1.Stop;
   MediaPlayer2.Stop;
    // Move to the next video
+  apptag:= Playlist[CurrentItemIndex].appointmentsID;
+     FDQuery3.Connection := FDConnection1;
+    FDQuery3.SQL.Text := 'UPDATE appointments A ' +
+                     'SET A.sdelanovden = A.sdelanovden + 1, A.sdelanovsego = A.sdelanovsego + 1, A.lastsession = UTC_TIMESTAMP()' +
+                     'WHERE A.idAppointments = :apptag ';
+    FDQuery3.ParamByName('apptag').AsInteger := apptag; // Replace UserName with the actual user name
+    FDQuery3.ExecSQL;
   Inc(CurrentItemIndex);
     // Reset the FirstLoop variable if you've moved to a new video
   FirstLoop := True;
@@ -583,14 +598,7 @@ inifilename : string;
     MediaPlayer2.Stop;
     Timer1.Enabled:= False;
     Stopwatch.Stop;
-    FDQuery3.Connection := FDConnection1;
-    FDQuery3.SQL.Text := 'UPDATE appointments A ' +
-                     'INNER JOIN patients P ON P.idPatients = A.idPatients ' +
-                     'INNER JOIN videos V ON A.idvideos = V.idvideos ' +
-                     'SET A.sdelanovden = A.sdelanovden + 1, A.sdelanovsego = A.sdelanovsego + 1, A.lastsession = UTC_TIMESTAMP()' +
-                     'WHERE P.Username = :UserName AND CURDATE() BETWEEN A.Starttime AND A.Endtime AND A.sdelanovden < A.kolvden';
-    FDQuery3.ParamByName('UserName').AsString := Pusername; // Replace UserName with the actual user name
-    FDQuery3.ExecSQL;
+
 
   inifilename := TPath.Combine(Path, 'MyApp.ini');
    try
@@ -614,7 +622,7 @@ begin
  // MediaPlayer1.Open;
   MediaPlayer1.Play;
   //Startrising(Mediaplayer1);
- // MediaPlayer1.Volume := tbVolume.Value;
+ MediaPlayer1.Volume := tbVolume.Value;
   Stopwatch.reset;
   Stopwatch.Start;
 end;

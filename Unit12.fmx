@@ -71,7 +71,7 @@ object Form12: TForm12
       DefaultItemStyles.GroupFooterStyle = ''
       Viewport.Width = 295.000000000000000000
       Viewport.Height = 292.000000000000000000
-      object ListBoxGroupHeader1: TListBoxGroupHeader
+      object ListBoxItem1: TListBoxItem
         TabOrder = 0
         Text = #1057#1087#1080#1089#1086#1082' '#1091#1087#1088#1072#1078#1085#1077#1085#1080#1081':'
       end
