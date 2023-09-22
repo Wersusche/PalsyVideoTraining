@@ -12,7 +12,8 @@ uses
   FireDAC.Stan.ExprFuncs, FireDAC.Phys.SQLiteWrapper.Stat, FireDAC.FMXUI.Wait,
   Data.DB, FireDAC.Comp.Client, FMX.Edit, FireDAC.Stan.Param, FireDAC.DatS,
   FireDAC.DApt.Intf, FireDAC.DApt, FireDAC.Comp.DataSet, System.IOUtils,
-  FireDAC.Comp.UI, FireDAC.Phys.MySQL, FireDAC.Phys.MySQLDef, System.Diagnostics, System.IniFiles;
+  FireDAC.Comp.UI, FireDAC.Phys.MySQL, FireDAC.Phys.MySQLDef, System.Diagnostics, System.IniFiles,
+   FMX.TextLayout;
 
 type
   TForm12 = class(TForm)
@@ -45,6 +46,7 @@ type
     Button1: TButton;
     Button2: TButton;
     ListBoxItem1: TListBoxItem;
+    StyleBook1: TStyleBook;
     procedure FormCreate(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
     procedure bPlayClickClick(Sender: TObject);
@@ -76,6 +78,7 @@ type
     Stopwatch: TStopwatch;
     IsMP3Loaded: Boolean;
     FirstLoop: Boolean;
+    function CalculateTextHeight(const Text: string; const Font: TFont; const Width: Single): Single;
     procedure ListTxtFiles;
     procedure Nextvideoload;
 
@@ -160,6 +163,7 @@ begin
   on E: Exception do
   begin
     ShowMessage('Невозможно проиграть видео. Возможно вам требуется установка дополнительных кодеков.');
+    Application.Terminate;
   end;
   end;
   Stopwatch.Start;
@@ -227,6 +231,7 @@ var
   Hour, Min, Sec, MSec: Word;
    IniFile: TIniFile;
   LastVolume: extended;
+  TextHeight: Single;
   inifilename : string;
 begin
 
@@ -312,7 +317,12 @@ begin
       DecodeTime(Item.PlaybackTime, Hour, Min, Sec, MSec);
       ListBox1.Items.Add(Format('Упражнение: %s, Время: %d мин %d сек', [Item.Videoname, Min, Sec]));
       ListBox1.ListItems[ListBox1.Items.Count-1].Tag := Item.appointmentsID;
-      ListBox1.ListItems[ListBox1.Items.Count-1].WordWrap:=true;
+      //ListBox1.ListItems[ListBox1.Items.Count-1].Height := 113;
+      ListBox1.ListItems[ListBox1.Items.Count-1].WordWrap:= true;
+      ListBox1.ListItems[ListBox1.Items.Count-1].TextSettings.WordWrap:= true;
+      ListBox1.ListItems[ListBox1.Items.Count-1].StyleLookup := 'ListBoxItem1Style1';
+      TextHeight := CalculateTextHeight(ListBox1.ListItems[ListBox1.Items.Count-1].Text, ListBox1.ListItems[ListBox1.Items.Count-1].Font, ListBox1.Width);
+      ListBox1.ListItems[ListBox1.Items.Count-1].Height := TextHeight + 10; // Add some padding
     end;
     FDQuery1.Free;
     bplayclick.Enabled:=true;
@@ -614,6 +624,7 @@ apptag : integer;
  timer4.Enabled := false;
  bplayclick.Enabled:=false;
  bstopclick.Enabled:=false;
+ Application.Terminate;
    end
 else
 begin
@@ -627,5 +638,28 @@ begin
   Stopwatch.Start;
 end;
   end;
+
+  function TForm12.CalculateTextHeight(const Text: string; const Font: TFont; const Width: Single): Single;
+var
+  Layout: TTextLayout;
+begin
+  Layout := TTextLayoutManager.DefaultTextLayout.Create;
+  try
+    Layout.BeginUpdate;
+    try
+      Layout.Font := Font;
+      Layout.MaxSize := TPointF.Create(Width, TTextLayout.MaxLayoutSize.Y);
+      Layout.Text := Text;
+      Layout.WordWrap := True;
+    finally
+      Layout.EndUpdate;
+    end;
+    Result := Layout.Height;
+  finally
+    Layout.Free;
+  end;
+end;
+
+
 end.
 
