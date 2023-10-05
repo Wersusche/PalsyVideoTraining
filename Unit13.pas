@@ -97,6 +97,7 @@ type
     Edit_min: TEdit;
     label_min: TLabel;
     Label_sec: TLabel;
+    Button4: TButton;
     procedure FormCreate(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure enterLoginTyping(Sender: TObject);
@@ -131,6 +132,8 @@ type
     procedure Button_optimizeClick(Sender: TObject);
     procedure CloneTreeItem(SourceItem, TargetParent: TTreeViewItem);
     procedure Edit_minTyping(Sender: TObject);
+    procedure Button4Click(Sender: TObject);
+    procedure ListView1Click(Sender: TObject);
   private
     { Private declarations }
 
@@ -190,7 +193,8 @@ Newusername : string;
     FDQuery_newpatient.ExecSQL;
    finally
     FDQuery_newpatient.Close;
-   ShowMessage('Обязательно передайте пациенту учетные данные!')
+   ShowMessage('Обязательно передайте пациенту учетные данные!');
+   Populateinitiallist(Listview_cure);
    end;
 
   end
@@ -225,7 +229,8 @@ Newusername : string;
     FDQuery_newpatient.ExecSQL;
         finally
     FDQuery_newpatient.Close;
-    ShowMessage('Обязательно передайте пациенту учетные данные!')
+    ShowMessage('Обязательно передайте пациенту учетные данные!');
+    Populateinitiallist(Listview_cure);
         end;
     end;
       end;
@@ -389,6 +394,11 @@ end;
 
 
 
+procedure TForm13.Button4Click(Sender: TObject);
+begin
+Populateinitiallist(Listview1);
+end;
+
 procedure TForm13.Button_optimizeClick(Sender: TObject);
 begin
 MergeTreeViewNodes(TreeView_delcure);
@@ -403,6 +413,34 @@ end;
 procedure TForm13.Button_alter_appointClick(Sender: TObject);
 begin
 SaveExercisesToDB;
+     FDQuery_loadapp.Close;
+    FDQuery_loadapp.SQL.Text := 'SELECT a.Starttime, a.Endtime, a.kolvden, a.sdelanovsego, a.done_percent, v.video_name, a.idAppointments ' +
+                                         'FROM appointments a ' +
+                                         'LEFT JOIN videos v ON a.idvideos = v.idvideos ' +
+                                         'WHERE a.idPatients = :ID';
+
+    FDQuery_loadapp.ParamByName('ID').AsInteger := ListView_cure.Selected.Tag;
+    FDQuery_loadapp.Open;
+
+     try
+    // Assume FDQuery1 has been prepared and opened to select your fields
+    while not FDQuery_loadapp.EOF do
+    begin
+    if (InRange(Now(), FDQuery_loadapp.FieldByName('Starttime').AsDateTime, FDQuery_loadapp.FieldByName('Endtime').AsDateTime)) or
+         (Now() < FDQuery_loadapp.FieldByName('Starttime').AsDateTime) then
+        begin
+     AddAppointmentToListView(TreeView_delcure, FDQuery_loadapp);
+     FDQuery_loadapp.Next;
+      end
+      else
+      FDQuery_loadapp.Next;
+    end;
+     finally
+     FDQuery_loadapp.Close;
+
+
+  end;
+
 end;
 
 procedure TForm13.Button_alter_disordersClick(Sender: TObject);
@@ -447,6 +485,8 @@ begin
       finally
       FDQuery.Free; // Free the query object
     end;
+    Loadexercises(TreeView_exercises);
+    ShowMessage('Изменения успешно сохранены!');
   end
   else
   Showmessage('Пациент не выбран!');
@@ -603,6 +643,11 @@ begin
     Inc(Counter);
     Result := BaseUserName + IntToStr(Counter);
   end;
+end;
+
+procedure TForm13.ListView1Click(Sender: TObject);
+begin
+Populateuserdata(Listview1)
 end;
 
 procedure TForm13.ListView1DblClick(Sender: TObject);
