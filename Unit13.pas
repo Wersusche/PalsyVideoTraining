@@ -98,6 +98,8 @@ type
     label_min: TLabel;
     Label_sec: TLabel;
     Button4: TButton;
+    Button6: TButton;
+    Button7: TButton;
     procedure FormCreate(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure enterLoginTyping(Sender: TObject);
@@ -133,7 +135,9 @@ type
     procedure CloneTreeItem(SourceItem, TargetParent: TTreeViewItem);
     procedure Edit_minTyping(Sender: TObject);
     procedure Button4Click(Sender: TObject);
-    procedure ListView1Click(Sender: TObject);
+    procedure Deleteuser(ListView: TListView);
+    procedure Button6Click(Sender: TObject);
+    procedure Button7Click(Sender: TObject);
   private
     { Private declarations }
 
@@ -195,6 +199,7 @@ Newusername : string;
     FDQuery_newpatient.Close;
    ShowMessage('Обязательно передайте пациенту учетные данные!');
    Populateinitiallist(Listview_cure);
+     Populateinitiallist(Listview1);
    end;
 
   end
@@ -231,6 +236,10 @@ Newusername : string;
     FDQuery_newpatient.Close;
     ShowMessage('Обязательно передайте пациенту учетные данные!');
     Populateinitiallist(Listview_cure);
+    Populateinitiallist(Listview1);
+    enterName.Text := '';
+        enterSurname.Text := '';
+            enterName2.Text := '';
         end;
     end;
       end;
@@ -410,9 +419,35 @@ Populateinitiallist(Listview_cure);
 TabControl3.Enabled := ListView_cure.ItemIndex <> -1;
 end;
 
+procedure TForm13.Button6Click(Sender: TObject);
+begin
+if Listview_cure.Selected.Index <> -1 then
+begin
+Deleteuser(ListView_cure);
+Populateinitiallist(Listview_cure);
+Populateinitiallist(Listview1);
+TabControl3.Enabled := ListView_cure.ItemIndex <> -1;
+end
+else
+  ShowMessage('Пациент не выбран');
+end;
+
+procedure TForm13.Button7Click(Sender: TObject);
+begin
+if Listview1.ItemIndex <> -1 then
+begin
+Deleteuser(ListView1);
+Populateinitiallist(Listview1);
+TabControl3.Enabled := ListView_cure.ItemIndex <> -1;
+end
+else
+  ShowMessage('Пациент не выбран');
+end;
+
 procedure TForm13.Button_alter_appointClick(Sender: TObject);
 begin
 SaveExercisesToDB;
+Loadexercises(TreeView_exercises);
      FDQuery_loadapp.Close;
     FDQuery_loadapp.SQL.Text := 'SELECT a.Starttime, a.Endtime, a.kolvden, a.sdelanovsego, a.done_percent, v.video_name, a.idAppointments ' +
                                          'FROM appointments a ' +
@@ -437,7 +472,6 @@ SaveExercisesToDB;
     end;
      finally
      FDQuery_loadapp.Close;
-
 
   end;
 
@@ -643,11 +677,6 @@ begin
     Inc(Counter);
     Result := BaseUserName + IntToStr(Counter);
   end;
-end;
-
-procedure TForm13.ListView1Click(Sender: TObject);
-begin
-Populateuserdata(Listview1)
 end;
 
 procedure TForm13.ListView1DblClick(Sender: TObject);
@@ -1357,6 +1386,25 @@ begin
     CloneTreeItem(ChildItem, NewItem);
   end;
 end;
+
+
+  procedure TForm13.Deleteuser(ListView: TListView);
+ var
+  FDQuery: TFDQuery;
+  PatientID: Integer;
+begin
+  FDQuery := TFDQuery.Create(nil);
+  FDQuery.Connection := FDConnection1;
+  PatientID := Listview.Selected.Tag;
+        FDQuery.Close;
+        FDQuery.SQL.Text := 'START TRANSACTION; DELETE FROM appointments WHERE idPatients = :patient_id; ' +
+                            'DELETE FROM patient_disorders WHERE patient_id = :patient_id; ' +
+                            'DELETE FROM patients WHERE idPatients = :patient_id; ' +
+                            'COMMIT; ';
+        FDQuery.ParamByName('patient_id').AsInteger := PatientID;
+        FDQuery.ExecSQL;
+end;
+
 end.
 
 

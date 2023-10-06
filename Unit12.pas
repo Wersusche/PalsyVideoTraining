@@ -296,7 +296,7 @@ begin
   begin
     HoursDifference := FDQuery1.FieldByName('HoursDifference').AsInteger;
 
-    if HoursDifference >= 2 then
+    if HoursDifference >= 0 then
     begin
       SetLength(Playlist, Length(Playlist) + 1);
       Playlist[High(Playlist)].VideoID := FDQuery1.FieldByName('filename').AsString;

@@ -59,7 +59,6 @@
           Size.Height = 332.048950195312500000
           Size.PlatformDefault = False
           TabOrder = 0
-          OnClick = ListView1Click
           OnDblClick = ListView1DblClick
           SearchVisible = True
         end
@@ -250,9 +249,9 @@
           HeaderAppearanceClassName = 'TListHeaderObjects'
           FooterAppearanceClassName = 'TListHeaderObjects'
           Align = Scale
-          Position.X = 15.999999046325680000
+          Position.X = 15.999998092651370000
           Position.Y = 170.000000000000000000
-          Size.Width = 350.999969482421900000
+          Size.Width = 350.999938964843800000
           Size.Height = 93.000000000000000000
           Size.PlatformDefault = False
           TabOrder = 0
@@ -274,12 +273,22 @@
       object Button4: TButton
         Position.X = 24.000000000000000000
         Position.Y = 490.000000000000000000
-        Size.Width = 153.000000000000000000
+        Size.Width = 176.000000000000000000
         Size.Height = 56.000000000000000000
         Size.PlatformDefault = False
         TabOrder = 4
         Text = #1054#1073#1085#1086#1074#1080#1090#1100' '#1089#1087#1080#1089#1086#1082' '#1087#1072#1094#1080#1077#1085#1090#1086#1074
         OnClick = Button4Click
+      end
+      object Button7: TButton
+        Position.X = 208.000000000000000000
+        Position.Y = 490.000000000000000000
+        Size.Width = 185.000000000000000000
+        Size.Height = 56.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 5
+        Text = #1059#1076#1072#1083#1080#1090#1100' '#1074#1099#1073#1088#1072#1085#1085#1086#1075#1086' '#1087#1072#1094#1080#1077#1085#1090#1072
+        OnClick = Button7Click
       end
     end
     object Tab_cure: TTabItem
@@ -594,6 +603,16 @@
           end
         end
       end
+      object Button6: TButton
+        Position.X = 135.000000000000000000
+        Position.Y = 422.000000000000000000
+        Size.Width = 194.000000000000000000
+        Size.Height = 51.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 3
+        Text = #1059#1076#1072#1083#1080#1090#1100' '#1074#1099#1073#1088#1072#1085#1085#1086#1075#1086' '#1087#1072#1094#1080#1077#1085#1090#1072
+        OnClick = Button6Click
+      end
     end
     object Tab_newpatient: TTabItem
       CustomIcon = <
@@ -749,8 +768,8 @@
   end
   object FDQuery_totalpatients: TFDQuery
     Connection = FDConnection1
-    Left = 144
-    Top = 520
+    Left = 136
+    Top = 568
   end
   object FDQuery_openactusers: TFDQuery
     Connection = FDConnection1
