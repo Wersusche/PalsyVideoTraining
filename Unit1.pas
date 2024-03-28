@@ -155,17 +155,18 @@ end;
 
 function TLoginForm.ValidateCredentials(const Username, Password: string): Boolean;
 var
- hashedPassword: string;
+ hashedPassword, nothashedPassword: string;
  // IdMD5: TIdHashMessageDigest5;
 begin
   Result := False;
   hashedPassword := THashMD5.GetHashString(Password);
+  nothashedPassword:= Password;
 
     try
     LoginForm.FDQuery1.Connection := LoginForm.FDConnection1;
     LoginForm.FDQuery1.SQL.Text := 'SELECT COUNT(*) FROM patients WHERE Username = :Username AND Password = :Password';
     LoginForm.FDQuery1.ParamByName('Username').AsString := Username;
-    LoginForm.FDQuery1.ParamByName('Password').AsString := hashedPassword;
+    LoginForm.FDQuery1.ParamByName('Password').AsString := nothashedPassword;
     LoginForm.FDQuery1.Open;
 
     // Check result

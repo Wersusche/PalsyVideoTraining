@@ -1,7 +1,7 @@
 ﻿object Form13: TForm13
   Left = 0
   Top = 0
-  Caption = 'Form13'
+  Caption = #1055#1088#1080#1083#1086#1078#1077#1085#1080#1077' '#1088#1077#1072#1073#1080#1083#1080#1090#1086#1083#1086#1075#1072
   ClientHeight = 647
   ClientWidth = 1081
   Position = Designed
@@ -612,6 +612,42 @@
         TabOrder = 3
         Text = #1059#1076#1072#1083#1080#1090#1100' '#1074#1099#1073#1088#1072#1085#1085#1086#1075#1086' '#1087#1072#1094#1080#1077#1085#1090#1072
         OnClick = Button6Click
+      end
+      object GroupBox11: TGroupBox
+        Position.X = 352.000000000000000000
+        Position.Y = 326.000000000000000000
+        Size.Width = 233.000000000000000000
+        Size.Height = 147.000000000000000000
+        Size.PlatformDefault = False
+        Text = #1059#1095#1077#1090#1085#1099#1077' '#1076#1072#1085#1085#1099#1077
+        TabOrder = 4
+        object Label7: TLabel
+          Position.X = 8.000000000000000000
+          Position.Y = 49.000000000000000000
+          Size.Width = 105.000000000000000000
+          Size.Height = 33.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 38
+          object Label10: TLabel
+            Position.Y = 40.000000000000000000
+            Text = #1055#1072#1088#1086#1083#1100':'
+            TabOrder = 4
+          end
+        end
+        object Label8: TLabel
+          Position.X = 8.000000000000000000
+          Position.Y = 106.000000000000000000
+          Size.Width = 120.000000000000000000
+          Size.Height = 33.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 39
+        end
+        object Label9: TLabel
+          Position.X = 8.000000000000000000
+          Position.Y = 24.000000000000000000
+          Text = #1051#1086#1075#1080#1085':'
+          TabOrder = 40
+        end
       end
     end
     object Tab_newpatient: TTabItem

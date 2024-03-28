@@ -100,6 +100,11 @@ type
     Button4: TButton;
     Button6: TButton;
     Button7: TButton;
+    GroupBox11: TGroupBox;
+    Label9: TLabel;
+    Label10: TLabel;
+    Label7: TLabel;
+    Label8: TLabel;
     procedure FormCreate(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure enterLoginTyping(Sender: TObject);
@@ -149,6 +154,7 @@ type
     function FilterNonEnglishCharacters(const AText: string): string;
     function  AddAppointmentToListView(Treeview: TTreeview; FDQuery_patappointments: TFDQuery): TTreeViewItem;
     function FilterNonDecimalCharacters(const AText: string): string;
+    function IsAnyTreeViewItemChecked(ATreeView: TTreeView): Boolean;
      end;
 
 var
@@ -162,7 +168,7 @@ implementation
 
 procedure TForm13.Button1Click(Sender: TObject);
   var
-hashedPassword: string;
+hashedPassword,nothashedPassword: string;
 Newusername : string;
 
  begin
@@ -180,6 +186,7 @@ Newusername : string;
   enterLogin.Text := NewUserName;
   enterPassword.Text := GenerateRandomPassword;
   hashedPassword := THashMD5.GetHashString(enterPassword.Text);
+  nothashedPassword := enterPassword.Text;
     try
     FDQuery_newpatient.Connection := FDConnection1; // Replace with your TFDConnection component's name
 
@@ -192,7 +199,7 @@ Newusername : string;
     FDQuery_newpatient.ParamByName('Secname').AsString := enterName2.Text;
     FDQuery_newpatient.ParamByName('DateOfBirth').AsDate := DateEdit1.Date;
     FDQuery_newpatient.ParamByName('AssiUsername').AsString := NewUserName;
-    FDQuery_newpatient.ParamByName('AssiPassword').AsString := hashedPassword;
+    FDQuery_newpatient.ParamByName('AssiPassword').AsString := nothashedPassword;
     // Execute the SQL statement
     FDQuery_newpatient.ExecSQL;
    finally
@@ -446,6 +453,8 @@ end;
 
 procedure TForm13.Button_alter_appointClick(Sender: TObject);
 begin
+if IsAnyTreeViewItemChecked(TreeView_exercises) then
+begin
 SaveExercisesToDB;
 Loadexercises(TreeView_exercises);
      FDQuery_loadapp.Close;
@@ -458,6 +467,7 @@ Loadexercises(TreeView_exercises);
     FDQuery_loadapp.Open;
 
      try
+     TreeView_delcure.Clear;
     // Assume FDQuery1 has been prepared and opened to select your fields
     while not FDQuery_loadapp.EOF do
     begin
@@ -472,9 +482,10 @@ Loadexercises(TreeView_exercises);
     end;
      finally
      FDQuery_loadapp.Close;
-
   end;
-
+end
+else
+  ShowMessage('Не выбраны упражнения!');
 end;
 
 procedure TForm13.Button_alter_disordersClick(Sender: TObject);
@@ -721,14 +732,18 @@ for i := 0 to TreeView1.Count - 1 do
   end;
 
     FDQuery_loadapp.Close;
-    FDQuery_loadapp.SQL.Text := 'SELECT a.Starttime, a.Endtime, a.kolvden, a.sdelanovsego, a.done_percent, v.video_name, a.idAppointments ' +
-                                         'FROM appointments a ' +
-                                         'LEFT JOIN videos v ON a.idvideos = v.idvideos ' +
-                                         'WHERE a.idPatients = :ID';
+     FDQuery_loadapp.SQL.Text := 'SELECT a.Starttime, a.Endtime, a.kolvden, a.sdelanovsego, a.done_percent, ' +
+                            'v.video_name, a.idAppointments, p.Username, p.Password ' + // Added Username from patients table
+                            'FROM appointments a ' +
+                            'LEFT JOIN videos v ON a.idvideos = v.idvideos ' +
+                            'LEFT JOIN patients p ON a.idPatients = p.idPatients ' + // Join with patients table
+                            'WHERE a.idPatients = :ID';
 
     FDQuery_loadapp.ParamByName('ID').AsInteger := ListView_cure.Selected.Tag;
     FDQuery_loadapp.Open;
 
+    Label7.Text := FDQuery_loadapp.FieldByName('Username').AsString;
+     Label8.Text := FDQuery_loadapp.FieldByName('Password').AsString;
      try
     // Assume FDQuery1 has been prepared and opened to select your fields
     while not FDQuery_loadapp.EOF do
@@ -1403,6 +1418,23 @@ begin
                             'COMMIT; ';
         FDQuery.ParamByName('patient_id').AsInteger := PatientID;
         FDQuery.ExecSQL;
+end;
+
+function TForm13.IsAnyTreeViewItemChecked(ATreeView: TTreeView): Boolean;
+var
+  i: Integer;
+  Item: TTreeViewItem;
+begin
+  Result := False;
+  for i := 0 to ATreeView.Count - 1 do
+  begin
+    Item := ATreeView.Items[i];
+    if Item.IsChecked then
+    begin
+      Result := True;
+      Break;
+    end;
+  end;
 end;
 
 end.

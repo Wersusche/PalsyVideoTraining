@@ -1,7 +1,7 @@
 object LoginForm: TLoginForm
   Left = 0
   Top = 0
-  Caption = 'Form1'
+  Caption = #1060#1086#1088#1084#1072' '#1074#1093#1086#1076#1072
   ClientHeight = 634
   ClientWidth = 1078
   FormFactor.Width = 320
@@ -38,7 +38,7 @@ object LoginForm: TLoginForm
     end
     object PasswordEdit: TEdit
       Touch.InteractiveGestures = [LongTap, DoubleTap]
-      TabOrder = 4
+      TabOrder = 3
       Text = '123456'
       Position.X = 119.000000000000000000
       Position.Y = 46.000000000000000000
@@ -49,7 +49,7 @@ object LoginForm: TLoginForm
     object Button1: TButton
       Position.X = 80.000000000000000000
       Position.Y = 86.000000000000000000
-      TabOrder = 5
+      TabOrder = 4
       Text = #1042#1086#1081#1090#1080
       OnClick = Button1Click
     end
