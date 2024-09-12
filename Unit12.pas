@@ -200,6 +200,7 @@ var
   TextHeight: Single;
 begin
   // Stop the current media playback
+  Timer1.Enabled := False;  // Temporarily disable the Timer to prevent interference
   MediaPlayer1.Stop;
   MediaPlayer2.Stop;
 
@@ -210,9 +211,10 @@ begin
   Playlist[High(Playlist)] := SkippedItem;   // Place the skipped item at the end
 
   // If the current item is the last one, reset to the first item
-  Inc(CurrentItemIndex);
-  if CurrentItemIndex >= Length(Playlist) then
-    CurrentItemIndex := 0;
+  if CurrentItemIndex >= Length(Playlist) - 1 then
+    CurrentItemIndex := 0
+  else
+    Inc(CurrentItemIndex);  // Increment only once manually
 
   // Refresh the ListBox1 to reflect the updated playlist
   ListBox1.BeginUpdate;
@@ -245,6 +247,9 @@ begin
   // Reset the stopwatch for the new video
   Stopwatch.Reset;
   Stopwatch.Start;
+
+  // Re-enable the Timer
+  Timer1.Enabled := True;
 end;
 
 
