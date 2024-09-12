@@ -47,6 +47,7 @@ type
     Button2: TButton;
     ListBoxItem1: TListBoxItem;
     StyleBook1: TStyleBook;
+    bSkipClick: TButton;
     procedure FormCreate(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
     procedure bPlayClickClick(Sender: TObject);
@@ -63,6 +64,7 @@ type
     procedure Timer_startrisingTimer(Sender: TObject);
     procedure Timer2Timer(Sender: TObject);
     procedure Button1Click(Sender: TObject);
+    procedure bSkipClickClick(Sender: TObject);
 
   private
     { Private declarations }
@@ -81,6 +83,7 @@ type
     function CalculateTextHeight(const Text: string; const Font: TFont; const Width: Single): Single;
     procedure ListTxtFiles;
     procedure Nextvideoload;
+
 
 
   public
@@ -188,6 +191,62 @@ FTotalPlaybackTime := 0;
   end
 
 end;
+
+procedure TForm12.bSkipClickClick(Sender: TObject);
+var
+  SkippedItem: TPlaylistItem;
+  I: Integer;
+  Hour, Min, Sec, MSec: Word;
+  TextHeight: Single;
+begin
+  // Stop the current media playback
+  MediaPlayer1.Stop;
+  MediaPlayer2.Stop;
+
+  // Move the current video (Playlist[CurrentItemIndex]) to the end of the playlist
+  SkippedItem := Playlist[CurrentItemIndex];  // Store the current item
+  for I := CurrentItemIndex to High(Playlist) - 1 do
+    Playlist[I] := Playlist[I + 1];  // Shift all remaining items left
+  Playlist[High(Playlist)] := SkippedItem;   // Place the skipped item at the end
+
+  // If the current item is the last one, reset to the first item
+  Inc(CurrentItemIndex);
+  if CurrentItemIndex >= Length(Playlist) then
+    CurrentItemIndex := 0;
+
+  // Refresh the ListBox1 to reflect the updated playlist
+  ListBox1.BeginUpdate;
+  try
+    ListBox1.Clear;
+    for I := 0 to High(Playlist) do
+    begin
+      DecodeTime(Playlist[I].PlaybackTime, Hour, Min, Sec, MSec);
+      ListBox1.Items.Add(Format('Упражнение: %s, Время: %d мин %d сек', [Playlist[I].Videoname, Min, Sec]));
+      ListBox1.ListItems[ListBox1.Items.Count-1].Tag := Playlist[I].appointmentsID;
+
+      // Optionally set custom style and word wrap (based on your original setup)
+      ListBox1.ListItems[ListBox1.Items.Count-1].WordWrap := True;
+      ListBox1.ListItems[ListBox1.Items.Count-1].TextSettings.WordWrap := True;
+      ListBox1.ListItems[ListBox1.Items.Count-1].StyleLookup := 'ListBoxItem1Style1';
+
+      // Adjust height based on text length
+      TextHeight := CalculateTextHeight(ListBox1.ListItems[ListBox1.Items.Count-1].Text, ListBox1.ListItems[ListBox1.Items.Count-1].Font, ListBox1.Width);
+      ListBox1.ListItems[ListBox1.Items.Count-1].Height := TextHeight + 10;  // Add padding
+    end;
+  finally
+    ListBox1.EndUpdate;
+  end;
+
+  // Load and play the next video
+  MediaPlayer1.FileName := GetVideoFilePath(Playlist[CurrentItemIndex].VideoID);
+  MediaPlayer1.Play;
+  MediaPlayer1.Volume := tbVolume.Value;
+
+  // Reset the stopwatch for the new video
+  Stopwatch.Reset;
+  Stopwatch.Start;
+end;
+
 
 procedure TForm12.bStopClickClick(Sender: TObject);
 begin

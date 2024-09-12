@@ -9,9 +9,6 @@
         <Projects Include="Project11.dproj">
             <Dependencies/>
         </Projects>
-        <Projects Include="Palsy.dproj">
-            <Dependencies/>
-        </Projects>
     </ItemGroup>
     <ProjectExtensions>
         <Borland.Personality>Default.Personality.12</Borland.Personality>
@@ -38,23 +35,14 @@
     <Target Name="Project11:Make">
         <MSBuild Projects="Project11.dproj" Targets="Make"/>
     </Target>
-    <Target Name="Palsy">
-        <MSBuild Projects="Palsy.dproj"/>
-    </Target>
-    <Target Name="Palsy:Clean">
-        <MSBuild Projects="Palsy.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="Palsy:Make">
-        <MSBuild Projects="Palsy.dproj" Targets="Make"/>
-    </Target>
     <Target Name="Build">
-        <CallTarget Targets="Project10;Project11;Palsy"/>
+        <CallTarget Targets="Project10;Project11"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="Project10:Clean;Project11:Clean;Palsy:Clean"/>
+        <CallTarget Targets="Project10:Clean;Project11:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="Project10:Make;Project11:Make;Palsy:Make"/>
+        <CallTarget Targets="Project10:Make;Project11:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>

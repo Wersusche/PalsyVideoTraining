@@ -167,6 +167,16 @@ object Form12: TForm12
       Visible = False
       OnClick = Button3Click
     end
+    object bSkipClick: TButton
+      Position.X = 894.000000000000000000
+      Position.Y = 24.000000000000000000
+      Size.Width = 155.000000000000000000
+      Size.Height = 33.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 28
+      Text = #1055#1088#1086#1087#1091#1089#1090#1080#1090#1100' '#1091#1087#1088#1072#1078#1085#1077#1085#1080#1077
+      OnClick = bSkipClickClick
+    end
   end
   object tbVolume: TTrackBar
     Align = Scale
@@ -194,8 +204,8 @@ object Form12: TForm12
   end
   object Timer_for: TTimer
     Interval = 500
-    Left = 904
-    Top = 575
+    Left = 152
+    Top = 591
   end
   object Timer_startrising: TTimer
     Enabled = False
@@ -203,44 +213,6 @@ object Form12: TForm12
     OnTimer = Timer_startrisingTimer
     Left = 344
     Top = 567
-  end
-  object FDConnection1: TFDConnection
-    Params.Strings = (
-      'DriverID=MySQL'
-      'Database=.\pushcount.db')
-    LoginPrompt = False
-    BeforeConnect = FDConnection1BeforeConnect
-    Left = 544
-  end
-  object FDPhysSQLiteDriverLink1: TFDPhysSQLiteDriverLink
-    Left = 600
-    Top = 56
-  end
-  object FDQuery1: TFDQuery
-    Connection = FDConnection1
-    Left = 592
-    Top = 104
-  end
-  object FDGUIxWaitCursor1: TFDGUIxWaitCursor
-    Provider = 'FMX'
-    Left = 592
-    Top = 344
-  end
-  object FDQuery2: TFDQuery
-    Connection = FDConnection1
-    SQL.Strings = (
-      'SELECT count FROM push_count ORDER BY ID DESC LIMIT 1')
-    Left = 456
-    Top = 264
-  end
-  object FDPhysMySQLDriverLink1: TFDPhysMySQLDriverLink
-    Left = 592
-    Top = 392
-  end
-  object FDQuery3: TFDQuery
-    Connection = FDConnection1
-    Left = 488
-    Top = 208
   end
   object StyleBook1: TStyleBook
     Styles = <
@@ -480,5 +452,43 @@ object Form12: TForm12
       end>
     Left = 8
     Top = 8
+  end
+  object FDConnection1: TFDConnection
+    Params.Strings = (
+      'DriverID=MySQL'
+      'Database=.\pushcount.db')
+    LoginPrompt = False
+    BeforeConnect = FDConnection1BeforeConnect
+    Left = 544
+  end
+  object FDPhysSQLiteDriverLink1: TFDPhysSQLiteDriverLink
+    Left = 600
+    Top = 56
+  end
+  object FDQuery1: TFDQuery
+    Connection = FDConnection1
+    Left = 592
+    Top = 104
+  end
+  object FDGUIxWaitCursor1: TFDGUIxWaitCursor
+    Provider = 'FMX'
+    Left = 592
+    Top = 344
+  end
+  object FDQuery2: TFDQuery
+    Connection = FDConnection1
+    SQL.Strings = (
+      'SELECT count FROM push_count ORDER BY ID DESC LIMIT 1')
+    Left = 456
+    Top = 264
+  end
+  object FDPhysMySQLDriverLink1: TFDPhysMySQLDriverLink
+    Left = 592
+    Top = 392
+  end
+  object FDQuery3: TFDQuery
+    Connection = FDConnection1
+    Left = 488
+    Top = 208
   end
 end
