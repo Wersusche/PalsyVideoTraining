@@ -15,6 +15,15 @@ uses
   FireDAC.Comp.UI, FireDAC.Phys.MySQL, FireDAC.Phys.MySQLDef, System.Diagnostics, System.IniFiles,
    FMX.TextLayout;
 
+   type
+  TPlaylistItem = record
+    VideoID: string;
+    PlaybackTime: TTime; // In seconds
+    Videoname: string;
+    appointmentsID : integer;
+    CumulativeTime: Double; // In seconds
+  end;
+
 type
   TForm12 = class(TForm)
     FDConnection1: TFDConnection;
@@ -85,7 +94,12 @@ type
     procedure ListTxtFiles;
     procedure Nextvideoload;
     procedure InitializeVideoTrackBar;
-
+    function TimeInSecondsOf(ATime: TTime): Double;
+    procedure UpdateExerciseList;
+    procedure SaveSettingsToIniFile;
+ procedure UpdateCumulativeTimeInDatabase(const Item: TPlaylistItem);
+procedure CompleteExercise(var Item: TPlaylistItem);
+ procedure RemoveExerciseFromPlaylist(const Item: TPlaylistItem);
 
 
   public
@@ -97,13 +111,7 @@ type
     procedure StartRising(MediaPlayer: TMediaPlayer);
   end;
 
- type
-  TPlaylistItem = record
-    VideoID: string;
-    PlaybackTime: TTime; // In seconds
-    Videoname: string;
-    appointmentsID : integer;
-  end;
+
 
   const
   INI_FILE = 'MyApp.ini';
@@ -152,20 +160,108 @@ begin
   end;
 end;
 
+procedure TForm12.RemoveExerciseFromPlaylist(const Item: TPlaylistItem);
+var
+  I, J: Integer;
+begin
+  for I := 0 to High(Playlist) do
+  begin
+    if Playlist[I].appointmentsID = Item.appointmentsID then
+    begin
+      // Remove from the playlist
+      for J := I to High(Playlist) - 1 do
+        Playlist[J] := Playlist[J + 1];
+      SetLength(Playlist, Length(Playlist) - 1);
+      Break;
+    end;
+  end;
+end;
+
+procedure TForm12.UpdateExerciseList;
+var
+  I: Integer;
+  Hour, Min, Sec, MSec: Word;
+  TextHeight: Single;
+  ExerciseDuration, PercentageCompleted: Double;
+begin
+  ListBox1.BeginUpdate;
+  try
+    // Remove all items except the group header (assuming it's at index 0)
+    while ListBox1.Count > 1 do
+      ListBox1.Items.Delete(1);
+
+    for I := 0 to High(Playlist) do
+    begin
+      // Get exercise duration in seconds
+      ExerciseDuration := TimeInSecondsOf(Playlist[I].PlaybackTime);
+
+      // Calculate percentage completed
+      PercentageCompleted := (Playlist[I].CumulativeTime / ExerciseDuration) * 100;
+      if PercentageCompleted > 100 then
+        PercentageCompleted := 100;
+
+      DecodeTime(Playlist[I].PlaybackTime, Hour, Min, Sec, MSec);
+      ListBox1.Items.Add(Format('Упражнение: %s, Время: %d мин %d сек, Выполнено: %d%%',
+        [Playlist[I].Videoname, Min, Sec, Round(PercentageCompleted)]));
+      ListBox1.ListItems[ListBox1.Items.Count - 1].Tag := Playlist[I].appointmentsID;
+      ListBox1.ListItems[ListBox1.Items.Count - 1].WordWrap := True;
+      ListBox1.ListItems[ListBox1.Items.Count - 1].TextSettings.WordWrap := True;
+      ListBox1.ListItems[ListBox1.Items.Count - 1].StyleLookup := 'ListBoxItem1Style1';
+
+      // Adjust height based on text length
+      TextHeight := CalculateTextHeight(ListBox1.ListItems[ListBox1.Items.Count - 1].Text,
+        ListBox1.ListItems[ListBox1.Items.Count - 1].Font, ListBox1.Width);
+      ListBox1.ListItems[ListBox1.Items.Count - 1].Height := TextHeight + 10; // Add padding
+    end;
+  finally
+    ListBox1.EndUpdate;
+  end;
+end;
+
+procedure TForm12.UpdateCumulativeTimeInDatabase(const Item: TPlaylistItem);
+begin
+  FDQuery3.Connection := FDConnection1;
+  FDQuery3.SQL.Text := 'UPDATE appointments A ' +
+                       'SET A.CumulativeTimeSpent = :CumulativeTime ' +
+                       'WHERE A.idAppointments = :apptag';
+  FDQuery3.ParamByName('CumulativeTime').AsFloat := Item.CumulativeTime;
+  FDQuery3.ParamByName('apptag').AsInteger := Item.appointmentsID;
+  FDQuery3.ExecSQL;
+end;
+
 procedure TForm12.InitializeVideoTrackBar;
 var
-  TimeInSeconds: Double;
-  Hour, Min, Sec, MSec: Word;
+  ExerciseDuration, RemainingTime: Double;
 begin
-  // Decode the exercise duration
-  DecodeTime(Playlist[CurrentItemIndex].PlaybackTime, Hour, Min, Sec, MSec);
-  TimeInSeconds := Hour * 3600 + Min * 60 + Sec + MSec / 1000;
+  // Get total exercise duration in seconds
+  ExerciseDuration := TimeInSecondsOf(Playlist[CurrentItemIndex].PlaybackTime);
 
-  // Initialize tbVideo
+  // Calculate remaining time for the exercise
+  RemainingTime := ExerciseDuration - Playlist[CurrentItemIndex].CumulativeTime;
+  if RemainingTime < 0 then
+    RemainingTime := 0;
+
   tbVideo.Min := 0;
-  tbVideo.Max := TimeInSeconds;
-  tbVideo.Value := 0;
-  tbVideo.Enabled := False; // Set to True if you want to allow seeking (not recommended here)
+  tbVideo.Max := ExerciseDuration;
+  tbVideo.Value := Playlist[CurrentItemIndex].CumulativeTime;
+  tbVideo.Enabled := False; // Disable seeking
+
+  // Update the label with remaining time
+  Label2.Text := Format('Оставшееся время упражнения: %d сек', [Round(RemainingTime)]);
+end;
+
+procedure TForm12.SaveSettingsToIniFile;
+var
+  IniFile: TIniFile;
+  inifilename: string;
+begin
+  inifilename := TPath.Combine(Path, 'MyApp.ini');
+  try
+    IniFile := TIniFile.Create(inifilename);
+    IniFile.WriteString(INI_SECTION, 'MyVolume', FloatToStr(tbVolume.Value));
+  finally
+    IniFile.Free;
+  end;
 end;
 
 procedure TForm12.bPlayClickClick(Sender: TObject);
@@ -220,6 +316,13 @@ var
   Hour, Min, Sec, MSec: Word;
   TextHeight: Single;
 begin
+  // Before rearranging the playlist, add elapsed time to cumulative time
+  Stopwatch.Stop;
+  Playlist[CurrentItemIndex].CumulativeTime := Playlist[CurrentItemIndex].CumulativeTime + Stopwatch.Elapsed.TotalSeconds;
+  UpdateCumulativeTimeInDatabase(Playlist[CurrentItemIndex]);
+  Stopwatch.Reset;
+
+
   // Stop the current media playback
   Timer1.Enabled := False;  // Temporarily disable the Timer to prevent interference
   MediaPlayer1.Stop;
@@ -281,11 +384,23 @@ end;
 
 procedure TForm12.bStopClickClick(Sender: TObject);
 begin
-Stopwatch.Stop;
-Timer4.Enabled := false;
-MediaPlayer1.Stop;
-MediaPlayer2.Stop;
-bPlayClick.Text := 'Продолжить упражнение'
+  // Stop the stopwatch
+  Stopwatch.Stop;
+
+  // Add elapsed time to cumulative time
+  Playlist[CurrentItemIndex].CumulativeTime := Playlist[CurrentItemIndex].CumulativeTime + Stopwatch.Elapsed.TotalSeconds;
+
+  // Update cumulative time in the database
+  UpdateCumulativeTimeInDatabase(Playlist[CurrentItemIndex]);
+
+  // Reset the stopwatch
+  Stopwatch.Reset;
+
+  // Stop media playback
+  Timer4.Enabled := False;
+  MediaPlayer1.Stop;
+  MediaPlayer2.Stop;
+  bPlayClick.Text := 'Продолжить упражнение';
 end;
 
 procedure TForm12.Button1Click(Sender: TObject);
@@ -311,6 +426,23 @@ timer4.Enabled := False;
 Mediaplayer1.Stop;
 Application.Terminate;
 end;
+
+procedure TForm12.CompleteExercise(var Item: TPlaylistItem);
+begin
+  FDQuery3.Connection := FDConnection1;
+  FDQuery3.SQL.Text := 'UPDATE appointments A ' +
+                       'SET A.sdelanovden = A.sdelanovden + 1, ' +
+                       'A.sdelanovsego = A.sdelanovsego + 1, ' +
+                       'A.Lastsession = UTC_TIMESTAMP(), ' +
+                       'A.CumulativeTimeSpent = 0 ' +
+                       'WHERE A.idAppointments = :apptag';
+  FDQuery3.ParamByName('apptag').AsInteger := Item.appointmentsID;
+  FDQuery3.ExecSQL;
+
+  // Reset cumulative time
+  Item.CumulativeTime := 0;
+end;
+
 
 procedure TForm12.FormCreate(Sender: TObject);
 var
@@ -368,10 +500,11 @@ Fullexercisetime := 0;
     FDConnection1.Connected := True;
     FDQuery1.Connection := FDConnection1;
 
-    FDQuery1.SQL.Text :=  'SELECT P.idPatients, A.idAppointments, A.idvideos, A.dlitelnost, A.Lastsession, V.filename, V.video_name, NOW() AS CurrentTime, ' +
-                          'TIMESTAMPDIFF(HOUR, A.Lastsession, NOW()) AS HoursDifference FROM patients P INNER JOIN ' +
-                          'appointments A ON P.idPatients = A.idPatients INNER JOIN videos V ON A.idvideos = V.idvideos ' +
-                          'WHERE P.Username = :UserName AND CURDATE() BETWEEN A.Starttime AND A.Endtime AND A.sdelanovden < A.kolvden ';
+FDQuery1.SQL.Text := 'SELECT P.idPatients, A.idAppointments, A.idvideos, A.dlitelnost, A.Lastsession, V.filename, V.video_name, NOW() AS CurrentTime, ' +
+                     'TIMESTAMPDIFF(HOUR, A.Lastsession, NOW()) AS HoursDifference, A.CumulativeTimeSpent ' +
+                     'FROM patients P INNER JOIN ' +
+                     'appointments A ON P.idPatients = A.idPatients INNER JOIN videos V ON A.idvideos = V.idvideos ' +
+                     'WHERE P.Username = :UserName AND CURDATE() BETWEEN A.Starttime AND A.Endtime AND A.sdelanovden < A.kolvden';
                           //'HAVING HoursDifference > 2';
 
       FDQuery1.ParamByName('UserName').AsString := Pusername; // Replace UserName with the actual user name
@@ -393,6 +526,7 @@ begin
       Playlist[High(Playlist)].PlaybackTime := FDQuery1.FieldByName('dlitelnost').AsDateTime;
       Playlist[High(Playlist)].Videoname := FDQuery1.FieldByName('video_name').AsString;
       Playlist[High(Playlist)].appointmentsID := FDQuery1.FieldByName('idAppointments').AsInteger;
+      Playlist[High(Playlist)].CumulativeTime := FDQuery1.FieldByName('CumulativeTimeSpent').AsFloat;
       end;
 
     FDQuery1.Next;
@@ -403,7 +537,7 @@ begin
     for var I := 0 to High(Playlist) do
     begin
       Item := Playlist[I];
-      Fullexercisetime := Fullexercisetime + Item.PlaybackTime;
+      Fullexercisetime := Fullexercisetime + (TimeInSecondsOf(Item.PlaybackTime) - Item.CumulativeTime);
       DecodeTime(Item.PlaybackTime, Hour, Min, Sec, MSec);
       ListBox1.Items.Add(Format('Упражнение: %s, Время: %d мин %d сек', [Item.Videoname, Min, Sec]));
       ListBox1.ListItems[ListBox1.Items.Count-1].Tag := Item.appointmentsID;
@@ -479,40 +613,43 @@ end;
 
 procedure TForm12.Timer1Timer(Sender: TObject);
 var
-  Hour, Min, Sec, MSec: Word;
-  TimeInSeconds: double;
-
-  RemainingTime: Double;
-
+  ExerciseDuration, TotalTimeSpent, RemainingTime: Double;
 begin
-  DecodeTime(Playlist[CurrentItemIndex].PlaybackTime, Hour, Min, Sec, MSec);
-  TimeInSeconds := Min * 60 + Sec;
+  // Calculate total time spent on current exercise
+  TotalTimeSpent := Playlist[CurrentItemIndex].CumulativeTime + Stopwatch.Elapsed.TotalSeconds;
 
-  // Update the trackbar with current playback position
- tbVideo.Value := Stopwatch.Elapsed.TotalSeconds;
- // Calculate remaining exercise time
-  RemainingTime := tbVideo.Max - tbVideo.Value;
-  if RemainingTime < 0 then RemainingTime := 0;
+  // Get exercise duration
+  ExerciseDuration := TimeInSecondsOf(Playlist[CurrentItemIndex].PlaybackTime);
 
-//    if Stopwatch.Elapsed.TotalSeconds >= 20  then
-//    begin
-//      startfading(Mediaplayer1);
-//    end;
+  // Update tbVideo
+  tbVideo.Value := TotalTimeSpent;
 
-    if Stopwatch.Elapsed.TotalSeconds >= TimeInSeconds  then
-    begin
+  // Calculate remaining time for the current exercise
+  RemainingTime := ExerciseDuration - TotalTimeSpent;
+  if RemainingTime < 0 then
+    RemainingTime := 0;
+
+  // Update label for remaining time
+  Label2.Text := Format('Оставшееся время упражнения: %d сек', [Round(RemainingTime)]);
+
+  // Check if exercise is completed
+  if TotalTimeSpent >= ExerciseDuration then
+  begin
     Nextvideoload;
-    end;
+    Exit; // Exit the procedure to avoid further processing
+  end;
 
-    if (MediaPlayer1.CurrentTime >= MediaPlayer1.Duration)   then
-       begin
-      MediaPlayer1.CurrentTime := 0;
-      MediaPlayer1.Play;
+  // Handle video looping and background music
+  if MediaPlayer1.CurrentTime >= MediaPlayer1.Duration then
+  begin
+    MediaPlayer1.CurrentTime := 0;
+    MediaPlayer1.Play;
 
-            // If it's not the first loop, play the external audio track
-      if not FirstLoop then
-      begin
-       MediaPlayer1.Volume := 0;  // Mute the main player
+    // If it's not the first loop, play the background music
+    if not FirstLoop then
+    begin
+      MediaPlayer1.Volume := 0;  // Mute the main video player
+
       // Load and play the MP3 only if it hasn't been loaded yet
       if not IsMP3Loaded then
       begin
@@ -524,40 +661,45 @@ begin
       begin
         // MP3 is already loaded, just continue playing it
         MediaPlayer2.Play;
-        if (MediaPlayer2.CurrentTime >= MediaPlayer2.Duration)   then
+
+        // Loop the MP3 if it has ended
+        if MediaPlayer2.CurrentTime >= MediaPlayer2.Duration then
         begin
-        MediaPlayer2.FileName := LoadRandomMP3;
-        MediaPlayer2.Play;
+          MediaPlayer2.FileName := LoadRandomMP3;
+          MediaPlayer2.Play;
         end;
       end;
-     MediaPlayer2.Volume := tbVolume.Value;  // Full volume for MediaPlayer2
+
+      MediaPlayer2.Volume := tbVolume.Value;  // Set volume for MediaPlayer2
     end
-      else
+    else
     begin
       FirstLoop := False;  // Not the first loop anymore
     end;
   end;
-
-
 end;
 
-
 procedure TForm12.Timer4Timer(Sender: TObject);
-  var
-  RemainingTime: Int64;
-
+var
+  TotalRemainingTime: Double;
+  I: Integer;
+  Min1, Sec1: Integer;
 begin
-  // Calculate the remaining time in seconds
- // RemainingTime := Round(Playlist[CurrentItemIndex].PlaybackTime - Stopwatch.Elapsed.TotalSeconds);
-  // Update the label
- RemainingTime :=  Min1 * 60 + Sec1;
- Dec(RemainingTime);
- Min1 := RemainingTime div 60;
- Sec1 := RemainingTime mod 60;
- label2.Text := Format('Общее оставшееся время занятия: %d мин %d сек', [Min1, Sec1]);
- if RemainingTime <=0 then
- timer4.Enabled := false;
+  // Calculate total remaining time across all exercises
+  TotalRemainingTime := 0;
+  for I := 0 to High(Playlist) do
+  begin
+    TotalRemainingTime := TotalRemainingTime + (TimeInSecondsOf(Playlist[I].PlaybackTime) - Playlist[I].CumulativeTime);
+  end;
 
+  // Update the label
+  Min1 := Trunc(TotalRemainingTime) div 60;
+  Sec1 := Trunc(TotalRemainingTime) mod 60;
+  Label2.Text := Format('Общее оставшееся время занятия: %d мин %d сек', [Min1, Sec1]);
+
+  // Stop the timer if no time remains
+  if TotalRemainingTime <= 0 then
+    Timer4.Enabled := False;
 end;
 
 procedure TForm12.Timer5Timer(Sender: TObject);
@@ -668,6 +810,13 @@ begin
   Timer_startrising.Enabled := True;
 end;
 
+function TForm12.TimeInSecondsOf(ATime: TTime): Double;
+var
+  Hour, Min, Sec, MSec: Word;
+begin
+  DecodeTime(ATime, Hour, Min, Sec, MSec);
+  Result := Hour * 3600 + Min * 60 + Sec + MSec / 1000.0;
+end;
 
 
 procedure TForm12.Timer2Timer(Sender: TObject);
@@ -681,65 +830,83 @@ begin
     end;
 
   procedure TForm12.Nextvideoload;
-  var
-IniFile: TIniFile;
-inifilename : string;
-apptag : integer;
+var
+  apptag: Integer;
+  ExerciseDuration: Double;
+begin
+  // Stop the stopwatch
+  Stopwatch.Stop;
+
+  // Add elapsed time to cumulative time
+  Playlist[CurrentItemIndex].CumulativeTime := Playlist[CurrentItemIndex].CumulativeTime + Stopwatch.Elapsed.TotalSeconds;
+
+  // Get the appointmentsID for database updates
+  apptag := Playlist[CurrentItemIndex].appointmentsID;
+
+  // Get the exercise duration in seconds
+  ExerciseDuration := TimeInSecondsOf(Playlist[CurrentItemIndex].PlaybackTime);
+
+  // Check if the exercise is completed
+  if Playlist[CurrentItemIndex].CumulativeTime >= ExerciseDuration then
   begin
- MediaPlayer1.Stop;
-  MediaPlayer2.Stop;
-   // Move to the next video
-  apptag:= Playlist[CurrentItemIndex].appointmentsID;
-     FDQuery3.Connection := FDConnection1;
-    FDQuery3.SQL.Text := 'UPDATE appointments A ' +
-                     'SET A.sdelanovden = A.sdelanovden + 1, A.sdelanovsego = A.sdelanovsego + 1, A.lastsession = UTC_TIMESTAMP()' +
-                     'WHERE A.idAppointments = :apptag ';
-    FDQuery3.ParamByName('apptag').AsInteger := apptag; // Replace UserName with the actual user name
-    FDQuery3.ExecSQL;
-  Inc(CurrentItemIndex);
-    // Reset the FirstLoop variable if you've moved to a new video
-  FirstLoop := True;
-  if CurrentItemIndex >= Length(Playlist) then
-    begin
-    CurrentItemIndex := 0;
+    // Mark the exercise as completed
+    CompleteExercise(Playlist[CurrentItemIndex]);
+
+    // Remove the exercise from the playlist
+    RemoveExerciseFromPlaylist(Playlist[CurrentItemIndex]);
+
+    // Update the exercise list display
+    UpdateExerciseList;
+  end
+  else
+  begin
+    // Update cumulative time in the database
+    UpdateCumulativeTimeInDatabase(Playlist[CurrentItemIndex]);
+  end;
+
+  // Reset the stopwatch
+  Stopwatch.Reset;
+
+  // Proceed to the next exercise
+  if CurrentItemIndex >= Length(Playlist) - 1 then
+    CurrentItemIndex := 0
+  else
+    Inc(CurrentItemIndex);
+
+  // Check if there are any exercises left
+  if Length(Playlist) = 0 then
+  begin
+    // All exercises are completed
     MediaPlayer1.Stop;
     MediaPlayer2.Stop;
-    Timer1.Enabled:= False;
+    Timer1.Enabled := False;
     Stopwatch.Stop;
 
+    // Save settings to INI file (e.g., volume)
+    SaveSettingsToIniFile;
 
-  inifilename := TPath.Combine(Path, 'MyApp.ini');
-   try
-   IniFile := TIniFile.Create(inifilename);
-   IniFile.WriteString(INI_SECTION, 'MyVolume', floattostr(tbVolume.Value));
+    ShowMessage('Ты молодец! Занятие окончено!');
+    Timer1.Enabled := False;
+    Timer4.Enabled := False;
+    bPlayClick.Enabled := False;
+    bStopClick.Enabled := False;
+    Application.Terminate;
+  end
+  else
+  begin
+    // Start the next video
+    MediaPlayer1.FileName := GetVideoFilePath(Playlist[CurrentItemIndex].VideoID);
+    MediaPlayer1.Play;
+    MediaPlayer1.Volume := tbVolume.Value;
 
-  finally
-    IniFile.Free;
-   end;
-
-  ShowMessage('Ты молодец! Занятие окончено!');
- timer1.Enabled := false;
- timer4.Enabled := false;
- bplayclick.Enabled:=false;
- bstopclick.Enabled:=false;
- Application.Terminate;
-   end
-else
-begin
-   // Start the next video
-  MediaPlayer1.FileName := GetVideoFilePath(Playlist[CurrentItemIndex].VideoID);
- // MediaPlayer1.Open;
-  MediaPlayer1.Play;
-  //Startrising(Mediaplayer1);
- MediaPlayer1.Volume := tbVolume.Value;
-
-     // Reinitialize tbVideo for the new video
+    // Reinitialize tbVideo for the new exercise
     InitializeVideoTrackBar;
 
-  Stopwatch.reset;
-  Stopwatch.Start;
-end;
+    // Start the stopwatch for the new exercise
+    Stopwatch.Start;
   end;
+end;
+
 
   function TForm12.CalculateTextHeight(const Text: string; const Font: TFont; const Width: Single): Single;
 var
