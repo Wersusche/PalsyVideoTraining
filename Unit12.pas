@@ -45,9 +45,10 @@ type
     Timer_startrising: TTimer;
     Button1: TButton;
     Button2: TButton;
-    ListBoxItem1: TListBoxItem;
     StyleBook1: TStyleBook;
     bSkipClick: TButton;
+    ListBoxGroupHeader1: TListBoxGroupHeader;
+    tbVideo: TTrackBar;
     procedure FormCreate(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
     procedure bPlayClickClick(Sender: TObject);
@@ -83,6 +84,7 @@ type
     function CalculateTextHeight(const Text: string; const Font: TFont; const Width: Single): Single;
     procedure ListTxtFiles;
     procedure Nextvideoload;
+    procedure InitializeVideoTrackBar;
 
 
 
@@ -150,6 +152,22 @@ begin
   end;
 end;
 
+procedure TForm12.InitializeVideoTrackBar;
+var
+  TimeInSeconds: Double;
+  Hour, Min, Sec, MSec: Word;
+begin
+  // Decode the exercise duration
+  DecodeTime(Playlist[CurrentItemIndex].PlaybackTime, Hour, Min, Sec, MSec);
+  TimeInSeconds := Hour * 3600 + Min * 60 + Sec + MSec / 1000;
+
+  // Initialize tbVideo
+  tbVideo.Min := 0;
+  tbVideo.Max := TimeInSeconds;
+  tbVideo.Value := 0;
+  tbVideo.Enabled := False; // Set to True if you want to allow seeking (not recommended here)
+end;
+
 procedure TForm12.bPlayClickClick(Sender: TObject);
 begin
   if bPlayClick.Text = 'Начать упражнение' then
@@ -161,6 +179,9 @@ begin
   //MediaPlayer1.Open;
   MediaPlayer1.Play;
   //startrising(MediaPlayer1);
+      // Initialize tbVideo
+      InitializeVideoTrackBar;
+
   FirstLoop := True;
   except
   on E: Exception do
@@ -212,28 +233,33 @@ begin
 
   // If the current item is the last one, reset to the first item
   if CurrentItemIndex >= Length(Playlist) - 1 then
-    CurrentItemIndex := 0
-  else
-    Inc(CurrentItemIndex);  // Increment only once manually
+    CurrentItemIndex := 0;
+  //else
+    //Inc(CurrentItemIndex);  // Increment only once manually
 
   // Refresh the ListBox1 to reflect the updated playlist
   ListBox1.BeginUpdate;
   try
-    ListBox1.Clear;
+    // Remove all items except the group header
+    while ListBox1.Count > 1 do
+      ListBox1.Items.Delete(1);
+
     for I := 0 to High(Playlist) do
-    begin
+       begin
+      with TListBoxItem.Create(ListBox1) do
+      begin
       DecodeTime(Playlist[I].PlaybackTime, Hour, Min, Sec, MSec);
-      ListBox1.Items.Add(Format('Упражнение: %s, Время: %d мин %d сек', [Playlist[I].Videoname, Min, Sec]));
-      ListBox1.ListItems[ListBox1.Items.Count-1].Tag := Playlist[I].appointmentsID;
+        Parent := ListBox1;
+        Text := Format('Упражнение: %s, Время: %d мин %d сек', [Playlist[I].Videoname, Min, Sec]);
+        Tag := Playlist[I].appointmentsID;
+        WordWrap := True;
+        TextSettings.WordWrap := True;
+        StyleLookup := 'ListBoxItem1Style1';
 
-      // Optionally set custom style and word wrap (based on your original setup)
-      ListBox1.ListItems[ListBox1.Items.Count-1].WordWrap := True;
-      ListBox1.ListItems[ListBox1.Items.Count-1].TextSettings.WordWrap := True;
-      ListBox1.ListItems[ListBox1.Items.Count-1].StyleLookup := 'ListBoxItem1Style1';
-
-      // Adjust height based on text length
-      TextHeight := CalculateTextHeight(ListBox1.ListItems[ListBox1.Items.Count-1].Text, ListBox1.ListItems[ListBox1.Items.Count-1].Font, ListBox1.Width);
-      ListBox1.ListItems[ListBox1.Items.Count-1].Height := TextHeight + 10;  // Add padding
+        // Adjust height based on text length
+        TextHeight := CalculateTextHeight(Text, Font, ListBox1.Width);
+        Height := TextHeight + 10;  // Add padding
+      end;
     end;
   finally
     ListBox1.EndUpdate;
@@ -456,9 +482,17 @@ var
   Hour, Min, Sec, MSec: Word;
   TimeInSeconds: double;
 
+  RemainingTime: Double;
+
 begin
   DecodeTime(Playlist[CurrentItemIndex].PlaybackTime, Hour, Min, Sec, MSec);
   TimeInSeconds := Min * 60 + Sec;
+
+  // Update the trackbar with current playback position
+ tbVideo.Value := Stopwatch.Elapsed.TotalSeconds;
+ // Calculate remaining exercise time
+  RemainingTime := tbVideo.Max - tbVideo.Value;
+  if RemainingTime < 0 then RemainingTime := 0;
 
 //    if Stopwatch.Elapsed.TotalSeconds >= 20  then
 //    begin
@@ -698,6 +732,10 @@ begin
   MediaPlayer1.Play;
   //Startrising(Mediaplayer1);
  MediaPlayer1.Volume := tbVolume.Value;
+
+     // Reinitialize tbVideo for the new video
+    InitializeVideoTrackBar;
+
   Stopwatch.reset;
   Stopwatch.Start;
 end;

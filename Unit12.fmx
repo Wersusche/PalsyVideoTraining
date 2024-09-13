@@ -72,13 +72,7 @@ object Form12: TForm12
       DefaultItemStyles.GroupFooterStyle = ''
       Viewport.Width = 295.000000000000000000
       Viewport.Height = 292.000000000000000000
-      object ListBoxItem1: TListBoxItem
-        TextSettings.WordWrap = True
-        StyledSettings = [Family, Size, Style, FontColor]
-        Size.Width = 295.000000000000000000
-        Size.Height = 25.000000000000000000
-        Size.PlatformDefault = False
-        StyleLookup = 'ListBoxItem1Style1'
+      object ListBoxGroupHeader1: TListBoxGroupHeader
         TabOrder = 0
         Text = #1057#1087#1080#1089#1086#1082' '#1091#1087#1088#1072#1078#1085#1077#1085#1080#1081':'
       end
@@ -176,6 +170,16 @@ object Form12: TForm12
       TabOrder = 28
       Text = #1055#1088#1086#1087#1091#1089#1090#1080#1090#1100' '#1091#1087#1088#1072#1078#1085#1077#1085#1080#1077
       OnClick = bSkipClickClick
+    end
+    object tbVideo: TTrackBar
+      CanParentFocus = True
+      Orientation = Horizontal
+      Position.X = 8.000000000000000000
+      Position.Y = -40.000000000000000000
+      Size.Width = 781.000000000000000000
+      Size.Height = 19.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 29
     end
   end
   object tbVolume: TTrackBar
