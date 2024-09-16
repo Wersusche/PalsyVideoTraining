@@ -286,6 +286,12 @@
             <Form>LoginForm</Form>
             <FormType>fmx</FormType>
         </DCCReference>
+        <DCCReference Include="ClientClassesUnit2.pas"/>
+        <DCCReference Include="ClientModuleUnit2.pas">
+            <Form>ClientModule2</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TDataModule</DesignClass>
+        </DCCReference>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
@@ -2471,6 +2477,10 @@
                 <Platform value="Win32">True</Platform>
                 <Platform value="Win64">True</Platform>
             </Platforms>
+            <DataSnapProxyLookup>
+                <ClientClassesUnit1>{1AF2B515-28D1-4E81-B2A9-E98BC6F78BA8}</ClientClassesUnit1>
+                <ClientClassesUnit2>{AF692571-C59E-4D67-924A-E5D6ABAA7E5B}</ClientClassesUnit2>
+            </DataSnapProxyLookup>
         </BorlandProject>
         <ProjectFileVersion>12</ProjectFileVersion>
     </ProjectExtensions>

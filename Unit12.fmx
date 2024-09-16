@@ -109,6 +109,13 @@ object Form12: TForm12
         Visible = False
         OnClick = Button2Click
       end
+      object Button4: TButton
+        Position.X = 128.000000000000000000
+        Position.Y = 120.000000000000000000
+        TabOrder = 27
+        Text = 'Button4'
+        OnClick = Button4Click
+      end
     end
   end
   object Layout1: TLayout
@@ -494,5 +501,15 @@ object Form12: TForm12
     Connection = FDConnection1
     Left = 488
     Top = 208
+  end
+  object DSRestConnection1: TDSRestConnection
+    Host = 'localhost'
+    Port = 8080
+    Left = 733
+    Top = 293
+  end
+  object DSProviderConnection1: TDSProviderConnection
+    Left = 712
+    Top = 368
   end
 end

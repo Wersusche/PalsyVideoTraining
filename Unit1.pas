@@ -13,7 +13,7 @@ uses
   FireDAC.Comp.Client, System.Hash, System.IniFiles, System.IOUtils,
   Data.SqlExpr, Datasnap.DBClient, Datasnap.DSConnect, Data.DBXCommon, Data.DBXDataSnap, Data.DBXJSON, Datasnap.DSProxy,
   Data.DbxHTTPLayer, REST.Types, REST.Client, Data.Bind.Components,
-  Data.Bind.ObjectScope, Datasnap.DSClientRest;
+  Data.Bind.ObjectScope, Datasnap.DSClientRest, ClientModuleUnit2;
 
 type
   TLoginForm = class(TForm)
@@ -25,19 +25,21 @@ type
     FDConnection1: TFDConnection;
     FDQuery1: TFDQuery;
     FDPhysMySQLDriverLink1: TFDPhysMySQLDriverLink;
+    DSRestConnection1: TDSRestConnection;
+    Button2: TButton;
     procedure Button1Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure Button3Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
   private
     { Private declarations }
         Path : string;
 
       public
     { Public declarations }
-         Pusername : string;
+    Pusername : string;
      function ValidateCredentials(const Username, Password: string): Boolean;
-
-      end;
+     end;
 
   const
   INI_FILE = 'MyApp.ini';
@@ -88,7 +90,33 @@ begin
 
  end;
 
+function TLoginForm.ValidateCredentials(const Username, Password: string): Boolean;
+begin
+  try
+    // Call the server method
+    Result := ClientModule2.ServerMethods1Client.ValidateCredentials(Username, Password);
+  except
+    on E: Exception do
+    begin
+      ShowMessage('Error communicating with server: ' + E.Message);
+      Result := False;
+    end;
+  end;
+end;
 
+procedure TLoginForm.Button2Click(Sender: TObject);
+var
+  Msg: string;
+begin
+  try
+    Msg := ClientModule2.ServerMethods1Client.GetMessage;
+    ShowMessage(Msg);
+  except
+    on E: Exception do
+      ShowMessage('Error: ' + E.Message);
+  end;
+
+end;
 
 procedure TLoginForm.Button3Click(Sender: TObject);
 begin
@@ -153,34 +181,34 @@ end;
   end;
 
 
-function TLoginForm.ValidateCredentials(const Username, Password: string): Boolean;
-var
- hashedPassword, nothashedPassword: string;
- // IdMD5: TIdHashMessageDigest5;
-begin
-  Result := False;
-  hashedPassword := THashMD5.GetHashString(Password);
-  nothashedPassword:= Password;
-
-    try
-    LoginForm.FDQuery1.Connection := LoginForm.FDConnection1;
-    LoginForm.FDQuery1.SQL.Text := 'SELECT COUNT(*) FROM patients WHERE Username = :Username AND Password = :Password';
-    LoginForm.FDQuery1.ParamByName('Username').AsString := Username;
-    LoginForm.FDQuery1.ParamByName('Password').AsString := nothashedPassword;
-    LoginForm.FDQuery1.Open;
-
-    // Check result
-    if LoginForm.FDQuery1.Fields[0].AsInteger > 0 then
-     begin
-      Result := true;
-      end
-
-  finally
-  //FDQuery1.Free;
- // FDConnection1.Free;
-
- end;
-   end;
+//function TLoginForm.ValidateCredentials(const Username, Password: string): Boolean;
+//var
+// hashedPassword, nothashedPassword: string;
+// // IdMD5: TIdHashMessageDigest5;
+//begin
+//  Result := False;
+//  hashedPassword := THashMD5.GetHashString(Password);
+//  nothashedPassword:= Password;
+//
+//    try
+//    LoginForm.FDQuery1.Connection := LoginForm.FDConnection1;
+//    LoginForm.FDQuery1.SQL.Text := 'SELECT COUNT(*) FROM patients WHERE Username = :Username AND Password = :Password';
+//    LoginForm.FDQuery1.ParamByName('Username').AsString := Username;
+//    LoginForm.FDQuery1.ParamByName('Password').AsString := nothashedPassword;
+//    LoginForm.FDQuery1.Open;
+//
+//    // Check result
+//    if LoginForm.FDQuery1.Fields[0].AsInteger > 0 then
+//     begin
+//      Result := true;
+//      end
+//
+//  finally
+//  //FDQuery1.Free;
+// // FDConnection1.Free;
+//
+// end;
+//   end;
 
 
 

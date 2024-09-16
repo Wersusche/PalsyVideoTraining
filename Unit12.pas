@@ -13,7 +13,8 @@ uses
   Data.DB, FireDAC.Comp.Client, FMX.Edit, FireDAC.Stan.Param, FireDAC.DatS,
   FireDAC.DApt.Intf, FireDAC.DApt, FireDAC.Comp.DataSet, System.IOUtils,
   FireDAC.Comp.UI, FireDAC.Phys.MySQL, FireDAC.Phys.MySQLDef, System.Diagnostics, System.IniFiles,
-   FMX.TextLayout;
+   FMX.TextLayout, Datasnap.DSClientRest, ClientModuleUnit1, Datasnap.DBClient,
+  Datasnap.DSConnect;
 
    type
   TPlaylistItem = record
@@ -58,6 +59,9 @@ type
     bSkipClick: TButton;
     ListBoxGroupHeader1: TListBoxGroupHeader;
     tbVideo: TTrackBar;
+    Button4: TButton;
+    DSRestConnection1: TDSRestConnection;
+    DSProviderConnection1: TDSProviderConnection;
     procedure FormCreate(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
     procedure bPlayClickClick(Sender: TObject);
@@ -75,6 +79,7 @@ type
     procedure Timer2Timer(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure bSkipClickClick(Sender: TObject);
+    procedure Button4Click(Sender: TObject);
 
   private
     { Private declarations }
@@ -416,6 +421,19 @@ end;
 procedure TForm12.Button3Click(Sender: TObject);
 begin
 Edit1.Text:= GenerateRandomPassword;
+end;
+
+procedure TForm12.Button4Click(Sender: TObject);
+var
+  Msg: string;
+begin
+  try
+    Msg := ClientModule1.ServerMethods1Client.GetMessage;
+    ShowMessage(Msg);
+  except
+    on E: Exception do
+      ShowMessage('Error: ' + E.Message);
+  end;
 end;
 
 procedure TForm12.FormClose(Sender: TObject; var Action: TCloseAction);

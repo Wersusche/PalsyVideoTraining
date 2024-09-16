@@ -54,6 +54,13 @@ object LoginForm: TLoginForm
       OnClick = Button1Click
     end
   end
+  object Button2: TButton
+    Position.X = 536.000000000000000000
+    Position.Y = 464.000000000000000000
+    TabOrder = 5
+    Text = 'Button2'
+    OnClick = Button2Click
+  end
   object FDConnection1: TFDConnection
     ConnectionName = 'localhost'
     Params.Strings = (
@@ -69,5 +76,12 @@ object LoginForm: TLoginForm
   object FDPhysMySQLDriverLink1: TFDPhysMySQLDriverLink
     Left = 528
     Top = 184
+  end
+  object DSRestConnection1: TDSRestConnection
+    Host = 'localhost'
+    Port = 8080
+    LoginPrompt = False
+    Left = 768
+    Top = 120
   end
 end

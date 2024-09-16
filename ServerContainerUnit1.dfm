@@ -5,30 +5,11 @@ object ServerContainer1: TServerContainer1
     Left = 96
     Top = 11
   end
-  object DSTCPServerTransport1: TDSTCPServerTransport
-    Server = DSServer1
-    Filters = <>
-    Left = 96
-    Top = 73
-  end
   object DSHTTPService1: TDSHTTPService
     HttpPort = 8080
     Server = DSServer1
     Filters = <>
     Left = 96
-    Top = 135
-  end
-  object DSCertFiles1: TDSCertFiles
-    OnGetPEMFileSBPasskey = DSCertFiles1GetPEMFileSBPasskey
-    Left = 200
-    Top = 197
-  end
-  object DSHTTPService2: TDSHTTPService
-    HttpPort = 8081
-    CertFiles = DSCertFiles1
-    Server = DSServer1
-    Filters = <>
-    Left = 200
     Top = 135
   end
   object DSServerClass1: TDSServerClass

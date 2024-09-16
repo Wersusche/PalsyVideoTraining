@@ -1,14 +1,22 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <BorlandProject>
 	<Transactions>
+    <Transaction>1899.12.30 00:00:00.000.248,=C:\Users\Cheptsov VV\Downloads\vecteezy_video-countdown-counter-with-rounded-corners-for-10-to-1-on_5965601_897.mp4</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.723,=C:\Users\Cheptsov VV\Documents\Embarcadero\Studio\Projects\Palsy\Unit2.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.013,=C:\Users\Cheptsov VV\Documents\Embarcadero\Studio\Projects\Palsy\Unit2.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.478,=C:\Users\Cheptsov VV\Documents\Embarcadero\Studio\Projects\Palsy\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.956,=C:\Users\Wersus\Downloads\libmysql.dll\LIBMYSQL.DLL</Transaction>
     <Transaction>1899.12.30 00:00:00.000.614,C:\Users\Wersus\Downloads\libmysql.dll\LIBMYSQL.DLL=</Transaction>
     <Transaction>1899.12.30 00:00:00.000.738,=C:\Users\Cheptsov VV\Documents\Embarcadero\Studio\Projects\Unit12.pas</Transaction>
     <Transaction>1899.12.30 00:00:00.000.576,C:\Users\Cheptsov VV\Documents\Embarcadero\Studio\Projects\Project10.dproj=C:\Users\Cheptsov VV\Documents\Embarcadero\Studio\Projects\Project10.dproj</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.478,=C:\Users\Cheptsov VV\Documents\Embarcadero\Studio\Projects\Palsy\Unit1.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.013,=C:\Users\Cheptsov VV\Documents\Embarcadero\Studio\Projects\Palsy\Unit2.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.723,=C:\Users\Cheptsov VV\Documents\Embarcadero\Studio\Projects\Palsy\Unit2.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.248,=C:\Users\Cheptsov VV\Downloads\vecteezy_video-countdown-counter-with-rounded-corners-for-10-to-1-on_5965601_897.mp4</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.956,=C:\Users\Wersus\Downloads\libmysql.dll\LIBMYSQL.DLL</Transaction>
+    <Transaction>2024.09.16 16:16:50.493,=C:\Users\Cheptsov VV\Documents\Embarcadero\Studio\Projects\pals2\ClientClassesUnit1.pas</Transaction>
+    <Transaction>2024.09.16 16:16:50.582,=C:\Users\Cheptsov VV\Documents\Embarcadero\Studio\Projects\pals2\ClientModuleUnit1.pas</Transaction>
+    <Transaction>2024.09.16 18:14:41.421,C:\Users\Cheptsov VV\Documents\Embarcadero\Studio\Projects\pals2\ClientModuleUnit1.pas=</Transaction>
+    <Transaction>2024.09.16 18:15:01.262,=C:\Users\Cheptsov VV\Documents\Embarcadero\Studio\Projects\pals2\ClientClassesUnit2.pas</Transaction>
+    <Transaction>2024.09.16 18:15:01.352,=C:\Users\Cheptsov VV\Documents\Embarcadero\Studio\Projects\pals2\ClientModuleUnit2.pas</Transaction>
+    <Transaction>2024.09.16 18:15:17.194,C:\Users\Cheptsov VV\Documents\Embarcadero\Studio\Projects\pals2\ClientClassesUnit1.pas=</Transaction>
+    <Transaction>2024.09.16 18:15:29.819,=C:\Users\Cheptsov VV\Documents\Embarcadero\Studio\Projects\pals2\ClientClassesUnit2.pas</Transaction>
+    <Transaction>2024.09.16 18:15:29.882,=C:\Users\Cheptsov VV\Documents\Embarcadero\Studio\Projects\pals2\ClientModuleUnit2.pas</Transaction>
   </Transactions>
 	<ActiveMobileDevice>
 		<NoProfile Android64="" Android=""/>
