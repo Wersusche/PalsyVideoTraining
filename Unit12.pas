@@ -895,6 +895,9 @@ begin
   else
   begin
     // Start the next video
+
+    MediaPlayer2.Stop;
+    IsMP3Loaded := False; // Reset for the next exercise
     MediaPlayer1.FileName := GetVideoFilePath(Playlist[CurrentItemIndex].VideoID);
     MediaPlayer1.Play;
     MediaPlayer1.Volume := tbVolume.Value;
