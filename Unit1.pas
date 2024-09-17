@@ -22,14 +22,10 @@ type
     UsernameEdit: TEdit;
     PasswordEdit: TEdit;
     Button1: TButton;
-    FDConnection1: TFDConnection;
-    FDQuery1: TFDQuery;
-    FDPhysMySQLDriverLink1: TFDPhysMySQLDriverLink;
     DSRestConnection1: TDSRestConnection;
     Button2: TButton;
     procedure Button1Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
-    procedure Button3Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
   private
     { Private declarations }
@@ -118,26 +114,6 @@ begin
 
 end;
 
-procedure TLoginForm.Button3Click(Sender: TObject);
-begin
-    FDConnection1.DriverName := 'MySQL';
-    FDConnection1.Params.Values['Database'] := 'palsy_db';
-    FDConnection1.Params.Values['User_Name'] := 'wersusche';
-    FDConnection1.Params.Values['Password'] := 'tyjer1987';
-    FDConnection1.Params.Values['Server'] := 'db4free.net';
-    FDConnection1.Connected := True;
-
-    FDQuery1.Connection := FDConnection1;
-    FDQuery1.SQL.Text := 'SELECT P.idPatients, A.idvideos, A.dlitelnost, V.filename ' +
-                  'FROM patients P ' +
-                  'INNER JOIN appointments A ON P.idPatients = A.idPatients ' +
-                  'INNER JOIN videos V ON A.idvideos = V.idvideos ' +
-                  'WHERE P.Username = :UserName';
-      FDQuery1.ParamByName('UserName').AsString := 'Boris'; // Replace UserName with the actual user name
-      FDQuery1.Open;
-  ShowMessage(FDQuery1.FieldByName('filename').AsString);
-
-end;
 
 procedure TLoginForm.FormCreate(Sender: TObject);
 var
@@ -146,14 +122,6 @@ var
   LastValuelogin, LastValuepass: string;
   inifilename : string;
 begin
-    // Connection settings
-    FDConnection1.DriverName := 'MySQL';
-    FDConnection1.Params.Values['Database'] := 'palsy_db';
-    FDConnection1.Params.Values['User_Name'] := 'wersusche';
-    FDConnection1.Params.Values['Password'] := 'tyjer1987';
-    FDConnection1.Params.Values['Server'] := 'db4free.net';
-    FDConnection1.Connected := True;
-
 
 
 Case TOSVersion.Platform of

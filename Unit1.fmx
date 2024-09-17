@@ -61,22 +61,6 @@ object LoginForm: TLoginForm
     Text = 'Button2'
     OnClick = Button2Click
   end
-  object FDConnection1: TFDConnection
-    ConnectionName = 'localhost'
-    Params.Strings = (
-      'DriverID=MySQL')
-    LoginPrompt = False
-    Left = 528
-    Top = 40
-  end
-  object FDQuery1: TFDQuery
-    Left = 520
-    Top = 112
-  end
-  object FDPhysMySQLDriverLink1: TFDPhysMySQLDriverLink
-    Left = 528
-    Top = 184
-  end
   object DSRestConnection1: TDSRestConnection
     Host = 'localhost'
     Port = 8080
