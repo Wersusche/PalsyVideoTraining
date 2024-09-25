@@ -13,8 +13,8 @@ uses
   Data.DB, FireDAC.Comp.Client, FMX.Edit, FireDAC.Stan.Param, FireDAC.DatS,
   FireDAC.DApt.Intf, FireDAC.DApt, FireDAC.Comp.DataSet, System.IOUtils,
   FireDAC.Comp.UI, FireDAC.Phys.MySQL, FireDAC.Phys.MySQLDef, System.Diagnostics, System.IniFiles,
-   FMX.TextLayout, Datasnap.DSClientRest, ClientModuleUnit1, Datasnap.DBClient,
-  Datasnap.DSConnect;
+  FMX.TextLayout, Datasnap.DSClientRest, ClientModuleUnit3, Datasnap.DBClient,
+  Datasnap.DSConnect, System.JSON;
 
    type
   TPlaylistItem = record
@@ -428,7 +428,7 @@ var
   Msg: string;
 begin
   try
-    Msg := ClientModule1.ServerMethods1Client.GetMessage;
+    Msg := ClientModule3.ServerMethods1Client.GetMessage;
     ShowMessage(Msg);
   except
     on E: Exception do
@@ -464,144 +464,146 @@ end;
 
 procedure TForm12.FormCreate(Sender: TObject);
 var
+  PlaylistData: TJSONArray;
+  JSONObject: TJSONObject;
+  I: Integer;
   Item: TPlaylistItem;
-  DateQuery: TFDQuery;
-  DateTimesessionFromDB, NowfromDB: TDateTime;
-  HoursDifference : Integer;
   Hour, Min, Sec, MSec: Word;
-   IniFile: TIniFile;
-  LastVolume: extended;
   TextHeight: Single;
-  inifilename : string;
+  IniFile: TIniFile;
+  LastVolume: Extended;
+  inifilename: string;
+  Response: string;
+  DateQueryResult: Boolean;
 begin
-
-Case TOSVersion.Platform of
+       // Initialize variables
+  IsMP3Loaded := False;
+  CurrentVolume := tbVolume.Value;
+  Stopwatch := TStopwatch.Create;
+  Fullexercisetime := 0;
+  Pusername := LoginForm.Pusername; // Retrieve username from the login form
+//
+  // Set the path for the INI file based on the platform
+  case TOSVersion.Platform of
     TOSVersion.TPlatform.pfWindows:
-  Path := ExtractFilePath(ParamStr(0));
- TOSVersion.TPlatform.pfiOS, TOSVersion.TPlatform.pfAndroid:
-    Path := TPath.Combine(TPath.GetDocumentsPath, 'MyApp.ini');
-  TOSVersion.TPlatform.pfMacOS:
-    Path := TPath.Combine(TPath.GetFullPath('../Resources/StartUp'), 'MyApp.ini');
-  TOSVersion.TPlatform.pfWinRT, TOSVersion.TPlatform.pfLinux:
-    raise Exception.Create('Unexpected platform');
-end;
+      Path := ExtractFilePath(ParamStr(0));
+    TOSVersion.TPlatform.pfiOS, TOSVersion.TPlatform.pfAndroid:
+      Path := TPath.GetDocumentsPath;
+    TOSVersion.TPlatform.pfMacOS:
+      Path := TPath.GetFullPath('../Resources/StartUp');
+    else
+      raise Exception.Create('Unexpected platform');
+  end;
 
- inifilename := TPath.Combine(Path, 'MyApp.ini');
+inifilename := TPath.Combine(Path, 'MyApp.ini');
 
+  // Load user settings from the INI file
   try
-   IniFile := TIniFile.Create(inifilename);
+    IniFile := TIniFile.Create(inifilename);
     try
-    LastVolume := strtofloat(IniFile.ReadString(INI_SECTION, 'MyVolume', ''));
-    tbVolume.value := LastVolume;
+      LastVolume := StrToFloat(IniFile.ReadString(INI_SECTION, 'MyVolume', '1'));
+      tbVolume.Value := LastVolume;
     except
-        // If conversion fails, set to default value 1
-        tbVolume.Value := 1;
+      // If conversion fails, set to default value 1
+      tbVolume.Value := 1;
     end;
-
-   finally
+  finally
     IniFile.Free;
   end;
 
+   // Retrieve the playlist from the server
+  try
+    // Call the server method to get the playlist as a JSON array
+    PlaylistData := ClientModule3.ServerMethods1Client.GetPlaylist(Pusername);
 
-IsMP3Loaded := False;
-CurrentVolume := tbVolume.Value;
-Pusername :=LoginForm.Pusername;
-Stopwatch := TStopwatch.Create;
-Fullexercisetime := 0;
-    // Connection settings
-    FDConnection1.DriverName := 'MySQL';
-    FDConnection1.Params.Values['Database'] := 'palsy_db';
-    FDConnection1.Params.Values['User_Name'] := 'wersusche';
-    FDConnection1.Params.Values['Password'] := 'tyjer1987';
-    FDConnection1.Params.Values['Server'] := 'db4free.net';
-    FDConnection1.Params.Values['CharacterSet'] := 'utf8mb4'; // or 'utf8mb4';
-    FDConnection1.Connected := True;
-    FDQuery1.Connection := FDConnection1;
-
-FDQuery1.SQL.Text := 'SELECT P.idPatients, A.idAppointments, A.idvideos, A.dlitelnost, A.Lastsession, V.filename, V.video_name, NOW() AS CurrentTime, ' +
-                     'TIMESTAMPDIFF(HOUR, A.Lastsession, NOW()) AS HoursDifference, A.CumulativeTimeSpent ' +
-                     'FROM patients P INNER JOIN ' +
-                     'appointments A ON P.idPatients = A.idPatients INNER JOIN videos V ON A.idvideos = V.idvideos ' +
-                     'WHERE P.Username = :UserName AND CURDATE() BETWEEN A.Starttime AND A.Endtime AND A.sdelanovden < A.kolvden';
-                          //'HAVING HoursDifference > 2';
-
-      FDQuery1.ParamByName('UserName').AsString := Pusername; // Replace UserName with the actual user name
-      FDQuery1.Open;
-       // Build the playlist
-
-if FDQuery1.RecordCount > 0 then
-begin
-  SetLength(Playlist, 0);  // Initialize the playlist size
-
-  while not FDQuery1.Eof do
-  begin
-    HoursDifference := FDQuery1.FieldByName('HoursDifference').AsInteger;
-
-    if HoursDifference >= 0 then
+    if (PlaylistData = nil) or (PlaylistData.Count = 0) then
     begin
-      SetLength(Playlist, Length(Playlist) + 1);
-      Playlist[High(Playlist)].VideoID := FDQuery1.FieldByName('filename').AsString;
-      Playlist[High(Playlist)].PlaybackTime := FDQuery1.FieldByName('dlitelnost').AsDateTime;
-      Playlist[High(Playlist)].Videoname := FDQuery1.FieldByName('video_name').AsString;
-      Playlist[High(Playlist)].appointmentsID := FDQuery1.FieldByName('idAppointments').AsInteger;
-      Playlist[High(Playlist)].CumulativeTime := FDQuery1.FieldByName('CumulativeTimeSpent').AsFloat;
+      // If no exercises are returned, check if the user has scheduled exercises
+      DateQueryResult := ClientModule3.ServerMethods1Client.CheckForScheduledExercises(Pusername);
+      if DateQueryResult then
+      begin
+        ShowMessage('Кажется ты сегодня сделал все нужные упражнения! Возвращайся завтра!');
+      end
+      else
+      begin
+        ShowMessage('Кажется у тебя сегодня не запланировано упражнений! Если считаешь, что нужно позаниматься - попробуй позвонить своему врачу!');
+      end;
+      Application.Terminate;
+      Exit;
+    end;
+
+    // Initialize the playlist array
+    SetLength(Playlist, PlaylistData.Count);
+
+    // Populate the playlist array from the JSON data
+    for I := 0 to PlaylistData.Count - 1 do
+    begin
+      JSONObject := PlaylistData.Items[I] as TJSONObject;
+
+      Item.VideoID := JSONObject.GetValue('filename').Value;
+      Item.Videoname := JSONObject.GetValue('video_name').Value;
+      Item.appointmentsID := StrToInt(JSONObject.GetValue('idAppointments').Value);
+      Item.CumulativeTime := JSONObject.GetValue('CumulativeTimeSpent').AsType<Double>;
+
+      // Parse the playback time (dlitelnost)
+      try
+        // Assuming 'dlitelnost' is in 'HH:MM:SS' format
+        Item.PlaybackTime := StrToTime(JSONObject.GetValue('dlitelnost').Value);
+      except
+        on E: Exception do
+        begin
+          ShowMessage('Error parsing playback time: ' + E.Message);
+          Continue; // Skip this item if there's an error
+        end;
       end;
 
-    FDQuery1.Next;
-  end;
+      Playlist[I] := Item;
 
-  if Length(Playlist) > 0 then
-  begin
-    for var I := 0 to High(Playlist) do
-    begin
-      Item := Playlist[I];
+      // Calculate total exercise time remaining
       Fullexercisetime := Fullexercisetime + (TimeInSecondsOf(Item.PlaybackTime) - Item.CumulativeTime);
+
+      // Update the ListBox with the exercise details
       DecodeTime(Item.PlaybackTime, Hour, Min, Sec, MSec);
       ListBox1.Items.Add(Format('Упражнение: %s, Время: %d мин %d сек', [Item.Videoname, Min, Sec]));
-      ListBox1.ListItems[ListBox1.Items.Count-1].Tag := Item.appointmentsID;
-      //ListBox1.ListItems[ListBox1.Items.Count-1].Height := 113;
-      ListBox1.ListItems[ListBox1.Items.Count-1].WordWrap:= true;
-      ListBox1.ListItems[ListBox1.Items.Count-1].TextSettings.WordWrap:= true;
-      ListBox1.ListItems[ListBox1.Items.Count-1].StyleLookup := 'ListBoxItem1Style1';
-      TextHeight := CalculateTextHeight(ListBox1.ListItems[ListBox1.Items.Count-1].Text, ListBox1.ListItems[ListBox1.Items.Count-1].Font, ListBox1.Width);
-      ListBox1.ListItems[ListBox1.Items.Count-1].Height := TextHeight + 10; // Add some padding
+      ListBox1.ListItems[ListBox1.Items.Count - 1].Tag := Item.appointmentsID;
+      ListBox1.ListItems[ListBox1.Items.Count - 1].WordWrap := True;
+      ListBox1.ListItems[ListBox1.Items.Count - 1].TextSettings.WordWrap := True;
+      ListBox1.ListItems[ListBox1.Items.Count - 1].StyleLookup := 'ListBoxItem1Style1';
+
+      // Adjust the height based on text length
+      TextHeight := CalculateTextHeight(
+        ListBox1.ListItems[ListBox1.Items.Count - 1].Text,
+        ListBox1.ListItems[ListBox1.Items.Count - 1].Font,
+        ListBox1.Width
+      );
+      ListBox1.ListItems[ListBox1.Items.Count - 1].Height := TextHeight + 10; // Add padding
     end;
-    FDQuery1.Free;
-    bplayclick.Enabled:=true;
-    bstopclick.Enabled:=true;
-    DecodeTime(Fullexercisetime, Hour1, Min1, Sec1, MSec1);
-    label2.Text := Format('Общее оставшееся время занятия: %d мин %d сек', [Min1, Sec1]);
-  end
-  else
-  begin
-    ShowMessage('Кажется прошло меньше 2 часов между занятиями! Жду тебя чуть позже!');
-    Application.Terminate;
-  end;
+
+    // Enable the play and stop buttons if there are exercises
+    if Length(Playlist) > 0 then
+    begin
+      bPlayClick.Enabled := True;
+      bStopClick.Enabled := True;
+      // Display the total remaining exercise time
+      DecodeTime(Fullexercisetime / SecsPerDay, Hour, Min, Sec, MSec);
+      Label2.Text := Format('Общее оставшееся время занятия: %d мин %d сек', [Min, Sec]);
     end
     else
-   begin
-  DateQuery := TFDQuery.Create(nil);
-    DateQuery.Connection := FDConnection1;
-       DateQuery.SQL.Text := 'SELECT P.idPatients, A.idvideos, A.dlitelnost, V.filename, V.video_name ' +
-                  'FROM patients P ' +
-                  'INNER JOIN appointments A ON P.idPatients = A.idPatients ' +
-                  'INNER JOIN videos V ON A.idvideos = V.idvideos ' +
-                  'WHERE P.Username = :UserName AND CURDATE() BETWEEN A.Starttime AND A.Endtime';
-      DateQuery.ParamByName('UserName').AsString := Pusername; // Replace UserName with the actual user name
-      DateQuery.Open;
-            
-      if DateQuery.IsEmpty then
-      begin
-   ShowMessage('Кажется у тебя сегодня не запланировано упражнений! Если считаешь, что нужно позаниматься - попробуй позвонить своему врачу!');
-   Application.Terminate;
-      end
-     else
-     begin
-   ShowMessage('Кажется ты сегодня сделал все нужные упражнения! Возвращайся завтра!');
-   Application.Terminate;
-     end;
+    begin
+      ShowMessage('Нет доступных упражнений.');
+      Application.Terminate;
     end;
+
+  except
+    on E: Exception do
+    begin
+      ShowMessage('Ошибка при получении списка упражнений: ' + E.Message);
+      Application.Terminate;
+    end;
+  end;
 end;
+
+
 
 
 procedure TForm12.FormDestroy(Sender: TObject);

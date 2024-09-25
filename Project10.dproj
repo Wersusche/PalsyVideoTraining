@@ -286,9 +286,9 @@
             <Form>LoginForm</Form>
             <FormType>fmx</FormType>
         </DCCReference>
-        <DCCReference Include="ClientClassesUnit2.pas"/>
-        <DCCReference Include="ClientModuleUnit2.pas">
-            <Form>ClientModule2</Form>
+        <DCCReference Include="ClientClassesUnit3.pas"/>
+        <DCCReference Include="ClientModuleUnit3.pas">
+            <Form>ClientModule3</Form>
             <FormType>dfm</FormType>
             <DesignClass>TDataModule</DesignClass>
         </DCCReference>
@@ -2479,7 +2479,7 @@
             </Platforms>
             <DataSnapProxyLookup>
                 <ClientClassesUnit1>{1AF2B515-28D1-4E81-B2A9-E98BC6F78BA8}</ClientClassesUnit1>
-                <ClientClassesUnit2>{AF692571-C59E-4D67-924A-E5D6ABAA7E5B}</ClientClassesUnit2>
+                <ClientClassesUnit3>{8E1C3F8A-4087-4C99-98EB-E739B60AF774}</ClientClassesUnit3>
             </DataSnapProxyLookup>
         </BorlandProject>
         <ProjectFileVersion>12</ProjectFileVersion>

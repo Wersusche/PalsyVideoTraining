@@ -13,7 +13,7 @@ uses
   FireDAC.Comp.Client, System.Hash, System.IniFiles, System.IOUtils,
   Data.SqlExpr, Datasnap.DBClient, Datasnap.DSConnect, Data.DBXCommon, Data.DBXDataSnap, Data.DBXJSON, Datasnap.DSProxy,
   Data.DbxHTTPLayer, REST.Types, REST.Client, Data.Bind.Components,
-  Data.Bind.ObjectScope, Datasnap.DSClientRest, ClientModuleUnit2;
+  Data.Bind.ObjectScope, Datasnap.DSClientRest, ClientModuleUnit3;
 
 type
   TLoginForm = class(TForm)
@@ -90,7 +90,7 @@ function TLoginForm.ValidateCredentials(const Username, Password: string): Boole
 begin
   try
     // Call the server method
-    Result := ClientModule2.ServerMethods1Client.ValidateCredentials(Username, Password);
+    Result := ClientModule3.ServerMethods1Client.ValidateCredentials(Username, Password);
   except
     on E: Exception do
     begin
@@ -105,7 +105,7 @@ var
   Msg: string;
 begin
   try
-    Msg := ClientModule2.ServerMethods1Client.GetMessage;
+    Msg := ClientModule3.ServerMethods1Client.GetMessage;
     ShowMessage(Msg);
   except
     on E: Exception do

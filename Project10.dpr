@@ -7,8 +7,8 @@ uses
   FMX.Forms,
   Unit12 in 'Unit12.pas' {Form12},
   Unit1 in 'Unit1.pas' {LoginForm},
-  ClientClassesUnit2 in 'ClientClassesUnit2.pas',
-  ClientModuleUnit2 in 'ClientModuleUnit2.pas' {ClientModule2: TDataModule};
+  ClientClassesUnit3 in 'ClientClassesUnit3.pas',
+  ClientModuleUnit3 in 'ClientModuleUnit3.pas' {ClientModule3: TDataModule};
 
 {$R *.res}
 
@@ -16,6 +16,6 @@ begin
   Application.Initialize;
   Application.FormFactor.Orientations := [TFormOrientation.Landscape];
   Application.CreateForm(TLoginForm, LoginForm);
-  Application.CreateForm(TClientModule2, ClientModule2);
+  Application.CreateForm(TClientModule3, ClientModule3);
   Application.Run;
 end.
