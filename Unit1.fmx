@@ -9,60 +9,76 @@ object LoginForm: TLoginForm
   FormFactor.Devices = [Desktop]
   OnCreate = FormCreate
   DesignerMasterStyle = 0
-  object Label1: TLabel
-    Position.X = 439.000000000000000000
-    Position.Y = 274.000000000000000000
-    Size.Width = 71.000000000000000000
-    Size.Height = 28.000000000000000000
+  object CenterLayout: TLayout
+    Align = Client
+    Size.Width = 1078.000000000000000000
+    Size.Height = 634.000000000000000000
     Size.PlatformDefault = False
-    Text = #1051#1086#1075#1080#1085':'
-    TabOrder = 0
-    object UsernameEdit: TEdit
-      Touch.InteractiveGestures = [LongTap, DoubleTap]
-      TabOrder = 2
-      Text = 'Boris'
-      Position.X = 120.000000000000000000
-      Position.Y = 3.000000000000000000
-      Size.Width = 145.000000000000000000
+    TabOrder = 5
+    object Label1: TLabel
+      Align = Top
+      Margins.Bottom = 5.000000000000000000
+      Size.Width = 1078.000000000000000000
+      Size.Height = 28.000000000000000000
+      Size.PlatformDefault = False
+      Text = #1051#1086#1075#1080#1085':'
+      TabOrder = 0
+    end
+    object Button1: TButton
+      Align = Bottom
+      Position.Y = 590.000000000000000000
+      Size.Width = 1078.000000000000000000
       Size.Height = 22.000000000000000000
       Size.PlatformDefault = False
+      TabOrder = 6
+      Text = #1042#1086#1081#1090#1080
+      OnClick = Button1Click
     end
     object Label2: TLabel
-      Position.X = -1.000000000000000000
-      Position.Y = 43.000000000000000000
-      Size.Width = 90.000000000000000000
-      Size.Height = 17.000000000000000000
+      Align = Top
+      Margins.Bottom = 5.000000000000000000
+      Position.Y = 109.000000000000000000
+      Size.Width = 1078.000000000000000000
+      Size.Height = 28.000000000000000000
       Size.PlatformDefault = False
       Text = #1055#1072#1088#1086#1083#1100':'
       TabOrder = 1
     end
     object PasswordEdit: TEdit
       Touch.InteractiveGestures = [LongTap, DoubleTap]
-      TabOrder = 3
+      Align = Top
+      TabOrder = 4
       Text = '123456'
-      Position.X = 119.000000000000000000
-      Position.Y = 46.000000000000000000
-      Size.Width = 145.000000000000000000
-      Size.Height = 22.000000000000000000
+      Position.Y = 33.000000000000000000
+      Margins.Bottom = 10.000000000000000000
+      Size.Width = 1078.000000000000000000
+      Size.Height = 28.000000000000000000
       Size.PlatformDefault = False
     end
-    object Button1: TButton
-      Position.X = 80.000000000000000000
-      Position.Y = 86.000000000000000000
-      TabOrder = 4
-      Text = #1042#1086#1081#1090#1080
-      OnClick = Button1Click
+    object UsernameEdit: TEdit
+      Touch.InteractiveGestures = [LongTap, DoubleTap]
+      Align = Top
+      TabOrder = 2
+      Text = 'Boris'
+      Position.Y = 71.000000000000000000
+      Margins.Bottom = 10.000000000000000000
+      Size.Width = 1078.000000000000000000
+      Size.Height = 28.000000000000000000
+      Size.PlatformDefault = False
+    end
+    object Button2: TButton
+      Align = Bottom
+      Position.Y = 612.000000000000000000
+      Size.Width = 1078.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 5
+      Text = 'Button2'
+      OnClick = Button2Click
     end
   end
-  object Button2: TButton
-    Position.X = 536.000000000000000000
-    Position.Y = 464.000000000000000000
-    TabOrder = 5
-    Text = 'Button2'
-    OnClick = Button2Click
-  end
   object DSRestConnection1: TDSRestConnection
-    Host = 'localhost'
+    Host = '91.207.183.63'
     Port = 8080
     LoginPrompt = False
     Left = 768

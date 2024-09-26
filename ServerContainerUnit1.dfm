@@ -8,6 +8,7 @@ object ServerContainer1: TServerContainer1
   object DSHTTPService1: TDSHTTPService
     HttpPort = 8080
     Server = DSServer1
+    DSHostname = '91.207.183.63'
     Filters = <>
     Left = 96
     Top = 135

@@ -7,13 +7,12 @@ uses
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs, FMX.StdCtrls,
   FMX.Edit, FMX.Controls.Presentation, FireDAC.Stan.Intf, FireDAC.Stan.Option,
   FireDAC.Stan.Error, FireDAC.UI.Intf, FireDAC.Phys.Intf, FireDAC.Stan.Def,
-  FireDAC.Stan.Pool, FireDAC.Stan.Async, FireDAC.Phys, FireDAC.Phys.MySQL,
-  FireDAC.Phys.MySQLDef, FireDAC.FMXUI.Wait, FireDAC.Stan.Param, FireDAC.DatS,
+  FireDAC.Stan.Pool, FireDAC.Stan.Async, FireDAC.Phys, FireDAC.FMXUI.Wait, FireDAC.Stan.Param, FireDAC.DatS,
   FireDAC.DApt.Intf, FireDAC.DApt, Data.DB, FireDAC.Comp.DataSet,
   FireDAC.Comp.Client, System.Hash, System.IniFiles, System.IOUtils,
   Data.SqlExpr, Datasnap.DBClient, Datasnap.DSConnect, Data.DBXCommon, Data.DBXDataSnap, Data.DBXJSON, Datasnap.DSProxy,
   Data.DbxHTTPLayer, REST.Types, REST.Client, Data.Bind.Components,
-  Data.Bind.ObjectScope, Datasnap.DSClientRest, ClientModuleUnit3;
+  Data.Bind.ObjectScope, Datasnap.DSClientRest, ClientModuleUnit3, FMX.Layouts;
 
 type
   TLoginForm = class(TForm)
@@ -24,6 +23,7 @@ type
     Button1: TButton;
     DSRestConnection1: TDSRestConnection;
     Button2: TButton;
+    CenterLayout: TLayout;
     procedure Button1Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure Button2Click(Sender: TObject);
@@ -46,6 +46,7 @@ var
 implementation
 
 {$R *.fmx}
+{$R *.LgXhdpiPh.fmx ANDROID}
 
 uses Unit12;
 
@@ -122,9 +123,7 @@ var
   LastValuelogin, LastValuepass: string;
   inifilename : string;
 begin
-
-
-Case TOSVersion.Platform of
+  Case TOSVersion.Platform of
     TOSVersion.TPlatform.pfWindows:
   Path := ExtractFilePath(ParamStr(0));
  TOSVersion.TPlatform.pfiOS, TOSVersion.TPlatform.pfAndroid:

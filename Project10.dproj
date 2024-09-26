@@ -5,7 +5,7 @@
         <FrameworkType>FMX</FrameworkType>
         <Base>True</Base>
         <Config Condition="'$(Config)'==''">Debug</Config>
-        <Platform Condition="'$(Platform)'==''">Win32</Platform>
+        <Platform Condition="'$(Platform)'==''">Android</Platform>
         <TargetedPlatforms>558099</TargetedPlatforms>
         <AppType>Application</AppType>
         <MainSource>Project10.dpr</MainSource>
@@ -292,6 +292,67 @@
             <FormType>dfm</FormType>
             <DesignClass>TDataModule</DesignClass>
         </DCCReference>
+        <None Include="Videos\koleno_act_1.mp4"/>
+        <None Include="Videos\koleno_act_2.mp4"/>
+        <None Include="Videos\koleno_act_3.mp4"/>
+        <None Include="Videos\koleno_act_4.mp4"/>
+        <None Include="Videos\koleno_pass_1.mp4"/>
+        <None Include="Videos\koleno_pass_2.mp4"/>
+        <None Include="Videos\koleno_pass_3.mp4"/>
+        <None Include="Videos\lokot_act_1.mp4"/>
+        <None Include="Videos\lokot_act_2.mp4"/>
+        <None Include="Videos\lokot_act_3.mp4"/>
+        <None Include="Videos\lokot_act_4.mp4"/>
+        <None Include="Videos\lokot_pass_1.mp4"/>
+        <None Include="Videos\lokot_pass_2.mp4"/>
+        <None Include="Videos\lokot_pass_3.mp4"/>
+        <None Include="Videos\plecho_act_1.mp4"/>
+        <None Include="Videos\plecho_act_2.mp4"/>
+        <None Include="Videos\plecho_act_3.mp4"/>
+        <None Include="Videos\plecho_act_4.mp4"/>
+        <None Include="Videos\plecho_act_5.mp4"/>
+        <None Include="Videos\plecho_pass_1.mp4"/>
+        <None Include="Videos\plecho_pass_2.mp4"/>
+        <None Include="Videos\plecho_pass_3.mp4"/>
+        <None Include="Videos\plecho_pass_4.mp4"/>
+        <None Include="Videos\plecho_pass_5.mp4"/>
+        <None Include="Videos\spina_act_1.mp4"/>
+        <None Include="Videos\spina_act_2.mp4"/>
+        <None Include="Videos\spina_act_3.mp4"/>
+        <None Include="Videos\spina_pass_1.mp4"/>
+        <None Include="Videos\spina_pass_2.mp4"/>
+        <None Include="Videos\spina_pass_3.mp4"/>
+        <None Include="Videos\stopa_act_1.mp4"/>
+        <None Include="Videos\stopa_act_2.mp4"/>
+        <None Include="Videos\stopa_act_3.mp4"/>
+        <None Include="Videos\stopa_act_4.mp4"/>
+        <None Include="Videos\stopa_pass_1.mp4"/>
+        <None Include="Videos\stopa_pass_2.mp4"/>
+        <None Include="Videos\taz_act_1.mp4"/>
+        <None Include="Videos\taz_act_2.mp4"/>
+        <None Include="Videos\taz_act_3.mp4"/>
+        <None Include="Videos\taz_act_4.mp4"/>
+        <None Include="Videos\taz_pass_1.mp4"/>
+        <None Include="Videos\taz_pass_2.mp4"/>
+        <None Include="Videos\taz_pass_3.mp4"/>
+        <None Include="Videos\taz_pass_4.mp4"/>
+        <None Include="Videos\zap_act_1.mp4"/>
+        <None Include="Videos\zap_act_2.mp4"/>
+        <None Include="Videos\zap_act_3.mp4"/>
+        <None Include="Videos\zap_act_4.mp4"/>
+        <None Include="Videos\zap_act_5.mp4"/>
+        <None Include="Videos\zap_act_6.mp4"/>
+        <None Include="Videos\zap_act_7.mp4"/>
+        <None Include="Videos\zap_pass_1.mp4"/>
+        <None Include="Videos\zap_pass_2.mp4"/>
+        <None Include="Videos\zap_pass_3.mp4"/>
+        <None Include="Videos\zap_pass_4.mp4"/>
+        <None Include="Videos\zap_pass_5.mp4"/>
+        <None Include="Videos\Background_music\blank-and-jones-city-lights-so8os-mix.mp3"/>
+        <None Include="Videos\Background_music\oh-wonder-technicolour-beat-urban-contact-remix.mp3"/>
+        <None Include="Videos\Background_music\the-weeknd-the-morning.mp3"/>
+        <None Include="Videos\Background_music\Ulybka.mp3"/>
+        <None Include="Videos\Background_music\yoga1.mp3"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
@@ -935,59 +996,321 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName="Videos\king.mp4" Configuration="Debug" Class="File">
-                    <Platform Name="Android">
-                        <RemoteName>king.mp4</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                    <Platform Name="Android64">
-                        <RemoteName>king.mp4</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                    <Platform Name="iOSDevice64">
-                        <RemoteName>king.mp4</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                    <Platform Name="iOSSimARM64">
-                        <RemoteName>king.mp4</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
+                <DeployFile LocalName="Videos\Background_music\blank-and-jones-city-lights-so8os-mix.mp3" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Win32">
-                        <RemoteName>king.mp4</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                    <Platform Name="Win64">
-                        <RemoteName>king.mp4</RemoteName>
+                        <RemoteDir>.\</RemoteDir>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName="Videos\king.mp4" Configuration="Release" Class="File">
-                    <Platform Name="All Platforms">
-                        <Enabled>false</Enabled>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
+                <DeployFile LocalName="Videos\Background_music\blank-and-jones-city-lights-so8os-mix.mp3" Configuration="Release" Class="File">
                     <Platform Name="Android">
-                        <RemoteName>king.mp4</RemoteName>
+                        <RemoteName>blank-and-jones-city-lights-so8os-mix.mp3</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
-                    <Platform Name="Android64">
-                        <RemoteName>king.mp4</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                    <Platform Name="iOSDevice64">
-                        <RemoteName>king.mp4</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                    <Platform Name="iOSSimARM64">
-                        <RemoteName>king.mp4</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\Background_music\oh-wonder-technicolour-beat-urban-contact-remix.mp3" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Win32">
-                        <RemoteName>king.mp4</RemoteName>
+                        <RemoteDir>.\</RemoteDir>
                         <Overwrite>true</Overwrite>
                     </Platform>
-                    <Platform Name="Win64">
-                        <RemoteName>king.mp4</RemoteName>
+                </DeployFile>
+                <DeployFile LocalName="Videos\Background_music\oh-wonder-technicolour-beat-urban-contact-remix.mp3" Configuration="Release" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>oh-wonder-technicolour-beat-urban-contact-remix.mp3</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\Background_music\the-weeknd-the-morning.mp3" Configuration="Debug" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>the-weeknd-the-morning.mp3</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\Background_music\the-weeknd-the-morning.mp3" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\Background_music\Ulybka.mp3" Configuration="Debug" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>Ulybka.mp3</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\Background_music\Ulybka.mp3" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\Background_music\yoga1.mp3" Configuration="Debug" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>yoga1.mp3</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\Background_music\yoga1.mp3" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\koleno_act_1.mp4" Configuration="Debug" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>koleno_act_1.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\koleno_act_1.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\koleno_act_1.mp4" Configuration="Release" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>koleno_act_1.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\koleno_act_2.mp4" Configuration="Debug" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>koleno_act_2.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\koleno_act_2.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\koleno_act_2.mp4" Configuration="Release" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>koleno_act_2.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\koleno_act_3.mp4" Configuration="Debug" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>koleno_act_3.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\koleno_act_3.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\koleno_act_3.mp4" Configuration="Release" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>koleno_act_3.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\koleno_act_4.mp4" Configuration="Debug" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>koleno_act_4.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\koleno_act_4.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\koleno_act_4.mp4" Configuration="Release" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>koleno_act_4.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\koleno_pass_1.mp4" Configuration="Debug" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>koleno_pass_1.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\koleno_pass_1.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\koleno_pass_1.mp4" Configuration="Release" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>koleno_pass_1.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\koleno_pass_2.mp4" Configuration="Debug" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>koleno_pass_2.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\koleno_pass_2.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\koleno_pass_2.mp4" Configuration="Release" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>koleno_pass_2.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\koleno_pass_3.mp4" Configuration="Debug" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>koleno_pass_3.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\koleno_pass_3.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\koleno_pass_3.mp4" Configuration="Release" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>koleno_pass_3.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\lokot_act_1.mp4" Configuration="Debug" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>lokot_act_1.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\lokot_act_1.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\lokot_act_1.mp4" Configuration="Release" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>lokot_act_1.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\lokot_act_2.mp4" Configuration="Debug" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>lokot_act_2.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\lokot_act_2.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\lokot_act_2.mp4" Configuration="Release" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>lokot_act_2.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\lokot_act_3.mp4" Configuration="Debug" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>lokot_act_3.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\lokot_act_3.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\lokot_act_3.mp4" Configuration="Release" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>lokot_act_3.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\lokot_act_4.mp4" Configuration="Debug" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>lokot_act_4.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\lokot_act_4.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\lokot_act_4.mp4" Configuration="Release" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>lokot_act_4.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\lokot_pass_1.mp4" Configuration="Debug" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>lokot_pass_1.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\lokot_pass_1.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\lokot_pass_1.mp4" Configuration="Release" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>lokot_pass_1.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\lokot_pass_2.mp4" Configuration="Debug" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>lokot_pass_2.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\lokot_pass_2.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\lokot_pass_2.mp4" Configuration="Release" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>lokot_pass_2.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\lokot_pass_3.mp4" Configuration="Debug" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>lokot_pass_3.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\lokot_pass_3.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\lokot_pass_3.mp4" Configuration="Release" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>lokot_pass_3.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\plecho_act_1.mp4" Configuration="Debug" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>plecho_act_1.mp4</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
@@ -1013,6 +1336,18 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                     <Platform Name="Win64">
+                        <RemoteName>plecho_act_1.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\plecho_act_1.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\plecho_act_1.mp4" Configuration="Release" Class="File">
+                    <Platform Name="Android">
                         <RemoteName>plecho_act_1.mp4</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
@@ -1052,6 +1387,12 @@
                         <RemoteName>plecho_act_2.mp4</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\plecho_act_2.mp4" Configuration="Debug" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>plecho_act_2.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
                     <Platform Name="Android64">
                         <RemoteName>plecho_act_2.mp4</RemoteName>
                         <Overwrite>true</Overwrite>
@@ -1069,6 +1410,18 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                     <Platform Name="Win64">
+                        <RemoteName>plecho_act_2.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\plecho_act_2.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\plecho_act_2.mp4" Configuration="Release" Class="File">
+                    <Platform Name="Android">
                         <RemoteName>plecho_act_2.mp4</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
@@ -1108,6 +1461,12 @@
                         <RemoteName>plecho_act_3.mp4</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\plecho_act_3.mp4" Configuration="Debug" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>plecho_act_3.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
                     <Platform Name="Android64">
                         <RemoteName>plecho_act_3.mp4</RemoteName>
                         <Overwrite>true</Overwrite>
@@ -1125,6 +1484,18 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                     <Platform Name="Win64">
+                        <RemoteName>plecho_act_3.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\plecho_act_3.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\plecho_act_3.mp4" Configuration="Release" Class="File">
+                    <Platform Name="Android">
                         <RemoteName>plecho_act_3.mp4</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
@@ -1164,6 +1535,12 @@
                         <RemoteName>plecho_act_4.mp4</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\plecho_act_4.mp4" Configuration="Debug" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>plecho_act_4.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
                     <Platform Name="Android64">
                         <RemoteName>plecho_act_4.mp4</RemoteName>
                         <Overwrite>true</Overwrite>
@@ -1181,6 +1558,18 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                     <Platform Name="Win64">
+                        <RemoteName>plecho_act_4.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\plecho_act_4.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\plecho_act_4.mp4" Configuration="Release" Class="File">
+                    <Platform Name="Android">
                         <RemoteName>plecho_act_4.mp4</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
@@ -1220,6 +1609,12 @@
                         <RemoteName>plecho_act_5.mp4</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\plecho_act_5.mp4" Configuration="Debug" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>plecho_act_5.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
                     <Platform Name="Android64">
                         <RemoteName>plecho_act_5.mp4</RemoteName>
                         <Overwrite>true</Overwrite>
@@ -1237,6 +1632,18 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                     <Platform Name="Win64">
+                        <RemoteName>plecho_act_5.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\plecho_act_5.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\plecho_act_5.mp4" Configuration="Release" Class="File">
+                    <Platform Name="Android">
                         <RemoteName>plecho_act_5.mp4</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
@@ -1276,6 +1683,12 @@
                         <RemoteName>plecho_pass_1.mp4</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\plecho_pass_1.mp4" Configuration="Debug" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>plecho_pass_1.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
                     <Platform Name="Android64">
                         <RemoteName>plecho_pass_1.mp4</RemoteName>
                         <Overwrite>true</Overwrite>
@@ -1293,6 +1706,18 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                     <Platform Name="Win64">
+                        <RemoteName>plecho_pass_1.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\plecho_pass_1.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\plecho_pass_1.mp4" Configuration="Release" Class="File">
+                    <Platform Name="Android">
                         <RemoteName>plecho_pass_1.mp4</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
@@ -1332,6 +1757,12 @@
                         <RemoteName>plecho_pass_2.mp4</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\plecho_pass_2.mp4" Configuration="Debug" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>plecho_pass_2.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
                     <Platform Name="Android64">
                         <RemoteName>plecho_pass_2.mp4</RemoteName>
                         <Overwrite>true</Overwrite>
@@ -1349,6 +1780,18 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                     <Platform Name="Win64">
+                        <RemoteName>plecho_pass_2.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\plecho_pass_2.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\plecho_pass_2.mp4" Configuration="Release" Class="File">
+                    <Platform Name="Android">
                         <RemoteName>plecho_pass_2.mp4</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
@@ -1388,6 +1831,12 @@
                         <RemoteName>plecho_pass_3.mp4</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\plecho_pass_3.mp4" Configuration="Debug" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>plecho_pass_3.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
                     <Platform Name="Android64">
                         <RemoteName>plecho_pass_3.mp4</RemoteName>
                         <Overwrite>true</Overwrite>
@@ -1405,6 +1854,18 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                     <Platform Name="Win64">
+                        <RemoteName>plecho_pass_3.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\plecho_pass_3.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\plecho_pass_3.mp4" Configuration="Release" Class="File">
+                    <Platform Name="Android">
                         <RemoteName>plecho_pass_3.mp4</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
@@ -1444,6 +1905,12 @@
                         <RemoteName>plecho_pass_4.mp4</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\plecho_pass_4.mp4" Configuration="Debug" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>plecho_pass_4.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
                     <Platform Name="Android64">
                         <RemoteName>plecho_pass_4.mp4</RemoteName>
                         <Overwrite>true</Overwrite>
@@ -1461,6 +1928,18 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                     <Platform Name="Win64">
+                        <RemoteName>plecho_pass_4.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\plecho_pass_4.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\plecho_pass_4.mp4" Configuration="Release" Class="File">
+                    <Platform Name="Android">
                         <RemoteName>plecho_pass_4.mp4</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
@@ -1501,32 +1980,8 @@
                         <RemoteName>plecho_pass_5.mp4</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
-                    <Platform Name="Android64">
-                        <RemoteName>plecho_pass_5.mp4</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                    <Platform Name="iOSDevice64">
-                        <RemoteName>plecho_pass_5.mp4</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                    <Platform Name="iOSSimARM64">
-                        <RemoteName>plecho_pass_5.mp4</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                    <Platform Name="Win32">
-                        <RemoteName>plecho_pass_5.mp4</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                    <Platform Name="Win64">
-                        <RemoteName>plecho_pass_5.mp4</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
                 </DeployFile>
-                <DeployFile LocalName="Videos\plecho_pass_5.mp4" Configuration="Release" Class="File">
-                    <Platform Name="All Platforms">
-                        <Enabled>false</Enabled>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
+                <DeployFile LocalName="Videos\plecho_pass_5.mp4" Configuration="Debug" Class="File">
                     <Platform Name="Android">
                         <RemoteName>plecho_pass_5.mp4</RemoteName>
                         <Overwrite>true</Overwrite>
@@ -1549,6 +2004,378 @@
                     </Platform>
                     <Platform Name="Win64">
                         <RemoteName>plecho_pass_5.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\plecho_pass_5.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\plecho_pass_5.mp4" Configuration="Release" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>plecho_pass_5.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\spina_act_1.mp4" Configuration="Debug" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>spina_act_1.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\spina_act_1.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\spina_act_1.mp4" Configuration="Release" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>spina_act_1.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\spina_act_2.mp4" Configuration="Debug" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>spina_act_2.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\spina_act_2.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\spina_act_2.mp4" Configuration="Release" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>spina_act_2.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\spina_act_3.mp4" Configuration="Debug" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>spina_act_3.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\spina_act_3.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\spina_act_3.mp4" Configuration="Release" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>spina_act_3.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\spina_pass_1.mp4" Configuration="Debug" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>spina_pass_1.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\spina_pass_1.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\spina_pass_1.mp4" Configuration="Release" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>spina_pass_1.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\spina_pass_2.mp4" Configuration="Debug" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>spina_pass_2.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\spina_pass_2.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\spina_pass_2.mp4" Configuration="Release" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>spina_pass_2.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\spina_pass_3.mp4" Configuration="Debug" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>spina_pass_3.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\spina_pass_3.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\spina_pass_3.mp4" Configuration="Release" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>spina_pass_3.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\stopa_act_1.mp4" Configuration="Debug" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>stopa_act_1.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\stopa_act_1.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\stopa_act_1.mp4" Configuration="Release" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>stopa_act_1.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\stopa_act_2.mp4" Configuration="Debug" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>stopa_act_2.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\stopa_act_2.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\stopa_act_2.mp4" Configuration="Release" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>stopa_act_2.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\stopa_act_3.mp4" Configuration="Debug" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>stopa_act_3.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\stopa_act_3.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\stopa_act_3.mp4" Configuration="Release" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>stopa_act_3.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\stopa_act_4.mp4" Configuration="Debug" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>stopa_act_4.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\stopa_act_4.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\stopa_act_4.mp4" Configuration="Release" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>stopa_act_4.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\stopa_pass_1.mp4" Configuration="Debug" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>stopa_pass_1.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\stopa_pass_1.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\stopa_pass_1.mp4" Configuration="Release" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>stopa_pass_1.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\stopa_pass_2.mp4" Configuration="Debug" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>stopa_pass_2.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\stopa_pass_2.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\stopa_pass_2.mp4" Configuration="Release" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>stopa_pass_2.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\taz_act_1.mp4" Configuration="Debug" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>taz_act_1.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\taz_act_1.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\taz_act_1.mp4" Configuration="Release" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>taz_act_1.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\taz_act_2.mp4" Configuration="Debug" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>taz_act_2.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\taz_act_2.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\taz_act_2.mp4" Configuration="Release" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>taz_act_2.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\taz_act_3.mp4" Configuration="Debug" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>taz_act_3.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\taz_act_3.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\taz_act_3.mp4" Configuration="Release" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>taz_act_3.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\taz_act_4.mp4" Configuration="Debug" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>taz_act_4.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\taz_act_4.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\taz_act_4.mp4" Configuration="Release" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>taz_act_4.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\taz_pass_1.mp4" Configuration="Debug" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>taz_pass_1.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\taz_pass_1.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\taz_pass_1.mp4" Configuration="Release" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>taz_pass_1.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\taz_pass_2.mp4" Configuration="Debug" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>taz_pass_2.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\taz_pass_2.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\taz_pass_2.mp4" Configuration="Release" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>taz_pass_2.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\taz_pass_3.mp4" Configuration="Debug" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>taz_pass_3.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\taz_pass_3.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\taz_pass_3.mp4" Configuration="Release" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>taz_pass_3.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\taz_pass_4.mp4" Configuration="Debug" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>taz_pass_4.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\taz_pass_4.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\taz_pass_4.mp4" Configuration="Release" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>taz_pass_4.mp4</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
@@ -1605,6 +2432,222 @@
                     </Platform>
                     <Platform Name="Win64">
                         <RemoteName>time.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\zap_act_1.mp4" Configuration="Debug" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>zap_act_1.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\zap_act_1.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\zap_act_1.mp4" Configuration="Release" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>zap_act_1.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\zap_act_2.mp4" Configuration="Debug" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>zap_act_2.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\zap_act_2.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\zap_act_2.mp4" Configuration="Release" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>zap_act_2.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\zap_act_3.mp4" Configuration="Debug" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>zap_act_3.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\zap_act_3.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\zap_act_3.mp4" Configuration="Release" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>zap_act_3.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\zap_act_4.mp4" Configuration="Debug" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>zap_act_4.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\zap_act_4.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\zap_act_4.mp4" Configuration="Release" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>zap_act_4.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\zap_act_5.mp4" Configuration="Debug" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>zap_act_5.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\zap_act_5.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\zap_act_5.mp4" Configuration="Release" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>zap_act_5.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\zap_act_6.mp4" Configuration="Debug" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>zap_act_6.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\zap_act_6.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\zap_act_6.mp4" Configuration="Release" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>zap_act_6.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\zap_act_7.mp4" Configuration="Debug" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>zap_act_7.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\zap_act_7.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\zap_act_7.mp4" Configuration="Release" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>zap_act_7.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\zap_pass_1.mp4" Configuration="Debug" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>zap_pass_1.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\zap_pass_1.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\zap_pass_1.mp4" Configuration="Release" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>zap_pass_1.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\zap_pass_2.mp4" Configuration="Debug" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>zap_pass_2.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\zap_pass_2.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\zap_pass_2.mp4" Configuration="Release" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>zap_pass_2.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\zap_pass_3.mp4" Configuration="Debug" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>zap_pass_3.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\zap_pass_3.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\zap_pass_3.mp4" Configuration="Release" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>zap_pass_3.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\zap_pass_4.mp4" Configuration="Debug" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>zap_pass_4.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\zap_pass_4.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\zap_pass_4.mp4" Configuration="Release" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>zap_pass_4.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\zap_pass_5.mp4" Configuration="Debug" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>zap_pass_5.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\zap_pass_5.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Videos\zap_pass_5.mp4" Configuration="Release" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>zap_pass_5.mp4</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>

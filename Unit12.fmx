@@ -49,6 +49,13 @@ object Form12: TForm12
       Margins.Top = 5.000000000000000000
       Margins.Right = 5.000000000000000000
       Margins.Bottom = 5.000000000000000000
+      object AniIndicator1: TAniIndicator
+        Align = Center
+        Size.Width = 129.000000000000000000
+        Size.Height = 121.000000000000000000
+        Size.PlatformDefault = False
+        Visible = False
+      end
     end
   end
   object Layoutitems: TLayout
@@ -464,47 +471,19 @@ object Form12: TForm12
     Left = 8
     Top = 8
   end
-  object FDConnection1: TFDConnection
-    Params.Strings = (
-      'DriverID=MySQL'
-      'Database=.\pushcount.db')
-    LoginPrompt = False
-    BeforeConnect = FDConnection1BeforeConnect
-    Left = 544
-  end
   object FDPhysSQLiteDriverLink1: TFDPhysSQLiteDriverLink
     Left = 600
     Top = 56
-  end
-  object FDQuery1: TFDQuery
-    Connection = FDConnection1
-    Left = 592
-    Top = 104
   end
   object FDGUIxWaitCursor1: TFDGUIxWaitCursor
     Provider = 'FMX'
     Left = 592
     Top = 344
   end
-  object FDQuery2: TFDQuery
-    Connection = FDConnection1
-    SQL.Strings = (
-      'SELECT count FROM push_count ORDER BY ID DESC LIMIT 1')
-    Left = 456
-    Top = 264
-  end
-  object FDPhysMySQLDriverLink1: TFDPhysMySQLDriverLink
-    Left = 592
-    Top = 392
-  end
-  object FDQuery3: TFDQuery
-    Connection = FDConnection1
-    Left = 488
-    Top = 208
-  end
   object DSRestConnection1: TDSRestConnection
-    Host = 'localhost'
+    Host = ' 91.207.183.63'
     Port = 8080
+    LoginPrompt = False
     Left = 733
     Top = 293
   end

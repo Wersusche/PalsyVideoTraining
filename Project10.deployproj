@@ -5,11 +5,525 @@
     </ProjectExtensions>
     <PropertyGroup>
         <DeviceId Condition="'$(Platform)'=='Android'">192.168.147.103:5555</DeviceId>
-        <DeviceId Condition="'$(Platform)'=='Android64'">192.168.147.103:5555</DeviceId>
+        <DeviceId Condition="'$(Platform)'=='Android64'"/>
         <DeviceId Condition="'$(Platform)'=='iOSDevice64'"/>
         <DeviceId Condition="'$(Platform)'=='iOSSimARM64'"/>
     </PropertyGroup>
     <ItemGroup Condition="'$(Platform)'=='Win32'">
+        <DeployFile Include="Videos\stopa_act_4.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>stopa_act_4.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\zap_pass_1.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>zap_pass_1.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\Background_music\yoga1.mp3" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>yoga1.mp3</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\Background_music\Ulybka.mp3" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>Ulybka.mp3</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\zap_pass_5.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>zap_pass_5.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\koleno_pass_3.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>koleno_pass_3.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\zap_act_6.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>zap_act_6.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_pass_2.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_pass_2.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\zap_act_3.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>zap_act_3.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\stopa_pass_2.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>stopa_pass_2.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Win32\Debug\MyApp.ini" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>MyApp.ini</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\koleno_act_4.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>koleno_act_4.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\spina_pass_2.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>spina_pass_2.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\spina_act_3.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>spina_act_3.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_act_5.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_act_5.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\stopa_act_2.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>stopa_act_2.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\koleno_pass_1.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>koleno_pass_1.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\zap_pass_2.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>zap_pass_2.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Win32\Release\Project10.exe" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>Project10.exe</RemoteName>
+            <DeployClass>ProjectOutput</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+            <Required>True</Required>
+        </DeployFile>
+        <DeployFile Include="Videos\koleno_act_1.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>koleno_act_1.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_pass_1.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_pass_1.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\stopa_pass_1.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>stopa_pass_1.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\Background_music\oh-wonder-technicolour-beat-urban-contact-remix.mp3" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>oh-wonder-technicolour-beat-urban-contact-remix.mp3</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\taz_pass_2.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>taz_pass_2.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_pass_5.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_pass_5.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\spina_act_2.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>spina_act_2.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\taz_act_2.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>taz_act_2.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_act_4.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_act_4.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\lokot_act_4.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>lokot_act_4.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_act_1.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_act_1.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\lokot_act_1.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>lokot_act_1.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_pass_2.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_pass_2.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_act_1.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_act_1.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="MyApp.ini" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>MyApp.ini</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_act_1.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_act_1.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_pass_2.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_pass_2.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\lokot_pass_1.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>lokot_pass_1.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_act_3.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_act_3.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\lokot_pass_2.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>lokot_pass_2.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\taz_act_1.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>taz_act_1.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="libmysql.dll" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>libmysql.dll</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="libmysql.dll" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>libmysql.dll</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\taz_pass_4.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>taz_pass_4.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\spina_pass_1.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>spina_pass_1.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\koleno_pass_2.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>koleno_pass_2.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_pass_4.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_pass_4.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\zap_act_5.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>zap_act_5.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\koleno_act_2.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>koleno_act_2.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\Background_music\the-weeknd-the-morning.mp3" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>the-weeknd-the-morning.mp3</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\spina_pass_3.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>spina_pass_3.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\zap_act_1.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>zap_act_1.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\taz_act_4.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>taz_act_4.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\zap_pass_3.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>zap_pass_3.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_pass_3.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_pass_3.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\zap_act_2.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>zap_act_2.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_pass_5.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_pass_5.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\zap_act_4.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>zap_act_4.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
         <DeployFile Include="Win32\Debug\Project10.exe" Condition="'$(Config)'=='Debug'">
             <RemoteDir>Project10\</RemoteDir>
             <RemoteName>Project10.exe</RemoteName>
@@ -20,27 +534,296 @@
             <Overwrite>True</Overwrite>
             <Required>True</Required>
         </DeployFile>
-        <DeployFile Include="Videos\Kayaking.mp4" Condition="'$(Config)'=='Debug'">
+        <DeployFile Include="Videos\time.mp4" Condition="'$(Config)'=='Debug'">
             <RemoteDir>Project10\</RemoteDir>
-            <RemoteName>Kayaking.mp4</RemoteName>
+            <RemoteName>time.mp4</RemoteName>
             <DeployClass>File</DeployClass>
             <Operation>0</Operation>
             <LocalCommand/>
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
-        <DeployFile Include="Videos\vecteezy_video.mp4" Condition="'$(Config)'=='Debug'">
+        <DeployFile Include="Videos\time.mp4" Condition="'$(Config)'=='Release'">
             <RemoteDir>Project10\</RemoteDir>
-            <RemoteName>vecteezy_video.mp4</RemoteName>
+            <RemoteName>time.mp4</RemoteName>
             <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\Background_music\blank-and-jones-city-lights-so8os-mix.mp3" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>blank-and-jones-city-lights-so8os-mix.mp3</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\taz_pass_1.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>taz_pass_1.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_act_4.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_act_4.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_act_4.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_act_4.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\lokot_act_3.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>lokot_act_3.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_act_3.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_act_3.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_act_3.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_act_3.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\zap_act_7.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>zap_act_7.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_pass_1.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_pass_1.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_pass_1.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_pass_1.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_act_2.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_act_2.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_act_2.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_act_2.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_act_2.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_act_2.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\lokot_pass_3.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>lokot_pass_3.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\taz_act_3.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>taz_act_3.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\stopa_act_1.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>stopa_act_1.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\zap_pass_4.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>zap_pass_4.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_act_5.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_act_5.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_act_5.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_act_5.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\spina_act_1.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>spina_act_1.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_pass_3.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_pass_3.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_pass_3.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_pass_3.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\lokot_act_2.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>lokot_act_2.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\taz_pass_3.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>taz_pass_3.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\koleno_act_3.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>koleno_act_3.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_pass_4.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_pass_4.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_pass_4.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_pass_4.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\stopa_act_3.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>stopa_act_3.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
             <Operation>0</Operation>
             <LocalCommand/>
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
     </ItemGroup>
-    <ItemGroup Condition="'$(Platform)'=='Android64'"/>
-    <ItemGroup Condition="'$(Platform)'=='Android'">
+    <ItemGroup Condition="'$(Platform)'=='Android64'">
+        <DeployFile Include="$(BDS)\bin\Artwork\Android\FM_LauncherIcon_72x72.png" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\res\drawable-hdpi\</RemoteDir>
+            <RemoteName>ic_launcher.png</RemoteName>
+            <DeployClass>Android_LauncherIcon72</DeployClass>
+            <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="$(BDS)\bin\Artwork\Android\FM_LauncherIcon_48x48.png" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\res\drawable-mdpi\</RemoteDir>
+            <RemoteName>ic_launcher.png</RemoteName>
+            <DeployClass>Android_LauncherIcon48</DeployClass>
+            <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
         <DeployFile Include="$(BDS)\bin\Artwork\Android\FM_SplashImage_640x480.png" Condition="'$(Config)'=='Debug'">
             <RemoteDir>Project10\res\drawable-large\</RemoteDir>
             <RemoteName>splash_image.png</RemoteName>
@@ -50,10 +833,65 @@
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
-        <DeployFile Include="Android\Debug\strings.xml" Condition="'$(Config)'=='Debug'">
+        <DeployFile Include="$(BDS)\lib\android\debug\mips\libnative-activity.so" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\library\lib\mips\</RemoteDir>
+            <RemoteName>libProject10.so</RemoteName>
+            <DeployClass>AndroidLibnativeMipsFile</DeployClass>
+            <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="$(BDS)\lib\android\debug\armeabi-v7a\libnative-activity.so" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\library\lib\armeabi-v7a\</RemoteDir>
+            <RemoteName>libProject10.so</RemoteName>
+            <DeployClass>AndroidLibnativeArmeabiv7aFile</DeployClass>
+            <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Android64\Debug\libProject10.so" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\library\lib\arm64-v8a\</RemoteDir>
+            <RemoteName>libProject10.so</RemoteName>
+            <DeployClass>ProjectOutput</DeployClass>
+            <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+            <Required>True</Required>
+        </DeployFile>
+        <DeployFile Include="Android64\Debug\styles.xml" Condition="'$(Config)'=='Debug'">
             <RemoteDir>Project10\res\values\</RemoteDir>
-            <RemoteName>strings.xml</RemoteName>
-            <DeployClass>Android_Strings</DeployClass>
+            <RemoteName>styles.xml</RemoteName>
+            <DeployClass>AndroidSplashStyles</DeployClass>
+            <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_pass_5.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_pass_5.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Android64\Debug\AndroidManifest.xml" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>AndroidManifest.xml</RemoteName>
+            <DeployClass>ProjectAndroidManifest</DeployClass>
+            <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="$(BDS)\bin\Artwork\Android\FM_LauncherIcon_192x192.png" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\res\drawable-xxxhdpi\</RemoteDir>
+            <RemoteName>ic_launcher.png</RemoteName>
+            <DeployClass>Android_LauncherIcon192</DeployClass>
             <Operation>1</Operation>
             <LocalCommand/>
             <RemoteCommand/>
@@ -68,11 +906,346 @@
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
-        <DeployFile Include="Android\Debug\styles-v21.xml" Condition="'$(Config)'=='Debug'">
+        <DeployFile Include="$(BDS)\lib\android\debug\armeabi\libnative-activity.so" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\library\lib\armeabi\</RemoteDir>
+            <RemoteName>libProject10.so</RemoteName>
+            <DeployClass>AndroidLibnativeArmeabiFile</DeployClass>
+            <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_pass_2.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_pass_2.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Android64\Debug\colors.xml" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\res\values\</RemoteDir>
+            <RemoteName>colors.xml</RemoteName>
+            <DeployClass>Android_Colors</DeployClass>
+            <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_act_1.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_act_1.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_act_1.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_act_1.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_pass_2.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_pass_2.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Android64\Debug\Project10.classes" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\classes\</RemoteDir>
+            <RemoteName>Project10.classes</RemoteName>
+            <DeployClass>AndroidClasses</DeployClass>
+            <Operation>64</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Android64\Debug\strings.xml" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\res\values\</RemoteDir>
+            <RemoteName>strings.xml</RemoteName>
+            <DeployClass>Android_Strings</DeployClass>
+            <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="$(BDS)\bin\Artwork\Android\FM_SplashImage_470x320.png" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\res\drawable-normal\</RemoteDir>
+            <RemoteName>splash_image.png</RemoteName>
+            <DeployClass>Android_SplashImage470</DeployClass>
+            <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="$(BDS)\bin\Artwork\Android\FM_LauncherIcon_144x144.png" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\res\drawable-xxhdpi\</RemoteDir>
+            <RemoteName>ic_launcher.png</RemoteName>
+            <DeployClass>Android_LauncherIcon144</DeployClass>
+            <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="$(BDS)\bin\Artwork\Android\FM_NotificationIcon_96x96.png" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\res\drawable-xxxhdpi\</RemoteDir>
+            <RemoteName>ic_notification.png</RemoteName>
+            <DeployClass>Android_NotificationIcon96</DeployClass>
+            <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="$(BDS)\bin\Artwork\Android\FM_LauncherIcon_36x36.png" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\res\drawable-ldpi\</RemoteDir>
+            <RemoteName>ic_launcher.png</RemoteName>
+            <DeployClass>Android_LauncherIcon36</DeployClass>
+            <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\time.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>time.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\time.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>time.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_act_4.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_act_4.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_act_4.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_act_4.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_act_3.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_act_3.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_act_3.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_act_3.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_pass_1.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_pass_1.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_pass_1.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_pass_1.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_act_2.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_act_2.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_act_2.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_act_2.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="$(BDS)\bin\Artwork\Android\FM_NotificationIcon_36x36.png" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\res\drawable-hdpi\</RemoteDir>
+            <RemoteName>ic_notification.png</RemoteName>
+            <DeployClass>Android_NotificationIcon36</DeployClass>
+            <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Android64\Debug\splash_image_def.xml" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\res\drawable\</RemoteDir>
+            <RemoteName>splash_image_def.xml</RemoteName>
+            <DeployClass>AndroidSplashImageDef</DeployClass>
+            <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="$(BDS)\bin\Artwork\Android\FM_LauncherIcon_96x96.png" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\res\drawable-xhdpi\</RemoteDir>
+            <RemoteName>ic_launcher.png</RemoteName>
+            <DeployClass>Android_LauncherIcon96</DeployClass>
+            <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="$(BDS)\bin\Artwork\Android\FM_NotificationIcon_24x24.png" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\res\drawable-mdpi\</RemoteDir>
+            <RemoteName>ic_notification.png</RemoteName>
+            <DeployClass>Android_NotificationIcon24</DeployClass>
+            <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="$(BDS)\bin\Artwork\Android\FM_SplashImage_960x720.png" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\res\drawable-xlarge\</RemoteDir>
+            <RemoteName>splash_image.png</RemoteName>
+            <DeployClass>Android_SplashImage960</DeployClass>
+            <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_act_5.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_act_5.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_act_5.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_act_5.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_pass_3.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_pass_3.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_pass_3.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_pass_3.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="$(BDS)\bin\Artwork\Android\FM_SplashImage_426x320.png" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\res\drawable-small\</RemoteDir>
+            <RemoteName>splash_image.png</RemoteName>
+            <DeployClass>Android_SplashImage426</DeployClass>
+            <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_pass_4.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_pass_4.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_pass_4.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_pass_4.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Android64\Debug\styles-v21.xml" Condition="'$(Config)'=='Debug'">
             <RemoteDir>Project10\res\values-v21\</RemoteDir>
             <RemoteName>styles.xml</RemoteName>
             <DeployClass>AndroidSplashStylesV21</DeployClass>
             <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="$(BDS)\bin\Artwork\Android\FM_NotificationIcon_72x72.png" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\res\drawable-xxhdpi\</RemoteDir>
+            <RemoteName>ic_notification.png</RemoteName>
+            <DeployClass>Android_NotificationIcon72</DeployClass>
+            <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+    </ItemGroup>
+    <ItemGroup Condition="'$(Platform)'=='Android'">
+        <DeployFile Include="Videos\koleno_act_2.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>koleno_act_2.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\koleno_act_2.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>koleno_act_2.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
             <LocalCommand/>
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
@@ -86,7 +1259,268 @@
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
-        <DeployFile Include="Android\Debug\splash_image_def.xml" Condition="'$(Config)'=='Debug'">
+        <DeployFile Include="Videos\plecho_pass_3.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>plecho_pass_3.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_pass_3.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_pass_3.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\taz_act_4.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>taz_act_4.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\taz_act_4.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>taz_act_4.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="$(BDS)\bin\Artwork\Android\FM_LauncherIcon_72x72.png" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\res\drawable-hdpi\</RemoteDir>
+            <RemoteName>ic_launcher.png</RemoteName>
+            <DeployClass>Android_LauncherIcon72</DeployClass>
+            <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="$(BDS)\bin\Artwork\Android\FM_LauncherIcon_72x72.png" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\res\drawable-hdpi\</RemoteDir>
+            <RemoteName>ic_launcher.png</RemoteName>
+            <DeployClass>Android_LauncherIcon72</DeployClass>
+            <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_act_5.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>plecho_act_5.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_act_5.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_act_5.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Android\Release\strings.xml" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\res\values\</RemoteDir>
+            <RemoteName>strings.xml</RemoteName>
+            <DeployClass>Android_Strings</DeployClass>
+            <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Android\Release\styles-v21.xml" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\res\values-v21\</RemoteDir>
+            <RemoteName>styles.xml</RemoteName>
+            <DeployClass>AndroidSplashStylesV21</DeployClass>
+            <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Android\Debug\Project10.classes" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\classes\</RemoteDir>
+            <RemoteName>Project10.classes</RemoteName>
+            <DeployClass>AndroidClasses</DeployClass>
+            <Operation>64</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\zap_act_5.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>zap_act_5.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\zap_act_5.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>zap_act_5.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\koleno_pass_1.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>koleno_pass_1.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\koleno_pass_1.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>koleno_pass_1.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\stopa_act_3.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>stopa_act_3.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\taz_pass_2.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>taz_pass_2.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\zap_act_1.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>zap_act_1.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\zap_act_4.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>zap_act_4.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\stopa_act_3.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>stopa_act_3.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\taz_pass_2.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>taz_pass_2.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\zap_act_1.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>zap_act_1.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\zap_act_4.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>zap_act_4.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="$(BDS)\bin\Artwork\Android\FM_LauncherIcon_36x36.png" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\res\drawable-ldpi\</RemoteDir>
+            <RemoteName>ic_launcher.png</RemoteName>
+            <DeployClass>Android_LauncherIcon36</DeployClass>
+            <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="$(BDS)\bin\Artwork\Android\FM_LauncherIcon_36x36.png" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\res\drawable-ldpi\</RemoteDir>
+            <RemoteName>ic_launcher.png</RemoteName>
+            <DeployClass>Android_LauncherIcon36</DeployClass>
+            <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\zap_pass_4.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>zap_pass_4.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\zap_pass_4.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>zap_pass_4.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\Background_music\blank-and-jones-city-lights-so8os-mix.mp3" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>blank-and-jones-city-lights-so8os-mix.mp3</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\Background_music\blank-and-jones-city-lights-so8os-mix.mp3" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>blank-and-jones-city-lights-so8os-mix.mp3</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Android\Release\splash_image_def.xml" Condition="'$(Config)'=='Release'">
             <RemoteDir>Project10\res\drawable\</RemoteDir>
             <RemoteName>splash_image_def.xml</RemoteName>
             <DeployClass>AndroidSplashImageDef</DeployClass>
@@ -95,16 +1529,521 @@
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
-        <DeployFile Include="$(BDS)\lib\android\debug\armeabi\libnative-activity.so" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>Project10\library\lib\armeabi\</RemoteDir>
-            <RemoteName>libProject10.so</RemoteName>
-            <DeployClass>AndroidLibnativeArmeabiFile</DeployClass>
+        <DeployFile Include="Videos\koleno_pass_3.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>koleno_pass_3.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\koleno_pass_3.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>koleno_pass_3.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\stopa_act_1.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>stopa_act_1.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\zap_act_6.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>zap_act_6.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\stopa_act_1.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>stopa_act_1.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\zap_act_6.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>zap_act_6.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_pass_5.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_pass_5.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\stopa_pass_2.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>stopa_pass_2.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\stopa_pass_2.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>stopa_pass_2.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="$(NDKBasePath)\prebuilt\android-arm\gdbserver\gdbserver" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\library\lib\armeabi-v7a\</RemoteDir>
+            <RemoteName>gdbserver</RemoteName>
+            <DeployClass>AndroidGDBServer</DeployClass>
             <Operation>1</Operation>
             <LocalCommand/>
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
+        <DeployFile Include="$(BDS)\bin\Artwork\Android\FM_SplashImage_470x320.png" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\res\drawable-normal\</RemoteDir>
+            <RemoteName>splash_image.png</RemoteName>
+            <DeployClass>Android_SplashImage470</DeployClass>
+            <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="$(BDS)\bin\Artwork\Android\FM_SplashImage_470x320.png" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\res\drawable-normal\</RemoteDir>
+            <RemoteName>splash_image.png</RemoteName>
+            <DeployClass>Android_SplashImage470</DeployClass>
+            <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="$(BDS)\bin\Artwork\Android\FM_NotificationIcon_72x72.png" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\res\drawable-xxhdpi\</RemoteDir>
+            <RemoteName>ic_notification.png</RemoteName>
+            <DeployClass>Android_NotificationIcon72</DeployClass>
+            <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="$(BDS)\bin\Artwork\Android\FM_NotificationIcon_72x72.png" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\res\drawable-xxhdpi\</RemoteDir>
+            <RemoteName>ic_notification.png</RemoteName>
+            <DeployClass>Android_NotificationIcon72</DeployClass>
+            <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\lokot_pass_3.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>lokot_pass_3.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="$(BDS)\bin\Artwork\Android\FM_LauncherIcon_144x144.png" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\res\drawable-xxhdpi\</RemoteDir>
+            <RemoteName>ic_launcher.png</RemoteName>
+            <DeployClass>Android_LauncherIcon144</DeployClass>
+            <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="$(BDS)\bin\Artwork\Android\FM_LauncherIcon_144x144.png" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\res\drawable-xxhdpi\</RemoteDir>
+            <RemoteName>ic_launcher.png</RemoteName>
+            <DeployClass>Android_LauncherIcon144</DeployClass>
+            <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="$(BDS)\bin\Artwork\Android\FM_LauncherIcon_192x192.png" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\res\drawable-xxxhdpi\</RemoteDir>
+            <RemoteName>ic_launcher.png</RemoteName>
+            <DeployClass>Android_LauncherIcon192</DeployClass>
+            <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="$(BDS)\bin\Artwork\Android\FM_LauncherIcon_192x192.png" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\res\drawable-xxxhdpi\</RemoteDir>
+            <RemoteName>ic_launcher.png</RemoteName>
+            <DeployClass>Android_LauncherIcon192</DeployClass>
+            <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_pass_2.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_pass_2.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="$(BDS)\bin\Artwork\Android\FM_LauncherIcon_96x96.png" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\res\drawable-xhdpi\</RemoteDir>
+            <RemoteName>ic_launcher.png</RemoteName>
+            <DeployClass>Android_LauncherIcon96</DeployClass>
+            <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="$(BDS)\bin\Artwork\Android\FM_LauncherIcon_96x96.png" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\res\drawable-xhdpi\</RemoteDir>
+            <RemoteName>ic_launcher.png</RemoteName>
+            <DeployClass>Android_LauncherIcon96</DeployClass>
+            <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Android\Debug\libProject10.so" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\library\lib\armeabi-v7a\</RemoteDir>
+            <RemoteName>libProject10.so</RemoteName>
+            <DeployClass>ProjectOutput</DeployClass>
+            <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+            <Required>True</Required>
+        </DeployFile>
+        <DeployFile Include="Android\Debug\AndroidManifest.xml" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>AndroidManifest.xml</RemoteName>
+            <DeployClass>ProjectAndroidManifest</DeployClass>
+            <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_act_1.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_act_1.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_act_1.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_act_1.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_pass_2.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_pass_2.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\Background_music\Ulybka.mp3" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>Ulybka.mp3</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\Background_music\yoga1.mp3" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>yoga1.mp3</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\lokot_pass_3.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>lokot_pass_3.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Android\Debug\styles.xml" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\res\values\</RemoteDir>
+            <RemoteName>styles.xml</RemoteName>
+            <DeployClass>AndroidSplashStyles</DeployClass>
+            <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\stopa_act_2.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>stopa_act_2.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\taz_act_1.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>taz_act_1.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\taz_pass_3.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>taz_pass_3.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\lokot_act_1.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>lokot_act_1.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\lokot_act_1.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>lokot_act_1.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\spina_pass_1.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>spina_pass_1.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\zap_act_3.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>zap_act_3.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\zap_pass_5.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>zap_pass_5.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\spina_pass_1.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>spina_pass_1.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\stopa_act_2.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>stopa_act_2.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\taz_act_1.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>taz_act_1.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\taz_pass_3.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>taz_pass_3.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\zap_act_3.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>zap_act_3.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\zap_pass_5.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>zap_pass_5.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="$(NDKBasePath)\prebuilt\android-arm\gdbserver\gdbserver" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\library\lib\armeabi-v7a\</RemoteDir>
+            <RemoteName>gdbserver</RemoteName>
+            <DeployClass>AndroidGDBServer</DeployClass>
+            <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\koleno_pass_2.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>koleno_pass_2.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\koleno_pass_2.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>koleno_pass_2.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\taz_pass_1.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>taz_pass_1.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\taz_act_3.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>taz_act_3.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\lokot_pass_1.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>lokot_pass_1.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\lokot_pass_1.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>lokot_pass_1.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\spina_act_3.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>spina_act_3.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\spina_act_3.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>spina_act_3.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\taz_act_3.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>taz_act_3.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\taz_pass_1.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>taz_pass_1.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
         <DeployFile Include="$(BDS)\bin\Artwork\Android\FM_NotificationIcon_24x24.png" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\res\drawable-mdpi\</RemoteDir>
+            <RemoteName>ic_notification.png</RemoteName>
+            <DeployClass>Android_NotificationIcon24</DeployClass>
+            <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="$(BDS)\bin\Artwork\Android\FM_NotificationIcon_24x24.png" Condition="'$(Config)'=='Release'">
             <RemoteDir>Project10\res\drawable-mdpi\</RemoteDir>
             <RemoteName>ic_notification.png</RemoteName>
             <DeployClass>Android_NotificationIcon24</DeployClass>
@@ -131,83 +2070,236 @@
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
-        <DeployFile Include="Videos\vecteezy_video.mp4" Condition="'$(Config)'=='Debug'">
+        <DeployFile Include="$(BDS)\bin\Artwork\Android\FM_SplashImage_426x320.png" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\res\drawable-small\</RemoteDir>
+            <RemoteName>splash_image.png</RemoteName>
+            <DeployClass>Android_SplashImage426</DeployClass>
+            <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="$(BDS)\lib\android\debug\mips\libnative-activity.so" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\library\lib\mips\</RemoteDir>
+            <RemoteName>libProject10.so</RemoteName>
+            <DeployClass>AndroidLibnativeMipsFile</DeployClass>
+            <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\taz_pass_4.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>taz_pass_4.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\taz_pass_4.mp4" Condition="'$(Config)'=='Release'">
             <RemoteDir>Project10\</RemoteDir>
-            <RemoteName>vecteezy_video.mp4</RemoteName>
+            <RemoteName>taz_pass_4.mp4</RemoteName>
             <DeployClass>File</DeployClass>
             <Operation>0</Operation>
             <LocalCommand/>
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
-        <DeployFile Include="$(NDKBasePath)\prebuilt\android-arm\gdbserver\gdbserver" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>Project10\library\lib\armeabi-v7a\</RemoteDir>
-            <RemoteName>gdbserver</RemoteName>
-            <DeployClass>AndroidGDBServer</DeployClass>
-            <Operation>1</Operation>
+        <DeployFile Include="Videos\plecho_pass_1.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>plecho_pass_1.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
             <LocalCommand/>
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
-        <DeployFile Include="$(BDS)\bin\Artwork\Android\FM_LauncherIcon_36x36.png" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>Project10\res\drawable-ldpi\</RemoteDir>
-            <RemoteName>ic_launcher.png</RemoteName>
-            <DeployClass>Android_LauncherIcon36</DeployClass>
-            <Operation>1</Operation>
+        <DeployFile Include="Videos\plecho_pass_1.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_pass_1.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
             <LocalCommand/>
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
-        <DeployFile Include="$(BDS)\bin\Artwork\Android\FM_LauncherIcon_72x72.png" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>Project10\res\drawable-hdpi\</RemoteDir>
-            <RemoteName>ic_launcher.png</RemoteName>
-            <DeployClass>Android_LauncherIcon72</DeployClass>
-            <Operation>1</Operation>
+        <DeployFile Include="Videos\taz_act_2.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>taz_act_2.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
             <LocalCommand/>
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
-        <DeployFile Include="$(BDS)\bin\Artwork\Android\FM_NotificationIcon_72x72.png" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>Project10\res\drawable-xxhdpi\</RemoteDir>
-            <RemoteName>ic_notification.png</RemoteName>
-            <DeployClass>Android_NotificationIcon72</DeployClass>
-            <Operation>1</Operation>
+        <DeployFile Include="Videos\lokot_act_3.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>lokot_act_3.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
             <LocalCommand/>
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
-        <DeployFile Include="$(BDS)\bin\Artwork\Android\FM_SplashImage_470x320.png" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>Project10\res\drawable-normal\</RemoteDir>
+        <DeployFile Include="Videos\lokot_act_3.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>lokot_act_3.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\taz_act_2.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>taz_act_2.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_act_2.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>plecho_act_2.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_act_2.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_act_2.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\lokot_act_4.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>lokot_act_4.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\lokot_act_4.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>lokot_act_4.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="$(BDS)\bin\Artwork\Android\FM_SplashImage_640x480.png" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\res\drawable-large\</RemoteDir>
             <RemoteName>splash_image.png</RemoteName>
-            <DeployClass>Android_SplashImage470</DeployClass>
+            <DeployClass>Android_SplashImage640</DeployClass>
             <Operation>1</Operation>
             <LocalCommand/>
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
-        <DeployFile Include="$(BDS)\bin\Artwork\Android\FM_NotificationIcon_36x36.png" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>Project10\res\drawable-hdpi\</RemoteDir>
-            <RemoteName>ic_notification.png</RemoteName>
-            <DeployClass>Android_NotificationIcon36</DeployClass>
+        <DeployFile Include="$(BDS)\bin\Artwork\Android\FM_SplashImage_640x480.png" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\res\drawable-large\</RemoteDir>
+            <RemoteName>splash_image.png</RemoteName>
+            <DeployClass>Android_SplashImage640</DeployClass>
             <Operation>1</Operation>
             <LocalCommand/>
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
-        <DeployFile Include="$(BDS)\bin\Artwork\Android\FM_LauncherIcon_192x192.png" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>Project10\res\drawable-xxxhdpi\</RemoteDir>
-            <RemoteName>ic_launcher.png</RemoteName>
-            <DeployClass>Android_LauncherIcon192</DeployClass>
+        <DeployFile Include="Android\Debug\strings.xml" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\res\values\</RemoteDir>
+            <RemoteName>strings.xml</RemoteName>
+            <DeployClass>Android_Strings</DeployClass>
             <Operation>1</Operation>
             <LocalCommand/>
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
-        <DeployFile Include="$(BDS)\bin\Artwork\Android\FM_LauncherIcon_144x144.png" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>Project10\res\drawable-xxhdpi\</RemoteDir>
-            <RemoteName>ic_launcher.png</RemoteName>
-            <DeployClass>Android_LauncherIcon144</DeployClass>
+        <DeployFile Include="Android\Release\Project10.classes" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\classes\</RemoteDir>
+            <RemoteName>Project10.classes</RemoteName>
+            <DeployClass>AndroidClasses</DeployClass>
+            <Operation>64</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Android\Debug\splash_image_def.xml" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\res\drawable\</RemoteDir>
+            <RemoteName>splash_image_def.xml</RemoteName>
+            <DeployClass>AndroidSplashImageDef</DeployClass>
             <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\spina_pass_2.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>spina_pass_2.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\zap_act_2.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>zap_act_2.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\spina_pass_2.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>spina_pass_2.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\zap_act_2.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>zap_act_2.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Android\Release\styles.xml" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\res\values\</RemoteDir>
+            <RemoteName>styles.xml</RemoteName>
+            <DeployClass>AndroidSplashStyles</DeployClass>
+            <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\zap_act_7.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>zap_act_7.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\zap_act_7.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>zap_act_7.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
             <LocalCommand/>
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
@@ -221,28 +2313,10 @@
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
-        <DeployFile Include="Android\Debug\Project10.classes" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>Project10\classes\</RemoteDir>
-            <RemoteName>Project10.classes</RemoteName>
-            <DeployClass>AndroidClasses</DeployClass>
-            <Operation>64</Operation>
-            <LocalCommand/>
-            <RemoteCommand/>
-            <Overwrite>True</Overwrite>
-        </DeployFile>
-        <DeployFile Include="Videos\Kayaking.mp4" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>Project10\</RemoteDir>
-            <RemoteName>Kayaking.mp4</RemoteName>
-            <DeployClass>File</DeployClass>
-            <Operation>0</Operation>
-            <LocalCommand/>
-            <RemoteCommand/>
-            <Overwrite>True</Overwrite>
-        </DeployFile>
-        <DeployFile Include="$(BDS)\bin\Artwork\Android\FM_LauncherIcon_96x96.png" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>Project10\res\drawable-xhdpi\</RemoteDir>
+        <DeployFile Include="$(BDS)\bin\Artwork\Android\FM_LauncherIcon_48x48.png" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\res\drawable-mdpi\</RemoteDir>
             <RemoteName>ic_launcher.png</RemoteName>
-            <DeployClass>Android_LauncherIcon96</DeployClass>
+            <DeployClass>Android_LauncherIcon48</DeployClass>
             <Operation>1</Operation>
             <LocalCommand/>
             <RemoteCommand/>
@@ -257,39 +2331,281 @@
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
-        <DeployFile Include="Android\Debug\libProject10.so" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>Project10\library\lib\armeabi-v7a\</RemoteDir>
-            <RemoteName>libProject10.so</RemoteName>
-            <DeployClass>ProjectOutput</DeployClass>
+        <DeployFile Include="$(BDS)\bin\Artwork\Android\FM_SplashImage_960x720.png" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\res\drawable-xlarge\</RemoteDir>
+            <RemoteName>splash_image.png</RemoteName>
+            <DeployClass>Android_SplashImage960</DeployClass>
             <Operation>1</Operation>
             <LocalCommand/>
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
-            <Required>True</Required>
         </DeployFile>
-        <DeployFile Include="pushcount.db" Condition="'$(Config)'=='Debug'">
+        <DeployFile Include="Videos\plecho_pass_4.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>plecho_pass_4.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_pass_4.mp4" Condition="'$(Config)'=='Release'">
             <RemoteDir>Project10\</RemoteDir>
-            <RemoteName>pushcount.db</RemoteName>
+            <RemoteName>plecho_pass_4.mp4</RemoteName>
             <DeployClass>File</DeployClass>
             <Operation>0</Operation>
             <LocalCommand/>
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
-        <DeployFile Include="Android\Debug\AndroidManifest.xml" Condition="'$(Config)'=='Debug'">
+        <DeployFile Include="Videos\zap_pass_3.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>zap_pass_3.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\zap_pass_3.mp4" Condition="'$(Config)'=='Release'">
             <RemoteDir>Project10\</RemoteDir>
-            <RemoteName>AndroidManifest.xml</RemoteName>
-            <DeployClass>ProjectAndroidManifest</DeployClass>
+            <RemoteName>zap_pass_3.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\spina_act_1.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>spina_act_1.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\spina_act_1.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>spina_act_1.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="$(BDS)\bin\Artwork\Android\FM_NotificationIcon_48x48.png" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\res\drawable-xhdpi\</RemoteDir>
+            <RemoteName>ic_notification.png</RemoteName>
+            <DeployClass>Android_NotificationIcon48</DeployClass>
             <Operation>1</Operation>
             <LocalCommand/>
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
-        <DeployFile Include="Android\Debug\styles.xml" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>Project10\res\values\</RemoteDir>
-            <RemoteName>styles.xml</RemoteName>
-            <DeployClass>AndroidSplashStyles</DeployClass>
+        <DeployFile Include="$(BDS)\bin\Artwork\Android\FM_NotificationIcon_48x48.png" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\res\drawable-xhdpi\</RemoteDir>
+            <RemoteName>ic_notification.png</RemoteName>
+            <DeployClass>Android_NotificationIcon48</DeployClass>
             <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Android\Debug\styles-v21.xml" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\res\values-v21\</RemoteDir>
+            <RemoteName>styles.xml</RemoteName>
+            <DeployClass>AndroidSplashStylesV21</DeployClass>
+            <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\lokot_pass_2.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>lokot_pass_2.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\lokot_pass_2.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>lokot_pass_2.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_pass_5.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_pass_5.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_pass_5.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>plecho_pass_5.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\koleno_act_4.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>koleno_act_4.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\koleno_act_4.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>koleno_act_4.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="$(BDS)\lib\android\debug\armeabi\libnative-activity.so" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\library\lib\armeabi\</RemoteDir>
+            <RemoteName>libProject10.so</RemoteName>
+            <DeployClass>AndroidLibnativeArmeabiFile</DeployClass>
+            <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="$(BDS)\lib\android\debug\armeabi\libnative-activity.so" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\library\lib\armeabi\</RemoteDir>
+            <RemoteName>libProject10.so</RemoteName>
+            <DeployClass>AndroidLibnativeArmeabiFile</DeployClass>
+            <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="$(BDS)\bin\Artwork\Android\FM_NotificationIcon_36x36.png" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\res\drawable-hdpi\</RemoteDir>
+            <RemoteName>ic_notification.png</RemoteName>
+            <DeployClass>Android_NotificationIcon36</DeployClass>
+            <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="$(BDS)\bin\Artwork\Android\FM_NotificationIcon_36x36.png" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\res\drawable-hdpi\</RemoteDir>
+            <RemoteName>ic_notification.png</RemoteName>
+            <DeployClass>Android_NotificationIcon36</DeployClass>
+            <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\koleno_act_3.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>koleno_act_3.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\koleno_act_3.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>koleno_act_3.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\time.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>time.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\time.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>time.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\spina_act_2.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>spina_act_2.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\spina_act_2.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>spina_act_2.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Android\Release\colors.xml" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\res\values\</RemoteDir>
+            <RemoteName>colors.xml</RemoteName>
+            <DeployClass>Android_Colors</DeployClass>
+            <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_act_4.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_act_4.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_act_4.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_act_4.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_act_4.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>plecho_act_4.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_act_4.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_act_4.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
             <LocalCommand/>
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
@@ -303,8 +2619,968 @@
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
+        <DeployFile Include="$(BDS)\bin\Artwork\Android\FM_NotificationIcon_96x96.png" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\res\drawable-xxxhdpi\</RemoteDir>
+            <RemoteName>ic_notification.png</RemoteName>
+            <DeployClass>Android_NotificationIcon96</DeployClass>
+            <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_act_3.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_act_3.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_act_3.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_act_3.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\lokot_act_2.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>lokot_act_2.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\lokot_act_2.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>lokot_act_2.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_act_1.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>plecho_act_1.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_act_1.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_act_1.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Android\Release\libProject10.so" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\library\lib\armeabi-v7a\</RemoteDir>
+            <RemoteName>libProject10.so</RemoteName>
+            <DeployClass>ProjectOutput</DeployClass>
+            <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+            <Required>True</Required>
+        </DeployFile>
+        <DeployFile Include="Videos\koleno_act_1.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>koleno_act_1.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\koleno_act_1.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>koleno_act_1.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_act_3.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>plecho_act_3.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_act_3.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_act_3.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\Background_music\the-weeknd-the-morning.mp3" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>the-weeknd-the-morning.mp3</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\zap_pass_1.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>zap_pass_1.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\zap_pass_1.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>zap_pass_1.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_pass_1.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_pass_1.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_pass_1.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_pass_1.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_act_2.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_act_2.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_act_2.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_act_2.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="pushcount.db" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>pushcount.db</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\stopa_act_4.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>stopa_act_4.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\stopa_act_4.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>stopa_act_4.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\stopa_pass_1.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>stopa_pass_1.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_pass_2.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>plecho_pass_2.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_pass_2.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_pass_2.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\stopa_pass_1.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>stopa_pass_1.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_act_5.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_act_5.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_act_5.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_act_5.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Android\Release\AndroidManifest.xml" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>AndroidManifest.xml</RemoteName>
+            <DeployClass>ProjectAndroidManifest</DeployClass>
+            <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_pass_3.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_pass_3.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_pass_3.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_pass_3.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\zap_pass_2.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>zap_pass_2.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\zap_pass_2.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>zap_pass_2.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_pass_4.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_pass_4.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_pass_4.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_pass_4.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\spina_pass_3.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>spina_pass_3.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\spina_pass_3.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>spina_pass_3.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\Background_music\oh-wonder-technicolour-beat-urban-contact-remix.mp3" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>oh-wonder-technicolour-beat-urban-contact-remix.mp3</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\Background_music\oh-wonder-technicolour-beat-urban-contact-remix.mp3" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>oh-wonder-technicolour-beat-urban-contact-remix.mp3</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
     </ItemGroup>
-    <ItemGroup Condition="'$(Platform)'=='Win64'"/>
-    <ItemGroup Condition="'$(Platform)'=='iOSDevice64'"/>
-    <ItemGroup Condition="'$(Platform)'=='iOSSimARM64'"/>
+    <ItemGroup Condition="'$(Platform)'=='Win64'">
+        <DeployFile Include="Win64\Debug\Project10.exe" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>Project10.exe</RemoteName>
+            <DeployClass>ProjectOutput</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+            <Required>True</Required>
+        </DeployFile>
+        <DeployFile Include="libmysql.dll" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>libmysql.dll</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="libmysql.dll" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>libmysql.dll</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_pass_5.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_pass_5.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_pass_2.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_pass_2.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_act_1.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_act_1.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_act_1.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_act_1.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_pass_2.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_pass_2.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\time.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>time.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\time.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>time.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_act_4.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_act_4.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_act_4.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_act_4.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_act_3.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_act_3.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_act_3.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_act_3.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_pass_1.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_pass_1.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_pass_1.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_pass_1.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_act_2.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_act_2.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_act_2.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_act_2.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Win64\Release\Project10.exe" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>Project10.exe</RemoteName>
+            <DeployClass>ProjectOutput</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+            <Required>True</Required>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_act_5.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_act_5.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_act_5.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_act_5.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_pass_3.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_pass_3.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_pass_3.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_pass_3.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_pass_4.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_pass_4.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_pass_4.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>plecho_pass_4.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+    </ItemGroup>
+    <ItemGroup Condition="'$(Platform)'=='iOSDevice64'">
+        <DeployFile Include="Videos\plecho_pass_5.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10.app\</RemoteDir>
+            <RemoteName>plecho_pass_5.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_pass_2.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10.app\</RemoteDir>
+            <RemoteName>plecho_pass_2.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_act_1.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10.app\</RemoteDir>
+            <RemoteName>plecho_act_1.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_act_1.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10.app\</RemoteDir>
+            <RemoteName>plecho_act_1.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_pass_2.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10.app\</RemoteDir>
+            <RemoteName>plecho_pass_2.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\time.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10.app\</RemoteDir>
+            <RemoteName>time.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\time.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10.app\</RemoteDir>
+            <RemoteName>time.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_act_4.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10.app\</RemoteDir>
+            <RemoteName>plecho_act_4.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_act_4.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10.app\</RemoteDir>
+            <RemoteName>plecho_act_4.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_act_3.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10.app\</RemoteDir>
+            <RemoteName>plecho_act_3.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_act_3.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10.app\</RemoteDir>
+            <RemoteName>plecho_act_3.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_pass_1.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10.app\</RemoteDir>
+            <RemoteName>plecho_pass_1.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_pass_1.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10.app\</RemoteDir>
+            <RemoteName>plecho_pass_1.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_act_2.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10.app\</RemoteDir>
+            <RemoteName>plecho_act_2.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_act_2.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10.app\</RemoteDir>
+            <RemoteName>plecho_act_2.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_act_5.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10.app\</RemoteDir>
+            <RemoteName>plecho_act_5.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_act_5.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10.app\</RemoteDir>
+            <RemoteName>plecho_act_5.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_pass_3.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10.app\</RemoteDir>
+            <RemoteName>plecho_pass_3.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_pass_3.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10.app\</RemoteDir>
+            <RemoteName>plecho_pass_3.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_pass_4.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10.app\</RemoteDir>
+            <RemoteName>plecho_pass_4.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_pass_4.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10.app\</RemoteDir>
+            <RemoteName>plecho_pass_4.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+    </ItemGroup>
+    <ItemGroup Condition="'$(Platform)'=='iOSSimARM64'">
+        <DeployFile Include="Videos\plecho_pass_5.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10.app\</RemoteDir>
+            <RemoteName>plecho_pass_5.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_pass_2.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10.app\</RemoteDir>
+            <RemoteName>plecho_pass_2.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_act_1.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10.app\</RemoteDir>
+            <RemoteName>plecho_act_1.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_act_1.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10.app\</RemoteDir>
+            <RemoteName>plecho_act_1.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_pass_2.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10.app\</RemoteDir>
+            <RemoteName>plecho_pass_2.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\time.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10.app\</RemoteDir>
+            <RemoteName>time.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\time.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10.app\</RemoteDir>
+            <RemoteName>time.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_act_4.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10.app\</RemoteDir>
+            <RemoteName>plecho_act_4.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_act_4.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10.app\</RemoteDir>
+            <RemoteName>plecho_act_4.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_act_3.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10.app\</RemoteDir>
+            <RemoteName>plecho_act_3.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_act_3.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10.app\</RemoteDir>
+            <RemoteName>plecho_act_3.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_pass_1.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10.app\</RemoteDir>
+            <RemoteName>plecho_pass_1.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_pass_1.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10.app\</RemoteDir>
+            <RemoteName>plecho_pass_1.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_act_2.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10.app\</RemoteDir>
+            <RemoteName>plecho_act_2.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_act_2.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10.app\</RemoteDir>
+            <RemoteName>plecho_act_2.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_act_5.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10.app\</RemoteDir>
+            <RemoteName>plecho_act_5.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_act_5.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10.app\</RemoteDir>
+            <RemoteName>plecho_act_5.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_pass_3.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10.app\</RemoteDir>
+            <RemoteName>plecho_pass_3.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_pass_3.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10.app\</RemoteDir>
+            <RemoteName>plecho_pass_3.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_pass_4.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10.app\</RemoteDir>
+            <RemoteName>plecho_pass_4.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_pass_4.mp4" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Project10.app\</RemoteDir>
+            <RemoteName>plecho_pass_4.mp4</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+    </ItemGroup>
 </Project>

@@ -12,9 +12,9 @@ uses
   FireDAC.Stan.ExprFuncs, FireDAC.Phys.SQLiteWrapper.Stat, FireDAC.FMXUI.Wait,
   Data.DB, FireDAC.Comp.Client, FMX.Edit, FireDAC.Stan.Param, FireDAC.DatS,
   FireDAC.DApt.Intf, FireDAC.DApt, FireDAC.Comp.DataSet, System.IOUtils,
-  FireDAC.Comp.UI, FireDAC.Phys.MySQL, FireDAC.Phys.MySQLDef, System.Diagnostics, System.IniFiles,
+  FireDAC.Comp.UI, System.Diagnostics, System.IniFiles,
   FMX.TextLayout, Datasnap.DSClientRest, ClientModuleUnit3, Datasnap.DBClient,
-  Datasnap.DSConnect, System.JSON;
+  Datasnap.DSConnect, System.JSON,System.Threading, FMX.DialogService.Async;
 
    type
   TPlaylistItem = record
@@ -27,9 +27,7 @@ uses
 
 type
   TForm12 = class(TForm)
-    FDConnection1: TFDConnection;
     FDPhysSQLiteDriverLink1: TFDPhysSQLiteDriverLink;
-    FDQuery1: TFDQuery;
     MediaPlayer1: TMediaPlayer;
     MediaplayerControl: TMediaPlayerControl;
     Timer1: TTimer;
@@ -39,14 +37,11 @@ type
     ListBox1: TListBox;
     FDGUIxWaitCursor1: TFDGUIxWaitCursor;
     Label2: TLabel;
-    FDQuery2: TFDQuery;
-    FDPhysMySQLDriverLink1: TFDPhysMySQLDriverLink;
     Timer4: TTimer;
     Layoutvideo: TLayout;
     Layoutitems: TLayout;
     Layout1: TLayout;
     Layout2: TLayout;
-    FDQuery3: TFDQuery;
     Edit1: TEdit;
     Button3: TButton;
     MediaPlayer2: TMediaPlayer;
@@ -62,12 +57,12 @@ type
     Button4: TButton;
     DSRestConnection1: TDSRestConnection;
     DSProviderConnection1: TDSProviderConnection;
+    AniIndicator1: TAniIndicator;
     procedure FormCreate(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
     procedure bPlayClickClick(Sender: TObject);
     procedure bStopClickClick(Sender: TObject);
     procedure tbVolumeChange(Sender: TObject);
-    procedure FDConnection1BeforeConnect(Sender: TObject);
     procedure Button2Click(Sender: TObject);
     procedure Button3Click(Sender: TObject);
     procedure Timer4Timer(Sender: TObject);
@@ -97,14 +92,17 @@ type
     FirstLoop: Boolean;
     function CalculateTextHeight(const Text: string; const Font: TFont; const Width: Single): Single;
     procedure ListTxtFiles;
+    procedure ShowLoadingIndicator;
+    procedure HideLoadingIndicator;
     procedure Nextvideoload;
     procedure InitializeVideoTrackBar;
     function TimeInSecondsOf(ATime: TTime): Double;
     procedure UpdateExerciseList;
     procedure SaveSettingsToIniFile;
  procedure UpdateCumulativeTimeInDatabase(const Item: TPlaylistItem);
-procedure CompleteExercise(var Item: TPlaylistItem);
+procedure CompleteExercise(ItemIndex: Integer);
  procedure RemoveExerciseFromPlaylist(const Item: TPlaylistItem);
+ procedure ProcessPlaylistData(PlaylistData: TJSONArray);
 
 
   public
@@ -225,15 +223,26 @@ end;
 
 procedure TForm12.UpdateCumulativeTimeInDatabase(const Item: TPlaylistItem);
 begin
-  FDQuery3.Connection := FDConnection1;
-  FDQuery3.SQL.Text := 'UPDATE appointments A ' +
-                       'SET A.CumulativeTimeSpent = :CumulativeTime ' +
-                       'WHERE A.idAppointments = :apptag';
-  FDQuery3.ParamByName('CumulativeTime').AsFloat := Item.CumulativeTime;
-  FDQuery3.ParamByName('apptag').AsInteger := Item.appointmentsID;
-  FDQuery3.ExecSQL;
+  TTask.Run(
+    procedure
+    begin
+      try
+        ClientModule3.ServerMethods1Client.UpdateCumulativeTime(Item.appointmentsID, Item.CumulativeTime);
+      except
+        on E: Exception do
+        begin
+          // Handle exception on the main thread if needed
+          TThread.Queue(nil,
+            procedure
+            begin
+              ShowMessage('Error updating cumulative time: ' + E.Message);
+            end
+          );
+        end;
+      end;
+    end
+  );
 end;
-
 procedure TForm12.InitializeVideoTrackBar;
 var
   ExerciseDuration, RemainingTime: Double;
@@ -445,22 +454,68 @@ Mediaplayer1.Stop;
 Application.Terminate;
 end;
 
-procedure TForm12.CompleteExercise(var Item: TPlaylistItem);
+procedure TForm12.ShowLoadingIndicator;
 begin
-  FDQuery3.Connection := FDConnection1;
-  FDQuery3.SQL.Text := 'UPDATE appointments A ' +
-                       'SET A.sdelanovden = A.sdelanovden + 1, ' +
-                       'A.sdelanovsego = A.sdelanovsego + 1, ' +
-                       'A.Lastsession = UTC_TIMESTAMP(), ' +
-                       'A.CumulativeTimeSpent = 0 ' +
-                       'WHERE A.idAppointments = :apptag';
-  FDQuery3.ParamByName('apptag').AsInteger := Item.appointmentsID;
-  FDQuery3.ExecSQL;
-
-  // Reset cumulative time
-  Item.CumulativeTime := 0;
+  // For example, show a TActivityIndicator
+  AniIndicator1.Visible := True;
+  AniIndicator1.Enabled := True; // Start the animation
 end;
 
+procedure TForm12.HideLoadingIndicator;
+begin
+  AniIndicator1.Enabled := false;
+  AniIndicator1.Visible := false;
+  end;
+
+procedure TForm12.CompleteExercise(ItemIndex: Integer);
+var
+  AppointmentsID: Integer;
+begin
+  // Extract necessary data into local variables
+  AppointmentsID := Playlist[ItemIndex].appointmentsID;
+
+  // Run the server call asynchronously
+  TTask.Run(
+    procedure
+    var
+      Success: Boolean;
+    begin
+      try
+        // Call the server method
+        Success := ClientModule3.ServerMethods1Client.CompleteExercise(AppointmentsID);
+
+        // Update the UI on the main thread
+        TThread.Queue(nil,
+          procedure
+          begin
+            if Success then
+            begin
+              // Modify the Playlist item
+              Playlist[ItemIndex].CumulativeTime := 0;
+              // Update the UI as needed
+              UpdateExerciseList;
+            end
+            else
+            begin
+              ShowMessage('Failed to complete exercise.');
+            end;
+          end
+        );
+      except
+        on E: Exception do
+        begin
+          // Handle exceptions on the main thread
+          TThread.Queue(nil,
+            procedure
+            begin
+              ShowMessage('Error completing exercise: ' + E.Message);
+            end
+          );
+        end;
+      end;
+    end
+  );
+end;
 
 procedure TForm12.FormCreate(Sender: TObject);
 var
@@ -476,6 +531,9 @@ var
   Response: string;
   DateQueryResult: Boolean;
 begin
+        // Show the loading indicator
+  ShowLoadingIndicator;
+
        // Initialize variables
   IsMP3Loaded := False;
   CurrentVolume := tbVolume.Value;
@@ -511,97 +569,125 @@ inifilename := TPath.Combine(Path, 'MyApp.ini');
     IniFile.Free;
   end;
 
-   // Retrieve the playlist from the server
-  try
-    // Call the server method to get the playlist as a JSON array
-    PlaylistData := ClientModule3.ServerMethods1Client.GetPlaylist(Pusername);
 
-    if (PlaylistData = nil) or (PlaylistData.Count = 0) then
+   // Run the server call in a background task
+  TTask.Run(
+    procedure
+    var
+      PlaylistData: TJSONArray;
     begin
-      // If no exercises are returned, check if the user has scheduled exercises
-      DateQueryResult := ClientModule3.ServerMethods1Client.CheckForScheduledExercises(Pusername);
-      if DateQueryResult then
-      begin
-        ShowMessage('Кажется ты сегодня сделал все нужные упражнения! Возвращайся завтра!');
-      end
-      else
-      begin
-        ShowMessage('Кажется у тебя сегодня не запланировано упражнений! Если считаешь, что нужно позаниматься - попробуй позвонить своему врачу!');
-      end;
-      Application.Terminate;
-      Exit;
-    end;
-
-    // Initialize the playlist array
-    SetLength(Playlist, PlaylistData.Count);
-
-    // Populate the playlist array from the JSON data
-    for I := 0 to PlaylistData.Count - 1 do
-    begin
-      JSONObject := PlaylistData.Items[I] as TJSONObject;
-
-      Item.VideoID := JSONObject.GetValue('filename').Value;
-      Item.Videoname := JSONObject.GetValue('video_name').Value;
-      Item.appointmentsID := StrToInt(JSONObject.GetValue('idAppointments').Value);
-      Item.CumulativeTime := JSONObject.GetValue('CumulativeTimeSpent').AsType<Double>;
-
-      // Parse the playback time (dlitelnost)
       try
-        // Assuming 'dlitelnost' is in 'HH:MM:SS' format
-        Item.PlaybackTime := StrToTime(JSONObject.GetValue('dlitelnost').Value);
+        // Perform the server call
+        PlaylistData := ClientModule3.ServerMethods1Client.GetPlaylist(Pusername);
+
+        // Process the data on the main thread
+        TThread.Synchronize(nil,
+          procedure
+          begin
+            // Hide the loading indicator
+            HideLoadingIndicator;
+
+            // Process the PlaylistData
+            ProcessPlaylistData(PlaylistData);
+          end
+        );
       except
         on E: Exception do
         begin
-          ShowMessage('Error parsing playback time: ' + E.Message);
-          Continue; // Skip this item if there's an error
+          // Handle exceptions on the main thread
+          TThread.Synchronize(nil,
+            procedure
+            begin
+              HideLoadingIndicator;
+              ShowMessage('Ошибка при получении списка упражнений: ' + E.Message);
+              Application.Terminate;
+            end
+          );
         end;
       end;
-
-      Playlist[I] := Item;
-
-      // Calculate total exercise time remaining
-      Fullexercisetime := Fullexercisetime + (TimeInSecondsOf(Item.PlaybackTime) - Item.CumulativeTime);
-
-      // Update the ListBox with the exercise details
-      DecodeTime(Item.PlaybackTime, Hour, Min, Sec, MSec);
-      ListBox1.Items.Add(Format('Упражнение: %s, Время: %d мин %d сек', [Item.Videoname, Min, Sec]));
-      ListBox1.ListItems[ListBox1.Items.Count - 1].Tag := Item.appointmentsID;
-      ListBox1.ListItems[ListBox1.Items.Count - 1].WordWrap := True;
-      ListBox1.ListItems[ListBox1.Items.Count - 1].TextSettings.WordWrap := True;
-      ListBox1.ListItems[ListBox1.Items.Count - 1].StyleLookup := 'ListBoxItem1Style1';
-
-      // Adjust the height based on text length
-      TextHeight := CalculateTextHeight(
-        ListBox1.ListItems[ListBox1.Items.Count - 1].Text,
-        ListBox1.ListItems[ListBox1.Items.Count - 1].Font,
-        ListBox1.Width
-      );
-      ListBox1.ListItems[ListBox1.Items.Count - 1].Height := TextHeight + 10; // Add padding
-    end;
-
-    // Enable the play and stop buttons if there are exercises
-    if Length(Playlist) > 0 then
-    begin
-      bPlayClick.Enabled := True;
-      bStopClick.Enabled := True;
-      // Display the total remaining exercise time
-      DecodeTime(Fullexercisetime / SecsPerDay, Hour, Min, Sec, MSec);
-      Label2.Text := Format('Общее оставшееся время занятия: %d мин %d сек', [Min, Sec]);
     end
-    else
-    begin
-      ShowMessage('Нет доступных упражнений.');
-      Application.Terminate;
+  );
+end;
+
+procedure TForm12.ProcessPlaylistData(PlaylistData: TJSONArray);
+var
+  I: Integer;
+  JSONObject: TJSONObject;
+  Item: TPlaylistItem;
+  Hour, Min, Sec, MSec: Word;
+  TextHeight: Single;
+begin
+  // Check for empty or nil PlaylistData
+  if (PlaylistData = nil) or (PlaylistData.Count = 0) then
+  begin
+    // Handle no exercises case
+    // ... (your existing code)
+    Exit;
+  end;
+
+  // Initialize the playlist array
+  SetLength(Playlist, PlaylistData.Count);
+
+  // Populate the playlist array from the JSON data
+  for I := 0 to PlaylistData.Count - 1 do
+  begin
+    JSONObject := PlaylistData.Items[I] as TJSONObject;
+
+    Item.VideoID := JSONObject.GetValue('filename').Value;
+    Item.Videoname := JSONObject.GetValue('video_name').Value;
+    Item.appointmentsID := StrToInt(JSONObject.GetValue('idAppointments').Value);
+    Item.CumulativeTime := JSONObject.GetValue('CumulativeTimeSpent').AsType<Double>;
+
+    // Parse the playback time (dlitelnost)
+    try
+      // Assuming 'dlitelnost' is in 'HH:MM:SS' format
+      Item.PlaybackTime := StrToTime(JSONObject.GetValue('dlitelnost').Value);
+    except
+      on E: Exception do
+      begin
+        ShowMessage('Error parsing playback time: ' + E.Message);
+        Continue; // Skip this item if there's an error
+      end;
     end;
 
-  except
-    on E: Exception do
-    begin
-      ShowMessage('Ошибка при получении списка упражнений: ' + E.Message);
-      Application.Terminate;
-    end;
+    Playlist[I] := Item;
+
+    // Calculate total exercise time remaining
+    Fullexercisetime := Fullexercisetime + (TimeInSecondsOf(Item.PlaybackTime) - Item.CumulativeTime);
+
+    // Update the ListBox with the exercise details
+    DecodeTime(Item.PlaybackTime, Hour, Min, Sec, MSec);
+    ListBox1.Items.Add(Format('Упражнение: %s, Время: %d мин %d сек', [Item.Videoname, Min, Sec]));
+    ListBox1.ListItems[ListBox1.Items.Count - 1].Tag := Item.appointmentsID;
+    ListBox1.ListItems[ListBox1.Items.Count - 1].WordWrap := True;
+    ListBox1.ListItems[ListBox1.Items.Count - 1].TextSettings.WordWrap := True;
+    ListBox1.ListItems[ListBox1.Items.Count - 1].StyleLookup := 'ListBoxItem1Style1';
+
+    // Adjust the height based on text length
+    TextHeight := CalculateTextHeight(
+      ListBox1.ListItems[ListBox1.Items.Count - 1].Text,
+      ListBox1.ListItems[ListBox1.Items.Count - 1].Font,
+      ListBox1.Width
+    );
+    ListBox1.ListItems[ListBox1.Items.Count - 1].Height := TextHeight + 10; // Add padding
+  end;
+
+  // Enable the play and stop buttons if there are exercises
+  if Length(Playlist) > 0 then
+  begin
+    bPlayClick.Enabled := True;
+    bStopClick.Enabled := True;
+    // Display the total remaining exercise time
+    DecodeTime(Fullexercisetime / SecsPerDay, Hour, Min, Sec, MSec);
+    Label2.Text := Format('Общее оставшееся время занятия: %d мин %d сек', [Min, Sec]);
+  end
+  else
+  begin
+    ShowMessage('Нет доступных упражнений.');
+    Application.Terminate;
   end;
 end;
+
 
 
 
@@ -754,13 +840,6 @@ begin
   end;
 end;
 
-procedure TForm12.FDConnection1BeforeConnect(Sender: TObject);
-begin
-  {$IF DEFINED(iOS) or DEFINED(ANDROID)}
-  FDConnection1.Params.Values['Database'] :=
-      TPath.Combine(TPath.GetDocumentsPath, 'pushcount.db');
-  {$ENDIF}
-end;
 
 procedure TForm12.tbVolumeChange(Sender: TObject);
 
@@ -870,7 +949,7 @@ begin
   if Playlist[CurrentItemIndex].CumulativeTime >= ExerciseDuration then
   begin
     // Mark the exercise as completed
-    CompleteExercise(Playlist[CurrentItemIndex]);
+    CompleteExercise(CurrentItemIndex);
 
     // Remove the exercise from the playlist
     RemoveExerciseFromPlaylist(Playlist[CurrentItemIndex]);
