@@ -58,15 +58,15 @@ inifilename : string;
 Nextform : TForm12;
 
 begin
-   inifilename := TPath.Combine(Path, 'MyApp.ini');
-   try
-   IniFile := TIniFile.Create(inifilename);
-   IniFile.WriteString(INI_SECTION, 'MyPassword', PasswordEdit.Text);
-   IniFile.WriteString(INI_SECTION, 'MyLogin', UsernameEdit.Text);
+  inifilename := TPath.Combine(Path, 'MyApp.ini');
 
+  try
+    IniFile := TIniFile.Create(inifilename);
+    IniFile.WriteString(INI_SECTION, 'MyPassword', PasswordEdit.Text);
+    IniFile.WriteString(INI_SECTION, 'MyLogin', UsernameEdit.Text);
   finally
     IniFile.Free;
-   end;
+  end;
 
   if ValidateCredentials(UsernameEdit.Text, PasswordEdit.Text) then
   begin
@@ -123,16 +123,8 @@ var
   LastValuelogin, LastValuepass: string;
   inifilename : string;
 begin
-  Case TOSVersion.Platform of
-    TOSVersion.TPlatform.pfWindows:
-  Path := ExtractFilePath(ParamStr(0));
- TOSVersion.TPlatform.pfiOS, TOSVersion.TPlatform.pfAndroid:
-    Path := TPath.Combine(TPath.GetDocumentsPath, 'MyApp.ini');
-  TOSVersion.TPlatform.pfMacOS:
-    Path := TPath.Combine(TPath.GetFullPath('../Resources/StartUp'), 'MyApp.ini');
-  TOSVersion.TPlatform.pfWinRT, TOSVersion.TPlatform.pfLinux:
-    raise Exception.Create('Unexpected platform');
-end;
+Path := TPath.GetHomePath; // or TPath.GetHomePath
+
 
    inifilename := TPath.Combine(Path, 'MyApp.ini');
   try
