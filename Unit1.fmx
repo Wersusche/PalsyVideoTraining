@@ -16,8 +16,8 @@ object LoginForm: TLoginForm
     Size.PlatformDefault = False
     TabOrder = 5
     object Label1: TLabel
-      Align = Top
-      Margins.Bottom = 5.000000000000000000
+      Align = Center
+      Margins.Top = -230.000000000000000000
       Size.Width = 1078.000000000000000000
       Size.Height = 28.000000000000000000
       Size.PlatformDefault = False
@@ -25,8 +25,8 @@ object LoginForm: TLoginForm
       TabOrder = 0
     end
     object Button1: TButton
-      Align = Bottom
-      Position.Y = 590.000000000000000000
+      Align = Center
+      Margins.Top = 20.000000000000000000
       Size.Width = 1078.000000000000000000
       Size.Height = 22.000000000000000000
       Size.PlatformDefault = False
@@ -35,9 +35,8 @@ object LoginForm: TLoginForm
       OnClick = Button1Click
     end
     object Label2: TLabel
-      Align = Top
-      Margins.Bottom = 5.000000000000000000
-      Position.Y = 109.000000000000000000
+      Align = Center
+      Margins.Top = -120.000000000000000000
       Size.Width = 1078.000000000000000000
       Size.Height = 28.000000000000000000
       Size.PlatformDefault = False
@@ -46,29 +45,27 @@ object LoginForm: TLoginForm
     end
     object PasswordEdit: TEdit
       Touch.InteractiveGestures = [LongTap, DoubleTap]
-      Align = Top
+      Align = Center
       TabOrder = 4
       Text = '123456'
-      Position.Y = 33.000000000000000000
-      Margins.Bottom = 10.000000000000000000
+      Margins.Top = -60.000000000000000000
       Size.Width = 1078.000000000000000000
       Size.Height = 28.000000000000000000
       Size.PlatformDefault = False
     end
     object UsernameEdit: TEdit
       Touch.InteractiveGestures = [LongTap, DoubleTap]
-      Align = Top
+      Align = Center
       TabOrder = 2
       Text = 'Boris'
-      Position.Y = 71.000000000000000000
-      Margins.Bottom = 10.000000000000000000
+      Margins.Top = -180.000000000000000000
       Size.Width = 1078.000000000000000000
       Size.Height = 28.000000000000000000
       Size.PlatformDefault = False
     end
     object Button2: TButton
-      Align = Bottom
-      Position.Y = 612.000000000000000000
+      Align = Center
+      Margins.Top = 90.000000000000000000
       Size.Width = 1078.000000000000000000
       Size.Height = 22.000000000000000000
       Size.PlatformDefault = False

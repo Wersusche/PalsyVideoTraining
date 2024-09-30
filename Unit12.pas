@@ -624,20 +624,16 @@ begin
     // ... (your existing code)
     Exit;
   end;
-
   // Initialize the playlist array
   SetLength(Playlist, PlaylistData.Count);
-
   // Populate the playlist array from the JSON data
   for I := 0 to PlaylistData.Count - 1 do
   begin
     JSONObject := PlaylistData.Items[I] as TJSONObject;
-
     Item.VideoID := JSONObject.GetValue('filename').Value;
     Item.Videoname := JSONObject.GetValue('video_name').Value;
     Item.appointmentsID := StrToInt(JSONObject.GetValue('idAppointments').Value);
     Item.CumulativeTime := JSONObject.GetValue('CumulativeTimeSpent').AsType<Double>;
-
     // Parse the playback time (dlitelnost)
     try
       // Assuming 'dlitelnost' is in 'HH:MM:SS' format
@@ -649,12 +645,9 @@ begin
         Continue; // Skip this item if there's an error
       end;
     end;
-
     Playlist[I] := Item;
-
     // Calculate total exercise time remaining
     Fullexercisetime := Fullexercisetime + (TimeInSecondsOf(Item.PlaybackTime) - Item.CumulativeTime);
-
     // Update the ListBox with the exercise details
     DecodeTime(Item.PlaybackTime, Hour, Min, Sec, MSec);
     ListBox1.Items.Add(Format('Упражнение: %s, Время: %d мин %d сек', [Item.Videoname, Min, Sec]));
@@ -662,7 +655,6 @@ begin
     ListBox1.ListItems[ListBox1.Items.Count - 1].WordWrap := True;
     ListBox1.ListItems[ListBox1.Items.Count - 1].TextSettings.WordWrap := True;
     ListBox1.ListItems[ListBox1.Items.Count - 1].StyleLookup := 'ListBoxItem1Style1';
-
     // Adjust the height based on text length
     TextHeight := CalculateTextHeight(
       ListBox1.ListItems[ListBox1.Items.Count - 1].Text,
@@ -671,7 +663,6 @@ begin
     );
     ListBox1.ListItems[ListBox1.Items.Count - 1].Height := TextHeight + 10; // Add padding
   end;
-
   // Enable the play and stop buttons if there are exercises
   if Length(Playlist) > 0 then
   begin
