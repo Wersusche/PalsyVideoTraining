@@ -24,9 +24,11 @@ type
     DSRestConnection1: TDSRestConnection;
     Button2: TButton;
     CenterLayout: TLayout;
+    Button3: TButton;
     procedure Button1Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure Button2Click(Sender: TObject);
+    procedure Button3Click(Sender: TObject);
   private
     { Private declarations }
         Path : string;
@@ -115,6 +117,12 @@ begin
 
 end;
 
+
+procedure TLoginForm.Button3Click(Sender: TObject);
+begin
+ Path := TPath.GetDocumentsPath;
+ label1.Text:= Path;
+end;
 
 procedure TLoginForm.FormCreate(Sender: TObject);
 var

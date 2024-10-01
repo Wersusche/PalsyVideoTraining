@@ -46,6 +46,15 @@
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
+        <DeployFile Include="res\xml\network_security_config.xml" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>network_security_config.xml</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
         <DeployFile Include="Win32\Debug\MyApp.ini" Condition="'$(Config)'=='Debug'">
             <RemoteDir>Project10\</RemoteDir>
             <RemoteName>MyApp.ini</RemoteName>
@@ -127,15 +136,6 @@
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
-        <DeployFile Include="Videos\plecho_pass_5.mp4" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>Project10\</RemoteDir>
-            <RemoteName>plecho_pass_5.mp4</RemoteName>
-            <DeployClass>File</DeployClass>
-            <Operation>0</Operation>
-            <LocalCommand/>
-            <RemoteCommand/>
-            <Overwrite>True</Overwrite>
-        </DeployFile>
         <DeployFile Include="Videos\taz_act_2.mp4" Condition="'$(Config)'=='Debug'">
             <RemoteDir>Project10\</RemoteDir>
             <RemoteName>taz_act_2.mp4</RemoteName>
@@ -148,15 +148,6 @@
         <DeployFile Include="Videos\plecho_pass_2.mp4" Condition="'$(Config)'=='Release'">
             <RemoteDir>Project10\</RemoteDir>
             <RemoteName>plecho_pass_2.mp4</RemoteName>
-            <DeployClass>File</DeployClass>
-            <Operation>0</Operation>
-            <LocalCommand/>
-            <RemoteCommand/>
-            <Overwrite>True</Overwrite>
-        </DeployFile>
-        <DeployFile Include="Videos\plecho_act_1.mp4" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>Project10\</RemoteDir>
-            <RemoteName>plecho_act_1.mp4</RemoteName>
             <DeployClass>File</DeployClass>
             <Operation>0</Operation>
             <LocalCommand/>
@@ -290,15 +281,6 @@
             <Overwrite>True</Overwrite>
             <Required>True</Required>
         </DeployFile>
-        <DeployFile Include="Videos\time.mp4" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>Project10\</RemoteDir>
-            <RemoteName>time.mp4</RemoteName>
-            <DeployClass>File</DeployClass>
-            <Operation>0</Operation>
-            <LocalCommand/>
-            <RemoteCommand/>
-            <Overwrite>True</Overwrite>
-        </DeployFile>
         <DeployFile Include="Videos\Background_music\blank-and-jones-city-lights-so8os-mix.mp3" Condition="'$(Config)'=='Debug'">
             <RemoteDir>Project10\</RemoteDir>
             <RemoteName>blank-and-jones-city-lights-so8os-mix.mp3</RemoteName>
@@ -317,28 +299,10 @@
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
-        <DeployFile Include="Videos\plecho_act_3.mp4" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>Project10\</RemoteDir>
-            <RemoteName>plecho_act_3.mp4</RemoteName>
-            <DeployClass>File</DeployClass>
-            <Operation>0</Operation>
-            <LocalCommand/>
-            <RemoteCommand/>
-            <Overwrite>True</Overwrite>
-        </DeployFile>
         <DeployFile Include="Videos\zap_act_7.mp4" Condition="'$(Config)'=='Debug'">
             <RemoteDir>Project10\</RemoteDir>
             <RemoteName>zap_act_7.mp4</RemoteName>
             <DeployClass>ProjectFile</DeployClass>
-            <Operation>0</Operation>
-            <LocalCommand/>
-            <RemoteCommand/>
-            <Overwrite>True</Overwrite>
-        </DeployFile>
-        <DeployFile Include="Videos\plecho_pass_1.mp4" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>Project10\</RemoteDir>
-            <RemoteName>plecho_pass_1.mp4</RemoteName>
-            <DeployClass>File</DeployClass>
             <Operation>0</Operation>
             <LocalCommand/>
             <RemoteCommand/>
@@ -366,15 +330,6 @@
             <RemoteDir>Project10\</RemoteDir>
             <RemoteName>stopa_act_1.mp4</RemoteName>
             <DeployClass>ProjectFile</DeployClass>
-            <Operation>0</Operation>
-            <LocalCommand/>
-            <RemoteCommand/>
-            <Overwrite>True</Overwrite>
-        </DeployFile>
-        <DeployFile Include="Videos\plecho_act_5.mp4" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>Project10\</RemoteDir>
-            <RemoteName>plecho_act_5.mp4</RemoteName>
-            <DeployClass>File</DeployClass>
             <Operation>0</Operation>
             <LocalCommand/>
             <RemoteCommand/>
@@ -420,15 +375,6 @@
             <RemoteDir>Project10\</RemoteDir>
             <RemoteName>koleno_act_3.mp4</RemoteName>
             <DeployClass>ProjectFile</DeployClass>
-            <Operation>0</Operation>
-            <LocalCommand/>
-            <RemoteCommand/>
-            <Overwrite>True</Overwrite>
-        </DeployFile>
-        <DeployFile Include="Videos\plecho_pass_4.mp4" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>Project10\</RemoteDir>
-            <RemoteName>plecho_pass_4.mp4</RemoteName>
-            <DeployClass>File</DeployClass>
             <Operation>0</Operation>
             <LocalCommand/>
             <RemoteCommand/>
@@ -569,15 +515,6 @@
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
-        <DeployFile Include="Videos\plecho_pass_2.mp4" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>Project10\</RemoteDir>
-            <RemoteName>plecho_pass_2.mp4</RemoteName>
-            <DeployClass>File</DeployClass>
-            <Operation>0</Operation>
-            <LocalCommand/>
-            <RemoteCommand/>
-            <Overwrite>True</Overwrite>
-        </DeployFile>
         <DeployFile Include="Videos\plecho_act_1.mp4" Condition="'$(Config)'=='Release'">
             <RemoteDir>Project10\</RemoteDir>
             <RemoteName>plecho_act_1.mp4</RemoteName>
@@ -686,15 +623,6 @@
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
-        <DeployFile Include="Videos\plecho_act_4.mp4" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>Project10\</RemoteDir>
-            <RemoteName>plecho_act_4.mp4</RemoteName>
-            <DeployClass>File</DeployClass>
-            <Operation>0</Operation>
-            <LocalCommand/>
-            <RemoteCommand/>
-            <Overwrite>True</Overwrite>
-        </DeployFile>
         <DeployFile Include="Videos\lokot_act_3.mp4" Condition="'$(Config)'=='Debug'">
             <RemoteDir>Project10\</RemoteDir>
             <RemoteName>lokot_act_3.mp4</RemoteName>
@@ -716,15 +644,6 @@
         <DeployFile Include="Videos\plecho_pass_1.mp4" Condition="'$(Config)'=='Release'">
             <RemoteDir>Project10\</RemoteDir>
             <RemoteName>plecho_pass_1.mp4</RemoteName>
-            <DeployClass>File</DeployClass>
-            <Operation>0</Operation>
-            <LocalCommand/>
-            <RemoteCommand/>
-            <Overwrite>True</Overwrite>
-        </DeployFile>
-        <DeployFile Include="Videos\plecho_act_2.mp4" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>Project10\</RemoteDir>
-            <RemoteName>plecho_act_2.mp4</RemoteName>
             <DeployClass>File</DeployClass>
             <Operation>0</Operation>
             <LocalCommand/>
@@ -767,15 +686,6 @@
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
-        <DeployFile Include="Videos\plecho_pass_3.mp4" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>Project10\</RemoteDir>
-            <RemoteName>plecho_pass_3.mp4</RemoteName>
-            <DeployClass>File</DeployClass>
-            <Operation>0</Operation>
-            <LocalCommand/>
-            <RemoteCommand/>
-            <Overwrite>True</Overwrite>
-        </DeployFile>
         <DeployFile Include="Videos\plecho_pass_4.mp4" Condition="'$(Config)'=='Release'">
             <RemoteDir>Project10\</RemoteDir>
             <RemoteName>plecho_pass_4.mp4</RemoteName>
@@ -796,36 +706,9 @@
         </DeployFile>
     </ItemGroup>
     <ItemGroup Condition="'$(Platform)'=='Android64'">
-        <DeployFile Include="Videos\plecho_pass_5.mp4" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>Project10\</RemoteDir>
-            <RemoteName>plecho_pass_5.mp4</RemoteName>
-            <DeployClass>File</DeployClass>
-            <Operation>0</Operation>
-            <LocalCommand/>
-            <RemoteCommand/>
-            <Overwrite>True</Overwrite>
-        </DeployFile>
         <DeployFile Include="Videos\plecho_pass_2.mp4" Condition="'$(Config)'=='Release'">
             <RemoteDir>Project10\</RemoteDir>
             <RemoteName>plecho_pass_2.mp4</RemoteName>
-            <DeployClass>File</DeployClass>
-            <Operation>0</Operation>
-            <LocalCommand/>
-            <RemoteCommand/>
-            <Overwrite>True</Overwrite>
-        </DeployFile>
-        <DeployFile Include="Videos\plecho_act_1.mp4" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>Project10\</RemoteDir>
-            <RemoteName>plecho_act_1.mp4</RemoteName>
-            <DeployClass>File</DeployClass>
-            <Operation>0</Operation>
-            <LocalCommand/>
-            <RemoteCommand/>
-            <Overwrite>True</Overwrite>
-        </DeployFile>
-        <DeployFile Include="Videos\time.mp4" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>Project10\</RemoteDir>
-            <RemoteName>time.mp4</RemoteName>
             <DeployClass>File</DeployClass>
             <Operation>0</Operation>
             <LocalCommand/>
@@ -841,24 +724,6 @@
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
-        <DeployFile Include="Videos\plecho_act_3.mp4" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>Project10\</RemoteDir>
-            <RemoteName>plecho_act_3.mp4</RemoteName>
-            <DeployClass>File</DeployClass>
-            <Operation>0</Operation>
-            <LocalCommand/>
-            <RemoteCommand/>
-            <Overwrite>True</Overwrite>
-        </DeployFile>
-        <DeployFile Include="Videos\plecho_pass_1.mp4" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>Project10\</RemoteDir>
-            <RemoteName>plecho_pass_1.mp4</RemoteName>
-            <DeployClass>File</DeployClass>
-            <Operation>0</Operation>
-            <LocalCommand/>
-            <RemoteCommand/>
-            <Overwrite>True</Overwrite>
-        </DeployFile>
         <DeployFile Include="Videos\plecho_act_2.mp4" Condition="'$(Config)'=='Release'">
             <RemoteDir>Project10\</RemoteDir>
             <RemoteName>plecho_act_2.mp4</RemoteName>
@@ -868,36 +733,9 @@
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
-        <DeployFile Include="Videos\plecho_act_5.mp4" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>Project10\</RemoteDir>
-            <RemoteName>plecho_act_5.mp4</RemoteName>
-            <DeployClass>File</DeployClass>
-            <Operation>0</Operation>
-            <LocalCommand/>
-            <RemoteCommand/>
-            <Overwrite>True</Overwrite>
-        </DeployFile>
         <DeployFile Include="Videos\plecho_pass_3.mp4" Condition="'$(Config)'=='Release'">
             <RemoteDir>Project10\</RemoteDir>
             <RemoteName>plecho_pass_3.mp4</RemoteName>
-            <DeployClass>File</DeployClass>
-            <Operation>0</Operation>
-            <LocalCommand/>
-            <RemoteCommand/>
-            <Overwrite>True</Overwrite>
-        </DeployFile>
-        <DeployFile Include="Videos\plecho_pass_4.mp4" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>Project10\</RemoteDir>
-            <RemoteName>plecho_pass_4.mp4</RemoteName>
-            <DeployClass>File</DeployClass>
-            <Operation>0</Operation>
-            <LocalCommand/>
-            <RemoteCommand/>
-            <Overwrite>True</Overwrite>
-        </DeployFile>
-        <DeployFile Include="Videos\plecho_pass_2.mp4" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>Project10\</RemoteDir>
-            <RemoteName>plecho_pass_2.mp4</RemoteName>
             <DeployClass>File</DeployClass>
             <Operation>0</Operation>
             <LocalCommand/>
@@ -922,15 +760,6 @@
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
-        <DeployFile Include="Videos\plecho_act_4.mp4" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>Project10\</RemoteDir>
-            <RemoteName>plecho_act_4.mp4</RemoteName>
-            <DeployClass>File</DeployClass>
-            <Operation>0</Operation>
-            <LocalCommand/>
-            <RemoteCommand/>
-            <Overwrite>True</Overwrite>
-        </DeployFile>
         <DeployFile Include="Videos\plecho_act_3.mp4" Condition="'$(Config)'=='Release'">
             <RemoteDir>Project10\</RemoteDir>
             <RemoteName>plecho_act_3.mp4</RemoteName>
@@ -949,27 +778,9 @@
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
-        <DeployFile Include="Videos\plecho_act_2.mp4" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>Project10\</RemoteDir>
-            <RemoteName>plecho_act_2.mp4</RemoteName>
-            <DeployClass>File</DeployClass>
-            <Operation>0</Operation>
-            <LocalCommand/>
-            <RemoteCommand/>
-            <Overwrite>True</Overwrite>
-        </DeployFile>
         <DeployFile Include="Videos\plecho_act_5.mp4" Condition="'$(Config)'=='Release'">
             <RemoteDir>Project10\</RemoteDir>
             <RemoteName>plecho_act_5.mp4</RemoteName>
-            <DeployClass>File</DeployClass>
-            <Operation>0</Operation>
-            <LocalCommand/>
-            <RemoteCommand/>
-            <Overwrite>True</Overwrite>
-        </DeployFile>
-        <DeployFile Include="Videos\plecho_pass_3.mp4" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>Project10\</RemoteDir>
-            <RemoteName>plecho_pass_3.mp4</RemoteName>
             <DeployClass>File</DeployClass>
             <Operation>0</Operation>
             <LocalCommand/>
@@ -1357,7 +1168,7 @@
             <Overwrite>True</Overwrite>
         </DeployFile>
         <DeployFile Include="Videos\koleno_act_2.mp4" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteDir>Project10\media\</RemoteDir>
             <RemoteName>koleno_act_2.mp4</RemoteName>
             <DeployClass>ProjectFile</DeployClass>
             <Operation>0</Operation>
@@ -1449,6 +1260,15 @@
         <DeployFile Include="Videos\Background_music\blank-and-jones-city-lights-so8os-mix.mp3" Condition="'$(Config)'=='Debug'">
             <RemoteDir>Project10\assets\internal\</RemoteDir>
             <RemoteName>blank-and-jones-city-lights-so8os-mix.mp3</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="testtxt.txt" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>testtxt.txt</RemoteName>
             <DeployClass>ProjectFile</DeployClass>
             <Operation>0</Operation>
             <LocalCommand/>
@@ -1791,36 +1611,9 @@
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
-        <DeployFile Include="Videos\plecho_pass_5.mp4" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>Project10\</RemoteDir>
-            <RemoteName>plecho_pass_5.mp4</RemoteName>
-            <DeployClass>File</DeployClass>
-            <Operation>0</Operation>
-            <LocalCommand/>
-            <RemoteCommand/>
-            <Overwrite>True</Overwrite>
-        </DeployFile>
         <DeployFile Include="Videos\plecho_pass_2.mp4" Condition="'$(Config)'=='Release'">
             <RemoteDir>Project10\</RemoteDir>
             <RemoteName>plecho_pass_2.mp4</RemoteName>
-            <DeployClass>File</DeployClass>
-            <Operation>0</Operation>
-            <LocalCommand/>
-            <RemoteCommand/>
-            <Overwrite>True</Overwrite>
-        </DeployFile>
-        <DeployFile Include="Videos\plecho_act_1.mp4" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>Project10\</RemoteDir>
-            <RemoteName>plecho_act_1.mp4</RemoteName>
-            <DeployClass>File</DeployClass>
-            <Operation>0</Operation>
-            <LocalCommand/>
-            <RemoteCommand/>
-            <Overwrite>True</Overwrite>
-        </DeployFile>
-        <DeployFile Include="Videos\time.mp4" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>Project10\</RemoteDir>
-            <RemoteName>time.mp4</RemoteName>
             <DeployClass>File</DeployClass>
             <Operation>0</Operation>
             <LocalCommand/>
@@ -1836,36 +1629,9 @@
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
-        <DeployFile Include="Videos\plecho_act_3.mp4" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>Project10\</RemoteDir>
-            <RemoteName>plecho_act_3.mp4</RemoteName>
-            <DeployClass>File</DeployClass>
-            <Operation>0</Operation>
-            <LocalCommand/>
-            <RemoteCommand/>
-            <Overwrite>True</Overwrite>
-        </DeployFile>
-        <DeployFile Include="Videos\plecho_pass_1.mp4" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>Project10\</RemoteDir>
-            <RemoteName>plecho_pass_1.mp4</RemoteName>
-            <DeployClass>File</DeployClass>
-            <Operation>0</Operation>
-            <LocalCommand/>
-            <RemoteCommand/>
-            <Overwrite>True</Overwrite>
-        </DeployFile>
         <DeployFile Include="Videos\plecho_act_2.mp4" Condition="'$(Config)'=='Release'">
             <RemoteDir>Project10\</RemoteDir>
             <RemoteName>plecho_act_2.mp4</RemoteName>
-            <DeployClass>File</DeployClass>
-            <Operation>0</Operation>
-            <LocalCommand/>
-            <RemoteCommand/>
-            <Overwrite>True</Overwrite>
-        </DeployFile>
-        <DeployFile Include="Videos\plecho_act_5.mp4" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>Project10\</RemoteDir>
-            <RemoteName>plecho_act_5.mp4</RemoteName>
             <DeployClass>File</DeployClass>
             <Operation>0</Operation>
             <LocalCommand/>
@@ -1881,27 +1647,9 @@
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
-        <DeployFile Include="Videos\plecho_pass_4.mp4" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>Project10\</RemoteDir>
-            <RemoteName>plecho_pass_4.mp4</RemoteName>
-            <DeployClass>File</DeployClass>
-            <Operation>0</Operation>
-            <LocalCommand/>
-            <RemoteCommand/>
-            <Overwrite>True</Overwrite>
-        </DeployFile>
         <DeployFile Include="libmysql.dll" Condition="'$(Config)'=='Debug'">
             <RemoteDir>Project10\</RemoteDir>
             <RemoteName>libmysql.dll</RemoteName>
-            <DeployClass>File</DeployClass>
-            <Operation>0</Operation>
-            <LocalCommand/>
-            <RemoteCommand/>
-            <Overwrite>True</Overwrite>
-        </DeployFile>
-        <DeployFile Include="Videos\plecho_pass_2.mp4" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>Project10\</RemoteDir>
-            <RemoteName>plecho_pass_2.mp4</RemoteName>
             <DeployClass>File</DeployClass>
             <Operation>0</Operation>
             <LocalCommand/>
@@ -1926,15 +1674,6 @@
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
-        <DeployFile Include="Videos\plecho_act_4.mp4" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>Project10\</RemoteDir>
-            <RemoteName>plecho_act_4.mp4</RemoteName>
-            <DeployClass>File</DeployClass>
-            <Operation>0</Operation>
-            <LocalCommand/>
-            <RemoteCommand/>
-            <Overwrite>True</Overwrite>
-        </DeployFile>
         <DeployFile Include="Videos\plecho_act_3.mp4" Condition="'$(Config)'=='Release'">
             <RemoteDir>Project10\</RemoteDir>
             <RemoteName>plecho_act_3.mp4</RemoteName>
@@ -1953,27 +1692,9 @@
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
-        <DeployFile Include="Videos\plecho_act_2.mp4" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>Project10\</RemoteDir>
-            <RemoteName>plecho_act_2.mp4</RemoteName>
-            <DeployClass>File</DeployClass>
-            <Operation>0</Operation>
-            <LocalCommand/>
-            <RemoteCommand/>
-            <Overwrite>True</Overwrite>
-        </DeployFile>
         <DeployFile Include="Videos\plecho_act_5.mp4" Condition="'$(Config)'=='Release'">
             <RemoteDir>Project10\</RemoteDir>
             <RemoteName>plecho_act_5.mp4</RemoteName>
-            <DeployClass>File</DeployClass>
-            <Operation>0</Operation>
-            <LocalCommand/>
-            <RemoteCommand/>
-            <Overwrite>True</Overwrite>
-        </DeployFile>
-        <DeployFile Include="Videos\plecho_pass_3.mp4" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>Project10\</RemoteDir>
-            <RemoteName>plecho_pass_3.mp4</RemoteName>
             <DeployClass>File</DeployClass>
             <Operation>0</Operation>
             <LocalCommand/>
@@ -1992,36 +1713,9 @@
     </ItemGroup>
     <ItemGroup Condition="'$(Platform)'=='Win64x'"/>
     <ItemGroup Condition="'$(Platform)'=='iOSDevice64'">
-        <DeployFile Include="Videos\plecho_pass_5.mp4" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>Project10.app\</RemoteDir>
-            <RemoteName>plecho_pass_5.mp4</RemoteName>
-            <DeployClass>File</DeployClass>
-            <Operation>0</Operation>
-            <LocalCommand/>
-            <RemoteCommand/>
-            <Overwrite>True</Overwrite>
-        </DeployFile>
         <DeployFile Include="Videos\plecho_pass_2.mp4" Condition="'$(Config)'=='Release'">
             <RemoteDir>Project10.app\</RemoteDir>
             <RemoteName>plecho_pass_2.mp4</RemoteName>
-            <DeployClass>File</DeployClass>
-            <Operation>0</Operation>
-            <LocalCommand/>
-            <RemoteCommand/>
-            <Overwrite>True</Overwrite>
-        </DeployFile>
-        <DeployFile Include="Videos\plecho_act_1.mp4" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>Project10.app\</RemoteDir>
-            <RemoteName>plecho_act_1.mp4</RemoteName>
-            <DeployClass>File</DeployClass>
-            <Operation>0</Operation>
-            <LocalCommand/>
-            <RemoteCommand/>
-            <Overwrite>True</Overwrite>
-        </DeployFile>
-        <DeployFile Include="Videos\time.mp4" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>Project10.app\</RemoteDir>
-            <RemoteName>time.mp4</RemoteName>
             <DeployClass>File</DeployClass>
             <Operation>0</Operation>
             <LocalCommand/>
@@ -2037,24 +1731,6 @@
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
-        <DeployFile Include="Videos\plecho_act_3.mp4" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>Project10.app\</RemoteDir>
-            <RemoteName>plecho_act_3.mp4</RemoteName>
-            <DeployClass>File</DeployClass>
-            <Operation>0</Operation>
-            <LocalCommand/>
-            <RemoteCommand/>
-            <Overwrite>True</Overwrite>
-        </DeployFile>
-        <DeployFile Include="Videos\plecho_pass_1.mp4" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>Project10.app\</RemoteDir>
-            <RemoteName>plecho_pass_1.mp4</RemoteName>
-            <DeployClass>File</DeployClass>
-            <Operation>0</Operation>
-            <LocalCommand/>
-            <RemoteCommand/>
-            <Overwrite>True</Overwrite>
-        </DeployFile>
         <DeployFile Include="Videos\plecho_act_2.mp4" Condition="'$(Config)'=='Release'">
             <RemoteDir>Project10.app\</RemoteDir>
             <RemoteName>plecho_act_2.mp4</RemoteName>
@@ -2064,36 +1740,9 @@
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
-        <DeployFile Include="Videos\plecho_act_5.mp4" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>Project10.app\</RemoteDir>
-            <RemoteName>plecho_act_5.mp4</RemoteName>
-            <DeployClass>File</DeployClass>
-            <Operation>0</Operation>
-            <LocalCommand/>
-            <RemoteCommand/>
-            <Overwrite>True</Overwrite>
-        </DeployFile>
         <DeployFile Include="Videos\plecho_pass_3.mp4" Condition="'$(Config)'=='Release'">
             <RemoteDir>Project10.app\</RemoteDir>
             <RemoteName>plecho_pass_3.mp4</RemoteName>
-            <DeployClass>File</DeployClass>
-            <Operation>0</Operation>
-            <LocalCommand/>
-            <RemoteCommand/>
-            <Overwrite>True</Overwrite>
-        </DeployFile>
-        <DeployFile Include="Videos\plecho_pass_4.mp4" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>Project10.app\</RemoteDir>
-            <RemoteName>plecho_pass_4.mp4</RemoteName>
-            <DeployClass>File</DeployClass>
-            <Operation>0</Operation>
-            <LocalCommand/>
-            <RemoteCommand/>
-            <Overwrite>True</Overwrite>
-        </DeployFile>
-        <DeployFile Include="Videos\plecho_pass_2.mp4" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>Project10.app\</RemoteDir>
-            <RemoteName>plecho_pass_2.mp4</RemoteName>
             <DeployClass>File</DeployClass>
             <Operation>0</Operation>
             <LocalCommand/>
@@ -2118,15 +1767,6 @@
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
-        <DeployFile Include="Videos\plecho_act_4.mp4" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>Project10.app\</RemoteDir>
-            <RemoteName>plecho_act_4.mp4</RemoteName>
-            <DeployClass>File</DeployClass>
-            <Operation>0</Operation>
-            <LocalCommand/>
-            <RemoteCommand/>
-            <Overwrite>True</Overwrite>
-        </DeployFile>
         <DeployFile Include="Videos\plecho_act_3.mp4" Condition="'$(Config)'=='Release'">
             <RemoteDir>Project10.app\</RemoteDir>
             <RemoteName>plecho_act_3.mp4</RemoteName>
@@ -2145,27 +1785,9 @@
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
-        <DeployFile Include="Videos\plecho_act_2.mp4" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>Project10.app\</RemoteDir>
-            <RemoteName>plecho_act_2.mp4</RemoteName>
-            <DeployClass>File</DeployClass>
-            <Operation>0</Operation>
-            <LocalCommand/>
-            <RemoteCommand/>
-            <Overwrite>True</Overwrite>
-        </DeployFile>
         <DeployFile Include="Videos\plecho_act_5.mp4" Condition="'$(Config)'=='Release'">
             <RemoteDir>Project10.app\</RemoteDir>
             <RemoteName>plecho_act_5.mp4</RemoteName>
-            <DeployClass>File</DeployClass>
-            <Operation>0</Operation>
-            <LocalCommand/>
-            <RemoteCommand/>
-            <Overwrite>True</Overwrite>
-        </DeployFile>
-        <DeployFile Include="Videos\plecho_pass_3.mp4" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>Project10.app\</RemoteDir>
-            <RemoteName>plecho_pass_3.mp4</RemoteName>
             <DeployClass>File</DeployClass>
             <Operation>0</Operation>
             <LocalCommand/>
@@ -2183,36 +1805,9 @@
         </DeployFile>
     </ItemGroup>
     <ItemGroup Condition="'$(Platform)'=='iOSSimARM64'">
-        <DeployFile Include="Videos\plecho_pass_5.mp4" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>Project10.app\</RemoteDir>
-            <RemoteName>plecho_pass_5.mp4</RemoteName>
-            <DeployClass>File</DeployClass>
-            <Operation>0</Operation>
-            <LocalCommand/>
-            <RemoteCommand/>
-            <Overwrite>True</Overwrite>
-        </DeployFile>
         <DeployFile Include="Videos\plecho_pass_2.mp4" Condition="'$(Config)'=='Release'">
             <RemoteDir>Project10.app\</RemoteDir>
             <RemoteName>plecho_pass_2.mp4</RemoteName>
-            <DeployClass>File</DeployClass>
-            <Operation>0</Operation>
-            <LocalCommand/>
-            <RemoteCommand/>
-            <Overwrite>True</Overwrite>
-        </DeployFile>
-        <DeployFile Include="Videos\plecho_act_1.mp4" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>Project10.app\</RemoteDir>
-            <RemoteName>plecho_act_1.mp4</RemoteName>
-            <DeployClass>File</DeployClass>
-            <Operation>0</Operation>
-            <LocalCommand/>
-            <RemoteCommand/>
-            <Overwrite>True</Overwrite>
-        </DeployFile>
-        <DeployFile Include="Videos\time.mp4" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>Project10.app\</RemoteDir>
-            <RemoteName>time.mp4</RemoteName>
             <DeployClass>File</DeployClass>
             <Operation>0</Operation>
             <LocalCommand/>
@@ -2228,24 +1823,6 @@
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
-        <DeployFile Include="Videos\plecho_act_3.mp4" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>Project10.app\</RemoteDir>
-            <RemoteName>plecho_act_3.mp4</RemoteName>
-            <DeployClass>File</DeployClass>
-            <Operation>0</Operation>
-            <LocalCommand/>
-            <RemoteCommand/>
-            <Overwrite>True</Overwrite>
-        </DeployFile>
-        <DeployFile Include="Videos\plecho_pass_1.mp4" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>Project10.app\</RemoteDir>
-            <RemoteName>plecho_pass_1.mp4</RemoteName>
-            <DeployClass>File</DeployClass>
-            <Operation>0</Operation>
-            <LocalCommand/>
-            <RemoteCommand/>
-            <Overwrite>True</Overwrite>
-        </DeployFile>
         <DeployFile Include="Videos\plecho_act_2.mp4" Condition="'$(Config)'=='Release'">
             <RemoteDir>Project10.app\</RemoteDir>
             <RemoteName>plecho_act_2.mp4</RemoteName>
@@ -2255,36 +1832,9 @@
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
-        <DeployFile Include="Videos\plecho_act_5.mp4" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>Project10.app\</RemoteDir>
-            <RemoteName>plecho_act_5.mp4</RemoteName>
-            <DeployClass>File</DeployClass>
-            <Operation>0</Operation>
-            <LocalCommand/>
-            <RemoteCommand/>
-            <Overwrite>True</Overwrite>
-        </DeployFile>
         <DeployFile Include="Videos\plecho_pass_3.mp4" Condition="'$(Config)'=='Release'">
             <RemoteDir>Project10.app\</RemoteDir>
             <RemoteName>plecho_pass_3.mp4</RemoteName>
-            <DeployClass>File</DeployClass>
-            <Operation>0</Operation>
-            <LocalCommand/>
-            <RemoteCommand/>
-            <Overwrite>True</Overwrite>
-        </DeployFile>
-        <DeployFile Include="Videos\plecho_pass_4.mp4" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>Project10.app\</RemoteDir>
-            <RemoteName>plecho_pass_4.mp4</RemoteName>
-            <DeployClass>File</DeployClass>
-            <Operation>0</Operation>
-            <LocalCommand/>
-            <RemoteCommand/>
-            <Overwrite>True</Overwrite>
-        </DeployFile>
-        <DeployFile Include="Videos\plecho_pass_2.mp4" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>Project10.app\</RemoteDir>
-            <RemoteName>plecho_pass_2.mp4</RemoteName>
             <DeployClass>File</DeployClass>
             <Operation>0</Operation>
             <LocalCommand/>
@@ -2309,15 +1859,6 @@
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
-        <DeployFile Include="Videos\plecho_act_4.mp4" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>Project10.app\</RemoteDir>
-            <RemoteName>plecho_act_4.mp4</RemoteName>
-            <DeployClass>File</DeployClass>
-            <Operation>0</Operation>
-            <LocalCommand/>
-            <RemoteCommand/>
-            <Overwrite>True</Overwrite>
-        </DeployFile>
         <DeployFile Include="Videos\plecho_act_3.mp4" Condition="'$(Config)'=='Release'">
             <RemoteDir>Project10.app\</RemoteDir>
             <RemoteName>plecho_act_3.mp4</RemoteName>
@@ -2336,27 +1877,9 @@
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
-        <DeployFile Include="Videos\plecho_act_2.mp4" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>Project10.app\</RemoteDir>
-            <RemoteName>plecho_act_2.mp4</RemoteName>
-            <DeployClass>File</DeployClass>
-            <Operation>0</Operation>
-            <LocalCommand/>
-            <RemoteCommand/>
-            <Overwrite>True</Overwrite>
-        </DeployFile>
         <DeployFile Include="Videos\plecho_act_5.mp4" Condition="'$(Config)'=='Release'">
             <RemoteDir>Project10.app\</RemoteDir>
             <RemoteName>plecho_act_5.mp4</RemoteName>
-            <DeployClass>File</DeployClass>
-            <Operation>0</Operation>
-            <LocalCommand/>
-            <RemoteCommand/>
-            <Overwrite>True</Overwrite>
-        </DeployFile>
-        <DeployFile Include="Videos\plecho_pass_3.mp4" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>Project10.app\</RemoteDir>
-            <RemoteName>plecho_pass_3.mp4</RemoteName>
             <DeployClass>File</DeployClass>
             <Operation>0</Operation>
             <LocalCommand/>

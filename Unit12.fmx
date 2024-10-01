@@ -99,6 +99,14 @@ object Form12: TForm12
         Size.PlatformDefault = False
         Text = 'Label2'
         TabOrder = 24
+        object Button5: TButton
+          Position.X = 192.000000000000000000
+          Position.Y = 8.000000000000000000
+          TabOrder = 4
+          Text = 'Button5'
+          TextSettings.Trimming = None
+          OnClick = Button5Click
+        end
       end
       object Button1: TButton
         Position.X = 88.000000000000000000
@@ -125,6 +133,15 @@ object Form12: TForm12
         Text = 'Button4'
         TextSettings.Trimming = None
         OnClick = Button4Click
+      end
+      object Label1: TLabel
+        Position.X = 8.000000000000000000
+        Position.Y = 192.000000000000000000
+        Size.Width = 283.000000000000000000
+        Size.Height = 17.000000000000000000
+        Size.PlatformDefault = False
+        Text = 'Label1'
+        TabOrder = 28
       end
     end
   end

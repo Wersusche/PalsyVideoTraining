@@ -355,6 +355,7 @@
         <None Include="Videos\Background_music\Ulybka.mp3"/>
         <None Include="Videos\Background_music\yoga1.mp3"/>
         <None Include="res\xml\network_security_config.xml"/>
+        <None Include="testtxt.txt"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
@@ -377,8 +378,8 @@
                     <Source Name="MainSource">Project10.dpr</Source>
                 </Source>
                 <Excluded_Packages>
-                    <Excluded_Packages Name="$(BDSBIN)\dcloffice2k280.bpl">Microsoft Office 2000 Sample Automation Server Wrapper Components</Excluded_Packages>
-                    <Excluded_Packages Name="$(BDSBIN)\dclofficexp280.bpl">Microsoft Office XP Sample Automation Server Wrapper Components</Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\dcloffice2k290.bpl">Microsoft Office 2000 Sample Automation Server Wrapper Components</Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\dclofficexp290.bpl">Microsoft Office XP Sample Automation Server Wrapper Components</Excluded_Packages>
                 </Excluded_Packages>
             </Delphi.Personality>
             <Deployment Version="5">
@@ -674,7 +675,7 @@
                 <DeployFile LocalName="Videos\koleno_act_1.mp4" Configuration="Debug" Class="ProjectFile"/>
                 <DeployFile LocalName="Videos\koleno_act_1.mp4" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Android">
-                        <RemoteDir>.\assets\internal\</RemoteDir>
+                        <RemoteDir>assets\internal\</RemoteDir>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
@@ -688,7 +689,7 @@
                 <DeployFile LocalName="Videos\koleno_act_2.mp4" Configuration="Debug" Class="ProjectFile"/>
                 <DeployFile LocalName="Videos\koleno_act_2.mp4" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Android">
-                        <RemoteDir>.\assets\internal\</RemoteDir>
+                        <RemoteDir>media\</RemoteDir>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
@@ -867,33 +868,6 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Videos\lokot_pass_3.mp4" Configuration="Release" Class="ProjectFile"/>
-                <DeployFile LocalName="Videos\plecho_act_1.mp4" Configuration="Debug" Class="File">
-                    <Platform Name="Android">
-                        <Enabled>false</Enabled>
-                        <RemoteName>plecho_act_1.mp4</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                    <Platform Name="Android64">
-                        <RemoteName>plecho_act_1.mp4</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                    <Platform Name="iOSDevice64">
-                        <RemoteName>plecho_act_1.mp4</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                    <Platform Name="iOSSimARM64">
-                        <RemoteName>plecho_act_1.mp4</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                    <Platform Name="Win32">
-                        <RemoteName>plecho_act_1.mp4</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                    <Platform Name="Win64">
-                        <RemoteName>plecho_act_1.mp4</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
                 <DeployFile LocalName="Videos\plecho_act_1.mp4" Configuration="Debug" Class="ProjectFile"/>
                 <DeployFile LocalName="Videos\plecho_act_1.mp4" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Android">
@@ -939,33 +913,6 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Videos\plecho_act_1.mp4" Configuration="Release" Class="ProjectFile"/>
-                <DeployFile LocalName="Videos\plecho_act_2.mp4" Configuration="Debug" Class="File">
-                    <Platform Name="Android">
-                        <Enabled>false</Enabled>
-                        <RemoteName>plecho_act_2.mp4</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                    <Platform Name="Android64">
-                        <RemoteName>plecho_act_2.mp4</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                    <Platform Name="iOSDevice64">
-                        <RemoteName>plecho_act_2.mp4</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                    <Platform Name="iOSSimARM64">
-                        <RemoteName>plecho_act_2.mp4</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                    <Platform Name="Win32">
-                        <RemoteName>plecho_act_2.mp4</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                    <Platform Name="Win64">
-                        <RemoteName>plecho_act_2.mp4</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
                 <DeployFile LocalName="Videos\plecho_act_2.mp4" Configuration="Debug" Class="ProjectFile"/>
                 <DeployFile LocalName="Videos\plecho_act_2.mp4" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Android">
@@ -1011,33 +958,6 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Videos\plecho_act_2.mp4" Configuration="Release" Class="ProjectFile"/>
-                <DeployFile LocalName="Videos\plecho_act_3.mp4" Configuration="Debug" Class="File">
-                    <Platform Name="Android">
-                        <Enabled>false</Enabled>
-                        <RemoteName>plecho_act_3.mp4</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                    <Platform Name="Android64">
-                        <RemoteName>plecho_act_3.mp4</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                    <Platform Name="iOSDevice64">
-                        <RemoteName>plecho_act_3.mp4</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                    <Platform Name="iOSSimARM64">
-                        <RemoteName>plecho_act_3.mp4</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                    <Platform Name="Win32">
-                        <RemoteName>plecho_act_3.mp4</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                    <Platform Name="Win64">
-                        <RemoteName>plecho_act_3.mp4</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
                 <DeployFile LocalName="Videos\plecho_act_3.mp4" Configuration="Debug" Class="ProjectFile"/>
                 <DeployFile LocalName="Videos\plecho_act_3.mp4" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Android">
@@ -1083,33 +1003,6 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Videos\plecho_act_3.mp4" Configuration="Release" Class="ProjectFile"/>
-                <DeployFile LocalName="Videos\plecho_act_4.mp4" Configuration="Debug" Class="File">
-                    <Platform Name="Android">
-                        <Enabled>false</Enabled>
-                        <RemoteName>plecho_act_4.mp4</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                    <Platform Name="Android64">
-                        <RemoteName>plecho_act_4.mp4</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                    <Platform Name="iOSDevice64">
-                        <RemoteName>plecho_act_4.mp4</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                    <Platform Name="iOSSimARM64">
-                        <RemoteName>plecho_act_4.mp4</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                    <Platform Name="Win32">
-                        <RemoteName>plecho_act_4.mp4</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                    <Platform Name="Win64">
-                        <RemoteName>plecho_act_4.mp4</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
                 <DeployFile LocalName="Videos\plecho_act_4.mp4" Configuration="Debug" Class="ProjectFile"/>
                 <DeployFile LocalName="Videos\plecho_act_4.mp4" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Android">
@@ -1155,33 +1048,6 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Videos\plecho_act_4.mp4" Configuration="Release" Class="ProjectFile"/>
-                <DeployFile LocalName="Videos\plecho_act_5.mp4" Configuration="Debug" Class="File">
-                    <Platform Name="Android">
-                        <Enabled>false</Enabled>
-                        <RemoteName>plecho_act_5.mp4</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                    <Platform Name="Android64">
-                        <RemoteName>plecho_act_5.mp4</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                    <Platform Name="iOSDevice64">
-                        <RemoteName>plecho_act_5.mp4</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                    <Platform Name="iOSSimARM64">
-                        <RemoteName>plecho_act_5.mp4</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                    <Platform Name="Win32">
-                        <RemoteName>plecho_act_5.mp4</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                    <Platform Name="Win64">
-                        <RemoteName>plecho_act_5.mp4</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
                 <DeployFile LocalName="Videos\plecho_act_5.mp4" Configuration="Debug" Class="ProjectFile"/>
                 <DeployFile LocalName="Videos\plecho_act_5.mp4" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Android">
@@ -1227,33 +1093,6 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Videos\plecho_act_5.mp4" Configuration="Release" Class="ProjectFile"/>
-                <DeployFile LocalName="Videos\plecho_pass_1.mp4" Configuration="Debug" Class="File">
-                    <Platform Name="Android">
-                        <Enabled>false</Enabled>
-                        <RemoteName>plecho_pass_1.mp4</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                    <Platform Name="Android64">
-                        <RemoteName>plecho_pass_1.mp4</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                    <Platform Name="iOSDevice64">
-                        <RemoteName>plecho_pass_1.mp4</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                    <Platform Name="iOSSimARM64">
-                        <RemoteName>plecho_pass_1.mp4</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                    <Platform Name="Win32">
-                        <RemoteName>plecho_pass_1.mp4</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                    <Platform Name="Win64">
-                        <RemoteName>plecho_pass_1.mp4</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
                 <DeployFile LocalName="Videos\plecho_pass_1.mp4" Configuration="Debug" Class="ProjectFile"/>
                 <DeployFile LocalName="Videos\plecho_pass_1.mp4" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Android">
@@ -1299,33 +1138,6 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Videos\plecho_pass_1.mp4" Configuration="Release" Class="ProjectFile"/>
-                <DeployFile LocalName="Videos\plecho_pass_2.mp4" Configuration="Debug" Class="File">
-                    <Platform Name="Android">
-                        <Enabled>false</Enabled>
-                        <RemoteName>plecho_pass_2.mp4</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                    <Platform Name="Android64">
-                        <RemoteName>plecho_pass_2.mp4</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                    <Platform Name="iOSDevice64">
-                        <RemoteName>plecho_pass_2.mp4</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                    <Platform Name="iOSSimARM64">
-                        <RemoteName>plecho_pass_2.mp4</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                    <Platform Name="Win32">
-                        <RemoteName>plecho_pass_2.mp4</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                    <Platform Name="Win64">
-                        <RemoteName>plecho_pass_2.mp4</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
                 <DeployFile LocalName="Videos\plecho_pass_2.mp4" Configuration="Debug" Class="ProjectFile"/>
                 <DeployFile LocalName="Videos\plecho_pass_2.mp4" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Android">
@@ -1371,33 +1183,6 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Videos\plecho_pass_2.mp4" Configuration="Release" Class="ProjectFile"/>
-                <DeployFile LocalName="Videos\plecho_pass_3.mp4" Configuration="Debug" Class="File">
-                    <Platform Name="Android">
-                        <Enabled>false</Enabled>
-                        <RemoteName>plecho_pass_3.mp4</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                    <Platform Name="Android64">
-                        <RemoteName>plecho_pass_3.mp4</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                    <Platform Name="iOSDevice64">
-                        <RemoteName>plecho_pass_3.mp4</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                    <Platform Name="iOSSimARM64">
-                        <RemoteName>plecho_pass_3.mp4</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                    <Platform Name="Win32">
-                        <RemoteName>plecho_pass_3.mp4</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                    <Platform Name="Win64">
-                        <RemoteName>plecho_pass_3.mp4</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
                 <DeployFile LocalName="Videos\plecho_pass_3.mp4" Configuration="Debug" Class="ProjectFile"/>
                 <DeployFile LocalName="Videos\plecho_pass_3.mp4" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Android">
@@ -1443,33 +1228,6 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Videos\plecho_pass_3.mp4" Configuration="Release" Class="ProjectFile"/>
-                <DeployFile LocalName="Videos\plecho_pass_4.mp4" Configuration="Debug" Class="File">
-                    <Platform Name="Android">
-                        <Enabled>false</Enabled>
-                        <RemoteName>plecho_pass_4.mp4</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                    <Platform Name="Android64">
-                        <RemoteName>plecho_pass_4.mp4</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                    <Platform Name="iOSDevice64">
-                        <RemoteName>plecho_pass_4.mp4</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                    <Platform Name="iOSSimARM64">
-                        <RemoteName>plecho_pass_4.mp4</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                    <Platform Name="Win32">
-                        <RemoteName>plecho_pass_4.mp4</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                    <Platform Name="Win64">
-                        <RemoteName>plecho_pass_4.mp4</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
                 <DeployFile LocalName="Videos\plecho_pass_4.mp4" Configuration="Debug" Class="ProjectFile"/>
                 <DeployFile LocalName="Videos\plecho_pass_4.mp4" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Android">
@@ -1516,33 +1274,6 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Videos\plecho_pass_4.mp4" Configuration="Release" Class="ProjectFile"/>
-                <DeployFile LocalName="Videos\plecho_pass_5.mp4" Configuration="Debug" Class="File">
-                    <Platform Name="Android">
-                        <Enabled>false</Enabled>
-                        <RemoteName>plecho_pass_5.mp4</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                    <Platform Name="Android64">
-                        <RemoteName>plecho_pass_5.mp4</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                    <Platform Name="iOSDevice64">
-                        <RemoteName>plecho_pass_5.mp4</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                    <Platform Name="iOSSimARM64">
-                        <RemoteName>plecho_pass_5.mp4</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                    <Platform Name="Win32">
-                        <RemoteName>plecho_pass_5.mp4</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                    <Platform Name="Win64">
-                        <RemoteName>plecho_pass_5.mp4</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
                 <DeployFile LocalName="Videos\plecho_pass_5.mp4" Configuration="Debug" Class="ProjectFile"/>
                 <DeployFile LocalName="Videos\plecho_pass_5.mp4" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Android">
@@ -1837,33 +1568,6 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Videos\taz_pass_4.mp4" Configuration="Release" Class="ProjectFile"/>
-                <DeployFile LocalName="Videos\time.mp4" Configuration="Debug" Class="File">
-                    <Platform Name="Android">
-                        <Enabled>false</Enabled>
-                        <RemoteName>time.mp4</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                    <Platform Name="Android64">
-                        <RemoteName>time.mp4</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                    <Platform Name="iOSDevice64">
-                        <RemoteName>time.mp4</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                    <Platform Name="iOSSimARM64">
-                        <RemoteName>time.mp4</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                    <Platform Name="Win32">
-                        <RemoteName>time.mp4</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                    <Platform Name="Win64">
-                        <RemoteName>time.mp4</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
                 <DeployFile LocalName="Videos\time.mp4" Configuration="Release" Class="File">
                     <Platform Name="All Platforms">
                         <Enabled>false</Enabled>
@@ -2118,16 +1822,21 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName="pushcount.db" Configuration="Debug" Class="File">
+                <DeployFile LocalName="res\xml\network_security_config.xml" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Android">
-                        <Enabled>false</Enabled>
-                        <RemoteName>pushcount.db</RemoteName>
+                        <RemoteDir>res\xml\</RemoteDir>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="res\xml\network_security_config.xml" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="testtxt.txt" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Android">
-                        <RemoteDir>res\xml\</RemoteDir>
+                        <RemoteDir>.\assets\internal\</RemoteDir>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>

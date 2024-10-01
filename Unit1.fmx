@@ -32,6 +32,7 @@ object LoginForm: TLoginForm
       Size.PlatformDefault = False
       TabOrder = 6
       Text = #1042#1086#1081#1090#1080
+      TextSettings.Trimming = None
       OnClick = Button1Click
     end
     object Label2: TLabel
@@ -71,7 +72,15 @@ object LoginForm: TLoginForm
       Size.PlatformDefault = False
       TabOrder = 5
       Text = 'Button2'
+      TextSettings.Trimming = None
       OnClick = Button2Click
+    end
+    object Button3: TButton
+      Align = Center
+      TabOrder = 7
+      Text = 'Button3'
+      TextSettings.Trimming = None
+      OnClick = Button3Click
     end
   end
   object DSRestConnection1: TDSRestConnection

@@ -58,6 +58,8 @@ type
     DSRestConnection1: TDSRestConnection;
     DSProviderConnection1: TDSProviderConnection;
     AniIndicator1: TAniIndicator;
+    Label1: TLabel;
+    Button5: TButton;
     procedure FormCreate(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
     procedure bPlayClickClick(Sender: TObject);
@@ -75,6 +77,7 @@ type
     procedure Button1Click(Sender: TObject);
     procedure bSkipClickClick(Sender: TObject);
     procedure Button4Click(Sender: TObject);
+    procedure Button5Click(Sender: TObject);
 
   private
     { Private declarations }
@@ -99,6 +102,7 @@ type
     function TimeInSecondsOf(ATime: TTime): Double;
     procedure UpdateExerciseList;
     procedure SaveSettingsToIniFile;
+
  procedure UpdateCumulativeTimeInDatabase(const Item: TPlaylistItem);
 procedure CompleteExercise(ItemIndex: Integer);
  procedure RemoveExerciseFromPlaylist(const Item: TPlaylistItem);
@@ -269,6 +273,7 @@ var
   IniFile: TIniFile;
   inifilename: string;
 begin
+  Path := TPath.GetHomePath;
   inifilename := TPath.Combine(Path, 'MyApp.ini');
   try
     IniFile := TIniFile.Create(inifilename);
@@ -445,11 +450,19 @@ begin
   end;
 end;
 
-procedure TForm12.FormClose(Sender: TObject; var Action: TCloseAction);
-begin
-timer1.Enabled := False;
+procedure TForm12.Button5Click(Sender: TObject);
 
-timer4.Enabled := False;
+begin
+
+ label1.Text := Path;
+end;
+
+procedure TForm12.FormClose(Sender: TObject; var Action: TCloseAction);
+
+begin
+SaveSettingsToIniFile;
+timer1.Enabled := False;
+ timer4.Enabled := False;
 Mediaplayer1.Stop;
 Application.Terminate;
 end;
@@ -531,6 +544,7 @@ var
   Response: string;
   DateQueryResult: Boolean;
 begin
+
         // Show the loading indicator
   ShowLoadingIndicator;
 
@@ -539,27 +553,18 @@ begin
   CurrentVolume := tbVolume.Value;
   Stopwatch := TStopwatch.Create;
   Fullexercisetime := 0;
-  Pusername := LoginForm.Pusername; // Retrieve username from the login form
+  Pusername := 'cheptsz';//LoginForm.Pusername; // Retrieve username from the login form
 //
   // Set the path for the INI file based on the platform
-  case TOSVersion.Platform of
-    TOSVersion.TPlatform.pfWindows:
-      Path := ExtractFilePath(ParamStr(0));
-    TOSVersion.TPlatform.pfiOS, TOSVersion.TPlatform.pfAndroid:
-      Path := TPath.GetDocumentsPath;
-    TOSVersion.TPlatform.pfMacOS:
-      Path := TPath.GetFullPath('../Resources/StartUp');
-    else
-      raise Exception.Create('Unexpected platform');
-  end;
-
+Path := TPath.GetHomePath;
 inifilename := TPath.Combine(Path, 'MyApp.ini');
 
   // Load user settings from the INI file
   try
     IniFile := TIniFile.Create(inifilename);
     try
-      LastVolume := StrToFloat(IniFile.ReadString(INI_SECTION, 'MyVolume', '1'));
+      LastVolume := StrToFloat(IniFile.ReadString(INI_SECTION, 'MyVolume', ''));
+      label1.Text:= inifilename;
       tbVolume.Value := LastVolume;
     except
       // If conversion fails, set to default value 1
@@ -685,6 +690,7 @@ end;
 
 procedure TForm12.FormDestroy(Sender: TObject);
 begin
+SaveSettingsToIniFile;
 mediaplayer1.Stop;
 Application.Terminate;
 end;
@@ -701,7 +707,7 @@ begin
     TOSVersion.TPlatform.pfMacOS:
       Path := TPath.GetFullPath('../Resources/StartUp');
     TOSVersion.TPlatform.pfiOS, TOSVersion.TPlatform.pfAndroid:
-      Path := TPath.GetDocumentsPath;
+      Path := TPath.GetHomePath;
     TOSVersion.TPlatform.pfWinRT, TOSVersion.TPlatform.pfLinux:
       raise Exception.Create('Unexpected platform');
   end;
