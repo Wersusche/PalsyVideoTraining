@@ -105,6 +105,7 @@ object Form12: TForm12
         Position.Y = 120.000000000000000000
         TabOrder = 25
         Text = 'Button1'
+        TextSettings.Trimming = None
         Visible = False
         OnClick = Button1Click
       end
@@ -113,6 +114,7 @@ object Form12: TForm12
         Position.Y = 184.000000000000000000
         TabOrder = 26
         Text = 'Button2'
+        TextSettings.Trimming = None
         Visible = False
         OnClick = Button2Click
       end
@@ -121,6 +123,7 @@ object Form12: TForm12
         Position.Y = 120.000000000000000000
         TabOrder = 27
         Text = 'Button4'
+        TextSettings.Trimming = None
         OnClick = Button4Click
       end
     end
@@ -144,6 +147,7 @@ object Form12: TForm12
       Size.PlatformDefault = False
       TabOrder = 18
       Text = #1054#1089#1090#1072#1085#1086#1074#1080#1090#1100' '#1091#1087#1088#1072#1078#1085#1077#1085#1080#1077
+      TextSettings.Trimming = None
       OnClick = bStopClickClick
     end
     object bPlayClick: TButton
@@ -155,6 +159,7 @@ object Form12: TForm12
       Size.PlatformDefault = False
       TabOrder = 17
       Text = #1053#1072#1095#1072#1090#1100' '#1091#1087#1088#1072#1078#1085#1077#1085#1080#1077
+      TextSettings.Trimming = None
       OnClick = bPlayClickClick
     end
     object Edit1: TEdit
@@ -172,6 +177,7 @@ object Form12: TForm12
       Position.Y = 24.000000000000000000
       TabOrder = 27
       Text = 'Button3'
+      TextSettings.Trimming = None
       Visible = False
       OnClick = Button3Click
     end
@@ -183,6 +189,7 @@ object Form12: TForm12
       Size.PlatformDefault = False
       TabOrder = 28
       Text = #1055#1088#1086#1087#1091#1089#1090#1080#1090#1100' '#1091#1087#1088#1072#1078#1085#1077#1085#1080#1077
+      TextSettings.Trimming = None
       OnClick = bSkipClickClick
     end
     object tbVideo: TTrackBar
