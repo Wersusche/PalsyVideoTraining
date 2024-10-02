@@ -1,0 +1,29 @@
+inherited LoginForm_LgXhdpiPh: TLoginForm_LgXhdpiPh
+  ClientHeight = 695
+  ClientWidth = 450
+  DesignerMasterStyle = 0
+  inherited CenterLayout: TLayout
+    Size.Width = 450.000000000000000000
+    Size.Height = 695.000000000000000000
+    inherited Label1: TLabel
+      Size.Width = 450.000000000000000000
+    end
+    inherited Button1: TButton
+      Size.Width = 450.000000000000000000
+    end
+    inherited Label2: TLabel
+      Size.Width = 450.000000000000000000
+    end
+    inherited PasswordEdit: TEdit
+      Size.Width = 450.000000000000000000
+      Size.Height = 32.000000000000000000
+    end
+    inherited UsernameEdit: TEdit
+      Size.Width = 450.000000000000000000
+      Size.Height = 32.000000000000000000
+    end
+    inherited Button2: TButton
+      Size.Width = 450.000000000000000000
+    end
+  end
+end
