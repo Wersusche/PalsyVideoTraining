@@ -5,7 +5,7 @@
     </ProjectExtensions>
     <PropertyGroup>
         <DeviceId Condition="'$(Platform)'=='Android'">R5CW204BH1D</DeviceId>
-        <DeviceId Condition="'$(Platform)'=='Android64'">192.168.147.105:5555</DeviceId>
+        <DeviceId Condition="'$(Platform)'=='Android64'">R5CW204BH1D</DeviceId>
         <DeviceId Condition="'$(Platform)'=='iOSDevice64'"/>
         <DeviceId Condition="'$(Platform)'=='iOSSimARM64'"/>
     </PropertyGroup>
@@ -55,19 +55,19 @@
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
-        <DeployFile Include="Win32\Debug\MyApp.ini" Condition="'$(Config)'=='Debug'">
+        <DeployFile Include="Videos\stopa_pass_2.mp4" Condition="'$(Config)'=='Debug'">
             <RemoteDir>Project10\</RemoteDir>
-            <RemoteName>MyApp.ini</RemoteName>
-            <DeployClass>File</DeployClass>
+            <RemoteName>stopa_pass_2.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
             <Operation>0</Operation>
             <LocalCommand/>
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
-        <DeployFile Include="Videos\stopa_pass_2.mp4" Condition="'$(Config)'=='Debug'">
+        <DeployFile Include="Win32\Debug\MyApp.ini" Condition="'$(Config)'=='Debug'">
             <RemoteDir>Project10\</RemoteDir>
-            <RemoteName>stopa_pass_2.mp4</RemoteName>
-            <DeployClass>ProjectFile</DeployClass>
+            <RemoteName>MyApp.ini</RemoteName>
+            <DeployClass>File</DeployClass>
             <Operation>0</Operation>
             <LocalCommand/>
             <RemoteCommand/>
@@ -572,6 +572,15 @@
         <DeployFile Include="Videos\spina_pass_3.mp4" Condition="'$(Config)'=='Debug'">
             <RemoteDir>Project10\</RemoteDir>
             <RemoteName>spina_pass_3.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="testtxt.txt" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\</RemoteDir>
+            <RemoteName>testtxt.txt</RemoteName>
             <DeployClass>ProjectFile</DeployClass>
             <Operation>0</Operation>
             <LocalCommand/>

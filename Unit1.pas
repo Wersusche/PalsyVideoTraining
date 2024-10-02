@@ -54,19 +54,21 @@ uses Unit12;
 
 procedure TLoginForm.Button1Click(Sender: TObject);
 var
-IniFile: TIniFile;
+IniFile: TMemIniFile;
 LastValuelogin, LastValuepass: string;
 inifilename : string;
 Nextform : TForm12;
 
 begin
+Path := TPath.GetHomePath;
   inifilename := TPath.Combine(Path, 'MyApp.ini');
 
   try
-    IniFile := TIniFile.Create(inifilename);
+    IniFile := TMemIniFile.Create(inifilename);
     IniFile.WriteString(INI_SECTION, 'MyPassword', PasswordEdit.Text);
     IniFile.WriteString(INI_SECTION, 'MyLogin', UsernameEdit.Text);
   finally
+    Inifile.UpdateFile;
     IniFile.Free;
   end;
 
@@ -75,10 +77,10 @@ begin
     // Credentials are valid
     //Form12 := TForm12.Create(Application); // Assuming the main form class is TMainForm
     Pusername := UsernameEdit.Text;
-    Application.CreateForm(TForm12, NextForm);
+    NextForm := TForm12.Create(Application);
     NextForm.Show;
     //Form12.Show;
-     Self.Destroy;
+     Self.Release;
   end
   else
   begin
@@ -127,7 +129,7 @@ end;
 procedure TLoginForm.FormCreate(Sender: TObject);
 var
 
-  IniFile: TIniFile;
+  IniFile: TMemIniFile;
   LastValuelogin, LastValuepass: string;
   inifilename : string;
 begin
@@ -136,7 +138,7 @@ Path := TPath.GetHomePath; // or TPath.GetHomePath
 
    inifilename := TPath.Combine(Path, 'MyApp.ini');
   try
-   IniFile := TIniFile.Create(inifilename);
+   IniFile := TMemIniFile.Create(inifilename);
     LastValuepass := IniFile.ReadString(INI_SECTION, 'MyPassword', '');
     LastValuelogin := IniFile.ReadString(INI_SECTION, 'MyLogin', '');
     PasswordEdit.Text := LastValuepass;

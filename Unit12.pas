@@ -14,7 +14,8 @@ uses
   FireDAC.DApt.Intf, FireDAC.DApt, FireDAC.Comp.DataSet, System.IOUtils,
   FireDAC.Comp.UI, System.Diagnostics, System.IniFiles,
   FMX.TextLayout, Datasnap.DSClientRest, ClientModuleUnit3, Datasnap.DBClient,
-  Datasnap.DSConnect, System.JSON,System.Threading, FMX.DialogService.Async;
+  Datasnap.DSConnect, System.JSON,System.Threading,
+  FMX.DialogService.Async;
 
    type
   TPlaylistItem = record
@@ -50,7 +51,6 @@ type
     Timer_startrising: TTimer;
     Button1: TButton;
     Button2: TButton;
-    StyleBook1: TStyleBook;
     bSkipClick: TButton;
     ListBoxGroupHeader1: TListBoxGroupHeader;
     tbVideo: TTrackBar;
@@ -134,8 +134,11 @@ implementation
 
 {$R *.fmx}
 
-uses Unit1;
-{$R *.LgXhdpiPh.fmx ANDROID}
+uses
+
+
+Unit1;
+
 
 procedure TForm12.ListTxtFiles;
 var
@@ -270,15 +273,16 @@ end;
 
 procedure TForm12.SaveSettingsToIniFile;
 var
-  IniFile: TIniFile;
+  IniFile: TMemIniFile;
   inifilename: string;
 begin
   Path := TPath.GetHomePath;
   inifilename := TPath.Combine(Path, 'MyApp.ini');
   try
-    IniFile := TIniFile.Create(inifilename);
+    IniFile := TMemIniFile.Create(inifilename);
     IniFile.WriteString(INI_SECTION, 'MyVolume', FloatToStr(tbVolume.Value));
   finally
+    Inifile.UpdateFile;
     IniFile.Free;
   end;
 end;
@@ -538,7 +542,7 @@ var
   Item: TPlaylistItem;
   Hour, Min, Sec, MSec: Word;
   TextHeight: Single;
-  IniFile: TIniFile;
+  IniFile: TMemIniFile;
   LastVolume: Extended;
   inifilename: string;
   Response: string;
@@ -553,7 +557,7 @@ begin
   CurrentVolume := tbVolume.Value;
   Stopwatch := TStopwatch.Create;
   Fullexercisetime := 0;
-  Pusername := 'cheptsz';//LoginForm.Pusername; // Retrieve username from the login form
+  Pusername := LoginForm.Pusername; // Retrieve username from the login form
 //
   // Set the path for the INI file based on the platform
 Path := TPath.GetHomePath;
@@ -561,7 +565,7 @@ inifilename := TPath.Combine(Path, 'MyApp.ini');
 
   // Load user settings from the INI file
   try
-    IniFile := TIniFile.Create(inifilename);
+    IniFile := TMemIniFile.Create(inifilename);
     try
       LastVolume := StrToFloat(IniFile.ReadString(INI_SECTION, 'MyVolume', ''));
       label1.Text:= inifilename;
@@ -594,7 +598,9 @@ inifilename := TPath.Combine(Path, 'MyApp.ini');
 
             // Process the PlaylistData
             ProcessPlaylistData(PlaylistData);
-          end
+
+           end
+
         );
       except
         on E: Exception do
@@ -604,8 +610,8 @@ inifilename := TPath.Combine(Path, 'MyApp.ini');
             procedure
             begin
               HideLoadingIndicator;
-              ShowMessage('Ошибка при получении списка упражнений: ' + E.Message);
-              Application.Terminate;
+              ShowMessage('Ошибка при получении списка упражнений: ' + E.ClassName + ' - ' + E.Message);
+             // Application.Terminate;
             end
           );
         end;
@@ -621,58 +627,116 @@ var
   Item: TPlaylistItem;
   Hour, Min, Sec, MSec: Word;
   TextHeight: Single;
+  JSONValue: TJSONValue;
 begin
   // Check for empty or nil PlaylistData
   if (PlaylistData = nil) or (PlaylistData.Count = 0) then
   begin
     // Handle no exercises case
-    // ... (your existing code)
+    ShowMessage('Кажется, сегодня у тебя не запланировано упражнений');
     Exit;
   end;
   // Initialize the playlist array
   SetLength(Playlist, PlaylistData.Count);
+
   // Populate the playlist array from the JSON data
   for I := 0 to PlaylistData.Count - 1 do
   begin
-    JSONObject := PlaylistData.Items[I] as TJSONObject;
-    Item.VideoID := JSONObject.GetValue('filename').Value;
-    Item.Videoname := JSONObject.GetValue('video_name').Value;
-    Item.appointmentsID := StrToInt(JSONObject.GetValue('idAppointments').Value);
-    Item.CumulativeTime := JSONObject.GetValue('CumulativeTimeSpent').AsType<Double>;
-    // Parse the playback time (dlitelnost)
-    try
-      // Assuming 'dlitelnost' is in 'HH:MM:SS' format
-      Item.PlaybackTime := StrToTime(JSONObject.GetValue('dlitelnost').Value);
-    except
-      on E: Exception do
-      begin
-        ShowMessage('Error parsing playback time: ' + E.Message);
-        Continue; // Skip this item if there's an error
-      end;
+
+   if not (PlaylistData.Items[I] is TJSONObject) then
+    begin
+      ShowMessage(Format('Unexpected JSON value at index %d', [I]));
+      Continue;
     end;
+
+    JSONObject := PlaylistData.Items[I] as TJSONObject;
+
+     // Get 'filename'
+    JSONValue := JSONObject.GetValue('filename');
+    if JSONValue <> nil then
+      Item.VideoID := JSONValue.Value
+    else
+      Item.VideoID := ''; // Handle missing 'filename'
+
+     // Get 'video_name'
+    JSONValue := JSONObject.GetValue('video_name');
+    if JSONValue <> nil then
+      Item.Videoname := JSONValue.Value
+    else
+      Item.Videoname := ''; // Handle missing 'video_name'
+
+    // Get 'idAppointments'
+    JSONValue := JSONObject.GetValue('idAppointments');
+    if JSONValue <> nil then
+      Item.appointmentsID := StrToIntDef(JSONValue.Value, 0)
+    else
+      Item.appointmentsID := 0; // Handle missing 'idAppointments'
+
+    // Get 'CumulativeTimeSpent'
+    JSONValue := JSONObject.GetValue('CumulativeTimeSpent');
+    if JSONValue <> nil then
+      Item.CumulativeTime := JSONValue.AsType<Double>
+    else
+      Item.CumulativeTime := 0.0; // Handle missing 'CumulativeTimeSpent'
+
+
+    //Item.VideoID := JSONObject.GetValue('filename').Value;
+//    Item.Videoname := JSONObject.GetValue('video_name').Value;
+//    Item.appointmentsID := StrToInt(JSONObject.GetValue('idAppointments').Value);
+//    Item.CumulativeTime := JSONObject.GetValue('CumulativeTimeSpent').AsType<Double>;
+
+
+// Parse 'dlitelnost'
+    JSONValue := JSONObject.GetValue('dlitelnost');
+    if JSONValue <> nil then
+    begin
+      try
+        // Assuming 'dlitelnost' is in 'HH:MM:SS' format
+        Item.PlaybackTime := StrToTime(JSONValue.Value);
+      except
+        on E: Exception do
+        begin
+          ShowMessage('Error parsing playback time: ' + E.Message);
+          Continue; // Skip this item if there's an error
+        end;
+      end;
+    end
+    else
+    begin
+      Item.PlaybackTime := 0; // Handle missing 'dlitelnost'
+    end;
+
+
+
+ // Add the item to the playlist
     Playlist[I] := Item;
+
     // Calculate total exercise time remaining
     Fullexercisetime := Fullexercisetime + (TimeInSecondsOf(Item.PlaybackTime) - Item.CumulativeTime);
+
     // Update the ListBox with the exercise details
     DecodeTime(Item.PlaybackTime, Hour, Min, Sec, MSec);
     ListBox1.Items.Add(Format('Упражнение: %s, Время: %d мин %d сек', [Item.Videoname, Min, Sec]));
-    ListBox1.ListItems[ListBox1.Items.Count - 1].Tag := Item.appointmentsID;
-    ListBox1.ListItems[ListBox1.Items.Count - 1].WordWrap := True;
-    ListBox1.ListItems[ListBox1.Items.Count - 1].TextSettings.WordWrap := True;
-    ListBox1.ListItems[ListBox1.Items.Count - 1].StyleLookup := 'ListBoxItem1Style1';
-    // Adjust the height based on text length
-    TextHeight := CalculateTextHeight(
-      ListBox1.ListItems[ListBox1.Items.Count - 1].Text,
-      ListBox1.ListItems[ListBox1.Items.Count - 1].Font,
-      ListBox1.Width
-    );
-    ListBox1.ListItems[ListBox1.Items.Count - 1].Height := TextHeight + 10; // Add padding
+
+    with ListBox1.ListItems[ListBox1.Items.Count - 1] do
+    begin
+      Tag := Item.appointmentsID;
+      WordWrap := True;
+      TextSettings.WordWrap := True;
+      StyleLookup := 'ListBoxItem1Style1';
+
+      // Adjust the height based on text length
+      TextHeight := CalculateTextHeight(Text, Font, ListBox1.Width);
+      Height := TextHeight + 10; // Add padding
+    end;
   end;
+
   // Enable the play and stop buttons if there are exercises
   if Length(Playlist) > 0 then
   begin
     bPlayClick.Enabled := True;
     bStopClick.Enabled := True;
+
     // Display the total remaining exercise time
     DecodeTime(Fullexercisetime / SecsPerDay, Hour, Min, Sec, MSec);
     Label2.Text := Format('Общее оставшееся время занятия: %d мин %d сек', [Min, Sec]);
@@ -680,7 +744,7 @@ begin
   else
   begin
     ShowMessage('Нет доступных упражнений.');
-    Application.Terminate;
+    // Application.Terminate;
   end;
 end;
 
@@ -703,15 +767,15 @@ const
 begin
   case TOSVersion.Platform of
     TOSVersion.TPlatform.pfWindows:
-     Path := ExtractFilePath(ParamStr(0));
-    TOSVersion.TPlatform.pfMacOS:
+     Path := TPath.Combine(ExtractFilePath(ParamStr(0)),'Videos');
+      TOSVersion.TPlatform.pfMacOS:
       Path := TPath.GetFullPath('../Resources/StartUp');
     TOSVersion.TPlatform.pfiOS, TOSVersion.TPlatform.pfAndroid:
       Path := TPath.GetHomePath;
     TOSVersion.TPlatform.pfWinRT, TOSVersion.TPlatform.pfLinux:
       raise Exception.Create('Unexpected platform');
   end;
-  Result := TPath.Combine(TPath.Combine(Path, 'Videos'), VideoID + VideoExtension);
+  Result := TPath.Combine(Path, VideoID + VideoExtension);
 end;
 
 procedure TForm12.Timer1Timer(Sender: TObject);
