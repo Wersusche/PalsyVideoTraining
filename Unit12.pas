@@ -15,7 +15,7 @@ uses
   FireDAC.Comp.UI, System.Diagnostics, System.IniFiles,
   FMX.TextLayout, Datasnap.DSClientRest, ClientModuleUnit3, Datasnap.DBClient,
   Datasnap.DSConnect, System.JSON,System.Threading,
-  FMX.DialogService.Async;
+  FMX.DialogService.Async, FMX.Ani;
 
    type
   TPlaylistItem = record
@@ -39,12 +39,6 @@ type
     FDGUIxWaitCursor1: TFDGUIxWaitCursor;
     Label2: TLabel;
     Timer4: TTimer;
-    Layoutvideo: TLayout;
-    Layoutitems: TLayout;
-    Layout1: TLayout;
-    Layout2: TLayout;
-    Edit1: TEdit;
-    Button3: TButton;
     MediaPlayer2: TMediaPlayer;
     Timer_startfading: TTimer;
     Timer_for: TTimer;
@@ -52,7 +46,6 @@ type
     Button1: TButton;
     Button2: TButton;
     bSkipClick: TButton;
-    ListBoxGroupHeader1: TListBoxGroupHeader;
     tbVideo: TTrackBar;
     Button4: TButton;
     DSRestConnection1: TDSRestConnection;
@@ -60,13 +53,14 @@ type
     AniIndicator1: TAniIndicator;
     Label1: TLabel;
     Button5: TButton;
+    FloatAnimation1: TFloatAnimation;
+    GridPanelLayout1: TGridPanelLayout;
     procedure FormCreate(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
     procedure bPlayClickClick(Sender: TObject);
     procedure bStopClickClick(Sender: TObject);
     procedure tbVolumeChange(Sender: TObject);
     procedure Button2Click(Sender: TObject);
-    procedure Button3Click(Sender: TObject);
     procedure Timer4Timer(Sender: TObject);
     procedure Timer5Timer(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
@@ -436,10 +430,7 @@ begin
 startrising(MediaPlayer1);
 end;
 
-procedure TForm12.Button3Click(Sender: TObject);
-begin
-Edit1.Text:= GenerateRandomPassword;
-end;
+
 
 procedure TForm12.Button4Click(Sender: TObject);
 var
@@ -557,7 +548,7 @@ begin
   CurrentVolume := tbVolume.Value;
   Stopwatch := TStopwatch.Create;
   Fullexercisetime := 0;
-  Pusername := LoginForm.Pusername; // Retrieve username from the login form
+  Pusername := 'cheptsz';//LoginForm.Pusername; // Retrieve username from the login form
 //
   // Set the path for the INI file based on the platform
 Path := TPath.GetHomePath;

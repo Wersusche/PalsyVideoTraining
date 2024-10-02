@@ -15,6 +15,7 @@ uses
 begin
   Application.Initialize;
   Application.FormFactor.Orientations := [TFormOrientation.Landscape];
+  Application.CreateForm(TForm12, Form12);
   Application.CreateForm(TClientModule3, ClientModule3);
   Application.CreateForm(TLoginForm, LoginForm);
   Application.Run;

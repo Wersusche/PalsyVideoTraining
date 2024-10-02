@@ -183,6 +183,7 @@ begin
     OriginalDecimalSeparator := FormatSettings.DecimalSeparator;
   FormatSettings.DecimalSeparator := '.'; // Set decimal separator to do
   try
+  try
     // Set up the connection
     FDConnection.DriverName := 'MySQL';
     FDConnection.Params.Values['Database'] := 'palsy_db';
@@ -233,6 +234,10 @@ begin
       JSONArray.Free;
       raise Exception.Create('Error in GetPlaylist: ' + E.Message);
     end;
+  end;
+    finally
+    FDQuery.Free;
+    FDConnection.Free;
   end;
 end;
 
