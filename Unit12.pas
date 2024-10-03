@@ -55,6 +55,7 @@ type
     Button5: TButton;
     FloatAnimation1: TFloatAnimation;
     GridPanelLayout1: TGridPanelLayout;
+    StyleBook1: TStyleBook;
     procedure FormCreate(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
     procedure bPlayClickClick(Sender: TObject);
@@ -72,6 +73,9 @@ type
     procedure bSkipClickClick(Sender: TObject);
     procedure Button4Click(Sender: TObject);
     procedure Button5Click(Sender: TObject);
+    procedure bSkipClickResize(Sender: TObject);
+    procedure bStopClickResize(Sender: TObject);
+    procedure bPlayClickResize(Sender: TObject);
 
   private
     { Private declarations }
@@ -205,12 +209,11 @@ begin
         PercentageCompleted := 100;
 
       DecodeTime(Playlist[I].PlaybackTime, Hour, Min, Sec, MSec);
-      ListBox1.Items.Add(Format('Упражнение: %s, Время: %d мин %d сек, Выполнено: %d%%',
+      ListBox1.Items.Add(Format('%s, Время: %d мин %d сек, Выполнено: %d%%',
         [Playlist[I].Videoname, Min, Sec, Round(PercentageCompleted)]));
       ListBox1.ListItems[ListBox1.Items.Count - 1].Tag := Playlist[I].appointmentsID;
       ListBox1.ListItems[ListBox1.Items.Count - 1].WordWrap := True;
       ListBox1.ListItems[ListBox1.Items.Count - 1].TextSettings.WordWrap := True;
-      ListBox1.ListItems[ListBox1.Items.Count - 1].StyleLookup := 'ListBoxItem1Style1';
 
       // Adjust height based on text length
       TextHeight := CalculateTextHeight(ListBox1.ListItems[ListBox1.Items.Count - 1].Text,
@@ -281,6 +284,8 @@ begin
   end;
 end;
 
+
+
 procedure TForm12.bPlayClickClick(Sender: TObject);
 begin
   if bPlayClick.Text = 'Начать упражнение' then
@@ -304,7 +309,7 @@ begin
   end;
   end;
   Stopwatch.Start;
-  Timer1.Interval := 100; // Convert seconds to milliseconds
+  Timer1.Interval := 200; // Convert seconds to milliseconds
   Timer1.Enabled := True;
   Timer4.Interval := 1000;
   Timer4.Enabled := true;
@@ -318,12 +323,27 @@ FTotalPlaybackTime := 0;
   MediaPlayer1.Play;
   Stopwatch.Start;
   Timer4.Enabled := true;
+   Timer1.Enabled := true;
   if not FirstLoop then
   begin
   MediaPlayer2.Play;
   end;
   end
 
+end;
+
+procedure TForm12.bPlayClickResize(Sender: TObject);
+var
+  NewFontSize: Single;
+begin
+  // Disable styled font size
+  bPlayClick.StyledSettings := Button1.StyledSettings - [TStyledSetting.Size];
+
+  // Calculate font size as a percentage of button height
+  NewFontSize := bPlayClick.Width * 0.08; // 40% of button height
+
+  // Set the new font size
+  bPlayClick.TextSettings.Font.Size := NewFontSize;
 end;
 
 procedure TForm12.bSkipClickClick(Sender: TObject);
@@ -370,11 +390,10 @@ begin
       begin
       DecodeTime(Playlist[I].PlaybackTime, Hour, Min, Sec, MSec);
         Parent := ListBox1;
-        Text := Format('Упражнение: %s, Время: %d мин %d сек', [Playlist[I].Videoname, Min, Sec]);
+        Text := Format('%s, Время: %d мин %d сек', [Playlist[I].Videoname, Min, Sec]);
         Tag := Playlist[I].appointmentsID;
         WordWrap := True;
         TextSettings.WordWrap := True;
-        StyleLookup := 'ListBoxItem1Style1';
 
         // Adjust height based on text length
         TextHeight := CalculateTextHeight(Text, Font, ListBox1.Width);
@@ -399,10 +418,28 @@ begin
 end;
 
 
+procedure TForm12.bSkipClickResize(Sender: TObject);
+var
+  NewFontSize: Single;
+begin
+  // Disable styled font size
+  bSkipClick.StyledSettings := Button1.StyledSettings - [TStyledSetting.Size];
+
+  // Calculate font size as a percentage of button height
+  NewFontSize := bSkipClick.Width * 0.08; // 40% of button height
+
+  // Set the new font size
+  bSkipClick.TextSettings.Font.Size := NewFontSize;
+end;
+
 procedure TForm12.bStopClickClick(Sender: TObject);
 begin
-  // Stop the stopwatch
-  Stopwatch.Stop;
+    // Stop the stopwatch
+   Stopwatch.Stop;
+   Timer1.Enabled:=false;
+  Timer4.Enabled := False;
+  MediaPlayer1.Stop;
+  MediaPlayer2.Stop;
 
   // Add elapsed time to cumulative time
   Playlist[CurrentItemIndex].CumulativeTime := Playlist[CurrentItemIndex].CumulativeTime + Stopwatch.Elapsed.TotalSeconds;
@@ -414,10 +451,23 @@ begin
   Stopwatch.Reset;
 
   // Stop media playback
-  Timer4.Enabled := False;
-  MediaPlayer1.Stop;
-  MediaPlayer2.Stop;
+
   bPlayClick.Text := 'Продолжить упражнение';
+  SaveSettingsToIniFile;
+end;
+
+procedure TForm12.bStopClickResize(Sender: TObject);
+var
+  NewFontSize: Single;
+begin
+  // Disable styled font size
+  bStopClick.StyledSettings := Button1.StyledSettings - [TStyledSetting.Size];
+
+  // Calculate font size as a percentage of button height
+  NewFontSize := bStopClick.Width * 0.08; // 40% of button height
+
+  // Set the new font size
+  bStopClick.TextSettings.Font.Size := NewFontSize;
 end;
 
 procedure TForm12.Button1Click(Sender: TObject);
@@ -448,17 +498,18 @@ end;
 procedure TForm12.Button5Click(Sender: TObject);
 
 begin
-
- label1.Text := Path;
+  label1.Text := Path;
 end;
 
 procedure TForm12.FormClose(Sender: TObject; var Action: TCloseAction);
 
 begin
 SaveSettingsToIniFile;
+UpdateCumulativeTimeInDatabase(Playlist[CurrentItemIndex]);
 timer1.Enabled := False;
- timer4.Enabled := False;
+timer4.Enabled := False;
 Mediaplayer1.Stop;
+sleep(1000);
 Application.Terminate;
 end;
 
@@ -534,7 +585,7 @@ var
   Hour, Min, Sec, MSec: Word;
   TextHeight: Single;
   IniFile: TMemIniFile;
-  LastVolume: Extended;
+  LastVolume: Single;
   inifilename: string;
   Response: string;
   DateQueryResult: Boolean;
@@ -548,18 +599,19 @@ begin
   CurrentVolume := tbVolume.Value;
   Stopwatch := TStopwatch.Create;
   Fullexercisetime := 0;
-  Pusername := 'cheptsz';//LoginForm.Pusername; // Retrieve username from the login form
+  Pusername := LoginForm.Pusername; // Retrieve username from the login form
 //
   // Set the path for the INI file based on the platform
 Path := TPath.GetHomePath;
 inifilename := TPath.Combine(Path, 'MyApp.ini');
-
   // Load user settings from the INI file
   try
-    IniFile := TMemIniFile.Create(inifilename);
+   IniFile := TMemIniFile.Create(inifilename);
     try
+      label2.Text:= IniFile.ReadString(INI_SECTION, 'MyVolume', '');
       LastVolume := StrToFloat(IniFile.ReadString(INI_SECTION, 'MyVolume', ''));
-      label1.Text:= inifilename;
+      //floattostr(LastVolume);
+
       tbVolume.Value := LastVolume;
     except
       // If conversion fails, set to default value 1
@@ -707,16 +759,15 @@ begin
 
     // Update the ListBox with the exercise details
     DecodeTime(Item.PlaybackTime, Hour, Min, Sec, MSec);
-    ListBox1.Items.Add(Format('Упражнение: %s, Время: %d мин %d сек', [Item.Videoname, Min, Sec]));
+    ListBox1.Items.Add(Format('%s, Время: %d мин %d сек', [Item.Videoname, Min, Sec]));
 
     with ListBox1.ListItems[ListBox1.Items.Count - 1] do
     begin
       Tag := Item.appointmentsID;
       WordWrap := True;
       TextSettings.WordWrap := True;
-      StyleLookup := 'ListBoxItem1Style1';
 
-      // Adjust the height based on text length
+       // Adjust the height based on text length
       TextHeight := CalculateTextHeight(Text, Font, ListBox1.Width);
       Height := TextHeight + 10; // Add padding
     end;
@@ -730,7 +781,7 @@ begin
 
     // Display the total remaining exercise time
     DecodeTime(Fullexercisetime / SecsPerDay, Hour, Min, Sec, MSec);
-    Label2.Text := Format('Общее оставшееся время занятия: %d мин %d сек', [Min, Sec]);
+    //Label2.Text := Format('Общее оставшееся время занятия: %d мин %d сек', [Min, Sec]);
   end
   else
   begin
@@ -746,7 +797,10 @@ end;
 procedure TForm12.FormDestroy(Sender: TObject);
 begin
 SaveSettingsToIniFile;
+UpdateCumulativeTimeInDatabase(Playlist[CurrentItemIndex]);
 mediaplayer1.Stop;
+mediaplayer2.Stop;
+sleep(1000);
 Application.Terminate;
 end;
 
@@ -772,6 +826,7 @@ end;
 procedure TForm12.Timer1Timer(Sender: TObject);
 var
   ExerciseDuration, TotalTimeSpent, RemainingTime: Double;
+  getvolume: single;
 begin
   // Calculate total time spent on current exercise
   TotalTimeSpent := Playlist[CurrentItemIndex].CumulativeTime + Stopwatch.Elapsed.TotalSeconds;
@@ -796,34 +851,39 @@ begin
     Nextvideoload;
     Exit; // Exit the procedure to avoid further processing
   end;
-
+    //Label1.text := inttostr(MediaPlayer1.Media.CurrentTime);
   // Handle video looping and background music
-  if MediaPlayer1.CurrentTime >= MediaPlayer1.Duration then
+  if Mediaplayer1.State = TMediaState.stopped then
+ //MediaPlayer1.Media.CurrentTime >= MediaPlayer1.Duration then
   begin
-    MediaPlayer1.CurrentTime := 0;
+  //MediaPlayer1.FileName := GetVideoFilePath(Playlist[CurrentItemIndex].VideoID);
+     MediaPlayer1.CurrentTime:= 0;
+     MediaPlayer1.Volume:= tbVolume.Value;
     MediaPlayer1.Play;
 
     // If it's not the first loop, play the background music
     if not FirstLoop then
     begin
+      getvolume:= MediaPlayer1.Volume;
       MediaPlayer1.Volume := 0;  // Mute the main video player
-
-      // Load and play the MP3 only if it hasn't been loaded yet
+                  // Load and play the MP3 only if it hasn't been loaded yet
       if not IsMP3Loaded then
       begin
         MediaPlayer2.FileName := LoadRandomMP3;
         MediaPlayer2.Play;
+        MediaPlayer2.Volume:= getvolume;
         IsMP3Loaded := True;  // MP3 is now loaded
       end
       else
       begin
         // MP3 is already loaded, just continue playing it
+        MediaPlayer2.Volume:= getvolume;
         MediaPlayer2.Play;
-
-        // Loop the MP3 if it has ended
-        if MediaPlayer2.CurrentTime >= MediaPlayer2.Duration then
+                // Loop the MP3 if it has ended
+        if MediaPlayer2.State = TMediaState.stopped then
         begin
           MediaPlayer2.FileName := LoadRandomMP3;
+          MediaPlayer2.Volume:= getvolume;
           MediaPlayer2.Play;
         end;
       end;
@@ -899,8 +959,8 @@ begin
   if mediaplayer1.state = TMediaState.Playing then
   MediaPlayer1.Volume := tbVolume.value
   else
-   MediaPlayer2.Volume := tbVolume.value;
-
+  MediaPlayer2.Volume := tbVolume.value;
+  SaveSettingsToIniFile;
 end;
 
 
@@ -923,11 +983,13 @@ var
   Files: TStringDynArray;
   RandomFile: string;
   RandomIndex: Integer;
+
 begin
   Result :='';
   // Retrieve all MP3 files from the folder
-  Path := ExtractFilePath(ParamStr(0));
-  Files := TDirectory.GetFiles(TPath.Combine(Path, 'Videos\Background_music'), '*.mp3'); // Change the path accordingly
+    Files := TDirectory.GetFiles(Path, '*.mp3');
+
+ // Change the path accordingly
 
   if Length(Files) = 0 then
   begin

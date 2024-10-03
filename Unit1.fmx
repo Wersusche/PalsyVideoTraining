@@ -73,6 +73,7 @@ object LoginForm: TLoginForm
       TabOrder = 5
       Text = 'Button2'
       TextSettings.Trimming = None
+      Visible = False
       OnClick = Button2Click
     end
     object Button3: TButton
@@ -80,6 +81,7 @@ object LoginForm: TLoginForm
       TabOrder = 7
       Text = 'Button3'
       TextSettings.Trimming = None
+      Visible = False
       OnClick = Button3Click
     end
   end
