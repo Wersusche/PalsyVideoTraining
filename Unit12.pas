@@ -52,10 +52,10 @@ type
     DSProviderConnection1: TDSProviderConnection;
     AniIndicator1: TAniIndicator;
     Label1: TLabel;
-    Button5: TButton;
     FloatAnimation1: TFloatAnimation;
     GridPanelLayout1: TGridPanelLayout;
     StyleBook1: TStyleBook;
+
     procedure FormCreate(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
     procedure bPlayClickClick(Sender: TObject);
@@ -68,7 +68,6 @@ type
     procedure FormDestroy(Sender: TObject);
     procedure Timer_startfadingTimer(Sender: TObject);
     procedure Timer_startrisingTimer(Sender: TObject);
-    procedure Timer2Timer(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure bSkipClickClick(Sender: TObject);
     procedure Button4Click(Sender: TObject);
@@ -82,7 +81,7 @@ type
     FUpdatingTrackBar: Boolean;
     Path: string;
     FWatchedVideosCount: Integer;
-    CurrentVolume: Extended;
+    CurrentVolume: Single;
     FTotalPlaybackTime: Double; // In seconds
     Pusername : string;
     Fullexercisetime: TTime;
@@ -91,6 +90,7 @@ type
     Stopwatch: TStopwatch;
     IsMP3Loaded: Boolean;
     FirstLoop: Boolean;
+    LastVolume: Single;
     function CalculateTextHeight(const Text: string; const Font: TFont; const Width: Single): Single;
     procedure ListTxtFiles;
     procedure ShowLoadingIndicator;
@@ -100,6 +100,7 @@ type
     function TimeInSecondsOf(ATime: TTime): Double;
     procedure UpdateExerciseList;
     procedure SaveSettingsToIniFile;
+
 
  procedure UpdateCumulativeTimeInDatabase(const Item: TPlaylistItem);
 procedure CompleteExercise(ItemIndex: Integer);
@@ -585,7 +586,6 @@ var
   Hour, Min, Sec, MSec: Word;
   TextHeight: Single;
   IniFile: TMemIniFile;
-  LastVolume: Single;
   inifilename: string;
   Response: string;
   DateQueryResult: Boolean;
@@ -596,7 +596,6 @@ begin
 
        // Initialize variables
   IsMP3Loaded := False;
-  CurrentVolume := tbVolume.Value;
   Stopwatch := TStopwatch.Create;
   Fullexercisetime := 0;
   Pusername := LoginForm.Pusername; // Retrieve username from the login form
@@ -608,7 +607,7 @@ inifilename := TPath.Combine(Path, 'MyApp.ini');
   try
    IniFile := TMemIniFile.Create(inifilename);
     try
-      label2.Text:= IniFile.ReadString(INI_SECTION, 'MyVolume', '');
+      //label2.Text:= IniFile.ReadString(INI_SECTION, 'MyVolume', '');
       LastVolume := StrToFloat(IniFile.ReadString(INI_SECTION, 'MyVolume', ''));
       //floattostr(LastVolume);
 
@@ -621,6 +620,7 @@ inifilename := TPath.Combine(Path, 'MyApp.ini');
     IniFile.Free;
   end;
 
+  CurrentVolume := tbVolume.Value;
 
    // Run the server call in a background task
   TTask.Run(
@@ -858,41 +858,42 @@ begin
   begin
   //MediaPlayer1.FileName := GetVideoFilePath(Playlist[CurrentItemIndex].VideoID);
      MediaPlayer1.CurrentTime:= 0;
-     MediaPlayer1.Volume:= tbVolume.Value;
-    MediaPlayer1.Play;
+     MediaPlayer1.Play;
 
     // If it's not the first loop, play the background music
     if not FirstLoop then
     begin
-      getvolume:= MediaPlayer1.Volume;
-      MediaPlayer1.Volume := 0;  // Mute the main video player
+    MediaPlayer1.Volume := 0;
+      //getvolume:= MediaPlayer1.Volume;
+        // Mute the main video player
                   // Load and play the MP3 only if it hasn't been loaded yet
       if not IsMP3Loaded then
       begin
         MediaPlayer2.FileName := LoadRandomMP3;
         MediaPlayer2.Play;
-        MediaPlayer2.Volume:= getvolume;
+        MediaPlayer2.Volume:= CurrentVolume;
+
         IsMP3Loaded := True;  // MP3 is now loaded
       end
       else
       begin
         // MP3 is already loaded, just continue playing it
-        MediaPlayer2.Volume:= getvolume;
+        //MediaPlayer2.Volume:= CurrentVolume;
         MediaPlayer2.Play;
                 // Loop the MP3 if it has ended
         if MediaPlayer2.State = TMediaState.stopped then
         begin
           MediaPlayer2.FileName := LoadRandomMP3;
-          MediaPlayer2.Volume:= getvolume;
+          MediaPlayer2.Volume:= CurrentVolume;
           MediaPlayer2.Play;
         end;
       end;
-
-      MediaPlayer2.Volume := tbVolume.Value;  // Set volume for MediaPlayer2
+       //MediaPlayer2.Volume := tbVolume.Value;  // Set volume for MediaPlayer2
     end
     else
     begin
       FirstLoop := False;  // Not the first loop anymore
+      MediaPlayer1.Volume:= tbVolume.Value;
     end;
   end;
 end;
@@ -913,7 +914,7 @@ begin
   // Update the label
   Min1 := Trunc(TotalRemainingTime) div 60;
   Sec1 := Trunc(TotalRemainingTime) mod 60;
-  Label2.Text := Format('Общее оставшееся время занятия: %d мин %d сек', [Min1, Sec1]);
+  //Label2.Text := Format('Общее оставшееся время занятия: %d мин %d сек', [Min1, Sec1]);
 
   // Stop the timer if no time remains
   if TotalRemainingTime <= 0 then
@@ -961,6 +962,7 @@ begin
   else
   MediaPlayer2.Volume := tbVolume.value;
   SaveSettingsToIniFile;
+  CurrentVolume := tbVolume.Value;
 end;
 
 
@@ -986,6 +988,18 @@ var
 
 begin
   Result :='';
+
+   case TOSVersion.Platform of
+    TOSVersion.TPlatform.pfWindows:
+     Path := TPath.Combine(ExtractFilePath(ParamStr(0)),'Videos');
+      TOSVersion.TPlatform.pfMacOS:
+      Path := TPath.GetFullPath('../Resources/StartUp');
+    TOSVersion.TPlatform.pfiOS, TOSVersion.TPlatform.pfAndroid:
+      Path := TPath.GetHomePath;
+    TOSVersion.TPlatform.pfWinRT, TOSVersion.TPlatform.pfLinux:
+      raise Exception.Create('Unexpected platform');
+  end;
+
   // Retrieve all MP3 files from the folder
     Files := TDirectory.GetFiles(Path, '*.mp3');
 
@@ -1032,24 +1046,14 @@ begin
 end;
 
 
-procedure TForm12.Timer2Timer(Sender: TObject);
-begin
-
-      CurrentVolume := CurrentVolume - 0.1;
-      if CurrentVolume < 0 then CurrentVolume := 0;
-      mediaplayer1.Volume := CurrentVolume;
-      mediaplayer2.Volume := CurrentVolume;
-
-    end;
-
-  procedure TForm12.Nextvideoload;
+procedure TForm12.Nextvideoload;
 var
   apptag: Integer;
   ExerciseDuration: Double;
 begin
   // Stop the stopwatch
   Stopwatch.Stop;
-
+  MediaPlayer2.Stop;
   // Add elapsed time to cumulative time
   Playlist[CurrentItemIndex].CumulativeTime := Playlist[CurrentItemIndex].CumulativeTime + Stopwatch.Elapsed.TotalSeconds;
 
@@ -1076,7 +1080,7 @@ begin
     // Update cumulative time in the database
     UpdateCumulativeTimeInDatabase(Playlist[CurrentItemIndex]);
   end;
-
+  Firstloop := true;
   // Reset the stopwatch
   Stopwatch.Reset;
 
@@ -1110,10 +1114,11 @@ begin
     // Start the next video
 
     MediaPlayer2.Stop;
-    IsMP3Loaded := False; // Reset for the next exercise
+    Firstloop := true;
+    //IsMP3Loaded := False; // Reset for the next exercise
     MediaPlayer1.FileName := GetVideoFilePath(Playlist[CurrentItemIndex].VideoID);
     MediaPlayer1.Play;
-    MediaPlayer1.Volume := tbVolume.Value;
+    MediaPlayer1.Volume := Currentvolume;
 
     // Reinitialize tbVideo for the new exercise
     InitializeVideoTrackBar;

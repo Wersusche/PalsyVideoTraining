@@ -5,11 +5,10 @@
         <FrameworkType>FMX</FrameworkType>
         <Base>True</Base>
         <Config Condition="'$(Config)'==''">Debug</Config>
-        <Platform Condition="'$(Platform)'==''">Win32</Platform>
+        <Platform Condition="'$(Platform)'==''">Android</Platform>
         <TargetedPlatforms>558099</TargetedPlatforms>
         <AppType>Application</AppType>
         <MainSource>Project10.dpr</MainSource>
-        <ProjectName Condition="'$(ProjectName)'==''">Project10</ProjectName>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Config)'=='Base' or '$(Base)'!=''">
         <Base>true</Base>
@@ -295,7 +294,6 @@
             <FormType>dfm</FormType>
             <DesignClass>TDataModule</DesignClass>
         </DCCReference>
-        <None Include="Videos\koleno_act_1.mp4"/>
         <None Include="Videos\koleno_act_2.mp4"/>
         <None Include="Videos\koleno_act_3.mp4"/>
         <None Include="Videos\koleno_act_4.mp4"/>
@@ -358,6 +356,7 @@
         <None Include="Videos\Background_music\yoga1.mp3"/>
         <None Include="res\xml\network_security_config.xml"/>
         <None Include="testtxt.txt"/>
+        <None Include="Videos\koleno_act_1.mp4"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
@@ -687,6 +686,12 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
+                <DeployFile LocalName="Videos\koleno_act_1.mp4" Configuration="Release" Class="File">
+                    <Platform Name="Win32">
+                        <RemoteName>koleno_act_1.mp4</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile LocalName="Videos\koleno_act_1.mp4" Configuration="Release" Class="ProjectFile"/>
                 <DeployFile LocalName="Videos\koleno_act_2.mp4" Configuration="Debug" Class="ProjectFile"/>
                 <DeployFile LocalName="Videos\koleno_act_2.mp4" Configuration="Debug" Class="ProjectFile">
@@ -697,7 +702,6 @@
                 </DeployFile>
                 <DeployFile LocalName="Videos\koleno_act_2.mp4" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Win32">
-                        <RemoteDir>.\</RemoteDir>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
@@ -1680,7 +1684,7 @@
                 </DeployFile>
                 <DeployFile LocalName="Videos\zap_act_6.mp4" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Win32">
-                        <RemoteDir>.\</RemoteDir>
+                        <RemoteDir>.\Videos\</RemoteDir>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
@@ -1708,7 +1712,7 @@
                 </DeployFile>
                 <DeployFile LocalName="Videos\zap_pass_1.mp4" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Win32">
-                        <RemoteDir>.\</RemoteDir>
+                        <RemoteDir>.\Videos\</RemoteDir>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
@@ -2801,6 +2805,7 @@
                 <ClientClassesUnit1>{1AF2B515-28D1-4E81-B2A9-E98BC6F78BA8}</ClientClassesUnit1>
                 <ClientClassesUnit3>{8E1C3F8A-4087-4C99-98EB-E739B60AF774}</ClientClassesUnit3>
             </DataSnapProxyLookup>
+            <ModelSupport>False</ModelSupport>
         </BorlandProject>
         <ProjectFileVersion>12</ProjectFileVersion>
     </ProjectExtensions>
