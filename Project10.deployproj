@@ -825,10 +825,10 @@
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
-        <DeployFile Include="$(ProjectName).Artwork\Android\FM_LauncherIcon_72x72.png" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>Project10\res\drawable-hdpi\</RemoteDir>
+        <DeployFile Include="$(ProjectName).Artwork\Android\FM_LauncherIcon_192x192.png" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\res\drawable-xxxhdpi\</RemoteDir>
             <RemoteName>ic_launcher.png</RemoteName>
-            <DeployClass>Android_LauncherIcon72</DeployClass>
+            <DeployClass>Android_LauncherIcon192</DeployClass>
             <Operation>1</Operation>
             <LocalCommand/>
             <RemoteCommand/>
@@ -837,6 +837,15 @@
         <DeployFile Include="Videos\plecho_act_5.mp4" Condition="'$(Config)'=='Debug'">
             <RemoteDir>Project10\assets\internal\</RemoteDir>
             <RemoteName>plecho_act_5.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\taz_act_4_muted.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>taz_act_4_muted.mp4</RemoteName>
             <DeployClass>ProjectFile</DeployClass>
             <Operation>0</Operation>
             <LocalCommand/>
@@ -852,11 +861,38 @@
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
-        <DeployFile Include="$(ProjectName).Artwork\Android\FM_LauncherIcon_36x36.png" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>Project10\res\drawable-ldpi\</RemoteDir>
+        <DeployFile Include="Videos\spina_pass_2_muted.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>spina_pass_2_muted.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="$(ProjectName).Artwork\Android\FM_LauncherIcon_144x144.png" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\res\drawable-xxhdpi\</RemoteDir>
             <RemoteName>ic_launcher.png</RemoteName>
-            <DeployClass>Android_LauncherIcon36</DeployClass>
+            <DeployClass>Android_LauncherIcon144</DeployClass>
             <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\stopa_act_1_muted.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>stopa_act_1_muted.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\koleno_pass_3_muted.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>koleno_pass_3_muted.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
             <LocalCommand/>
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
@@ -882,6 +918,51 @@
         <DeployFile Include="Videos\zap_act_6.mp4" Condition="'$(Config)'=='Debug'">
             <RemoteDir>Project10\assets\internal\</RemoteDir>
             <RemoteName>zap_act_6.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\koleno_act_4_muted.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>koleno_act_4_muted.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="$(ProjectName).Artwork\Android\FM_SplashImage_640x480.png" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\res\drawable-large\</RemoteDir>
+            <RemoteName>splash_image.png</RemoteName>
+            <DeployClass>Android_SplashImage640</DeployClass>
+            <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\taz_pass_2_muted.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>taz_pass_2_muted.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\stopa_act_3_muted.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>stopa_act_3_muted.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\koleno_pass_1_muted.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>koleno_pass_1_muted.mp4</RemoteName>
             <DeployClass>ProjectFile</DeployClass>
             <Operation>0</Operation>
             <LocalCommand/>
@@ -969,6 +1050,24 @@
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
+        <DeployFile Include="Videos\taz_pass_4_muted.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>taz_pass_4_muted.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\spina_act_1_muted.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>spina_act_1_muted.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
         <DeployFile Include="Videos\taz_act_3.mp4" Condition="'$(Config)'=='Debug'">
             <RemoteDir>Project10\assets\internal\</RemoteDir>
             <RemoteName>taz_act_3.mp4</RemoteName>
@@ -978,20 +1077,20 @@
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
-        <DeployFile Include="$(ProjectName).Artwork\Android\FM_NotificationIcon_24x24.png" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>Project10\res\drawable-mdpi\</RemoteDir>
-            <RemoteName>ic_notification.png</RemoteName>
-            <DeployClass>Android_NotificationIcon24</DeployClass>
-            <Operation>1</Operation>
-            <LocalCommand/>
-            <RemoteCommand/>
-            <Overwrite>True</Overwrite>
-        </DeployFile>
         <DeployFile Include="$(BDS)\lib\android\debug\mips\libnative-activity.so" Condition="'$(Config)'=='Debug'">
             <RemoteDir>Project10\library\lib\mips\</RemoteDir>
             <RemoteName>libProject10.so</RemoteName>
             <DeployClass>AndroidLibnativeMipsFile</DeployClass>
             <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\zap_act_5_muted.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>zap_act_5_muted.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
             <LocalCommand/>
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
@@ -1023,11 +1122,11 @@
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
-        <DeployFile Include="$(ProjectName).Artwork\Android\FM_SplashImage_640x480.png" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>Project10\res\drawable-large\</RemoteDir>
-            <RemoteName>splash_image.png</RemoteName>
-            <DeployClass>Android_SplashImage640</DeployClass>
-            <Operation>1</Operation>
+        <DeployFile Include="Videos\plecho_pass_5_muted.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>plecho_pass_5_muted.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
             <LocalCommand/>
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
@@ -1041,11 +1140,74 @@
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
-        <DeployFile Include="$(ProjectName).Artwork\Android\FM_LauncherIcon_48x48.png" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>Project10\res\drawable-mdpi\</RemoteDir>
-            <RemoteName>ic_launcher.png</RemoteName>
-            <DeployClass>Android_LauncherIcon48</DeployClass>
-            <Operation>1</Operation>
+        <DeployFile Include="Videos\lokot_act_4_muted.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>lokot_act_4_muted.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\taz_pass_3_muted.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>taz_pass_3_muted.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\stopa_act_2_muted.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>stopa_act_2_muted.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\lokot_act_3_muted.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>lokot_act_3_muted.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\zap_pass_1_muted.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>zap_pass_1_muted.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\taz_act_1_muted.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>taz_act_1_muted.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\koleno_act_1_muted.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>koleno_act_1_muted.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_pass_3_muted.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>plecho_pass_3_muted.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
             <LocalCommand/>
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
@@ -1053,6 +1215,15 @@
         <DeployFile Include="Videos\zap_pass_3.mp4" Condition="'$(Config)'=='Debug'">
             <RemoteDir>Project10\assets\internal\</RemoteDir>
             <RemoteName>zap_pass_3.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\zap_pass_5_muted.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>zap_pass_5_muted.mp4</RemoteName>
             <DeployClass>ProjectFile</DeployClass>
             <Operation>0</Operation>
             <LocalCommand/>
@@ -1068,11 +1239,11 @@
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
-        <DeployFile Include="$(ProjectName).Artwork\Android\FM_NotificationIcon_48x48.png" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>Project10\res\drawable-xhdpi\</RemoteDir>
-            <RemoteName>ic_notification.png</RemoteName>
-            <DeployClass>Android_NotificationIcon48</DeployClass>
-            <Operation>1</Operation>
+        <DeployFile Include="Videos\zap_pass_3_muted.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>zap_pass_3_muted.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
             <LocalCommand/>
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
@@ -1113,9 +1284,9 @@
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
-        <DeployFile Include="Videos\spina_act_2.mp4" Condition="'$(Config)'=='Debug'">
+        <DeployFile Include="Videos\spina_act_2_muted.mp4" Condition="'$(Config)'=='Debug'">
             <RemoteDir>Project10\assets\internal\</RemoteDir>
-            <RemoteName>spina_act_2.mp4</RemoteName>
+            <RemoteName>spina_act_2_muted.mp4</RemoteName>
             <DeployClass>ProjectFile</DeployClass>
             <Operation>0</Operation>
             <LocalCommand/>
@@ -1127,6 +1298,15 @@
             <RemoteName>ic_launcher.xml</RemoteName>
             <DeployClass>Android_AdaptiveIcon</DeployClass>
             <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\spina_act_2.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>spina_act_2.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
             <LocalCommand/>
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
@@ -1143,6 +1323,15 @@
         <DeployFile Include="Videos\plecho_act_4.mp4" Condition="'$(Config)'=='Debug'">
             <RemoteDir>Project10\assets\internal\</RemoteDir>
             <RemoteName>plecho_act_4.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\lokot_act_2_muted.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>lokot_act_2_muted.mp4</RemoteName>
             <DeployClass>ProjectFile</DeployClass>
             <Operation>0</Operation>
             <LocalCommand/>
@@ -1194,6 +1383,51 @@
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
+        <DeployFile Include="$(ProjectName).Artwork\Android\FM_LauncherIcon_48x48.png" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\res\drawable-mdpi\</RemoteDir>
+            <RemoteName>ic_launcher.png</RemoteName>
+            <DeployClass>Android_LauncherIcon48</DeployClass>
+            <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="$(ProjectName).Artwork\Android\FM_NotificationIcon_24x24.png" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\res\drawable-mdpi\</RemoteDir>
+            <RemoteName>ic_notification.png</RemoteName>
+            <DeployClass>Android_NotificationIcon24</DeployClass>
+            <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\stopa_pass_1_muted.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>stopa_pass_1_muted.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="$(ProjectName).Artwork\Android\FM_LauncherIcon_36x36.png" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\res\drawable-ldpi\</RemoteDir>
+            <RemoteName>ic_launcher.png</RemoteName>
+            <DeployClass>Android_LauncherIcon36</DeployClass>
+            <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="$(ProjectName).Artwork\Android\FM_SplashImage_960x720.png" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\res\drawable-xlarge\</RemoteDir>
+            <RemoteName>splash_image.png</RemoteName>
+            <DeployClass>Android_SplashImage960</DeployClass>
+            <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
         <DeployFile Include="Videos\zap_pass_2.mp4" Condition="'$(Config)'=='Debug'">
             <RemoteDir>Project10\assets\internal\</RemoteDir>
             <RemoteName>zap_pass_2.mp4</RemoteName>
@@ -1212,6 +1446,24 @@
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
+        <DeployFile Include="Videos\zap_act_1_muted.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>zap_act_1_muted.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\taz_act_3_muted.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>taz_act_3_muted.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
         <DeployFile Include="Videos\Background_music\oh-wonder-technicolour-beat-urban-contact-remix.mp3" Condition="'$(Config)'=='Debug'">
             <RemoteDir>Project10\assets\internal\</RemoteDir>
             <RemoteName>oh-wonder-technicolour-beat-urban-contact-remix.mp3</RemoteName>
@@ -1221,8 +1473,44 @@
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
+        <DeployFile Include="Videos\plecho_act_3_muted.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>plecho_act_3_muted.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\zap_act_4_muted.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>zap_act_4_muted.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_pass_2_muted.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>plecho_pass_2_muted.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\spina_pass_3_muted.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>spina_pass_3_muted.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
         <DeployFile Include="Videos\koleno_act_2.mp4" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>Project10\media\</RemoteDir>
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
             <RemoteName>koleno_act_2.mp4</RemoteName>
             <DeployClass>ProjectFile</DeployClass>
             <Operation>0</Operation>
@@ -1239,10 +1527,46 @@
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
+        <DeployFile Include="Videos\stopa_act_4_muted.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>stopa_act_4_muted.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
         <DeployFile Include="Android\Debug\colors.xml" Condition="'$(Config)'=='Debug'">
             <RemoteDir>Project10\res\values\</RemoteDir>
             <RemoteName>colors.xml</RemoteName>
             <DeployClass>Android_Colors</DeployClass>
+            <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\koleno_act_2_muted.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>koleno_act_2_muted.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\zap_act_6_muted.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>zap_act_6_muted.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="$(ProjectName).Artwork\Android\FM_NotificationIcon_72x72.png" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\res\drawable-xxhdpi\</RemoteDir>
+            <RemoteName>ic_notification.png</RemoteName>
+            <DeployClass>Android_NotificationIcon72</DeployClass>
             <Operation>1</Operation>
             <LocalCommand/>
             <RemoteCommand/>
@@ -1260,6 +1584,33 @@
         <DeployFile Include="Videos\taz_act_4.mp4" Condition="'$(Config)'=='Debug'">
             <RemoteDir>Project10\assets\internal\</RemoteDir>
             <RemoteName>taz_act_4.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\zap_act_2_muted.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>zap_act_2_muted.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_act_5_muted.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>plecho_act_5_muted.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\zap_pass_2_muted.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>zap_pass_2_muted.mp4</RemoteName>
             <DeployClass>ProjectFile</DeployClass>
             <Operation>0</Operation>
             <LocalCommand/>
@@ -1320,6 +1671,15 @@
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
+        <DeployFile Include="Videos\lokot_pass_2_muted.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>lokot_pass_2_muted.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
         <DeployFile Include="Android\Debug\ic_launcher-v33.xml" Condition="'$(Config)'=='Debug'">
             <RemoteDir>Project10\res\drawable-anydpi-v33\</RemoteDir>
             <RemoteName>ic_launcher.xml</RemoteName>
@@ -1332,6 +1692,15 @@
         <DeployFile Include="Videos\zap_pass_4.mp4" Condition="'$(Config)'=='Debug'">
             <RemoteDir>Project10\assets\internal\</RemoteDir>
             <RemoteName>zap_pass_4.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\zap_act_7_muted.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>zap_act_7_muted.mp4</RemoteName>
             <DeployClass>ProjectFile</DeployClass>
             <Operation>0</Operation>
             <LocalCommand/>
@@ -1356,6 +1725,24 @@
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
+        <DeployFile Include="Videos\lokot_pass_1_muted.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>lokot_pass_1_muted.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="$(ProjectName).Artwork\Android\FM_SplashImage_426x320.png" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\res\drawable-small\</RemoteDir>
+            <RemoteName>splash_image.png</RemoteName>
+            <DeployClass>Android_SplashImage426</DeployClass>
+            <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
         <DeployFile Include="testtxt.txt" Condition="'$(Config)'=='Debug'">
             <RemoteDir>Project10\assets\internal\</RemoteDir>
             <RemoteName>testtxt.txt</RemoteName>
@@ -1365,47 +1752,11 @@
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
-        <DeployFile Include="$(ProjectName).Artwork\Android\FM_SplashImage_470x320.png" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>Project10\res\drawable-normal\</RemoteDir>
-            <RemoteName>splash_image.png</RemoteName>
-            <DeployClass>Android_SplashImage470</DeployClass>
-            <Operation>1</Operation>
-            <LocalCommand/>
-            <RemoteCommand/>
-            <Overwrite>True</Overwrite>
-        </DeployFile>
-        <DeployFile Include="$(ProjectName).Artwork\Android\FM_NotificationIcon_72x72.png" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>Project10\res\drawable-xxhdpi\</RemoteDir>
-            <RemoteName>ic_notification.png</RemoteName>
-            <DeployClass>Android_NotificationIcon72</DeployClass>
-            <Operation>1</Operation>
-            <LocalCommand/>
-            <RemoteCommand/>
-            <Overwrite>True</Overwrite>
-        </DeployFile>
         <DeployFile Include="Videos\taz_act_1.mp4" Condition="'$(Config)'=='Debug'">
             <RemoteDir>Project10\assets\internal\</RemoteDir>
             <RemoteName>taz_act_1.mp4</RemoteName>
             <DeployClass>ProjectFile</DeployClass>
             <Operation>0</Operation>
-            <LocalCommand/>
-            <RemoteCommand/>
-            <Overwrite>True</Overwrite>
-        </DeployFile>
-        <DeployFile Include="$(ProjectName).Artwork\Android\FM_LauncherIcon_144x144.png" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>Project10\res\drawable-xxhdpi\</RemoteDir>
-            <RemoteName>ic_launcher.png</RemoteName>
-            <DeployClass>Android_LauncherIcon144</DeployClass>
-            <Operation>1</Operation>
-            <LocalCommand/>
-            <RemoteCommand/>
-            <Overwrite>True</Overwrite>
-        </DeployFile>
-        <DeployFile Include="$(ProjectName).Artwork\Android\FM_LauncherIcon_192x192.png" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>Project10\res\drawable-xxxhdpi\</RemoteDir>
-            <RemoteName>ic_launcher.png</RemoteName>
-            <DeployClass>Android_LauncherIcon192</DeployClass>
-            <Operation>1</Operation>
             <LocalCommand/>
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
@@ -1438,6 +1789,33 @@
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
+        <DeployFile Include="Videos\spina_act_3_muted.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>spina_act_3_muted.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\stopa_pass_2_muted.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>stopa_pass_2_muted.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="$(ProjectName).Artwork\Android\FM_NotificationIcon_48x48.png" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\res\drawable-xhdpi\</RemoteDir>
+            <RemoteName>ic_notification.png</RemoteName>
+            <DeployClass>Android_NotificationIcon48</DeployClass>
+            <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
         <DeployFile Include="Videos\lokot_act_1.mp4" Condition="'$(Config)'=='Debug'">
             <RemoteDir>Project10\assets\internal\</RemoteDir>
             <RemoteName>lokot_act_1.mp4</RemoteName>
@@ -1450,6 +1828,15 @@
         <DeployFile Include="Videos\spina_pass_1.mp4" Condition="'$(Config)'=='Debug'">
             <RemoteDir>Project10\assets\internal\</RemoteDir>
             <RemoteName>spina_pass_1.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\lokot_act_1_muted.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>lokot_act_1_muted.mp4</RemoteName>
             <DeployClass>ProjectFile</DeployClass>
             <Operation>0</Operation>
             <LocalCommand/>
@@ -1501,11 +1888,11 @@
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
-        <DeployFile Include="$(ProjectName).Artwork\Android\FM_SplashImage_426x320.png" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>Project10\res\drawable-small\</RemoteDir>
-            <RemoteName>splash_image.png</RemoteName>
-            <DeployClass>Android_SplashImage426</DeployClass>
-            <Operation>1</Operation>
+        <DeployFile Include="Videos\taz_act_2_muted.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>taz_act_2_muted.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
             <LocalCommand/>
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
@@ -1528,6 +1915,15 @@
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
+        <DeployFile Include="Videos\spina_pass_1_muted.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>spina_pass_1_muted.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
         <DeployFile Include="Videos\lokot_act_4.mp4" Condition="'$(Config)'=='Debug'">
             <RemoteDir>Project10\assets\internal\</RemoteDir>
             <RemoteName>lokot_act_4.mp4</RemoteName>
@@ -1542,6 +1938,24 @@
             <RemoteName>splash_vector.xml</RemoteName>
             <DeployClass>Android_VectorizedSplash</DeployClass>
             <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\zap_act_3_muted.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>zap_act_3_muted.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_act_2_muted.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>plecho_act_2_muted.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
             <LocalCommand/>
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
@@ -1582,9 +1996,45 @@
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
+        <DeployFile Include="$(ProjectName).Artwork\Android\FM_LauncherIcon_72x72.png" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\res\drawable-hdpi\</RemoteDir>
+            <RemoteName>ic_launcher.png</RemoteName>
+            <DeployClass>Android_LauncherIcon72</DeployClass>
+            <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\koleno_act_3_muted.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>koleno_act_3_muted.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
         <DeployFile Include="Videos\zap_act_7.mp4" Condition="'$(Config)'=='Debug'">
             <RemoteDir>Project10\assets\internal\</RemoteDir>
             <RemoteName>zap_act_7.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\taz_pass_1_muted.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>taz_pass_1_muted.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\koleno_pass_2_muted.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>koleno_pass_2_muted.mp4</RemoteName>
             <DeployClass>ProjectFile</DeployClass>
             <Operation>0</Operation>
             <LocalCommand/>
@@ -1595,15 +2045,6 @@
             <RemoteDir>Project10\res\drawable-anydpi-v31\</RemoteDir>
             <RemoteName>splash_vector.xml</RemoteName>
             <DeployClass>Android_VectorizedSplashV31</DeployClass>
-            <Operation>1</Operation>
-            <LocalCommand/>
-            <RemoteCommand/>
-            <Overwrite>True</Overwrite>
-        </DeployFile>
-        <DeployFile Include="$(ProjectName).Artwork\Android\FM_SplashImage_960x720.png" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>Project10\res\drawable-xlarge\</RemoteDir>
-            <RemoteName>splash_image.png</RemoteName>
-            <DeployClass>Android_SplashImage960</DeployClass>
             <Operation>1</Operation>
             <LocalCommand/>
             <RemoteCommand/>
@@ -1636,9 +2077,27 @@
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
+        <DeployFile Include="Videos\lokot_pass_3_muted.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>lokot_pass_3_muted.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
         <DeployFile Include="Videos\koleno_act_3.mp4" Condition="'$(Config)'=='Debug'">
             <RemoteDir>Project10\assets\internal\</RemoteDir>
             <RemoteName>koleno_act_3.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\zap_pass_4_muted.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>zap_pass_4_muted.mp4</RemoteName>
             <DeployClass>ProjectFile</DeployClass>
             <Operation>0</Operation>
             <LocalCommand/>
@@ -1654,10 +2113,10 @@
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
-        <DeployFile Include="$(ProjectName).Artwork\Android\FM_NotificationIcon_96x96.png" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>Project10\res\drawable-xxxhdpi\</RemoteDir>
-            <RemoteName>ic_notification.png</RemoteName>
-            <DeployClass>Android_NotificationIcon96</DeployClass>
+        <DeployFile Include="$(ProjectName).Artwork\Android\FM_SplashImage_470x320.png" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\res\drawable-normal\</RemoteDir>
+            <RemoteName>splash_image.png</RemoteName>
+            <DeployClass>Android_SplashImage470</DeployClass>
             <Operation>1</Operation>
             <LocalCommand/>
             <RemoteCommand/>
@@ -1681,9 +2140,27 @@
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
+        <DeployFile Include="Videos\plecho_act_1_muted.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>plecho_act_1_muted.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
         <DeployFile Include="Videos\plecho_act_3.mp4" Condition="'$(Config)'=='Debug'">
             <RemoteDir>Project10\assets\internal\</RemoteDir>
             <RemoteName>plecho_act_3.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_pass_1_muted.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>plecho_pass_1_muted.mp4</RemoteName>
             <DeployClass>ProjectFile</DeployClass>
             <Operation>0</Operation>
             <LocalCommand/>
@@ -1722,6 +2199,33 @@
             <RemoteName>ic_launcher_foreground.xml</RemoteName>
             <DeployClass>Android_AdaptiveIconForeground</DeployClass>
             <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="$(ProjectName).Artwork\Android\FM_NotificationIcon_96x96.png" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\res\drawable-xxxhdpi\</RemoteDir>
+            <RemoteName>ic_notification.png</RemoteName>
+            <DeployClass>Android_NotificationIcon96</DeployClass>
+            <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_pass_4_muted.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>plecho_pass_4_muted.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Videos\plecho_act_4_muted.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>plecho_act_4_muted.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
             <LocalCommand/>
             <RemoteCommand/>
             <Overwrite>True</Overwrite>

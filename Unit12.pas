@@ -119,6 +119,7 @@ procedure CompleteExercise(ItemIndex: Integer);
     { Public declarations }
     function GenerateRandomPassword: string;
     function GetVideoFilePath(VideoID: string): string;
+    function GetVideoFilePathMuted(VideoID: string): string;
     function LoadRandomMP3 : string;
     procedure StartFading(MediaPlayer: TMediaPlayer);
     procedure StartRising(MediaPlayer: TMediaPlayer);
@@ -830,6 +831,25 @@ begin
   Result := TPath.Combine(Path, VideoID + VideoExtension);
 end;
 
+function TForm12.GetVideoFilePathMuted(VideoID: string): string;
+const
+  VideoFolder = '..\Videos'; // Replace with the actual path
+  VideoExtension = '.mp4'; // Replace with the actual extension if different
+
+begin
+  case TOSVersion.Platform of
+    TOSVersion.TPlatform.pfWindows:
+     Path := TPath.Combine(ExtractFilePath(ParamStr(0)),'Videos');
+      TOSVersion.TPlatform.pfMacOS:
+      Path := TPath.GetFullPath('../Resources/StartUp');
+    TOSVersion.TPlatform.pfiOS, TOSVersion.TPlatform.pfAndroid:
+      Path := TPath.GetHomePath;
+    TOSVersion.TPlatform.pfWinRT, TOSVersion.TPlatform.pfLinux:
+      raise Exception.Create('Unexpected platform');
+  end;
+  Result := TPath.Combine(Path, VideoID + '_muted' + VideoExtension);
+end;
+
 procedure TForm12.Timer1Timer(Sender: TObject);
 var
   ExerciseDuration, TotalTimeSpent, RemainingTime: Double;
@@ -864,12 +884,13 @@ begin
  //MediaPlayer1.Media.CurrentTime >= MediaPlayer1.Duration then
   begin
   //MediaPlayer1.FileName := GetVideoFilePath(Playlist[CurrentItemIndex].VideoID);
-     MediaPlayer1.CurrentTime:= 0;
-     MediaPlayer1.Play;
-     getvolume:= MediaPlayer1.Volume;
+
+
     // If it's not the first loop, play the background music
     if not FirstLoop then
     begin
+      MediaPlayer1.FileName := GetVideoFilePathMuted(Playlist[CurrentItemIndex].VideoID);
+      MediaPlayer1.Play;
             // Mute the main video player
                   // Load and play the MP3 only if it hasn't been loaded yet
       if not IsMP3Loaded then
@@ -894,14 +915,14 @@ begin
         end;
       end;
        //MediaPlayer2.Volume := tbVolume.Value;  // Set volume for MediaPlayer2
-       MediaPlayer1.Volume := 0.1;
        MediaPlayer2.Volume:= CurrentVolume;
-       MediaPlayer2.Volume:= getvolume;
+       //MediaPlayer2.Volume:= getvolume;
     end
     else
     begin
       FirstLoop := False;  // Not the first loop anymore
-      MediaPlayer1.Volume:= tbVolume.Value;
+      MediaPlayer1.CurrentTime:= 0;
+     MediaPlayer1.Play;
     end;
   end;
 end;

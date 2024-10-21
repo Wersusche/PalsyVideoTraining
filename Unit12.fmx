@@ -621,6 +621,13 @@ object Form12: TForm12
           00}
       end>
   end
+  object Timer2: TTimer
+    Enabled = False
+    Interval = 20000
+    OnTimer = Timer2Timer
+    Left = 192
+    Top = 144
+  end
   object FDPhysSQLiteDriverLink1: TFDPhysSQLiteDriverLink
     Left = 600
     Top = 56
@@ -640,12 +647,5 @@ object Form12: TForm12
   object DSProviderConnection1: TDSProviderConnection
     Left = 712
     Top = 368
-  end
-  object Timer2: TTimer
-    Enabled = False
-    Interval = 20000
-    OnTimer = Timer2Timer
-    Left = 192
-    Top = 144
   end
 end

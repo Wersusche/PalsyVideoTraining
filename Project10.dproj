@@ -5,11 +5,10 @@
         <FrameworkType>FMX</FrameworkType>
         <Base>True</Base>
         <Config Condition="'$(Config)'==''">Debug</Config>
-        <Platform Condition="'$(Platform)'==''">Win32</Platform>
+        <Platform Condition="'$(Platform)'==''">Android</Platform>
         <TargetedPlatforms>558099</TargetedPlatforms>
         <AppType>Application</AppType>
         <MainSource>Project10.dpr</MainSource>
-        <ProjectName Condition="'$(ProjectName)'==''">Project10</ProjectName>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Config)'=='Base' or '$(Base)'!=''">
         <Base>true</Base>
@@ -137,12 +136,12 @@
         <Android_NotificationAccentColor>#000000</Android_NotificationAccentColor>
         <Android_BackgroundColor>#FFE4C4</Android_BackgroundColor>
         <Android_SplashGravity>center</Android_SplashGravity>
-        <IncludeAndroid_AdaptiveIcon>true</IncludeAndroid_AdaptiveIcon>
         <Android_DarkBackgroundColor>#FFE4C4</Android_DarkBackgroundColor>
-        <IncludeAndroid_VectorizedSplash>true</IncludeAndroid_VectorizedSplash>
+        <IncludeAndroid_AdaptiveIcon>True</IncludeAndroid_AdaptiveIcon>
+        <IncludeAndroid_VectorizedSplash>True</IncludeAndroid_VectorizedSplash>
         <Android_AdaptiveIconBackground>$(ProjectName).Artwork\Android\FM_AdaptiveIcon_Background.xml</Android_AdaptiveIconBackground>
         <Android_AdaptiveIconForeground>$(ProjectName).Artwork\Android\FM_AdaptiveIcon_Foreground.xml</Android_AdaptiveIconForeground>
-        <IncludeAndroid_VectorizedNotificationIcon>true</IncludeAndroid_VectorizedNotificationIcon>
+        <IncludeAndroid_VectorizedNotificationIcon>True</IncludeAndroid_VectorizedNotificationIcon>
         <Android_VectorizedSplash>$(ProjectName).Artwork\Android\FM_VectorizedSplash.xml</Android_VectorizedSplash>
         <Android_VectorizedSplashDark>$(ProjectName).Artwork\Android\FM_VectorizedSplashDark.xml</Android_VectorizedSplashDark>
         <Android_VectorizedNotificationIcon>$(ProjectName).Artwork\Android\FM_VectorizedNotificationIcon.xml</Android_VectorizedNotificationIcon>
@@ -173,20 +172,20 @@
         <EnabledSysJars>activity-1.7.2.dex.jar;annotation-experimental-1.3.0.dex.jar;annotation-jvm-1.6.0.dex.jar;annotations-13.0.dex.jar;appcompat-1.2.0.dex.jar;appcompat-resources-1.2.0.dex.jar;billing-6.0.1.dex.jar;biometric-1.1.0.dex.jar;browser-1.4.0.dex.jar;cloud-messaging.dex.jar;collection-1.1.0.dex.jar;concurrent-futures-1.1.0.dex.jar;core-1.10.1.dex.jar;core-common-2.2.0.dex.jar;core-ktx-1.10.1.dex.jar;core-runtime-2.2.0.dex.jar;cursoradapter-1.0.0.dex.jar;customview-1.0.0.dex.jar;documentfile-1.0.0.dex.jar;drawerlayout-1.0.0.dex.jar;error_prone_annotations-2.9.0.dex.jar;exifinterface-1.3.6.dex.jar;firebase-annotations-16.2.0.dex.jar;firebase-common-20.3.1.dex.jar;firebase-components-17.1.0.dex.jar;firebase-datatransport-18.1.7.dex.jar;firebase-encoders-17.0.0.dex.jar;firebase-encoders-json-18.0.0.dex.jar;firebase-encoders-proto-16.0.0.dex.jar;firebase-iid-interop-17.1.0.dex.jar;firebase-installations-17.1.3.dex.jar;firebase-installations-interop-17.1.0.dex.jar;firebase-measurement-connector-19.0.0.dex.jar;firebase-messaging-23.1.2.dex.jar;fmx.dex.jar;fragment-1.2.5.dex.jar;google-play-licensing.dex.jar;interpolator-1.0.0.dex.jar;javax.inject-1.dex.jar;kotlin-stdlib-1.8.22.dex.jar;kotlin-stdlib-common-1.8.22.dex.jar;kotlin-stdlib-jdk7-1.8.22.dex.jar;kotlin-stdlib-jdk8-1.8.22.dex.jar;kotlinx-coroutines-android-1.6.4.dex.jar;kotlinx-coroutines-core-jvm-1.6.4.dex.jar;legacy-support-core-utils-1.0.0.dex.jar;lifecycle-common-2.6.1.dex.jar;lifecycle-livedata-2.6.1.dex.jar;lifecycle-livedata-core-2.6.1.dex.jar;lifecycle-runtime-2.6.1.dex.jar;lifecycle-service-2.6.1.dex.jar;lifecycle-viewmodel-2.6.1.dex.jar;lifecycle-viewmodel-savedstate-2.6.1.dex.jar;listenablefuture-1.0.dex.jar;loader-1.0.0.dex.jar;localbroadcastmanager-1.0.0.dex.jar;okio-jvm-3.4.0.dex.jar;play-services-ads-22.2.0.dex.jar;play-services-ads-base-22.2.0.dex.jar;play-services-ads-identifier-18.0.0.dex.jar;play-services-ads-lite-22.2.0.dex.jar;play-services-appset-16.0.1.dex.jar;play-services-base-18.1.0.dex.jar;play-services-basement-18.1.0.dex.jar;play-services-cloud-messaging-17.0.1.dex.jar;play-services-location-21.0.1.dex.jar;play-services-maps-18.1.0.dex.jar;play-services-measurement-base-20.1.2.dex.jar;play-services-measurement-sdk-api-20.1.2.dex.jar;play-services-stats-17.0.2.dex.jar;play-services-tasks-18.0.2.dex.jar;print-1.0.0.dex.jar;profileinstaller-1.3.0.dex.jar;room-common-2.2.5.dex.jar;room-runtime-2.2.5.dex.jar;savedstate-1.2.1.dex.jar;sqlite-2.1.0.dex.jar;sqlite-framework-2.1.0.dex.jar;startup-runtime-1.1.1.dex.jar;tracing-1.0.0.dex.jar;transport-api-3.0.0.dex.jar;transport-backend-cct-3.1.8.dex.jar;transport-runtime-3.1.8.dex.jar;user-messaging-platform-2.0.0.dex.jar;vectordrawable-1.1.0.dex.jar;vectordrawable-animated-1.1.0.dex.jar;versionedparcelable-1.1.1.dex.jar;viewpager-1.0.0.dex.jar;work-runtime-2.7.0.dex.jar</EnabledSysJars>
         <Android_BackgroundColor>#FFE4C4</Android_BackgroundColor>
         <Android_SplashGravity>center</Android_SplashGravity>
-        <IncludeAndroid_AdaptiveIcon>true</IncludeAndroid_AdaptiveIcon>
         <Android_DarkBackgroundColor>#FFE4C4</Android_DarkBackgroundColor>
-        <IncludeAndroid_VectorizedSplash>true</IncludeAndroid_VectorizedSplash>
+        <IncludeAndroid_AdaptiveIcon>True</IncludeAndroid_AdaptiveIcon>
         <Android_AdaptiveIconBackground>$(ProjectName).Artwork\Android\FM_AdaptiveIcon_Background.xml</Android_AdaptiveIconBackground>
-        <Android_AdaptiveIconForeground>$(ProjectName).Artwork\Android\FM_AdaptiveIcon_Foreground.xml</Android_AdaptiveIconForeground>
-        <IncludeAndroid_VectorizedNotificationIcon>true</IncludeAndroid_VectorizedNotificationIcon>
+        <IncludeAndroid_VectorizedSplash>True</IncludeAndroid_VectorizedSplash>
         <Android_VectorizedSplash>$(ProjectName).Artwork\Android\FM_VectorizedSplash.xml</Android_VectorizedSplash>
+        <IncludeAndroid_VectorizedNotificationIcon>True</IncludeAndroid_VectorizedNotificationIcon>
+        <Android_AdaptiveIconForeground>$(ProjectName).Artwork\Android\FM_AdaptiveIcon_Foreground.xml</Android_AdaptiveIconForeground>
         <Android_VectorizedSplashDark>$(ProjectName).Artwork\Android\FM_VectorizedSplashDark.xml</Android_VectorizedSplashDark>
-        <Android_VectorizedNotificationIcon>$(ProjectName).Artwork\Android\FM_VectorizedNotificationIcon.xml</Android_VectorizedNotificationIcon>
-        <Android_VectorizedSplashV31>$(ProjectName).Artwork\Android\FM_VectorizedSplashV31.xml</Android_VectorizedSplashV31>
-        <Android_VectorizedSplashV31Dark>$(ProjectName).Artwork\Android\FM_VectorizedSplashV31Dark.xml</Android_VectorizedSplashV31Dark>
-        <Android_AdaptiveIconMonochrome>$(ProjectName).Artwork\Android\FM_AdaptiveIcon_Monochrome.xml</Android_AdaptiveIconMonochrome>
         <VerInfo_Build>1</VerInfo_Build>
+        <Android_VectorizedSplashV31>$(ProjectName).Artwork\Android\FM_VectorizedSplashV31.xml</Android_VectorizedSplashV31>
+        <Android_VectorizedNotificationIcon>$(ProjectName).Artwork\Android\FM_VectorizedNotificationIcon.xml</Android_VectorizedNotificationIcon>
+        <Android_VectorizedSplashV31Dark>$(ProjectName).Artwork\Android\FM_VectorizedSplashV31Dark.xml</Android_VectorizedSplashV31Dark>
         <Android_NotificationAccentColor>#000000</Android_NotificationAccentColor>
+        <Android_AdaptiveIconMonochrome>$(ProjectName).Artwork\Android\FM_AdaptiveIcon_Monochrome.xml</Android_AdaptiveIconMonochrome>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_iOSDevice64)'!=''">
         <DCC_UsePackage>FlexCel_Report;fmx;DbxCommonDriver;bindengine;IndyIPCommon;emsclient;FireDACCommonDriver;FMX_FlexCel_Components;IndyProtocols;IndyIPClient;dbxcds;bindcompfmx;FlexCel_Pdf;ibmonitor;FireDACSqliteDriver;DbxClientDriver;soapmidas;fmxFireDAC;dbexpress;inet;DataSnapCommon;fmxase;FMX_FlexCel_Core;dbrtl;FireDACDBXDriver;FlexCel_XlsAdapter;CustomIPTransport;DBXInterBaseDriver;IndySystem;ibxbindings;FlexCel_Core;bindcomp;FireDACCommon;FlexCel_Render;IndyCore;RESTBackendComponents;bindcompdbx;rtl;RESTComponents;DBXSqliteDriver;IndyIPServer;dsnapxml;DataSnapClient;DataSnapProviderClient;DataSnapFireDAC;emsclientfiredac;FireDAC;FireDACDSDriver;xmlrtl;tethering;ibxpress;dsnap;CloudService;DataSnapNativeClient;soaprtl;soapserver;FireDACIBDriver;$(DCC_UsePackage)</DCC_UsePackage>
@@ -395,6 +394,62 @@
         <None Include="res\xml\network_security_config.xml"/>
         <None Include="testtxt.txt"/>
         <None Include="Videos\koleno_act_1.mp4"/>
+        <None Include="Videos\zap_pass_5_muted.mp4"/>
+        <None Include="Videos\zap_pass_4_muted.mp4"/>
+        <None Include="Videos\zap_pass_3_muted.mp4"/>
+        <None Include="Videos\zap_pass_2_muted.mp4"/>
+        <None Include="Videos\zap_pass_1_muted.mp4"/>
+        <None Include="Videos\zap_act_7_muted.mp4"/>
+        <None Include="Videos\zap_act_6_muted.mp4"/>
+        <None Include="Videos\zap_act_5_muted.mp4"/>
+        <None Include="Videos\zap_act_4_muted.mp4"/>
+        <None Include="Videos\zap_act_3_muted.mp4"/>
+        <None Include="Videos\zap_act_2_muted.mp4"/>
+        <None Include="Videos\zap_act_1_muted.mp4"/>
+        <None Include="Videos\taz_pass_4_muted.mp4"/>
+        <None Include="Videos\taz_pass_3_muted.mp4"/>
+        <None Include="Videos\taz_pass_2_muted.mp4"/>
+        <None Include="Videos\taz_pass_1_muted.mp4"/>
+        <None Include="Videos\taz_act_4_muted.mp4"/>
+        <None Include="Videos\taz_act_3_muted.mp4"/>
+        <None Include="Videos\taz_act_2_muted.mp4"/>
+        <None Include="Videos\taz_act_1_muted.mp4"/>
+        <None Include="Videos\stopa_pass_2_muted.mp4"/>
+        <None Include="Videos\stopa_pass_1_muted.mp4"/>
+        <None Include="Videos\stopa_act_4_muted.mp4"/>
+        <None Include="Videos\stopa_act_3_muted.mp4"/>
+        <None Include="Videos\stopa_act_2_muted.mp4"/>
+        <None Include="Videos\stopa_act_1_muted.mp4"/>
+        <None Include="Videos\spina_pass_3_muted.mp4"/>
+        <None Include="Videos\spina_pass_2_muted.mp4"/>
+        <None Include="Videos\spina_pass_1_muted.mp4"/>
+        <None Include="Videos\spina_act_3_muted.mp4"/>
+        <None Include="Videos\spina_act_2_muted.mp4"/>
+        <None Include="Videos\spina_act_1_muted.mp4"/>
+        <None Include="Videos\plecho_pass_5_muted.mp4"/>
+        <None Include="Videos\plecho_pass_4_muted.mp4"/>
+        <None Include="Videos\plecho_pass_3_muted.mp4"/>
+        <None Include="Videos\plecho_pass_2_muted.mp4"/>
+        <None Include="Videos\plecho_pass_1_muted.mp4"/>
+        <None Include="Videos\plecho_act_5_muted.mp4"/>
+        <None Include="Videos\plecho_act_4_muted.mp4"/>
+        <None Include="Videos\plecho_act_3_muted.mp4"/>
+        <None Include="Videos\plecho_act_2_muted.mp4"/>
+        <None Include="Videos\plecho_act_1_muted.mp4"/>
+        <None Include="Videos\lokot_pass_3_muted.mp4"/>
+        <None Include="Videos\lokot_pass_2_muted.mp4"/>
+        <None Include="Videos\lokot_pass_1_muted.mp4"/>
+        <None Include="Videos\lokot_act_4_muted.mp4"/>
+        <None Include="Videos\lokot_act_3_muted.mp4"/>
+        <None Include="Videos\lokot_act_2_muted.mp4"/>
+        <None Include="Videos\lokot_act_1_muted.mp4"/>
+        <None Include="Videos\koleno_pass_3_muted.mp4"/>
+        <None Include="Videos\koleno_pass_2_muted.mp4"/>
+        <None Include="Videos\koleno_pass_1_muted.mp4"/>
+        <None Include="Videos\koleno_act_4_muted.mp4"/>
+        <None Include="Videos\koleno_act_3_muted.mp4"/>
+        <None Include="Videos\koleno_act_2_muted.mp4"/>
+        <None Include="Videos\koleno_act_1_muted.mp4"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
@@ -785,7 +840,7 @@
                 <DeployFile LocalName="Videos\koleno_act_1.mp4" Configuration="Debug" Class="ProjectFile"/>
                 <DeployFile LocalName="Videos\koleno_act_1.mp4" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Android">
-                        <RemoteDir>assets\internal\</RemoteDir>
+                        <RemoteDir>.\assets\internal\</RemoteDir>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
@@ -802,10 +857,16 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Videos\koleno_act_1.mp4" Configuration="Release" Class="ProjectFile"/>
+                <DeployFile LocalName="Videos\koleno_act_1_muted.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Android">
+                        <RemoteDir>.\assets\internal\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile LocalName="Videos\koleno_act_2.mp4" Configuration="Debug" Class="ProjectFile"/>
                 <DeployFile LocalName="Videos\koleno_act_2.mp4" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Android">
-                        <RemoteDir>media\</RemoteDir>
+                        <RemoteDir>.\assets\internal\</RemoteDir>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
@@ -815,6 +876,12 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Videos\koleno_act_2.mp4" Configuration="Release" Class="ProjectFile"/>
+                <DeployFile LocalName="Videos\koleno_act_2_muted.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Android">
+                        <RemoteDir>.\assets\internal\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile LocalName="Videos\koleno_act_3.mp4" Configuration="Debug" Class="ProjectFile"/>
                 <DeployFile LocalName="Videos\koleno_act_3.mp4" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Android">
@@ -829,6 +896,12 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Videos\koleno_act_3.mp4" Configuration="Release" Class="ProjectFile"/>
+                <DeployFile LocalName="Videos\koleno_act_3_muted.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Android">
+                        <RemoteDir>.\assets\internal\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile LocalName="Videos\koleno_act_4.mp4" Configuration="Debug" Class="ProjectFile"/>
                 <DeployFile LocalName="Videos\koleno_act_4.mp4" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Android">
@@ -843,6 +916,12 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Videos\koleno_act_4.mp4" Configuration="Release" Class="ProjectFile"/>
+                <DeployFile LocalName="Videos\koleno_act_4_muted.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Android">
+                        <RemoteDir>.\assets\internal\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile LocalName="Videos\koleno_pass_1.mp4" Configuration="Debug" Class="ProjectFile"/>
                 <DeployFile LocalName="Videos\koleno_pass_1.mp4" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Android">
@@ -857,6 +936,12 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Videos\koleno_pass_1.mp4" Configuration="Release" Class="ProjectFile"/>
+                <DeployFile LocalName="Videos\koleno_pass_1_muted.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Android">
+                        <RemoteDir>.\assets\internal\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile LocalName="Videos\koleno_pass_2.mp4" Configuration="Debug" Class="ProjectFile"/>
                 <DeployFile LocalName="Videos\koleno_pass_2.mp4" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Android">
@@ -871,6 +956,12 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Videos\koleno_pass_2.mp4" Configuration="Release" Class="ProjectFile"/>
+                <DeployFile LocalName="Videos\koleno_pass_2_muted.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Android">
+                        <RemoteDir>.\assets\internal\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile LocalName="Videos\koleno_pass_3.mp4" Configuration="Debug" Class="ProjectFile"/>
                 <DeployFile LocalName="Videos\koleno_pass_3.mp4" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Android">
@@ -885,6 +976,12 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Videos\koleno_pass_3.mp4" Configuration="Release" Class="ProjectFile"/>
+                <DeployFile LocalName="Videos\koleno_pass_3_muted.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Android">
+                        <RemoteDir>.\assets\internal\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile LocalName="Videos\lokot_act_1.mp4" Configuration="Debug" Class="ProjectFile"/>
                 <DeployFile LocalName="Videos\lokot_act_1.mp4" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Android">
@@ -899,6 +996,12 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Videos\lokot_act_1.mp4" Configuration="Release" Class="ProjectFile"/>
+                <DeployFile LocalName="Videos\lokot_act_1_muted.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Android">
+                        <RemoteDir>.\assets\internal\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile LocalName="Videos\lokot_act_2.mp4" Configuration="Debug" Class="ProjectFile"/>
                 <DeployFile LocalName="Videos\lokot_act_2.mp4" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Android">
@@ -913,6 +1016,12 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Videos\lokot_act_2.mp4" Configuration="Release" Class="ProjectFile"/>
+                <DeployFile LocalName="Videos\lokot_act_2_muted.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Android">
+                        <RemoteDir>.\assets\internal\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile LocalName="Videos\lokot_act_3.mp4" Configuration="Debug" Class="ProjectFile"/>
                 <DeployFile LocalName="Videos\lokot_act_3.mp4" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Android">
@@ -927,6 +1036,12 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Videos\lokot_act_3.mp4" Configuration="Release" Class="ProjectFile"/>
+                <DeployFile LocalName="Videos\lokot_act_3_muted.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Android">
+                        <RemoteDir>.\assets\internal\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile LocalName="Videos\lokot_act_4.mp4" Configuration="Debug" Class="ProjectFile"/>
                 <DeployFile LocalName="Videos\lokot_act_4.mp4" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Android">
@@ -941,6 +1056,12 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Videos\lokot_act_4.mp4" Configuration="Release" Class="ProjectFile"/>
+                <DeployFile LocalName="Videos\lokot_act_4_muted.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Android">
+                        <RemoteDir>.\assets\internal\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile LocalName="Videos\lokot_pass_1.mp4" Configuration="Debug" Class="ProjectFile"/>
                 <DeployFile LocalName="Videos\lokot_pass_1.mp4" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Android">
@@ -955,6 +1076,12 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Videos\lokot_pass_1.mp4" Configuration="Release" Class="ProjectFile"/>
+                <DeployFile LocalName="Videos\lokot_pass_1_muted.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Android">
+                        <RemoteDir>.\assets\internal\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile LocalName="Videos\lokot_pass_2.mp4" Configuration="Debug" Class="ProjectFile"/>
                 <DeployFile LocalName="Videos\lokot_pass_2.mp4" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Android">
@@ -969,6 +1096,12 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Videos\lokot_pass_2.mp4" Configuration="Release" Class="ProjectFile"/>
+                <DeployFile LocalName="Videos\lokot_pass_2_muted.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Android">
+                        <RemoteDir>.\assets\internal\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile LocalName="Videos\lokot_pass_3.mp4" Configuration="Debug" Class="ProjectFile"/>
                 <DeployFile LocalName="Videos\lokot_pass_3.mp4" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Android">
@@ -983,6 +1116,12 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Videos\lokot_pass_3.mp4" Configuration="Release" Class="ProjectFile"/>
+                <DeployFile LocalName="Videos\lokot_pass_3_muted.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Android">
+                        <RemoteDir>.\assets\internal\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile LocalName="Videos\plecho_act_1.mp4" Configuration="Debug" Class="ProjectFile"/>
                 <DeployFile LocalName="Videos\plecho_act_1.mp4" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Android">
@@ -1028,6 +1167,12 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Videos\plecho_act_1.mp4" Configuration="Release" Class="ProjectFile"/>
+                <DeployFile LocalName="Videos\plecho_act_1_muted.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Android">
+                        <RemoteDir>.\assets\internal\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile LocalName="Videos\plecho_act_2.mp4" Configuration="Debug" Class="ProjectFile"/>
                 <DeployFile LocalName="Videos\plecho_act_2.mp4" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Android">
@@ -1073,6 +1218,12 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Videos\plecho_act_2.mp4" Configuration="Release" Class="ProjectFile"/>
+                <DeployFile LocalName="Videos\plecho_act_2_muted.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Android">
+                        <RemoteDir>.\assets\internal\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile LocalName="Videos\plecho_act_3.mp4" Configuration="Debug" Class="ProjectFile"/>
                 <DeployFile LocalName="Videos\plecho_act_3.mp4" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Android">
@@ -1118,6 +1269,12 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Videos\plecho_act_3.mp4" Configuration="Release" Class="ProjectFile"/>
+                <DeployFile LocalName="Videos\plecho_act_3_muted.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Android">
+                        <RemoteDir>.\assets\internal\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile LocalName="Videos\plecho_act_4.mp4" Configuration="Debug" Class="ProjectFile"/>
                 <DeployFile LocalName="Videos\plecho_act_4.mp4" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Android">
@@ -1163,6 +1320,12 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Videos\plecho_act_4.mp4" Configuration="Release" Class="ProjectFile"/>
+                <DeployFile LocalName="Videos\plecho_act_4_muted.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Android">
+                        <RemoteDir>.\assets\internal\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile LocalName="Videos\plecho_act_5.mp4" Configuration="Debug" Class="ProjectFile"/>
                 <DeployFile LocalName="Videos\plecho_act_5.mp4" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Android">
@@ -1208,6 +1371,12 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Videos\plecho_act_5.mp4" Configuration="Release" Class="ProjectFile"/>
+                <DeployFile LocalName="Videos\plecho_act_5_muted.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Android">
+                        <RemoteDir>.\assets\internal\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile LocalName="Videos\plecho_pass_1.mp4" Configuration="Debug" Class="ProjectFile"/>
                 <DeployFile LocalName="Videos\plecho_pass_1.mp4" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Android">
@@ -1253,6 +1422,12 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Videos\plecho_pass_1.mp4" Configuration="Release" Class="ProjectFile"/>
+                <DeployFile LocalName="Videos\plecho_pass_1_muted.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Android">
+                        <RemoteDir>.\assets\internal\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile LocalName="Videos\plecho_pass_2.mp4" Configuration="Debug" Class="ProjectFile"/>
                 <DeployFile LocalName="Videos\plecho_pass_2.mp4" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Android">
@@ -1298,6 +1473,12 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Videos\plecho_pass_2.mp4" Configuration="Release" Class="ProjectFile"/>
+                <DeployFile LocalName="Videos\plecho_pass_2_muted.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Android">
+                        <RemoteDir>.\assets\internal\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile LocalName="Videos\plecho_pass_3.mp4" Configuration="Debug" Class="ProjectFile"/>
                 <DeployFile LocalName="Videos\plecho_pass_3.mp4" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Android">
@@ -1343,6 +1524,12 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Videos\plecho_pass_3.mp4" Configuration="Release" Class="ProjectFile"/>
+                <DeployFile LocalName="Videos\plecho_pass_3_muted.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Android">
+                        <RemoteDir>.\assets\internal\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile LocalName="Videos\plecho_pass_4.mp4" Configuration="Debug" Class="ProjectFile"/>
                 <DeployFile LocalName="Videos\plecho_pass_4.mp4" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Android">
@@ -1389,6 +1576,12 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Videos\plecho_pass_4.mp4" Configuration="Release" Class="ProjectFile"/>
+                <DeployFile LocalName="Videos\plecho_pass_4_muted.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Android">
+                        <RemoteDir>.\assets\internal\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile LocalName="Videos\plecho_pass_5.mp4" Configuration="Debug" Class="ProjectFile"/>
                 <DeployFile LocalName="Videos\plecho_pass_5.mp4" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Android">
@@ -1403,6 +1596,12 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Videos\plecho_pass_5.mp4" Configuration="Release" Class="ProjectFile"/>
+                <DeployFile LocalName="Videos\plecho_pass_5_muted.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Android">
+                        <RemoteDir>.\assets\internal\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile LocalName="Videos\spina_act_1.mp4" Configuration="Debug" Class="ProjectFile"/>
                 <DeployFile LocalName="Videos\spina_act_1.mp4" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Android">
@@ -1417,6 +1616,12 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Videos\spina_act_1.mp4" Configuration="Release" Class="ProjectFile"/>
+                <DeployFile LocalName="Videos\spina_act_1_muted.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Android">
+                        <RemoteDir>.\assets\internal\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile LocalName="Videos\spina_act_2.mp4" Configuration="Debug" Class="ProjectFile"/>
                 <DeployFile LocalName="Videos\spina_act_2.mp4" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Android">
@@ -1431,6 +1636,12 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Videos\spina_act_2.mp4" Configuration="Release" Class="ProjectFile"/>
+                <DeployFile LocalName="Videos\spina_act_2_muted.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Android">
+                        <RemoteDir>.\assets\internal\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile LocalName="Videos\spina_act_3.mp4" Configuration="Debug" Class="ProjectFile"/>
                 <DeployFile LocalName="Videos\spina_act_3.mp4" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Android">
@@ -1445,6 +1656,12 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Videos\spina_act_3.mp4" Configuration="Release" Class="ProjectFile"/>
+                <DeployFile LocalName="Videos\spina_act_3_muted.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Android">
+                        <RemoteDir>.\assets\internal\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile LocalName="Videos\spina_pass_1.mp4" Configuration="Debug" Class="ProjectFile"/>
                 <DeployFile LocalName="Videos\spina_pass_1.mp4" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Android">
@@ -1459,6 +1676,12 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Videos\spina_pass_1.mp4" Configuration="Release" Class="ProjectFile"/>
+                <DeployFile LocalName="Videos\spina_pass_1_muted.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Android">
+                        <RemoteDir>.\assets\internal\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile LocalName="Videos\spina_pass_2.mp4" Configuration="Debug" Class="ProjectFile"/>
                 <DeployFile LocalName="Videos\spina_pass_2.mp4" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Android">
@@ -1473,6 +1696,12 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Videos\spina_pass_2.mp4" Configuration="Release" Class="ProjectFile"/>
+                <DeployFile LocalName="Videos\spina_pass_2_muted.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Android">
+                        <RemoteDir>.\assets\internal\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile LocalName="Videos\spina_pass_3.mp4" Configuration="Debug" Class="ProjectFile"/>
                 <DeployFile LocalName="Videos\spina_pass_3.mp4" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Android">
@@ -1487,6 +1716,12 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Videos\spina_pass_3.mp4" Configuration="Release" Class="ProjectFile"/>
+                <DeployFile LocalName="Videos\spina_pass_3_muted.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Android">
+                        <RemoteDir>.\assets\internal\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile LocalName="Videos\stopa_act_1.mp4" Configuration="Debug" Class="ProjectFile"/>
                 <DeployFile LocalName="Videos\stopa_act_1.mp4" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Android">
@@ -1501,6 +1736,12 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Videos\stopa_act_1.mp4" Configuration="Release" Class="ProjectFile"/>
+                <DeployFile LocalName="Videos\stopa_act_1_muted.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Android">
+                        <RemoteDir>.\assets\internal\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile LocalName="Videos\stopa_act_2.mp4" Configuration="Debug" Class="ProjectFile"/>
                 <DeployFile LocalName="Videos\stopa_act_2.mp4" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Android">
@@ -1515,6 +1756,12 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Videos\stopa_act_2.mp4" Configuration="Release" Class="ProjectFile"/>
+                <DeployFile LocalName="Videos\stopa_act_2_muted.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Android">
+                        <RemoteDir>.\assets\internal\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile LocalName="Videos\stopa_act_3.mp4" Configuration="Debug" Class="ProjectFile"/>
                 <DeployFile LocalName="Videos\stopa_act_3.mp4" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Android">
@@ -1529,6 +1776,12 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Videos\stopa_act_3.mp4" Configuration="Release" Class="ProjectFile"/>
+                <DeployFile LocalName="Videos\stopa_act_3_muted.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Android">
+                        <RemoteDir>.\assets\internal\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile LocalName="Videos\stopa_act_4.mp4" Configuration="Debug" Class="ProjectFile"/>
                 <DeployFile LocalName="Videos\stopa_act_4.mp4" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Android">
@@ -1543,6 +1796,12 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Videos\stopa_act_4.mp4" Configuration="Release" Class="ProjectFile"/>
+                <DeployFile LocalName="Videos\stopa_act_4_muted.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Android">
+                        <RemoteDir>.\assets\internal\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile LocalName="Videos\stopa_pass_1.mp4" Configuration="Debug" Class="ProjectFile"/>
                 <DeployFile LocalName="Videos\stopa_pass_1.mp4" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Android">
@@ -1557,6 +1816,12 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Videos\stopa_pass_1.mp4" Configuration="Release" Class="ProjectFile"/>
+                <DeployFile LocalName="Videos\stopa_pass_1_muted.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Android">
+                        <RemoteDir>.\assets\internal\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile LocalName="Videos\stopa_pass_2.mp4" Configuration="Debug" Class="ProjectFile"/>
                 <DeployFile LocalName="Videos\stopa_pass_2.mp4" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Android">
@@ -1571,6 +1836,12 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Videos\stopa_pass_2.mp4" Configuration="Release" Class="ProjectFile"/>
+                <DeployFile LocalName="Videos\stopa_pass_2_muted.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Android">
+                        <RemoteDir>.\assets\internal\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile LocalName="Videos\taz_act_1.mp4" Configuration="Debug" Class="ProjectFile"/>
                 <DeployFile LocalName="Videos\taz_act_1.mp4" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Android">
@@ -1585,6 +1856,12 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Videos\taz_act_1.mp4" Configuration="Release" Class="ProjectFile"/>
+                <DeployFile LocalName="Videos\taz_act_1_muted.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Android">
+                        <RemoteDir>.\assets\internal\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile LocalName="Videos\taz_act_2.mp4" Configuration="Debug" Class="ProjectFile"/>
                 <DeployFile LocalName="Videos\taz_act_2.mp4" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Android">
@@ -1599,6 +1876,12 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Videos\taz_act_2.mp4" Configuration="Release" Class="ProjectFile"/>
+                <DeployFile LocalName="Videos\taz_act_2_muted.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Android">
+                        <RemoteDir>.\assets\internal\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile LocalName="Videos\taz_act_3.mp4" Configuration="Debug" Class="ProjectFile"/>
                 <DeployFile LocalName="Videos\taz_act_3.mp4" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Android">
@@ -1613,6 +1896,12 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Videos\taz_act_3.mp4" Configuration="Release" Class="ProjectFile"/>
+                <DeployFile LocalName="Videos\taz_act_3_muted.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Android">
+                        <RemoteDir>.\assets\internal\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile LocalName="Videos\taz_act_4.mp4" Configuration="Debug" Class="ProjectFile"/>
                 <DeployFile LocalName="Videos\taz_act_4.mp4" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Android">
@@ -1627,6 +1916,12 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Videos\taz_act_4.mp4" Configuration="Release" Class="ProjectFile"/>
+                <DeployFile LocalName="Videos\taz_act_4_muted.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Android">
+                        <RemoteDir>.\assets\internal\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile LocalName="Videos\taz_pass_1.mp4" Configuration="Debug" Class="ProjectFile"/>
                 <DeployFile LocalName="Videos\taz_pass_1.mp4" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Android">
@@ -1641,6 +1936,12 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Videos\taz_pass_1.mp4" Configuration="Release" Class="ProjectFile"/>
+                <DeployFile LocalName="Videos\taz_pass_1_muted.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Android">
+                        <RemoteDir>.\assets\internal\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile LocalName="Videos\taz_pass_2.mp4" Configuration="Debug" Class="ProjectFile"/>
                 <DeployFile LocalName="Videos\taz_pass_2.mp4" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Android">
@@ -1655,6 +1956,12 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Videos\taz_pass_2.mp4" Configuration="Release" Class="ProjectFile"/>
+                <DeployFile LocalName="Videos\taz_pass_2_muted.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Android">
+                        <RemoteDir>.\assets\internal\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile LocalName="Videos\taz_pass_3.mp4" Configuration="Debug" Class="ProjectFile"/>
                 <DeployFile LocalName="Videos\taz_pass_3.mp4" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Android">
@@ -1669,6 +1976,12 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Videos\taz_pass_3.mp4" Configuration="Release" Class="ProjectFile"/>
+                <DeployFile LocalName="Videos\taz_pass_3_muted.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Android">
+                        <RemoteDir>.\assets\internal\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile LocalName="Videos\taz_pass_4.mp4" Configuration="Debug" Class="ProjectFile"/>
                 <DeployFile LocalName="Videos\taz_pass_4.mp4" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Android">
@@ -1683,6 +1996,12 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Videos\taz_pass_4.mp4" Configuration="Release" Class="ProjectFile"/>
+                <DeployFile LocalName="Videos\taz_pass_4_muted.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Android">
+                        <RemoteDir>.\assets\internal\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile LocalName="Videos\time.mp4" Configuration="Release" Class="File">
                     <Platform Name="All Platforms">
                         <Enabled>false</Enabled>
@@ -1728,6 +2047,12 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Videos\zap_act_1.mp4" Configuration="Release" Class="ProjectFile"/>
+                <DeployFile LocalName="Videos\zap_act_1_muted.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Android">
+                        <RemoteDir>.\assets\internal\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile LocalName="Videos\zap_act_2.mp4" Configuration="Debug" Class="ProjectFile"/>
                 <DeployFile LocalName="Videos\zap_act_2.mp4" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Android">
@@ -1742,6 +2067,12 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Videos\zap_act_2.mp4" Configuration="Release" Class="ProjectFile"/>
+                <DeployFile LocalName="Videos\zap_act_2_muted.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Android">
+                        <RemoteDir>.\assets\internal\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile LocalName="Videos\zap_act_3.mp4" Configuration="Debug" Class="ProjectFile"/>
                 <DeployFile LocalName="Videos\zap_act_3.mp4" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Android">
@@ -1756,6 +2087,12 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Videos\zap_act_3.mp4" Configuration="Release" Class="ProjectFile"/>
+                <DeployFile LocalName="Videos\zap_act_3_muted.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Android">
+                        <RemoteDir>.\assets\internal\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile LocalName="Videos\zap_act_4.mp4" Configuration="Debug" Class="ProjectFile"/>
                 <DeployFile LocalName="Videos\zap_act_4.mp4" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Android">
@@ -1770,6 +2107,12 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Videos\zap_act_4.mp4" Configuration="Release" Class="ProjectFile"/>
+                <DeployFile LocalName="Videos\zap_act_4_muted.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Android">
+                        <RemoteDir>.\assets\internal\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile LocalName="Videos\zap_act_5.mp4" Configuration="Debug" Class="ProjectFile"/>
                 <DeployFile LocalName="Videos\zap_act_5.mp4" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Android">
@@ -1784,6 +2127,12 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Videos\zap_act_5.mp4" Configuration="Release" Class="ProjectFile"/>
+                <DeployFile LocalName="Videos\zap_act_5_muted.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Android">
+                        <RemoteDir>.\assets\internal\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile LocalName="Videos\zap_act_6.mp4" Configuration="Debug" Class="ProjectFile"/>
                 <DeployFile LocalName="Videos\zap_act_6.mp4" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Android">
@@ -1798,6 +2147,12 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Videos\zap_act_6.mp4" Configuration="Release" Class="ProjectFile"/>
+                <DeployFile LocalName="Videos\zap_act_6_muted.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Android">
+                        <RemoteDir>.\assets\internal\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile LocalName="Videos\zap_act_7.mp4" Configuration="Debug" Class="ProjectFile"/>
                 <DeployFile LocalName="Videos\zap_act_7.mp4" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Android">
@@ -1812,6 +2167,12 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Videos\zap_act_7.mp4" Configuration="Release" Class="ProjectFile"/>
+                <DeployFile LocalName="Videos\zap_act_7_muted.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Android">
+                        <RemoteDir>.\assets\internal\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile LocalName="Videos\zap_pass_1.mp4" Configuration="Debug" Class="ProjectFile"/>
                 <DeployFile LocalName="Videos\zap_pass_1.mp4" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Android">
@@ -1826,6 +2187,12 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Videos\zap_pass_1.mp4" Configuration="Release" Class="ProjectFile"/>
+                <DeployFile LocalName="Videos\zap_pass_1_muted.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Android">
+                        <RemoteDir>.\assets\internal\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile LocalName="Videos\zap_pass_2.mp4" Configuration="Debug" Class="ProjectFile"/>
                 <DeployFile LocalName="Videos\zap_pass_2.mp4" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Android">
@@ -1840,6 +2207,12 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Videos\zap_pass_2.mp4" Configuration="Release" Class="ProjectFile"/>
+                <DeployFile LocalName="Videos\zap_pass_2_muted.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Android">
+                        <RemoteDir>.\assets\internal\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile LocalName="Videos\zap_pass_3.mp4" Configuration="Debug" Class="ProjectFile"/>
                 <DeployFile LocalName="Videos\zap_pass_3.mp4" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Android">
@@ -1854,6 +2227,12 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Videos\zap_pass_3.mp4" Configuration="Release" Class="ProjectFile"/>
+                <DeployFile LocalName="Videos\zap_pass_3_muted.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Android">
+                        <RemoteDir>.\assets\internal\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile LocalName="Videos\zap_pass_4.mp4" Configuration="Debug" Class="ProjectFile"/>
                 <DeployFile LocalName="Videos\zap_pass_4.mp4" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Android">
@@ -1868,6 +2247,12 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Videos\zap_pass_4.mp4" Configuration="Release" Class="ProjectFile"/>
+                <DeployFile LocalName="Videos\zap_pass_4_muted.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Android">
+                        <RemoteDir>.\assets\internal\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile LocalName="Videos\zap_pass_5.mp4" Configuration="Debug" Class="ProjectFile"/>
                 <DeployFile LocalName="Videos\zap_pass_5.mp4" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Android">
@@ -1882,6 +2267,12 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Videos\zap_pass_5.mp4" Configuration="Release" Class="ProjectFile"/>
+                <DeployFile LocalName="Videos\zap_pass_5_muted.mp4" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Android">
+                        <RemoteDir>.\assets\internal\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile LocalName="Win32\Debug\MyApp.ini" Configuration="Debug" Class="File">
                     <Platform Name="Win32">
                         <RemoteName>MyApp.ini</RemoteName>
