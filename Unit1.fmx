@@ -4,6 +4,8 @@ object LoginForm: TLoginForm
   Caption = #1060#1086#1088#1084#1072' '#1074#1093#1086#1076#1072
   ClientHeight = 634
   ClientWidth = 1078
+  Fill.Color = claBisque
+  Fill.Kind = Solid
   FormFactor.Width = 320
   FormFactor.Height = 480
   FormFactor.Devices = [Desktop]
@@ -27,8 +29,8 @@ object LoginForm: TLoginForm
     object Button1: TButton
       Align = Center
       Margins.Top = 20.000000000000000000
-      Size.Width = 1078.000000000000000000
-      Size.Height = 22.000000000000000000
+      Size.Width = 950.000000000000000000
+      Size.Height = 40.000000000000000000
       Size.PlatformDefault = False
       TabOrder = 6
       Text = #1042#1086#1081#1090#1080

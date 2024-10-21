@@ -15,7 +15,12 @@ uses
   FireDAC.Comp.UI, System.Diagnostics, System.IniFiles,
   FMX.TextLayout, Datasnap.DSClientRest, ClientModuleUnit3, Datasnap.DBClient,
   Datasnap.DSConnect, System.JSON,System.Threading,
-  FMX.DialogService.Async, FMX.Ani;
+  FMX.DialogService.Async, FMX.Ani
+  {$IFDEF ANDROID}
+  , Androidapi.Helpers, Androidapi.JNI.Media, Androidapi.JNI.JavaTypes,
+  Androidapi.JNI.Net, Androidapi.JNIBridge, FMX.Platform.Android,
+  Androidapi.JNI.GraphicsContentViewText
+  {$ENDIF};
 
    type
   TPlaylistItem = record
@@ -55,6 +60,7 @@ type
     FloatAnimation1: TFloatAnimation;
     GridPanelLayout1: TGridPanelLayout;
     StyleBook1: TStyleBook;
+    Timer2: TTimer;
 
     procedure FormCreate(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
@@ -75,6 +81,7 @@ type
     procedure bSkipClickResize(Sender: TObject);
     procedure bStopClickResize(Sender: TObject);
     procedure bPlayClickResize(Sender: TObject);
+    procedure Timer2Timer(Sender: TObject);
 
   private
     { Private declarations }
@@ -314,6 +321,7 @@ begin
   Timer1.Enabled := True;
   Timer4.Interval := 1000;
   Timer4.Enabled := true;
+  Timer2.Enabled := true;
 FWatchedVideosCount := 0;
 FTotalPlaybackTime := 0;
   MediaPlayer1.Volume:= tbVolume.Value ;
@@ -506,9 +514,9 @@ procedure TForm12.FormClose(Sender: TObject; var Action: TCloseAction);
 
 begin
 SaveSettingsToIniFile;
-UpdateCumulativeTimeInDatabase(Playlist[CurrentItemIndex]);
 timer1.Enabled := False;
 timer4.Enabled := False;
+timer2.Enabled := False;
 Mediaplayer1.Stop;
 sleep(1000);
 Application.Terminate;
@@ -797,7 +805,6 @@ end;
 procedure TForm12.FormDestroy(Sender: TObject);
 begin
 SaveSettingsToIniFile;
-UpdateCumulativeTimeInDatabase(Playlist[CurrentItemIndex]);
 mediaplayer1.Stop;
 mediaplayer2.Stop;
 sleep(1000);
@@ -859,13 +866,11 @@ begin
   //MediaPlayer1.FileName := GetVideoFilePath(Playlist[CurrentItemIndex].VideoID);
      MediaPlayer1.CurrentTime:= 0;
      MediaPlayer1.Play;
-
+     getvolume:= MediaPlayer1.Volume;
     // If it's not the first loop, play the background music
     if not FirstLoop then
     begin
-    MediaPlayer1.Volume := 0;
-      //getvolume:= MediaPlayer1.Volume;
-        // Mute the main video player
+            // Mute the main video player
                   // Load and play the MP3 only if it hasn't been loaded yet
       if not IsMP3Loaded then
       begin
@@ -889,6 +894,9 @@ begin
         end;
       end;
        //MediaPlayer2.Volume := tbVolume.Value;  // Set volume for MediaPlayer2
+       MediaPlayer1.Volume := 0.1;
+       MediaPlayer2.Volume:= CurrentVolume;
+       MediaPlayer2.Volume:= getvolume;
     end
     else
     begin
@@ -896,6 +904,11 @@ begin
       MediaPlayer1.Volume:= tbVolume.Value;
     end;
   end;
+end;
+
+procedure TForm12.Timer2Timer(Sender: TObject);
+begin
+UpdateCumulativeTimeInDatabase(Playlist[CurrentItemIndex]);
 end;
 
 procedure TForm12.Timer4Timer(Sender: TObject);
