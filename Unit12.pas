@@ -334,6 +334,7 @@ FTotalPlaybackTime := 0;
   Stopwatch.Start;
   Timer4.Enabled := true;
    Timer1.Enabled := true;
+
   if not FirstLoop then
   begin
   MediaPlayer2.Play;
@@ -364,11 +365,12 @@ var
   TextHeight: Single;
 begin
   // Before rearranging the playlist, add elapsed time to cumulative time
+
   Stopwatch.Stop;
   Playlist[CurrentItemIndex].CumulativeTime := Playlist[CurrentItemIndex].CumulativeTime + Stopwatch.Elapsed.TotalSeconds;
   UpdateCumulativeTimeInDatabase(Playlist[CurrentItemIndex]);
   Stopwatch.Reset;
-
+  Firstloop := true;
 
   // Stop the current media playback
   Timer1.Enabled := False;  // Temporarily disable the Timer to prevent interference

@@ -9,7 +9,7 @@ inherited LoginForm_LgXhdpiPh: TLoginForm_LgXhdpiPh
       Size.Width = 450.000000000000000000
     end
     inherited Button1: TButton
-      Size.Width = 48.000000000000000000
+      Size.Width = 450.000000000000000000
     end
     inherited Label2: TLabel
       Size.Width = 450.000000000000000000

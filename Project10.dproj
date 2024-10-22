@@ -137,11 +137,11 @@
         <Android_BackgroundColor>#FFE4C4</Android_BackgroundColor>
         <Android_SplashGravity>center</Android_SplashGravity>
         <Android_DarkBackgroundColor>#FFE4C4</Android_DarkBackgroundColor>
-        <IncludeAndroid_AdaptiveIcon>True</IncludeAndroid_AdaptiveIcon>
-        <IncludeAndroid_VectorizedSplash>True</IncludeAndroid_VectorizedSplash>
+        <IncludeAndroid_AdaptiveIcon>true</IncludeAndroid_AdaptiveIcon>
+        <IncludeAndroid_VectorizedSplash>true</IncludeAndroid_VectorizedSplash>
         <Android_AdaptiveIconBackground>$(ProjectName).Artwork\Android\FM_AdaptiveIcon_Background.xml</Android_AdaptiveIconBackground>
         <Android_AdaptiveIconForeground>$(ProjectName).Artwork\Android\FM_AdaptiveIcon_Foreground.xml</Android_AdaptiveIconForeground>
-        <IncludeAndroid_VectorizedNotificationIcon>True</IncludeAndroid_VectorizedNotificationIcon>
+        <IncludeAndroid_VectorizedNotificationIcon>true</IncludeAndroid_VectorizedNotificationIcon>
         <Android_VectorizedSplash>$(ProjectName).Artwork\Android\FM_VectorizedSplash.xml</Android_VectorizedSplash>
         <Android_VectorizedSplashDark>$(ProjectName).Artwork\Android\FM_VectorizedSplashDark.xml</Android_VectorizedSplashDark>
         <Android_VectorizedNotificationIcon>$(ProjectName).Artwork\Android\FM_VectorizedNotificationIcon.xml</Android_VectorizedNotificationIcon>
@@ -295,6 +295,8 @@
         <AppDPIAwarenessMode>PerMonitorV2</AppDPIAwarenessMode>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <VerInfo_Locale>1033</VerInfo_Locale>
+        <Icon_MainIcon>$(ProjectName).Artwork\Windows\AppIcon.ico</Icon_MainIcon>
+        <Icns_MainIcns>$(ProjectName).Artwork\Windows\AppIcon.icns</Icns_MainIcns>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Win64)'!=''">
         <AppDPIAwarenessMode>PerMonitorV2</AppDPIAwarenessMode>

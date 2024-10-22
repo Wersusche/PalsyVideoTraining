@@ -879,18 +879,18 @@
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
-        <DeployFile Include="Videos\stopa_act_1_muted.mp4" Condition="'$(Config)'=='Debug'">
+        <DeployFile Include="Videos\koleno_pass_3_muted.mp4" Condition="'$(Config)'=='Debug'">
             <RemoteDir>Project10\assets\internal\</RemoteDir>
-            <RemoteName>stopa_act_1_muted.mp4</RemoteName>
+            <RemoteName>koleno_pass_3_muted.mp4</RemoteName>
             <DeployClass>ProjectFile</DeployClass>
             <Operation>0</Operation>
             <LocalCommand/>
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
-        <DeployFile Include="Videos\koleno_pass_3_muted.mp4" Condition="'$(Config)'=='Debug'">
+        <DeployFile Include="Videos\stopa_act_1_muted.mp4" Condition="'$(Config)'=='Debug'">
             <RemoteDir>Project10\assets\internal\</RemoteDir>
-            <RemoteName>koleno_pass_3_muted.mp4</RemoteName>
+            <RemoteName>stopa_act_1_muted.mp4</RemoteName>
             <DeployClass>ProjectFile</DeployClass>
             <Operation>0</Operation>
             <LocalCommand/>
@@ -942,9 +942,9 @@
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
-        <DeployFile Include="Videos\taz_pass_2_muted.mp4" Condition="'$(Config)'=='Debug'">
+        <DeployFile Include="Videos\koleno_pass_1_muted.mp4" Condition="'$(Config)'=='Debug'">
             <RemoteDir>Project10\assets\internal\</RemoteDir>
-            <RemoteName>taz_pass_2_muted.mp4</RemoteName>
+            <RemoteName>koleno_pass_1_muted.mp4</RemoteName>
             <DeployClass>ProjectFile</DeployClass>
             <Operation>0</Operation>
             <LocalCommand/>
@@ -960,9 +960,9 @@
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
-        <DeployFile Include="Videos\koleno_pass_1_muted.mp4" Condition="'$(Config)'=='Debug'">
+        <DeployFile Include="Videos\taz_pass_2_muted.mp4" Condition="'$(Config)'=='Debug'">
             <RemoteDir>Project10\assets\internal\</RemoteDir>
-            <RemoteName>koleno_pass_1_muted.mp4</RemoteName>
+            <RemoteName>taz_pass_2_muted.mp4</RemoteName>
             <DeployClass>ProjectFile</DeployClass>
             <Operation>0</Operation>
             <LocalCommand/>
@@ -1149,15 +1149,6 @@
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
-        <DeployFile Include="Videos\taz_pass_3_muted.mp4" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>Project10\assets\internal\</RemoteDir>
-            <RemoteName>taz_pass_3_muted.mp4</RemoteName>
-            <DeployClass>ProjectFile</DeployClass>
-            <Operation>0</Operation>
-            <LocalCommand/>
-            <RemoteCommand/>
-            <Overwrite>True</Overwrite>
-        </DeployFile>
         <DeployFile Include="Videos\stopa_act_2_muted.mp4" Condition="'$(Config)'=='Debug'">
             <RemoteDir>Project10\assets\internal\</RemoteDir>
             <RemoteName>stopa_act_2_muted.mp4</RemoteName>
@@ -1176,6 +1167,15 @@
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
+        <DeployFile Include="Videos\taz_pass_3_muted.mp4" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\assets\internal\</RemoteDir>
+            <RemoteName>taz_pass_3_muted.mp4</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
         <DeployFile Include="Videos\zap_pass_1_muted.mp4" Condition="'$(Config)'=='Debug'">
             <RemoteDir>Project10\assets\internal\</RemoteDir>
             <RemoteName>zap_pass_1_muted.mp4</RemoteName>
@@ -1185,18 +1185,18 @@
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
-        <DeployFile Include="Videos\taz_act_1_muted.mp4" Condition="'$(Config)'=='Debug'">
+        <DeployFile Include="Videos\koleno_act_1_muted.mp4" Condition="'$(Config)'=='Debug'">
             <RemoteDir>Project10\assets\internal\</RemoteDir>
-            <RemoteName>taz_act_1_muted.mp4</RemoteName>
+            <RemoteName>koleno_act_1_muted.mp4</RemoteName>
             <DeployClass>ProjectFile</DeployClass>
             <Operation>0</Operation>
             <LocalCommand/>
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
-        <DeployFile Include="Videos\koleno_act_1_muted.mp4" Condition="'$(Config)'=='Debug'">
+        <DeployFile Include="Videos\taz_act_1_muted.mp4" Condition="'$(Config)'=='Debug'">
             <RemoteDir>Project10\assets\internal\</RemoteDir>
-            <RemoteName>koleno_act_1_muted.mp4</RemoteName>
+            <RemoteName>taz_act_1_muted.mp4</RemoteName>
             <DeployClass>ProjectFile</DeployClass>
             <Operation>0</Operation>
             <LocalCommand/>
@@ -1590,18 +1590,18 @@
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
-        <DeployFile Include="Videos\zap_act_2_muted.mp4" Condition="'$(Config)'=='Debug'">
+        <DeployFile Include="Videos\plecho_act_5_muted.mp4" Condition="'$(Config)'=='Debug'">
             <RemoteDir>Project10\assets\internal\</RemoteDir>
-            <RemoteName>zap_act_2_muted.mp4</RemoteName>
+            <RemoteName>plecho_act_5_muted.mp4</RemoteName>
             <DeployClass>ProjectFile</DeployClass>
             <Operation>0</Operation>
             <LocalCommand/>
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
-        <DeployFile Include="Videos\plecho_act_5_muted.mp4" Condition="'$(Config)'=='Debug'">
+        <DeployFile Include="Videos\zap_act_2_muted.mp4" Condition="'$(Config)'=='Debug'">
             <RemoteDir>Project10\assets\internal\</RemoteDir>
-            <RemoteName>plecho_act_5_muted.mp4</RemoteName>
+            <RemoteName>zap_act_2_muted.mp4</RemoteName>
             <DeployClass>ProjectFile</DeployClass>
             <Operation>0</Operation>
             <LocalCommand/>
@@ -1996,20 +1996,20 @@
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
-        <DeployFile Include="$(ProjectName).Artwork\Android\FM_LauncherIcon_72x72.png" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>Project10\res\drawable-hdpi\</RemoteDir>
-            <RemoteName>ic_launcher.png</RemoteName>
-            <DeployClass>Android_LauncherIcon72</DeployClass>
-            <Operation>1</Operation>
-            <LocalCommand/>
-            <RemoteCommand/>
-            <Overwrite>True</Overwrite>
-        </DeployFile>
         <DeployFile Include="Videos\koleno_act_3_muted.mp4" Condition="'$(Config)'=='Debug'">
             <RemoteDir>Project10\assets\internal\</RemoteDir>
             <RemoteName>koleno_act_3_muted.mp4</RemoteName>
             <DeployClass>ProjectFile</DeployClass>
             <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="$(ProjectName).Artwork\Android\FM_LauncherIcon_72x72.png" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>Project10\res\drawable-hdpi\</RemoteDir>
+            <RemoteName>ic_launcher.png</RemoteName>
+            <DeployClass>Android_LauncherIcon72</DeployClass>
+            <Operation>1</Operation>
             <LocalCommand/>
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
@@ -2023,18 +2023,18 @@
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
-        <DeployFile Include="Videos\taz_pass_1_muted.mp4" Condition="'$(Config)'=='Debug'">
+        <DeployFile Include="Videos\koleno_pass_2_muted.mp4" Condition="'$(Config)'=='Debug'">
             <RemoteDir>Project10\assets\internal\</RemoteDir>
-            <RemoteName>taz_pass_1_muted.mp4</RemoteName>
+            <RemoteName>koleno_pass_2_muted.mp4</RemoteName>
             <DeployClass>ProjectFile</DeployClass>
             <Operation>0</Operation>
             <LocalCommand/>
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
-        <DeployFile Include="Videos\koleno_pass_2_muted.mp4" Condition="'$(Config)'=='Debug'">
+        <DeployFile Include="Videos\taz_pass_1_muted.mp4" Condition="'$(Config)'=='Debug'">
             <RemoteDir>Project10\assets\internal\</RemoteDir>
-            <RemoteName>koleno_pass_2_muted.mp4</RemoteName>
+            <RemoteName>taz_pass_1_muted.mp4</RemoteName>
             <DeployClass>ProjectFile</DeployClass>
             <Operation>0</Operation>
             <LocalCommand/>
