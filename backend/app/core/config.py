@@ -6,7 +6,7 @@ from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
     project_name: str = "myapp"
-    database_url: PostgresDsn
+    database_url: PostgresDsn | None = None
 
     model_config = {
         "env_file": ".env",
