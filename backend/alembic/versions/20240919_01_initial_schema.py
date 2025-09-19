@@ -16,7 +16,9 @@ depends_on = None
 def upgrade() -> None:
     sql_path = Path(__file__).with_suffix(".sql")
     bind = op.get_bind()
-    bind.exec_driver_sql(sql_path.read_text())
+    bind.exec_driver_sql(
+        sql_path.read_text(), execution_options={"prepared": False}
+    )
 
 
 def downgrade() -> None:
