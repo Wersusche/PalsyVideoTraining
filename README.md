@@ -24,3 +24,7 @@
 
 ## CI/CD
 Работает GitHub Actions workflow `.github/workflows/ci.yml`, который проверяет backend (pytest) и frontend (npm build). Это позволит добавить шаги деплоя после настройки инфраструктуры.
+
+## Развёртывание на сервер 45.67.230.58
+
+В каталоге [`deploy/`](deploy/README.md) добавлена автоматизация Ansible. Она настраивает сервер `45.67.230.58`, используя временный доступ по логину и паролю, устанавливает зависимости, применяет миграции и поднимает сервис через systemd + Nginx. Перед запуском укажите реальные креденшлы в `deploy/inventory.ini` и строку подключения к БД в `deploy/group_vars/prod.yml`, затем выполните `ansible-playbook playbooks/deploy_backend.yml` из каталога `deploy`.

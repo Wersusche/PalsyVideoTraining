@@ -1,0 +1,143 @@
+---
+- name: Deploy Palsy Video Training backend
+  hosts: prod
+  become: true
+  vars:
+    backend_src: "{{ playbook_dir }}/../../backend"
+  pre_tasks:
+    - name: Update apt cache
+      ansible.builtin.apt:
+        update_cache: true
+        cache_valid_time: 3600
+
+    - name: Install system packages
+      ansible.builtin.apt:
+        name:
+          - python3
+          - python3-venv
+          - python3-pip
+          - build-essential
+          - nginx
+          - rsync
+        state: present
+
+  tasks:
+    - name: Ensure application user exists
+      ansible.builtin.user:
+        name: "{{ app_user }}"
+        system: true
+        create_home: false
+
+    - name: Create application directories
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: directory
+        owner: "{{ app_user }}"
+        group: "{{ app_user }}"
+        mode: "0755"
+      loop:
+        - "{{ app_root }}"
+        - "{{ app_src_path }}"
+        - "{{ app_src_path }}/backend"
+
+    - name: Sync backend sources
+      ansible.builtin.synchronize:
+        src: "{{ backend_src }}/"
+        dest: "{{ app_src_path }}/backend/"
+        delete: true
+        archive: true
+        recursive: true
+        rsync_opts:
+          - "--exclude=.venv"
+          - "--exclude=__pycache__"
+          - "--exclude=.pytest_cache"
+      delegate_to: localhost
+
+    - name: Ensure ownership of source tree
+      ansible.builtin.file:
+        path: "{{ app_src_path }}"
+        owner: "{{ app_user }}"
+        group: "{{ app_user }}"
+        state: directory
+        recurse: true
+
+    - name: Create virtual environment
+      ansible.builtin.command:
+        cmd: "python3 -m venv {{ venv_path }}"
+        creates: "{{ venv_path }}/bin/activate"
+
+    - name: Upgrade pip inside venv
+      ansible.builtin.command:
+        cmd: "{{ venv_path }}/bin/pip install --upgrade pip"
+
+    - name: Install backend package
+      ansible.builtin.pip:
+        name: "."
+        virtualenv: "{{ venv_path }}"
+        chdir: "{{ app_src_path }}/backend"
+
+    - name: Render backend environment file
+      ansible.builtin.template:
+        src: "../templates/backend.env.j2"
+        dest: "{{ app_root }}/backend.env"
+        owner: "{{ app_user }}"
+        group: "{{ app_user }}"
+        mode: "0640"
+
+    - name: Run Alembic migrations
+      ansible.builtin.command:
+        cmd: "{{ venv_path }}/bin/alembic upgrade head"
+        chdir: "{{ app_src_path }}/backend"
+      environment:
+        PVT_DATABASE_URL: "{{ pvt_database_url }}"
+      become_user: "{{ app_user }}"
+
+    - name: Install systemd service
+      ansible.builtin.template:
+        src: "../templates/palsy-backend.service.j2"
+        dest: "/etc/systemd/system/palsy-backend.service"
+        mode: "0644"
+      notify:
+        - Reload systemd
+        - Restart backend service
+
+    - name: Install Nginx site configuration
+      ansible.builtin.template:
+        src: "../templates/palsy-backend.nginx.conf.j2"
+        dest: "{{ nginx_site_path }}"
+        mode: "0644"
+      notify: Reload nginx
+
+    - name: Enable Nginx site
+      ansible.builtin.file:
+        src: "{{ nginx_site_path }}"
+        dest: "{{ nginx_site_link }}"
+        state: link
+        force: true
+      notify: Reload nginx
+
+    - name: Remove default Nginx site
+      ansible.builtin.file:
+        path: /etc/nginx/sites-enabled/default
+        state: absent
+      notify: Reload nginx
+
+    - name: Ensure backend service is enabled and started
+      ansible.builtin.systemd:
+        name: palsy-backend.service
+        enabled: true
+        state: started
+
+  handlers:
+    - name: Reload systemd
+      ansible.builtin.command: systemctl daemon-reload
+
+    - name: Restart backend service
+      ansible.builtin.systemd:
+        name: palsy-backend.service
+        state: restarted
+
+    - name: Reload nginx
+      ansible.builtin.systemd:
+        name: nginx
+        state: reloaded
