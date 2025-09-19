@@ -5,7 +5,7 @@ venv_path: "{{ app_root }}/venv"
 app_src_path: "{{ app_root }}/src"
 uvicorn_port: 8000
 palsy_domain: "45.67.230.58"
-pvt_database_url: "postgresql+psycopg://user:password@db-host:5432/palsy_db"
+pvt_database_url: "postgresql+psycopg://postgres:postgres@localhost:5432/postgres"
 
 nginx_site_path: /etc/nginx/sites-available/palsy-backend.conf
 nginx_site_link: /etc/nginx/sites-enabled/palsy-backend.conf
