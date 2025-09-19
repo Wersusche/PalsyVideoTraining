@@ -66,3 +66,12 @@ __recovery/
 
 # Boss dependency manager vendor folder https://github.com/HashLoad/boss
 modules/
+
+# Python/Node build artifacts
+backend/.venv/
+backend/.env
+backend/__pycache__/
+frontend/node_modules/
+frontend/dist/
+backend/**/__pycache__/
+backend/*.egg-info/
