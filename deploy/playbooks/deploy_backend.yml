@@ -4,7 +4,26 @@
   become: true
   vars:
     backend_src: "{{ playbook_dir }}/../../backend"
+    frontend_src: "{{ playbook_dir }}/../../frontend"
   pre_tasks:
+    - name: Ensure apt keyrings directory exists
+      ansible.builtin.file:
+        path: /etc/apt/keyrings
+        state: directory
+        mode: "0755"
+
+    - name: Add NodeSource GPG key
+      ansible.builtin.get_url:
+        url: https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key
+        dest: /etc/apt/keyrings/nodesource.gpg
+        mode: "0644"
+
+    - name: Add NodeSource repository
+      ansible.builtin.apt_repository:
+        repo: "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_{{ nodejs_major_version }} nodistro main"
+        filename: nodesource
+        state: present
+
     - name: Update apt cache
       ansible.builtin.apt:
         update_cache: true
@@ -19,6 +38,11 @@
           - build-essential
           - nginx
           - rsync
+        state: present
+
+    - name: Install Node.js runtime
+      ansible.builtin.apt:
+        name: nodejs
         state: present
 
   tasks:
@@ -39,6 +63,7 @@
         - "{{ app_root }}"
         - "{{ app_src_path }}"
         - "{{ app_src_path }}/backend"
+        - "{{ app_src_path }}/frontend"
 
     - name: Sync backend sources
       ansible.builtin.synchronize:
@@ -51,6 +76,19 @@
           - "--exclude=.venv"
           - "--exclude=__pycache__"
           - "--exclude=.pytest_cache"
+      delegate_to: localhost
+
+    - name: Sync frontend sources
+      ansible.builtin.synchronize:
+        src: "{{ frontend_src }}/"
+        dest: "{{ app_src_path }}/frontend/"
+        delete: true
+        archive: true
+        recursive: true
+        rsync_opts:
+          - "--exclude=node_modules"
+          - "--exclude=dist"
+          - "--exclude=.cache"
       delegate_to: localhost
 
     - name: Ensure ownership of source tree
@@ -75,6 +113,42 @@
         name: "."
         virtualenv: "{{ venv_path }}"
         chdir: "{{ app_src_path }}/backend"
+
+    - name: Install frontend dependencies
+      ansible.builtin.command:
+        cmd: npm ci
+        chdir: "{{ app_src_path }}/frontend"
+      become_user: "{{ app_user }}"
+
+    - name: Build frontend assets
+      ansible.builtin.command:
+        cmd: npm run build
+        chdir: "{{ app_src_path }}/frontend"
+      become_user: "{{ app_user }}"
+      environment:
+        NODE_ENV: production
+
+    - name: Ensure frontend root exists
+      ansible.builtin.file:
+        path: "{{ frontend_root }}"
+        state: directory
+        owner: "{{ app_user }}"
+        group: www-data
+        mode: "0755"
+
+    - name: Deploy frontend build artifacts
+      ansible.builtin.command:
+        cmd: rsync -a --delete dist/ "{{ frontend_root }}/"
+        chdir: "{{ app_src_path }}/frontend"
+      become_user: "{{ app_user }}"
+
+    - name: Ensure frontend files are readable by nginx
+      ansible.builtin.file:
+        path: "{{ frontend_root }}"
+        owner: "{{ app_user }}"
+        group: www-data
+        mode: "0755"
+        recurse: true
 
     - name: Render backend environment file
       ansible.builtin.template:
