@@ -23,7 +23,7 @@ jobs:
           pip install -e .[dev]
       - name: Run pytest
         env:
-          PVT_DATABASE_URL: mysql+pymysql://root:password@127.0.0.1:3306/palsy_db
+          PVT_DATABASE_URL: postgresql+psycopg://postgres:password@127.0.0.1:5432/palsy_db
         run: pytest
 
   frontend:
