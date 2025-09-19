@@ -47,10 +47,44 @@ jobs:
           pip install ansible
 
       - name: Create CI inventory
+        env:
+          SECRET_DEPLOY_SSH_USER: ${{ secrets.DEPLOY_SSH_USER }}
+          SECRET_DEPLOY_SSH_PASSWORD: ${{ secrets.DEPLOY_SSH_PASSWORD }}
+          SECRET_DEPLOY_SSH_BECOME_PASSWORD: ${{ secrets.DEPLOY_SSH_BECOME_PASSWORD }}
         run: |
+          get_inventory_value() {
+            local key="$1"
+            awk -v key="$key" '
+              $1 == "palsy_app" {
+                for (i = 1; i <= NF; i++) {
+                  split($i, kv, "=")
+                  if (kv[1] == key) {
+                    print kv[2]
+                    exit
+                  }
+                }
+              }
+            ' deploy/inventory.ini
+          }
+
+          ansible_user="${SECRET_DEPLOY_SSH_USER}"
+          if [ -z "$ansible_user" ]; then
+            ansible_user="$(get_inventory_value ansible_user)"
+          fi
+
+          ansible_password="${SECRET_DEPLOY_SSH_PASSWORD}"
+          if [ -z "$ansible_password" ]; then
+            ansible_password="$(get_inventory_value ansible_password)"
+          fi
+
+          ansible_become_password="${SECRET_DEPLOY_SSH_BECOME_PASSWORD}"
+          if [ -z "$ansible_become_password" ]; then
+            ansible_become_password="${ansible_password}"
+          fi
+
           cat <<INVENTORY > deploy/inventory.ci.ini
           [prod]
-          palsy_app ansible_host=${{ env.DEPLOY_HOST }} ansible_user=${{ secrets.DEPLOY_SSH_USER }} ansible_password=${{ secrets.DEPLOY_SSH_PASSWORD }} ansible_become_password=${{ secrets.DEPLOY_SSH_BECOME_PASSWORD || secrets.DEPLOY_SSH_PASSWORD }}
+          palsy_app ansible_host=${{ env.DEPLOY_HOST }} ansible_user=$ansible_user ansible_password=$ansible_password ansible_become_password=$ansible_become_password
           INVENTORY
 
       - name: Run deployment playbook
