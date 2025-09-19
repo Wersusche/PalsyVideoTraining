@@ -20,7 +20,7 @@ depends_on = None
 def upgrade() -> None:
     op.create_table(
         "doctors",
-        sa.Column("idDoctors", sa.Integer(), primary_key=True, autoincrement=True),
+        sa.Column("idDoctors", sa.Integer(), sa.Identity(), primary_key=True),
         sa.Column("doc_name", sa.String(length=45), nullable=True),
         sa.Column("doc_secname", sa.String(length=45), nullable=True),
         sa.Column("doc_surname", sa.String(length=45), nullable=True),
@@ -29,7 +29,7 @@ def upgrade() -> None:
 
     op.create_table(
         "patients",
-        sa.Column("idPatients", sa.Integer(), primary_key=True, autoincrement=True),
+        sa.Column("idPatients", sa.Integer(), sa.Identity(), primary_key=True),
         sa.Column("Name", sa.String(length=145), nullable=False),
         sa.Column("Secname", sa.String(length=145), nullable=True),
         sa.Column("Surname", sa.String(length=145), nullable=False),
@@ -40,7 +40,7 @@ def upgrade() -> None:
 
     op.create_table(
         "videos",
-        sa.Column("idvideos", sa.Integer(), primary_key=True, autoincrement=True),
+        sa.Column("idvideos", sa.Integer(), sa.Identity(), primary_key=True),
         sa.Column("video_name", sa.String(length=45), nullable=True),
         sa.Column("filename", sa.String(length=45), nullable=True),
         sa.Column("ex_type", sa.String(length=50), nullable=False, server_default=sa.text("'для всех'")),
@@ -48,15 +48,15 @@ def upgrade() -> None:
 
     op.create_table(
         "appointments",
-        sa.Column("idAppointments", sa.Integer(), primary_key=True, autoincrement=True),
+        sa.Column("idAppointments", sa.Integer(), sa.Identity(), nullable=False),
         sa.Column("Starttime", sa.Date(), nullable=True),
         sa.Column("Endtime", sa.Date(), nullable=True),
         sa.Column("Comments", sa.Text(), nullable=True),
-        sa.Column("idPatients", sa.Integer(), nullable=False, primary_key=True),
+        sa.Column("idPatients", sa.Integer(), nullable=False),
         sa.Column("idvideos", sa.Integer(), nullable=False),
-        sa.Column("idDoctors", sa.Integer(), nullable=False, primary_key=True, server_default=sa.text("1")),
+        sa.Column("idDoctors", sa.Integer(), nullable=False, server_default=sa.text("1")),
         sa.Column("kolvden", sa.Integer(), nullable=False, server_default=sa.text("1")),
-        sa.Column("dlitelnost", sa.Time(), nullable=True, server_default=sa.text("'00:00:50'")),
+        sa.Column("dlitelnost", sa.Time(), nullable=True, server_default=sa.text("'00:00:50'::time")),
         sa.Column("sdelanovden", sa.Integer(), nullable=False, server_default=sa.text("0")),
         sa.Column("sdelanovsego", sa.Integer(), nullable=False, server_default=sa.text("0")),
         sa.Column("Lastsession", sa.DateTime(), nullable=True),
@@ -65,18 +65,19 @@ def upgrade() -> None:
         sa.ForeignKeyConstraint(["idDoctors"], ["doctors.idDoctors"]),
         sa.ForeignKeyConstraint(["idPatients"], ["patients.idPatients"]),
         sa.ForeignKeyConstraint(["idvideos"], ["videos.idvideos"]),
+        sa.PrimaryKeyConstraint("idAppointments", "idPatients", "idDoctors"),
     )
 
     op.create_table(
         "disorders",
-        sa.Column("idDisorders", sa.Integer(), primary_key=True, autoincrement=True),
+        sa.Column("idDisorders", sa.Integer(), sa.Identity(), primary_key=True),
         sa.Column("Disorder_name", sa.String(length=45), nullable=True),
         sa.Column("Disorder_type", sa.String(length=45), nullable=True),
     )
 
     op.create_table(
         "push_count",
-        sa.Column("id", sa.Integer(), primary_key=True, autoincrement=True),
+        sa.Column("id", sa.Integer(), sa.Identity(), primary_key=True),
         sa.Column("count", sa.Integer(), nullable=True),
     )
 
@@ -113,42 +114,91 @@ def upgrade() -> None:
     op.execute(
         sa.text(
             """
-            CREATE EVENT IF NOT EXISTS reset_field_event
-            ON SCHEDULE EVERY 1 DAY
-            STARTS '2023-08-15 00:00:00'
-            DO
+            DO $$
+            DECLARE
+                cron_available boolean := TRUE;
             BEGIN
-                UPDATE appointments SET sdelanovden = 0;
-                UPDATE appointments SET CumulativeTimeSpent = 0;
-            END
-            """
-        )
-    )
+                BEGIN
+                    IF NOT EXISTS (SELECT 1 FROM pg_extension WHERE extname = 'pg_cron') THEN
+                        EXECUTE 'CREATE EXTENSION pg_cron';
+                    END IF;
+                EXCEPTION
+                    WHEN OTHERS THEN
+                        RAISE NOTICE 'pg_cron extension not available: %', SQLERRM;
+                        cron_available := FALSE;
+                END;
 
-    op.execute(
-        sa.text(
-            """
-            CREATE EVENT IF NOT EXISTS update_done_percent_event
-            ON SCHEDULE EVERY 1 DAY
-            STARTS '2023-08-31 09:17:29'
-            DO
-            BEGIN
-                UPDATE appointments
-                SET done_percent = CASE
-                    WHEN (DATEDIFF(NOW(), starttime) * kolvden) > 0 THEN
-                        (sdelanovsego * 100) / (DATEDIFF(NOW(), starttime) * kolvden)
-                    ELSE 0
-                END
-                WHERE NOW() BETWEEN starttime AND endtime;
+                IF cron_available THEN
+                    BEGIN
+                        EXECUTE $$SELECT cron.unschedule('reset_field_event')$$;
+                    EXCEPTION
+                        WHEN OTHERS THEN
+                            NULL;
+                    END;
+
+                    BEGIN
+                        EXECUTE $$SELECT cron.unschedule('update_done_percent_event')$$;
+                    EXCEPTION
+                        WHEN OTHERS THEN
+                            NULL;
+                    END;
+
+                    EXECUTE $$SELECT cron.schedule(
+                        'reset_field_event',
+                        '0 0 * * *',
+                        $$UPDATE appointments SET sdelanovden = 0, "CumulativeTimeSpent" = 0;$$
+                    )$$;
+
+                    EXECUTE $$SELECT cron.schedule(
+                        'update_done_percent_event',
+                        '0 0 * * *',
+                        $$UPDATE appointments
+                          SET done_percent = CASE
+                            WHEN NOW() BETWEEN "Starttime" AND "Endtime"
+                                 AND (DATE_PART('day', NOW() - "Starttime") * kolvden) > 0 THEN
+                                LEAST(
+                                    100,
+                                    (sdelanovsego * 100) /
+                                    NULLIF(DATE_PART('day', NOW() - "Starttime") * kolvden, 0)
+                                )
+                            ELSE 0
+                          END
+                          WHERE NOW() BETWEEN "Starttime" AND "Endtime";$$
+                    )$$;
+                END IF;
             END
+            $$;
             """
         )
     )
 
 
 def downgrade() -> None:
-    op.execute(sa.text("DROP EVENT IF EXISTS update_done_percent_event"))
-    op.execute(sa.text("DROP EVENT IF EXISTS reset_field_event"))
+    op.execute(
+        sa.text(
+            """
+            DO $$
+            BEGIN
+                IF EXISTS (SELECT 1 FROM pg_extension WHERE extname = 'pg_cron') THEN
+                    BEGIN
+                        EXECUTE $$SELECT cron.unschedule('update_done_percent_event')$$;
+                    EXCEPTION
+                        WHEN OTHERS THEN
+                            NULL;
+                    END;
+
+                    BEGIN
+                        EXECUTE $$SELECT cron.unschedule('reset_field_event')$$;
+                    EXCEPTION
+                        WHEN OTHERS THEN
+                            NULL;
+                    END;
+                END IF;
+            END
+            $$;
+            """
+        )
+    )
 
     op.drop_table("patient_disorders")
     op.drop_table("disorder_videos")

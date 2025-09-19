@@ -13,7 +13,7 @@
 1. `cd backend`
 2. `python -m venv .venv && source .venv/bin/activate`
 3. `pip install -e .[dev]`
-4. Скопируйте `.env.example` в `.env` и укажите доступ к MySQL.
+4. Скопируйте `.env.example` в `.env` и укажите доступ к PostgreSQL.
 5. Примените миграции: `alembic upgrade head`.
 6. Запустите API: `uvicorn app.main:app --reload`
 
