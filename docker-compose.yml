@@ -27,10 +27,21 @@ services:
       timeout: 5s
       retries: 5
 
+  frontend:
+    image: node:20-alpine
+    working_dir: /app
+    volumes:
+      - ./frontend:/app
+      - frontend-node-modules:/app/node_modules
+    command: sh -c "npm ci && npm run build"
+
   caddy:
     image: caddy:2
     depends_on:
-      - backend
+      backend:
+        condition: service_started
+      frontend:
+        condition: service_completed_successfully
     ports:
       - "80:80"
       - "443:443"
@@ -46,3 +57,4 @@ volumes:
   media-data:
   caddy-data:
   caddy-config:
+  frontend-node-modules:
