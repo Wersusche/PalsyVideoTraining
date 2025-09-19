@@ -1,15 +1,13 @@
-palsy-training.ru, www.palsy-training.ru {
-  encode zstd gzip
+palsy-training.ru {
+    # Раздаём собранный фронтенд
+    root * /home/deployer/app/frontend/dist
 
-  root * /srv
-  file_server
+    # Сжатие
+    encode zstd gzip
 
-  handle_path /media/* {
-    root * /media
+    # SPA fallback: если файла нет — отдаём index.html
+    try_files {path} /index.html
+
+    # Включаем файловый сервер
     file_server
-  }
-
-  handle_path /api/* {
-    reverse_proxy backend:8000
-  }
 }
