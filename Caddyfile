@@ -1,0 +1,15 @@
+palsy-training.ru, www.palsy-training.ru {
+  encode zstd gzip
+
+  root * /srv
+  file_server
+
+  handle_path /media/* {
+    root * /media
+    file_server
+  }
+
+  handle_path /api/* {
+    reverse_proxy backend:8000
+  }
+}
