@@ -11,7 +11,7 @@ dependencies = [
     "alembic",
     "pydantic-settings",
     "python-dotenv",
-    "pymysql",
+    "psycopg[binary]",
 ]
 
 [project.optional-dependencies]

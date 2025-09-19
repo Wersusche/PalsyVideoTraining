@@ -2,7 +2,8 @@
 
 ## Prerequisites
 - Python 3.10+
-- Running MySQL instance accessible via `PVT_DATABASE_URL`
+- Running PostgreSQL instance accessible via `PVT_DATABASE_URL`
+- Optional: [`pg_cron`](https://github.com/citusdata/pg_cron) extension installed on the target database (used to schedule daily maintenance jobs). If it is unavailable, schedule the maintenance SQL statements manually via an external cron job.
 
 ## Setup
 ```bash
