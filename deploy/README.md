@@ -31,13 +31,14 @@ ansible-playbook playbooks/deploy_backend.yml
 
 Плейбук выполняет следующие шаги:
 
-1. Устанавливает системные зависимости (Python 3, pip, build-essential, Nginx для проксирования).
+1. Устанавливает системные зависимости (Python 3, pip, build-essential, Node.js {{ nodejs_major_version }}, Nginx для проксирования).
 2. Создаёт системного пользователя `palsy` и директории приложения в `/opt/palsy-backend`.
 3. Копирует исходники backend'а и устанавливает зависимости в виртуальное окружение.
-4. Применяет миграции Alembic.
-5. Создаёт `.env` с учётом значений из `group_vars`.
-6. Разворачивает и запускает systemd-сервис `palsy-backend.service`.
-7. Настраивает Nginx в качестве обратного прокси (порт 80 → uvicorn).
+4. Копирует исходники frontend'а, выполняет `npm ci && npm run build` и выкладывает содержимое `dist/` в `{{ frontend_root }}`.
+5. Применяет миграции Alembic.
+6. Создаёт `.env` с учётом значений из `group_vars`.
+7. Разворачивает и запускает systemd-сервис `palsy-backend.service`.
+8. Настраивает Nginx в качестве обратного прокси (порт 80 → uvicorn) и раздачи статических файлов.
 
 После успешного выполнения API будет доступен по адресу `http://45.67.230.58/` (конфиг Nginx перенаправляет на uvicorn, работающий на порту 8000).
 
@@ -46,5 +47,6 @@ ansible-playbook playbooks/deploy_backend.yml
 - `pvt_database_url` — строка подключения к PostgreSQL; значение попадает в `.env` как `PVT_DATABASE_URL`.
 - `palsy_domain` — (опционально) доменное имя для блока server_name в Nginx. По умолчанию используется IP.
 - `uvicorn_port` — внутренний порт uvicorn (по умолчанию 8000).
+- `nodejs_major_version` — основная версия Node.js для установки из репозитория NodeSource (по умолчанию 20.x).
 
 При смене структуры проекта или добавлении фронтенда расширьте плейбук дополнительными задачами.
