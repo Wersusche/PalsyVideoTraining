@@ -1,0 +1,49 @@
+version: "3.9"
+
+services:
+  caddy:
+    build:
+      context: ..
+      dockerfile: deploy/caddy/Dockerfile
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - backend
+    volumes:
+      - media:/media
+    networks:
+      - app
+
+  backend:
+    build:
+      context: ../backend
+    environment:
+      PVT_DATABASE_URL: postgresql+psycopg://palsy:palsy@db:5432/palsy
+    volumes:
+      - media:/app/media
+    depends_on:
+      db:
+        condition: service_started
+    networks:
+      - app
+
+  db:
+    image: postgres:15
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: palsy
+      POSTGRES_USER: palsy
+      POSTGRES_PASSWORD: palsy
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - app
+
+volumes:
+  media:
+  postgres_data:
+
+networks:
+  app:
+    driver: bridge
