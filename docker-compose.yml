@@ -31,6 +31,7 @@ services:
   frontend:
     image: node:20-alpine
     working_dir: /app
+    user: "${APP_UID:-1000}:${APP_GID:-1000}"
     volumes:
       - ./frontend:/app
       - frontend-node-modules:/app/node_modules
