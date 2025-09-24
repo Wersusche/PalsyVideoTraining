@@ -13,6 +13,23 @@ class Settings(BaseSettings):
         "env_file_encoding": "utf-8",
     }
 
+    @property
+    def async_database_url(self) -> str:
+        """Return database URL compatible with SQLAlchemy async engines."""
+
+        url = str(self.database_url)
+
+        if "+" in url:
+            return url
+
+        if url.startswith("postgresql://"):
+            return url.replace("postgresql://", "postgresql+asyncpg://", 1)
+
+        if url.startswith("postgres://"):
+            return url.replace("postgres://", "postgresql+asyncpg://", 1)
+
+        return url
+
 
 @lru_cache(maxsize=1)
 def get_settings() -> Settings:
