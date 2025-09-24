@@ -40,95 +40,12 @@ type DoctorDashboardProps = {
   onLogout: () => void;
 };
 
-const disorders: Disorder[] = [
-  { id: 1, name: 'Спастичность верхних конечностей', category: 'Двигательные нарушения' },
-  { id: 2, name: 'Спастичность нижних конечностей', category: 'Двигательные нарушения' },
-  { id: 3, name: 'Нарушения осанки', category: 'Двигательные нарушения' },
-  { id: 4, name: 'Сложности с речью', category: 'Коммуникативные нарушения' },
-  { id: 5, name: 'Нарушения глотания', category: 'Коммуникативные нарушения' },
-  { id: 6, name: 'Сенсорные перегрузки', category: 'Сенсорные нарушения' },
-  { id: 7, name: 'Проблемы с координацией', category: 'Двигательные нарушения' },
-  { id: 8, name: 'Проблемы с вниманием', category: 'Когнитивные нарушения' },
-];
-
-const exercises: Exercise[] = [
-  { id: 101, name: 'Растяжка кистей', type: 'Разминка' },
-  { id: 102, name: 'Растяжка стоп', type: 'Разминка' },
-  { id: 103, name: 'Упражнение на осанку «Ласточка»', type: 'Сила и контроль' },
-  { id: 104, name: 'Видео с артикуляционной гимнастикой', type: 'Речь' },
-  { id: 105, name: 'Упражнение на глотание «Глоток воды»', type: 'Речь' },
-  { id: 106, name: 'Десенсибилизация кистей', type: 'Сенсорика' },
-  { id: 107, name: 'Баланс на платформе', type: 'Координация' },
-  { id: 108, name: 'Игровая тренировка на внимание', type: 'Когнитивные' },
-];
-
-const disorderExerciseMap: Record<number, number[]> = {
-  1: [101, 107],
-  2: [102, 107],
-  3: [103],
-  4: [104],
-  5: [105],
-  6: [106],
-  7: [103, 107],
-  8: [108],
+type DoctorDashboardData = {
+  patients: Patient[];
+  disorders: Disorder[];
+  exercises: Exercise[];
+  disorderExerciseMap: Record<number, number[]>;
 };
-
-const initialPatients: Patient[] = [
-  {
-    id: 1,
-    firstName: 'Алексей',
-    lastName: 'Иванов',
-    middleName: 'Сергеевич',
-    birthDate: '2010-02-14',
-    username: 'alexei.i',
-    password: 'rehab123',
-    disorders: [1, 3, 7],
-    appointments: [
-      {
-        id: 'app-1',
-        exerciseId: 101,
-        start: new Date().toISOString().slice(0, 10),
-        end: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10),
-        perDay: 3,
-        totalCompleted: 9,
-        donePercent: 45,
-        durationSeconds: 8 * 60,
-      },
-      {
-        id: 'app-2',
-        exerciseId: 103,
-        start: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10),
-        end: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10),
-        perDay: 2,
-        totalCompleted: 16,
-        donePercent: 80,
-        durationSeconds: 10 * 60,
-      },
-    ],
-  },
-  {
-    id: 2,
-    firstName: 'Мария',
-    lastName: 'Петрова',
-    middleName: 'Ильинична',
-    birthDate: '2012-07-03',
-    username: 'maria.p',
-    password: 'palsy2024',
-    disorders: [4, 5, 8],
-    appointments: [
-      {
-        id: 'app-3',
-        exerciseId: 104,
-        start: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10),
-        end: new Date(Date.now() + 9 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10),
-        perDay: 1,
-        totalCompleted: 0,
-        donePercent: 0,
-        durationSeconds: 6 * 60,
-      },
-    ],
-  },
-];
 
 const transliterate = (value: string) => {
   const map: Record<string, string> = {
@@ -204,6 +121,9 @@ const filterAlphaNumeric = (value: string) => value.replace(/[^a-z0-9]/gi, '');
 
 const getAge = (birthDate: string) => {
   const birth = new Date(birthDate);
+  if (Number.isNaN(birth.getTime())) {
+    return { years: 0, months: 0 };
+  }
   const now = new Date();
 
   const totalMonths =
@@ -215,10 +135,13 @@ const getAge = (birthDate: string) => {
 };
 
 const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
-  const [patients, setPatients] = useState<Patient[]>(initialPatients);
-  const [selectedPatientId, setSelectedPatientId] = useState<number | null>(
-    initialPatients[0]?.id ?? null,
-  );
+  const [patients, setPatients] = useState<Patient[]>([]);
+  const [selectedPatientId, setSelectedPatientId] = useState<number | null>(null);
+  const [disorders, setDisorders] = useState<Disorder[]>([]);
+  const [exercises, setExercises] = useState<Exercise[]>([]);
+  const [disorderExerciseMap, setDisorderExerciseMap] = useState<Record<number, number[]>>({});
+  const [isLoading, setIsLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const [autoCredentials, setAutoCredentials] = useState(true);
   const [newPatient, setNewPatient] = useState({
     lastName: '',
@@ -240,6 +163,62 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
   });
 
   useEffect(() => {
+    let isMounted = true;
+
+    const loadData = async () => {
+      try {
+        setIsLoading(true);
+        const response = await fetch('/api/doctor-dashboard');
+        if (!response.ok) {
+          throw new Error('Failed to load doctor dashboard data');
+        }
+        const data: DoctorDashboardData = await response.json();
+        if (!isMounted) return;
+
+        setPatients(data.patients);
+        setDisorders(data.disorders);
+        setExercises(data.exercises);
+        const normalizedDisorderMap = Object.entries(data.disorderExerciseMap ?? {}).reduce(
+          (acc, [key, value]) => {
+            const disorderId = Number.parseInt(key, 10);
+            if (!Number.isNaN(disorderId) && Array.isArray(value)) {
+              const exercisesForDisorder = value
+                .map((item) => Number(item))
+                .filter((item) => !Number.isNaN(item));
+              acc[disorderId] = exercisesForDisorder;
+            }
+            return acc;
+          },
+          {} as Record<number, number[]>,
+        );
+        setDisorderExerciseMap(normalizedDisorderMap);
+        setSelectedPatientId((prev) => {
+          if (prev && data.patients.some((patient) => patient.id === prev)) {
+            return prev;
+          }
+          return data.patients[0]?.id ?? null;
+        });
+        setLoadError(null);
+      } catch (error) {
+        console.error(error);
+        if (isMounted) {
+          setLoadError('Не удалось загрузить данные. Обновите страницу или попробуйте позже.');
+        }
+      } finally {
+        if (isMounted) {
+          setIsLoading(false);
+        }
+      }
+    };
+
+    loadData();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  useEffect(() => {
     setSelectedExercises([]);
   }, [selectedPatientId]);
 
@@ -253,7 +232,7 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
       acc[item.category].push(item);
       return acc;
     }, {});
-  }, []);
+  }, [disorders]);
 
   const recommendedExercises = useMemo(() => {
     if (!selectedPatient) {
@@ -263,7 +242,7 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
     return new Set(
       selectedPatient.disorders.flatMap((disorderId) => disorderExerciseMap[disorderId] ?? []),
     );
-  }, [selectedPatient]);
+  }, [disorderExerciseMap, selectedPatient]);
 
   const stats = useMemo(() => {
     const now = new Date();
@@ -315,7 +294,7 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
       acc[exercise.type].push(exercise);
       return acc;
     }, {});
-  }, [recommendedExercises, selectedPatient, showOnlyRecommended]);
+  }, [exercises, recommendedExercises, selectedPatient, showOnlyRecommended]);
 
   const resetForm = () => {
     setNewPatient({
@@ -669,6 +648,12 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
             Выйти из кабинета
           </button>
         </div>
+        {isLoading && <p className="muted">Загружаем данные кабинета...</p>}
+        {loadError && (
+          <p className="form-message" role="alert">
+            {loadError}
+          </p>
+        )}
       </header>
 
       <main className="doctor-layout">
@@ -765,24 +750,33 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
             <header className="panel-header">
               <h2 id="active-patients-heading">Активные пациенты</h2>
               <p className="panel-description">
-                Сейчас выполняют программу: {activePatients.length || 'нет данных'}
+                Сейчас выполняют программу:{' '}
+                {isLoading ? 'загрузка…' : activePatients.length || 'нет данных'}
               </p>
             </header>
             <ul className="patient-list">
-              {activePatients.map((patient) => (
-                <li key={patient.id} className="patient-item">
-                  <button
-                    type="button"
-                    className={`patient-button ${
-                      selectedPatientId === patient.id ? 'is-active' : ''
-                    }`}
-                    onClick={() => setSelectedPatientId(patient.id)}
-                  >
-                    {patient.lastName} {patient.firstName}
-                  </button>
-                </li>
-              ))}
-              {activePatients.length === 0 && <li className="patient-empty">Нет активных назначений</li>}
+              {isLoading ? (
+                <li className="patient-empty">Загрузка данных…</li>
+              ) : (
+                <>
+                  {activePatients.map((patient) => (
+                    <li key={patient.id} className="patient-item">
+                      <button
+                        type="button"
+                        className={`patient-button ${
+                          selectedPatientId === patient.id ? 'is-active' : ''
+                        }`}
+                        onClick={() => setSelectedPatientId(patient.id)}
+                      >
+                        {patient.lastName} {patient.firstName}
+                      </button>
+                    </li>
+                  ))}
+                  {activePatients.length === 0 && (
+                    <li className="patient-empty">Нет активных назначений</li>
+                  )}
+                </>
+              )}
             </ul>
           </div>
         </section>
@@ -794,34 +788,51 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
               <p className="panel-description">Выберите пациента для просмотра подробностей.</p>
             </header>
             <ul className="patient-list">
-              {patients.map((patient) => (
-                <li key={patient.id} className="patient-item">
-                  <button
-                    type="button"
-                    className={`patient-button ${
-                      selectedPatientId === patient.id ? 'is-active' : ''
-                    }`}
-                    onClick={() => setSelectedPatientId(patient.id)}
-                  >
-                    <span>{patient.lastName} {patient.firstName}</span>
-                    <span className="patient-username">{patient.username}</span>
-                  </button>
-                  <button
-                    type="button"
-                    className="link-button"
-                    onClick={() => handleDeletePatient(patient.id)}
-                  >
-                    Удалить
-                  </button>
-                </li>
-              ))}
-              {patients.length === 0 && <li className="patient-empty">Пациентов пока нет</li>}
+              {isLoading ? (
+                <li className="patient-empty">Загрузка данных…</li>
+              ) : (
+                <>
+                  {patients.map((patient) => (
+                    <li key={patient.id} className="patient-item">
+                      <button
+                        type="button"
+                        className={`patient-button ${
+                          selectedPatientId === patient.id ? 'is-active' : ''
+                        }`}
+                        onClick={() => setSelectedPatientId(patient.id)}
+                      >
+                        <span>{patient.lastName} {patient.firstName}</span>
+                        <span className="patient-username">{patient.username}</span>
+                      </button>
+                      <button
+                        type="button"
+                        className="link-button"
+                        onClick={() => handleDeletePatient(patient.id)}
+                      >
+                        Удалить
+                      </button>
+                    </li>
+                  ))}
+                  {patients.length === 0 && (
+                    <li className="patient-empty">Пациентов пока нет</li>
+                  )}
+                </>
+              )}
             </ul>
           </div>
         </section>
 
         <section className="doctor-column wide" aria-live="polite">
-          {selectedPatient ? (
+          {isLoading ? (
+            <div className="panel">
+              <header className="panel-header">
+                <h2>Загружаем данные…</h2>
+                <p className="panel-description">
+                  Подождите, пока мы получим информацию о пациентах и назначениях.
+                </p>
+              </header>
+            </div>
+          ) : selectedPatient ? (
             <div className="panel patient-details">
               <header className="panel-header">
                 <h2>
