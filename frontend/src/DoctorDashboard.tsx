@@ -1,4 +1,4 @@
-import { ChangeEvent, FormEvent, useEffect, useMemo, useState } from 'react';
+import { ChangeEvent, FormEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 type Disorder = {
   id: number;
@@ -46,6 +46,9 @@ type DoctorDashboardData = {
   exercises: Exercise[];
   disorderExerciseMap: Record<number, number[]>;
 };
+
+const COMPLETED_INITIAL_COUNT = 6;
+const COMPLETED_BATCH_SIZE = 4;
 
 const transliterate = (value: string) => {
   const map: Record<string, string> = {
@@ -162,6 +165,9 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
     minutes: '05',
     seconds: '00',
   });
+  const [completedVisibleCount, setCompletedVisibleCount] = useState(COMPLETED_INITIAL_COUNT);
+  const completedListRef = useRef<HTMLUListElement | null>(null);
+  const previousPatientIdRef = useRef<number | null>(null);
 
   const getLatestPatientId = (list: Patient[]) => {
     if (list.length === 0) {
@@ -694,6 +700,61 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
     return { current, future, past } as const;
   }, [selectedPatient]);
 
+  const visibleCompletedAppointments = useMemo(
+    () => appointmentsByStatus.past.slice(0, completedVisibleCount),
+    [appointmentsByStatus.past, completedVisibleCount],
+  );
+
+  useEffect(() => {
+    const total = appointmentsByStatus.past.length;
+    const initialCount = total === 0 ? 0 : Math.min(COMPLETED_INITIAL_COUNT, total);
+
+    if (previousPatientIdRef.current !== selectedPatientId) {
+      previousPatientIdRef.current = selectedPatientId;
+      setCompletedVisibleCount(initialCount);
+      if (completedListRef.current) {
+        completedListRef.current.scrollTop = 0;
+      }
+      return;
+    }
+
+    setCompletedVisibleCount((prev) => {
+      if (total === 0) {
+        return 0;
+      }
+
+      if (prev === 0) {
+        return initialCount;
+      }
+
+      if (prev > total) {
+        return total;
+      }
+
+      return prev;
+    });
+  }, [appointmentsByStatus.past.length, selectedPatientId]);
+
+  const handleCompletedScroll = useCallback(() => {
+    const element = completedListRef.current;
+    if (!element) {
+      return;
+    }
+
+    const { scrollTop, scrollHeight, clientHeight } = element;
+    if (scrollTop + clientHeight < scrollHeight - 16) {
+      return;
+    }
+
+    setCompletedVisibleCount((prev) => {
+      if (prev >= appointmentsByStatus.past.length) {
+        return prev;
+      }
+
+      return Math.min(prev + COMPLETED_BATCH_SIZE, appointmentsByStatus.past.length);
+    });
+  }, [appointmentsByStatus.past.length]);
+
   const renderAppointment = (appointment: Appointment) => {
     const exercise = exercises.find((item) => item.id === appointment.exerciseId);
     const minutes = Math.floor(appointment.durationSeconds / 60)
@@ -728,12 +789,8 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
 
   return (
     <div className="app page doctor-page">
-      <header className="page-header">
-        <h1>Кабинет врача</h1>
-        <p className="lead">
-          Управляйте пациентами, назначайте упражнения и следите за прогрессом прямо из браузера.
-        </p>
-        <div className="doctor-actions">
+      <header className="page-header doctor-header">
+        <div className="doctor-header-top">
           <div className="doctor-stat-cards" role="list">
             <article className="stat-card" role="listitem">
               <span className="stat-label">Пациентов в базе</span>
@@ -748,9 +805,18 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
               <span className="stat-value">{stats.atRisk}</span>
             </article>
           </div>
-          <button type="button" className="secondary-button" onClick={onLogout}>
-            Выйти из кабинета
-          </button>
+
+          <div className="doctor-heading" role="presentation">
+            <div className="doctor-heading-row">
+              <h1>Кабинет врача</h1>
+              <button type="button" className="secondary-button doctor-logout" onClick={onLogout}>
+                Выйти из кабинета
+              </button>
+            </div>
+            <p className="lead">
+              Управляйте пациентами, назначайте упражнения и следите за прогрессом прямо из браузера.
+            </p>
+          </div>
         </div>
         {isLoading && <p className="muted">Загружаем данные кабинета...</p>}
         {loadError && (
@@ -1131,10 +1197,19 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
                   </section>
                   <section>
                     <h4>Завершённые</h4>
-                    <ul className="appointment-list">
-                      {appointmentsByStatus.past.map((appointment) => renderAppointment(appointment))}
+                    <ul
+                      className="appointment-list completed-appointment-list"
+                      onScroll={handleCompletedScroll}
+                      ref={completedListRef}
+                    >
+                      {visibleCompletedAppointments.map((appointment) => renderAppointment(appointment))}
                       {appointmentsByStatus.past.length === 0 && (
                         <li className="muted">Нет завершённых назначений.</li>
+                      )}
+                      {appointmentsByStatus.past.length > visibleCompletedAppointments.length && (
+                        <li className="muted" role="status">
+                          Прокрутите вниз, чтобы посмотреть остальные назначения…
+                        </li>
                       )}
                     </ul>
                   </section>
