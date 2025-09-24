@@ -15,6 +15,11 @@ if BASE_DIR not in sys.path:
 from app.core.config import get_settings  # noqa: E402
 
 config = context.config
+db_url = os.getenv("DATABASE_URL")
+if not db_url:
+    raise RuntimeError("DATABASE_URL is not set; please export it or set in compose")
+
+config.set_main_option("sqlalchemy.url", db_url)
 settings = get_settings()
 
 if config.config_file_name is not None:
