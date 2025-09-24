@@ -1,16 +1,21 @@
 palsy-training.ru {
-    @api path /api/*
-    reverse_proxy @api backend:8000
+    route {
+        handle_path /api/* {
+            reverse_proxy backend:8000
+        }
 
-    # Раздаём собранный фронтенд
-    root * /srv
+        handle {
+            # Раздаём собранный фронтенд
+            root * /srv
 
-    # Сжатие
-    encode zstd gzip
+            # Сжатие
+            encode zstd gzip
 
-    # SPA fallback: если файла нет — отдаём index.html
-    try_files {path} /index.html
+            # SPA fallback: если файла нет — отдаём index.html
+            try_files {path} /index.html
 
-    # Включаем файловый сервер
-    file_server
+            # Включаем файловый сервер
+            file_server
+        }
+    }
 }
