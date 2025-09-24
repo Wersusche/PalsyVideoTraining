@@ -1,4 +1,7 @@
 palsy-training.ru {
+    @api path /api/*
+    reverse_proxy @api backend:8000
+
     # Раздаём собранный фронтенд
     root * /srv
 
