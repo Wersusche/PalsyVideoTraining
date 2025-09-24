@@ -1,6 +1,14 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# Ensure the database URL is available inside the container
+if [ -z "${DATABASE_URL:-}" ]; then
+  echo "DATABASE_URL environment variable is not set" >&2
+  exit 1
+fi
+
+echo "Using DATABASE_URL=${DATABASE_URL}"
+
 # Wait for the database to be ready before running migrations
 if [ -n "${DATABASE_URL:-}" ]; then
   python <<'PYTHON'

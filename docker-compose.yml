@@ -6,7 +6,8 @@ services:
       DATABASE_URL: ${DATABASE_URL:-postgresql://app:app@db:5432/app}
       PROJECT_NAME: ${PROJECT_NAME:-myapp}
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     volumes:
       - ./backend:/app
       - media-data:/media
