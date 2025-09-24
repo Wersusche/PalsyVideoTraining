@@ -61,7 +61,7 @@ jobs:
           set -euo pipefail
           cd "$DEPLOY_PATH"
           docker compose pull
-          export UID=$(id -u)
-          export GID=$(id -g)
+          export APP_UID=$(id -u)
+          export APP_GID=$(id -g)
           docker compose up -d --build --remove-orphans
           REMOTE
