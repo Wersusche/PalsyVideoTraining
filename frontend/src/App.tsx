@@ -19,10 +19,6 @@ const roleContent: Record<Role, RoleContent> = {
     description:
       'Получите доступ к инструментам назначения упражнений и отслеживания прогресса пациентов.',
     redirectMessage: 'После авторизации вы перейдёте в кабинет врача.',
-    demoCredentials: {
-      login: 'klinikanz',
-      password: 'welove23041987',
-    },
   },
   patient: {
     title: 'Вход для пациентов',
@@ -57,7 +53,6 @@ const App = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
-  const doctorDemoCredentials = roleContent.doctor.demoCredentials;
   const patientDemoCredentials = roleContent.patient.demoCredentials;
   const activeRoleContent = activeRole ? roleContent[activeRole] : null;
 
@@ -224,8 +219,8 @@ const App = () => {
         <div className="auth-card">
           <h2>Войдите в платформу</h2>
           <p>
-            Выберите тип доступа, чтобы продолжить. Сейчас доступны демонстрационные учётные записи
-            для врачей и пациентов.
+            Выберите тип доступа, чтобы продолжить. Сейчас доступна демонстрационная учётная запись
+            пациента.
           </p>
           <div className="auth-actions">
             <button type="button" className="auth-button" onClick={() => openModal('doctor')}>
@@ -239,16 +234,11 @@ const App = () => {
               Вход для пациентов
             </button>
           </div>
-          <small className="auth-hint">
-            Демо-доступ:
-            {doctorDemoCredentials
-              ? ` ${doctorDemoCredentials.login}/${doctorDemoCredentials.password}`
-              : ''}
-            {doctorDemoCredentials && patientDemoCredentials ? ' и' : ''}
-            {patientDemoCredentials
-              ? ` ${patientDemoCredentials.login}/${patientDemoCredentials.password}`
-              : ''}
-          </small>
+          {patientDemoCredentials && (
+            <small className="auth-hint">
+              Демо-доступ: {patientDemoCredentials.login}/{patientDemoCredentials.password}
+            </small>
+          )}
         </div>
       </div>
 

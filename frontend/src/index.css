@@ -354,6 +354,37 @@ footer {
   max-width: 720px;
 }
 
+.doctor-page .page-header {
+  max-width: none;
+  width: 100%;
+}
+
+.doctor-header-top {
+  display: flex;
+  gap: 1.5rem;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.doctor-heading {
+  flex: 1 1 320px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.doctor-heading-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.doctor-logout {
+  margin-left: auto;
+  align-self: flex-start;
+}
+
 .page-body {
   max-width: 720px;
   line-height: 1.7;
@@ -376,14 +407,6 @@ footer {
 .secondary-button:hover {
   transform: translateY(-1px);
   box-shadow: 0 16px 28px rgba(79, 70, 229, 0.25);
-}
-
-.doctor-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1.5rem;
-  align-items: center;
-  justify-content: space-between;
 }
 
 .doctor-stat-cards {
@@ -420,6 +443,19 @@ footer {
   font-size: 1.75rem;
   font-weight: 700;
   color: #1f2937;
+}
+
+.completed-appointment-list {
+  max-height: 20rem;
+  overflow-y: auto;
+  padding-right: 0.5rem;
+  scroll-behavior: smooth;
+}
+
+.completed-appointment-list li:last-child.muted {
+  margin-top: 0.75rem;
+  font-size: 0.875rem;
+  color: #6b7280;
 }
 
 .doctor-layout {
