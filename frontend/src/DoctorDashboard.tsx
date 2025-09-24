@@ -608,7 +608,7 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
     );
   };
 
-  const handleDeletePatient = (patientId: number) => {
+  const handleDeletePatient = async (patientId: number) => {
     const patient = patients.find((item) => item.id === patientId);
     if (!patient) return;
 
@@ -617,6 +617,20 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
     );
 
     if (!confirmed) {
+      return;
+    }
+
+    try {
+      const response = await fetch(`/api/patients/${patientId}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to delete patient');
+      }
+    } catch (error) {
+      console.error(error);
+      window.alert('Не удалось удалить пациента. Попробуйте позже.');
       return;
     }
 

@@ -1,7 +1,7 @@
 from collections import defaultdict
 from typing import Any
 
-from fastapi import Depends, FastAPI
+from fastapi import Depends, FastAPI, HTTPException
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -225,3 +225,34 @@ async def get_doctor_dashboard(
         exercises=exercises,
         disorderExerciseMap={key: value for key, value in disorder_exercise_map.items()},
     )
+
+
+@app.delete("/api/patients/{patient_id}", status_code=204)
+async def delete_patient(patient_id: int, db: AsyncSession = Depends(get_session)) -> None:
+    patient_exists = await db.execute(
+        text(
+            """
+            SELECT 1
+            FROM "patients"
+            WHERE "idPatients" = :patient_id
+            """
+        ),
+        {"patient_id": patient_id},
+    )
+
+    if patient_exists.scalar() is None:
+        raise HTTPException(status_code=404, detail="Patient not found")
+
+    await db.execute(
+        text('DELETE FROM "appointments" WHERE "idPatients" = :patient_id'),
+        {"patient_id": patient_id},
+    )
+    await db.execute(
+        text('DELETE FROM "patient_disorders" WHERE "patient_id" = :patient_id'),
+        {"patient_id": patient_id},
+    )
+    await db.execute(
+        text('DELETE FROM "patients" WHERE "idPatients" = :patient_id'),
+        {"patient_id": patient_id},
+    )
+    await db.commit()
