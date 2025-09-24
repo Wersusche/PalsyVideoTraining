@@ -64,4 +64,31 @@ jobs:
           export APP_UID=$(id -u)
           export APP_GID=$(id -g)
           docker compose up -d --build --remove-orphans db backend caddy
+
+          services=(db backend caddy)
+          failed=0
+
+          for service in "${services[@]}"; do
+            container_id="$(docker compose ps -q "$service")"
+
+            if [ -z "$container_id" ]; then
+              echo "Service $service did not start: missing container id" >&2
+              failed=1
+              continue
+            fi
+
+            status="$(docker inspect -f '{{.State.Status}}' "$container_id")"
+
+            if [ "$status" != "running" ]; then
+              echo "Service $service failed to start (status: $status)" >&2
+              echo "---- $service logs ----" >&2
+              docker compose logs "$service" >&2 || true
+              echo "---- end $service logs ----" >&2
+              failed=1
+            fi
+          done
+
+          if [ "$failed" -ne 0 ]; then
+            exit 1
+          fi
           REMOTE
