@@ -1,4 +1,5 @@
 import { FormEvent, useMemo, useState } from 'react';
+import DoctorDashboard from './DoctorDashboard';
 
 type Role = 'doctor' | 'patient';
 
@@ -26,13 +27,6 @@ const credentialsMap: Record<Role, Credentials> = {
     description: 'Откройте персональный план тренировок и рекомендации от специалистов.',
     redirectMessage: 'После авторизации вы перейдёте в личный кабинет пациента.',
   },
-};
-
-const doctorPageContent = {
-  title: 'Кабинет врача',
-  lead: 'Здесь появится рабочая область для назначения программ реабилитации.',
-  description:
-    'Мы готовим инструменты для создания индивидуальных планов, мониторинга выполнения и коммуникации с пациентами. Следите за обновлениями — функциональность появится в ближайших релизах.',
 };
 
 const patientPageContent = {
@@ -96,20 +90,7 @@ const App = () => {
   };
 
   if (view === 'doctor') {
-    return (
-      <div className="app page doctor-page">
-        <header className="page-header">
-          <h1>{doctorPageContent.title}</h1>
-          <p className="lead">{doctorPageContent.lead}</p>
-          <button type="button" className="secondary-button" onClick={handleLogout}>
-            Выйти
-          </button>
-        </header>
-        <main className="page-body">
-          <p>{doctorPageContent.description}</p>
-        </main>
-      </div>
-    );
+    return <DoctorDashboard onLogout={handleLogout} />;
   }
 
   if (view === 'patient') {
