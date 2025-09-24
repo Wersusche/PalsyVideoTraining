@@ -136,6 +136,7 @@ const getAge = (birthDate: string) => {
 
 const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
   const [patients, setPatients] = useState<Patient[]>([]);
+  const [patientSearch, setPatientSearch] = useState('');
   const [selectedPatientId, setSelectedPatientId] = useState<number | null>(null);
   const [disorders, setDisorders] = useState<Disorder[]>([]);
   const [exercises, setExercises] = useState<Exercise[]>([]);
@@ -161,6 +162,15 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
     minutes: '05',
     seconds: '00',
   });
+
+  const getLatestPatientId = (list: Patient[]) => {
+    if (list.length === 0) {
+      return null;
+    }
+
+    const [latest] = [...list].sort((a, b) => b.id - a.id);
+    return latest?.id ?? null;
+  };
 
   useEffect(() => {
     let isMounted = true;
@@ -192,11 +202,12 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
           {} as Record<number, number[]>,
         );
         setDisorderExerciseMap(normalizedDisorderMap);
+        const latestPatientId = getLatestPatientId(data.patients);
         setSelectedPatientId((prev) => {
           if (prev && data.patients.some((patient) => patient.id === prev)) {
             return prev;
           }
-          return data.patients[0]?.id ?? null;
+          return latestPatientId;
         });
         setLoadError(null);
       } catch (error) {
@@ -223,6 +234,61 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
   }, [selectedPatientId]);
 
   const selectedPatient = patients.find((patient) => patient.id === selectedPatientId) ?? null;
+
+  const displayedPatients = useMemo(() => {
+    if (patients.length === 0) {
+      return [] as Patient[];
+    }
+
+    const normalizedSearch = patientSearch.replace(/\s+/g, ' ').trim().toLowerCase();
+
+    if (!normalizedSearch) {
+      return [...patients].sort((a, b) => b.id - a.id).slice(0, 5);
+    }
+
+    type RankedPatient = {
+      patient: Patient;
+      priority: number;
+      position: number;
+      referenceName: string;
+    };
+
+    const ranked: RankedPatient[] = [];
+
+    patients.forEach((patient) => {
+      const lastFirst = `${patient.lastName} ${patient.firstName}`.trim().toLowerCase();
+      const firstLast = `${patient.firstName} ${patient.lastName}`.trim().toLowerCase();
+
+      const matches = [lastFirst.indexOf(normalizedSearch), firstLast.indexOf(normalizedSearch)].filter(
+        (index) => index >= 0,
+      );
+
+      if (matches.length === 0) {
+        return;
+      }
+
+      const bestPosition = Math.min(...matches);
+      const priority = matches.some((index) => index === 0) ? 0 : 1;
+      ranked.push({
+        patient,
+        priority,
+        position: bestPosition,
+        referenceName: lastFirst || firstLast,
+      });
+    });
+
+    ranked.sort((a, b) => {
+      if (a.priority !== b.priority) {
+        return a.priority - b.priority;
+      }
+      if (a.position !== b.position) {
+        return a.position - b.position;
+      }
+      return a.referenceName.localeCompare(b.referenceName);
+    });
+
+    return ranked.slice(0, 5).map((item) => item.patient);
+  }, [patients, patientSearch]);
 
   const groupedDisorders = useMemo(() => {
     return disorders.reduce<Record<string, Disorder[]>>((acc, item) => {
@@ -557,7 +623,7 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
     setPatients((prev) => {
       const updated = prev.filter((item) => item.id !== patientId);
       if (selectedPatientId === patientId) {
-        setSelectedPatientId(updated[0]?.id ?? null);
+        setSelectedPatientId(getLatestPatientId(updated));
       }
       return updated;
     });
@@ -785,6 +851,16 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
           <div className="panel">
             <header className="panel-header">
               <h2 id="patient-list-heading">Список пациентов</h2>
+              <div className="patient-search">
+                <input
+                  type="search"
+                  value={patientSearch}
+                  onChange={(event) => setPatientSearch(event.target.value)}
+                  placeholder="Поиск по фамилии и имени"
+                  aria-label="Поиск пациента по фамилии и имени"
+                  className="patient-search-input"
+                />
+              </div>
               <p className="panel-description">Выберите пациента для просмотра подробностей.</p>
             </header>
             <ul className="patient-list">
@@ -792,7 +868,7 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
                 <li className="patient-empty">Загрузка данных…</li>
               ) : (
                 <>
-                  {patients.map((patient) => (
+                  {displayedPatients.map((patient) => (
                     <li key={patient.id} className="patient-item">
                       <button
                         type="button"
@@ -813,8 +889,12 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
                       </button>
                     </li>
                   ))}
-                  {patients.length === 0 && (
+                  {patients.length === 0 ? (
                     <li className="patient-empty">Пациентов пока нет</li>
+                  ) : (
+                    displayedPatients.length === 0 && (
+                      <li className="patient-empty">Ничего не найдено</li>
+                    )
                   )}
                 </>
               )}
