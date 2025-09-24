@@ -4,6 +4,7 @@ import random
 import re
 from typing import Any
 
+import bcrypt
 from fastapi import Depends, FastAPI, HTTPException
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -61,6 +62,15 @@ class PatientCreateRequest(BaseModel):
     generateCredentials: bool = False
     username: str | None = None
     password: str | None = None
+
+
+class DoctorLoginRequest(BaseModel):
+    login: str
+    password: str
+
+
+class DoctorLoginResponse(BaseModel):
+    status: str = "ok"
 
 
 class DoctorDashboardResponse(BaseModel):
@@ -164,6 +174,51 @@ async def _username_exists(db: AsyncSession, username: str) -> bool:
         {"username": username},
     )
     return result.scalar() is not None
+
+
+def _coerce_to_str(value: Any) -> str:
+    if value is None:
+        return ""
+    if isinstance(value, memoryview):
+        return value.tobytes().decode("utf-8", "ignore")
+    return str(value)
+
+
+def _verify_password(plain_password: str, hashed_password: str) -> bool:
+    if not plain_password or not hashed_password:
+        return False
+    try:
+        return bcrypt.checkpw(
+            plain_password.encode("utf-8"), hashed_password.encode("utf-8")
+        )
+    except ValueError:
+        return False
+
+
+@app.post("/api/doctor-login", response_model=DoctorLoginResponse)
+async def doctor_login(
+    payload: DoctorLoginRequest, db: AsyncSession = Depends(get_session)
+) -> DoctorLoginResponse:
+    login = payload.login.strip()
+    if not login:
+        raise HTTPException(status_code=401, detail="Неверный логин или пароль.")
+
+    doctor_row = (
+        await db.execute(
+            text('SELECT "Password" FROM "doctors" WHERE "Login" = :login'),
+            {"login": login},
+        )
+    ).mappings().first()
+
+    if not doctor_row:
+        raise HTTPException(status_code=401, detail="Неверный логин или пароль.")
+
+    stored_password = _coerce_to_str(doctor_row.get("Password"))
+
+    if not stored_password or not _verify_password(payload.password, stored_password):
+        raise HTTPException(status_code=401, detail="Неверный логин или пароль.")
+
+    return DoctorLoginResponse()
 
 
 async def _generate_unique_username(

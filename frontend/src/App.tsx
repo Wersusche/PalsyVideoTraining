@@ -3,29 +3,35 @@ import DoctorDashboard from './DoctorDashboard';
 
 type Role = 'doctor' | 'patient';
 
-type Credentials = {
-  login: string;
-  password: string;
+type RoleContent = {
   title: string;
   description: string;
   redirectMessage: string;
+  demoCredentials?: {
+    login: string;
+    password: string;
+  };
 };
 
-const credentialsMap: Record<Role, Credentials> = {
+const roleContent: Record<Role, RoleContent> = {
   doctor: {
-    login: 'doctor',
-    password: '123',
     title: 'Вход для врачей',
     description:
       'Получите доступ к инструментам назначения упражнений и отслеживания прогресса пациентов.',
     redirectMessage: 'После авторизации вы перейдёте в кабинет врача.',
+    demoCredentials: {
+      login: 'klinikanz',
+      password: 'welove23041987',
+    },
   },
   patient: {
-    login: 'user',
-    password: '123',
     title: 'Вход для пациентов',
     description: 'Откройте персональный план тренировок и рекомендации от специалистов.',
     redirectMessage: 'После авторизации вы перейдёте в личный кабинет пациента.',
+    demoCredentials: {
+      login: 'user',
+      password: '123',
+    },
   },
 };
 
@@ -51,6 +57,10 @@ const App = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
+  const doctorDemoCredentials = roleContent.doctor.demoCredentials;
+  const patientDemoCredentials = roleContent.patient.demoCredentials;
+  const activeRoleContent = activeRole ? roleContent[activeRole] : null;
+
   const openModal = (role: Role) => {
     setActiveRole(role);
     setLogin('');
@@ -63,16 +73,62 @@ const App = () => {
     setError('');
   };
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (!activeRole) {
       return;
     }
 
-    const expected = credentialsMap[activeRole];
+    setError('');
 
-    if (login.trim() === expected.login && password === expected.password) {
+    const normalizedLogin = login.trim();
+
+    if (activeRole === 'doctor') {
+      if (!normalizedLogin || !password) {
+        setError('Введите логин и пароль.');
+        return;
+      }
+
+      try {
+        const response = await fetch('/api/doctor-login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ login: normalizedLogin, password }),
+        });
+
+        if (response.ok) {
+          setView('doctor');
+          closeModal();
+          return;
+        }
+
+        let message = 'Неверный логин или пароль. Попробуйте ещё раз.';
+        const contentType = response.headers.get('content-type') ?? '';
+
+        if (contentType.includes('application/json')) {
+          const data = await response.json();
+          if (typeof data?.detail === 'string' && data.detail.trim() !== '') {
+            message = data.detail;
+          }
+        } else {
+          const text = (await response.text()).trim();
+          if (text !== '') {
+            message = text;
+          }
+        }
+
+        setError(message);
+      } catch (error_) {
+        setError('Не удалось связаться с сервером. Проверьте соединение и попробуйте снова.');
+      }
+
+      return;
+    }
+
+    const expected = roleContent[activeRole].demoCredentials;
+
+    if (expected && normalizedLogin === expected.login && password === expected.password) {
       setView(activeRole);
       closeModal();
       return;
@@ -183,7 +239,16 @@ const App = () => {
               Вход для пациентов
             </button>
           </div>
-          <small className="auth-hint">Демо-доступ: doctor/123 и user/123</small>
+          <small className="auth-hint">
+            Демо-доступ:
+            {doctorDemoCredentials
+              ? ` ${doctorDemoCredentials.login}/${doctorDemoCredentials.password}`
+              : ''}
+            {doctorDemoCredentials && patientDemoCredentials ? ' и' : ''}
+            {patientDemoCredentials
+              ? ` ${patientDemoCredentials.login}/${patientDemoCredentials.password}`
+              : ''}
+          </small>
         </div>
       </div>
 
@@ -198,9 +263,17 @@ const App = () => {
             <button type="button" className="auth-close" onClick={closeModal} aria-label="Закрыть окно">
               ×
             </button>
-            <h3 id="auth-modal-title">{credentialsMap[activeRole].title}</h3>
-            <p>{credentialsMap[activeRole].description}</p>
-            <p className="auth-redirect">{credentialsMap[activeRole].redirectMessage}</p>
+            <h3 id="auth-modal-title">{activeRoleContent?.title}</h3>
+            {activeRoleContent?.description && <p>{activeRoleContent.description}</p>}
+            {activeRoleContent?.redirectMessage && (
+              <p className="auth-redirect">{activeRoleContent.redirectMessage}</p>
+            )}
+            {activeRoleContent?.demoCredentials && (
+              <p className="auth-hint">
+                Демо-доступ: {activeRoleContent.demoCredentials.login}/
+                {activeRoleContent.demoCredentials.password}
+              </p>
+            )}
 
             <form className="auth-form" onSubmit={handleSubmit}>
               <label className="auth-label">
@@ -210,7 +283,12 @@ const App = () => {
                   type="text"
                   autoComplete="username"
                   value={login}
-                  onChange={(event) => setLogin(event.target.value)}
+                  onChange={(event) => {
+                    setLogin(event.target.value);
+                    if (error) {
+                      setError('');
+                    }
+                  }}
                   className="auth-input"
                   required
                 />
@@ -223,7 +301,12 @@ const App = () => {
                   type="password"
                   autoComplete="current-password"
                   value={password}
-                  onChange={(event) => setPassword(event.target.value)}
+                  onChange={(event) => {
+                    setPassword(event.target.value);
+                    if (error) {
+                      setError('');
+                    }
+                  }}
                   className="auth-input"
                   required
                 />
