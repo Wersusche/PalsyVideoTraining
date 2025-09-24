@@ -30,7 +30,7 @@ services:
 
   frontend:
     image: node:20-alpine
-    user: "${UID:-1000}:${GID:-1000}"
+    user: "${APP_UID:-1000}:${APP_GID:-1000}"
     working_dir: /app
     environment:
       - HOME=/tmp
