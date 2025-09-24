@@ -19,7 +19,9 @@ class Settings(BaseSettings):
 
         url = str(self.database_url)
 
-        if "+" in url:
+        scheme = url.split("://", 1)[0]
+
+        if "+" in scheme:
             return url
 
         if url.startswith("postgresql://"):
