@@ -602,8 +602,8 @@ $$;
 COMMENT ON FUNCTION reset_field_event IS 'Call daily (for example via cron) to reset per-day counters.';
 COMMENT ON FUNCTION update_done_percent_event IS 'Call daily (for example via cron) to refresh done_percent similar to the MySQL event.';
 
-SELECT setval(pg_get_serial_sequence('"appointments"', '"idAppointments"'), 646, true);
-SELECT setval(pg_get_serial_sequence('"disorders"', '"idDisorders"'), 24, true);
-SELECT setval(pg_get_serial_sequence('"doctors"', '"idDoctors"'), 1, true);
-SELECT setval(pg_get_serial_sequence('"patients"', '"idPatients"'), 63, true);
-SELECT setval(pg_get_serial_sequence('"videos"', '"idvideos"'), 71, true);
+SELECT setval(pg_get_serial_sequence('"appointments"', 'idAppointments'), 646, true);
+SELECT setval(pg_get_serial_sequence('"disorders"', 'idDisorders'), 24, true);
+SELECT setval(pg_get_serial_sequence('"doctors"', 'idDoctors'), 1, true);
+SELECT setval(pg_get_serial_sequence('"patients"', 'idPatients'), 63, true);
+SELECT setval(pg_get_serial_sequence('"videos"', 'idvideos'), 71, true);
