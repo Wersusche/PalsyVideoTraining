@@ -24,8 +24,7 @@ def upgrade() -> None:
         sa.text(
             "UPDATE \"doctors\" SET \"Login\" = :login, \"Password\" = :password "
             "WHERE \"Login\" IS NULL AND \"idDoctors\" = 1"
-        ),
-        {"login": "doctor", "password": "123"},
+        ).bindparams(login="doctor", password="123")
     )
 
 
