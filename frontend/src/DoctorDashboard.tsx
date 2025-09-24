@@ -1,4 +1,4 @@
-import { ChangeEvent, FormEvent, useMemo, useState } from 'react';
+import { ChangeEvent, FormEvent, useEffect, useMemo, useState } from 'react';
 
 type Disorder = {
   id: number;
@@ -238,6 +238,10 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
     minutes: '05',
     seconds: '00',
   });
+
+  useEffect(() => {
+    setSelectedExercises([]);
+  }, [selectedPatientId]);
 
   const selectedPatient = patients.find((patient) => patient.id === selectedPatientId) ?? null;
 
