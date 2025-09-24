@@ -1,4 +1,7 @@
 from collections import defaultdict
+from datetime import date
+import random
+import re
 from typing import Any
 
 from fastapi import Depends, FastAPI, HTTPException
@@ -50,6 +53,16 @@ class PatientSchema(BaseModel):
     appointments: list[AppointmentSchema]
 
 
+class PatientCreateRequest(BaseModel):
+    firstName: str
+    lastName: str
+    middleName: str | None = None
+    birthDate: date
+    generateCredentials: bool = False
+    username: str | None = None
+    password: str | None = None
+
+
 class DoctorDashboardResponse(BaseModel):
     patients: list[PatientSchema]
     disorders: list[DisorderSchema]
@@ -71,6 +84,105 @@ def _to_iso_date(value: Any) -> str:
     except AttributeError:
         return str(value)
 
+
+_TRANSLIT_MAP: dict[str, str] = {
+    "а": "a",
+    "б": "b",
+    "в": "v",
+    "г": "g",
+    "д": "d",
+    "е": "e",
+    "ё": "yo",
+    "ж": "zh",
+    "з": "z",
+    "и": "i",
+    "й": "y",
+    "к": "k",
+    "л": "l",
+    "м": "m",
+    "н": "n",
+    "о": "o",
+    "п": "p",
+    "р": "r",
+    "с": "s",
+    "т": "t",
+    "у": "u",
+    "ф": "f",
+    "х": "h",
+    "ц": "ts",
+    "ч": "ch",
+    "ш": "sh",
+    "щ": "sch",
+    "ъ": "",
+    "ы": "y",
+    "ь": "",
+    "э": "e",
+    "ю": "yu",
+    "я": "ya",
+}
+
+
+def _transliterate(value: str) -> str:
+    return "".join(_TRANSLIT_MAP.get(char, char) for char in value.lower())
+
+
+def _generate_random_password() -> str:
+    letters = "abcdefghijkmnopqrstuvwxyz"
+    digits = "0123456789"
+    digits_at_start = random.random() < 0.5
+    result = ""
+
+    def random_letter() -> str:
+        return random.choice(letters)
+
+    def random_digit() -> str:
+        return random.choice(digits)
+
+    if digits_at_start:
+        result += random_digit()
+        result += random_digit()
+
+    for _ in range(4):
+        result += random_letter()
+
+    if not digits_at_start:
+        result += random_digit()
+        result += random_digit()
+
+    return result
+
+
+def _filter_alpha_numeric(value: str) -> str:
+    return re.sub(r"[^A-Za-z0-9]", "", value)
+
+
+async def _username_exists(db: AsyncSession, username: str) -> bool:
+    if not username:
+        return False
+    result = await db.execute(
+        text('SELECT 1 FROM "patients" WHERE "Username" = :username'),
+        {"username": username},
+    )
+    return result.scalar() is not None
+
+
+async def _generate_unique_username(
+    db: AsyncSession, first_name: str, last_name: str
+) -> str:
+    first = _transliterate(first_name)
+    last = _transliterate(last_name)
+    base = f"{first}.{last[:1]}"
+    candidate = base or "user"
+
+    if not await _username_exists(db, candidate):
+        return candidate
+
+    counter = 2
+    while True:
+        new_candidate = f"{base}{counter}" if base else f"user{counter}"
+        if not await _username_exists(db, new_candidate):
+            return new_candidate
+        counter += 1
 
 @app.get("/api/doctor-dashboard", response_model=DoctorDashboardResponse)
 async def get_doctor_dashboard(
@@ -224,6 +336,70 @@ async def get_doctor_dashboard(
         disorders=disorders,
         exercises=exercises,
         disorderExerciseMap={key: value for key, value in disorder_exercise_map.items()},
+    )
+
+
+@app.post("/api/patients", response_model=PatientSchema, status_code=201)
+async def create_patient(
+    payload: PatientCreateRequest, db: AsyncSession = Depends(get_session)
+) -> PatientSchema:
+    first_name = payload.firstName.strip()
+    last_name = payload.lastName.strip()
+    middle_name_raw = (payload.middleName or "").strip()
+
+    if not first_name or not last_name:
+        raise HTTPException(status_code=400, detail="Укажите фамилию и имя пациента.")
+
+    if payload.generateCredentials:
+        username = await _generate_unique_username(db, first_name, last_name)
+        password = _generate_random_password()
+    else:
+        username_input = _filter_alpha_numeric((payload.username or "").strip())
+        if not username_input:
+            raise HTTPException(status_code=400, detail="Введите логин пациента.")
+        if await _username_exists(db, username_input):
+            raise HTTPException(
+                status_code=400,
+                detail="Такой логин уже существует. Укажите другой.",
+            )
+        username = username_input
+        password = (payload.password or "").strip() or _generate_random_password()
+
+    insert_result = await db.execute(
+        text(
+            """
+            INSERT INTO "patients" ("Name", "Surname", "Secname", "Birthdate", "Username", "Password")
+            VALUES (:first_name, :last_name, :middle_name, :birth_date, :username, :password)
+            RETURNING "idPatients"
+            """
+        ),
+        {
+            "first_name": first_name,
+            "last_name": last_name,
+            "middle_name": middle_name_raw or None,
+            "birth_date": payload.birthDate,
+            "username": username,
+            "password": password,
+        },
+    )
+    row = insert_result.fetchone()
+    if row is None:
+        await db.rollback()
+        raise HTTPException(status_code=500, detail="Не удалось сохранить пациента.")
+
+    await db.commit()
+
+    patient_id = int(row[0])
+    return PatientSchema(
+        id=patient_id,
+        firstName=first_name,
+        lastName=last_name,
+        middleName=middle_name_raw,
+        birthDate=payload.birthDate.isoformat(),
+        username=username,
+        password=password,
+        disorders=[],
+        appointments=[],
     )
 
 
