@@ -723,6 +723,10 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
         return 0;
       }
 
+      if (prev === 0) {
+        return initialCount;
+      }
+
       if (prev > total) {
         return total;
       }
