@@ -30,8 +30,11 @@ services:
 
   frontend:
     image: node:20-alpine
+    user: "${UID:-1000}:${GID:-1000}"
     working_dir: /app
-    user: "${APP_UID:-1000}:${APP_GID:-1000}"
+    environment:
+      - HOME=/tmp
+      - NPM_CONFIG_CACHE=/tmp/.npm
     volumes:
       - ./frontend:/app
       - frontend-node-modules:/app/node_modules
