@@ -401,7 +401,7 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
     return candidate;
   };
 
-  const handleAddPatient = (event: FormEvent<HTMLFormElement>) => {
+  const handleAddPatient = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setFormMessage(null);
 
@@ -425,25 +425,49 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
     }
 
     const password = autoCredentials
-      ? generateRandomPassword()
+      ? undefined
       : newPatient.password || generateRandomPassword();
 
-    const createdPatient: Patient = {
-      id: Date.now(),
+    const payload = {
       firstName: newPatient.firstName.trim(),
       lastName: newPatient.lastName.trim(),
-      middleName: newPatient.middleName.trim(),
+      middleName: newPatient.middleName.trim() || null,
       birthDate: newPatient.birthDate,
-      username,
+      generateCredentials: autoCredentials,
+      username: autoCredentials ? undefined : username.trim(),
       password,
-      disorders: [],
-      appointments: [],
     };
 
-    setPatients((prev) => [...prev, createdPatient]);
-    setSelectedPatientId(createdPatient.id);
-    resetForm();
-    setFormMessage('Пациент добавлен. Передайте ему логин и пароль.');
+    try {
+      const response = await fetch('/api/patients', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+
+      const data = (await response.json().catch(() => null)) as
+        | { detail?: string }
+        | Patient
+        | null;
+
+      if (!response.ok || !data || 'detail' in data) {
+        const message = data && 'detail' in data && data.detail
+          ? data.detail
+          : 'Не удалось сохранить пациента. Попробуйте ещё раз.';
+        throw new Error(message);
+      }
+
+      const createdPatient = data as Patient;
+      setPatients((prev) => [...prev, createdPatient]);
+      setSelectedPatientId(createdPatient.id);
+      resetForm();
+      setFormMessage('Пациент добавлен. Передайте ему логин и пароль.');
+    } catch (error) {
+      const message = error instanceof Error
+        ? error.message
+        : 'Не удалось сохранить пациента. Попробуйте ещё раз.';
+      setFormMessage(message);
+    }
   };
 
   const toggleDisorder = (disorderId: number) => {
