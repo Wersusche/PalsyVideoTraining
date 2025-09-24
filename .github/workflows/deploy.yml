@@ -63,6 +63,5 @@ jobs:
           docker compose pull
           export APP_UID=$(id -u)
           export APP_GID=$(id -g)
-          docker compose run --rm -T frontend
           docker compose up -d --build --remove-orphans db backend caddy
           REMOTE
