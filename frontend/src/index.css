@@ -413,6 +413,8 @@ footer {
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
+  margin-left: auto;
+  justify-content: flex-end;
 }
 
 .stat-card {
