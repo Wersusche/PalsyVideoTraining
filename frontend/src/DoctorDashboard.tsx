@@ -794,6 +794,20 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
           <div className="doctor-heading" role="presentation">
             <div className="doctor-heading-row">
               <h1>Кабинет врача</h1>
+              <div className="doctor-stat-cards" role="list">
+                <article className="stat-card" role="listitem">
+                  <span className="stat-label">Пациентов в базе</span>
+                  <span className="stat-value">{stats.total}</span>
+                </article>
+                <article className="stat-card" role="listitem">
+                  <span className="stat-label">Активные назначения</span>
+                  <span className="stat-value">{stats.active}</span>
+                </article>
+                <article className="stat-card warning" role="listitem">
+                  <span className="stat-label">Низкий прогресс</span>
+                  <span className="stat-value">{stats.atRisk}</span>
+                </article>
+              </div>
               <button type="button" className="secondary-button doctor-logout" onClick={onLogout}>
                 Выйти из кабинета
               </button>
@@ -801,20 +815,6 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
             <p className="lead">
               Управляйте пациентами, назначайте упражнения и следите за прогрессом прямо из браузера.
             </p>
-          </div>
-          <div className="doctor-stat-cards" role="list">
-            <article className="stat-card" role="listitem">
-              <span className="stat-label">Пациентов в базе</span>
-              <span className="stat-value">{stats.total}</span>
-            </article>
-            <article className="stat-card" role="listitem">
-              <span className="stat-label">Активные назначения</span>
-              <span className="stat-value">{stats.active}</span>
-            </article>
-            <article className="stat-card warning" role="listitem">
-              <span className="stat-label">Низкий прогресс</span>
-              <span className="stat-value">{stats.atRisk}</span>
-            </article>
           </div>
         </div>
         {isLoading && <p className="muted">Загружаем данные кабинета...</p>}
