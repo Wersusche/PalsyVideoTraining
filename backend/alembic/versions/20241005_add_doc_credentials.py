@@ -4,7 +4,7 @@ from alembic import op
 import sqlalchemy as sa
 
 # revision identifiers, used by Alembic.
-revision = "20241005_01_add_doctor_login_password"
+revision = "20241005_add_doc_credentials"
 down_revision = "20240919_01_initial_schema"
 branch_labels = None
 depends_on = None
