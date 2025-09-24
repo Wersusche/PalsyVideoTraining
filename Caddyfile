@@ -1,6 +1,6 @@
 palsy-training.ru {
     # Раздаём собранный фронтенд
-    root * /home/deployer/app/frontend/dist
+    root * /srv
 
     # Сжатие
     encode zstd gzip
