@@ -157,6 +157,7 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
   });
   const [formMessage, setFormMessage] = useState<string | null>(null);
   const [showOnlyRecommended, setShowOnlyRecommended] = useState(true);
+  const [cognitiveStatus, setCognitiveStatus] = useState<'positive' | 'negative' | null>(null);
   const [selectedExercises, setSelectedExercises] = useState<number[]>([]);
   const [exerciseForm, setExerciseForm] = useState({
     start: new Date().toISOString().slice(0, 10),
@@ -351,11 +352,29 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
     );
   }, [patients]);
 
+  const isActiveExercise = useCallback((exercise: Exercise) => {
+    const type = exercise.type.trim().toLowerCase();
+    return type.includes('актив') || type.includes('active');
+  }, []);
+
+  const isPassiveExercise = useCallback((exercise: Exercise) => {
+    const type = exercise.type.trim().toLowerCase();
+    return type.includes('пассив') || type.includes('passive');
+  }, []);
+
   const categorizedExercises = useMemo(() => {
     return exercises.reduce<Record<string, Exercise[]>>((acc, exercise) => {
       if (showOnlyRecommended && selectedPatient) {
         const recommended = recommendedExercises.has(exercise.id);
         if (!recommended) {
+          return acc;
+        }
+
+        if (cognitiveStatus === 'positive' && !isActiveExercise(exercise)) {
+          return acc;
+        }
+
+        if (cognitiveStatus === 'negative' && !isPassiveExercise(exercise)) {
           return acc;
         }
       }
@@ -366,7 +385,21 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
       acc[exercise.type].push(exercise);
       return acc;
     }, {});
-  }, [exercises, recommendedExercises, selectedPatient, showOnlyRecommended]);
+  }, [
+    cognitiveStatus,
+    exercises,
+    isActiveExercise,
+    isPassiveExercise,
+    recommendedExercises,
+    selectedPatient,
+    showOnlyRecommended,
+  ]);
+
+  useEffect(() => {
+    if (!showOnlyRecommended) {
+      setCognitiveStatus(null);
+    }
+  }, [showOnlyRecommended]);
 
   const resetForm = () => {
     setNewPatient({
@@ -1080,6 +1113,31 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
                       />
                       Показывать упражнения по патологиям пациента
                     </label>
+                    {showOnlyRecommended && (
+                      <div className="cognitive-status-filter">
+                        <span className="cognitive-status-title">Когнитивный статус</span>
+                        <label className="form-checkbox">
+                          <input
+                            type="checkbox"
+                            checked={cognitiveStatus === 'negative'}
+                            onChange={(event) =>
+                              setCognitiveStatus(event.target.checked ? 'negative' : null)
+                            }
+                          />
+                          Отрицательный
+                        </label>
+                        <label className="form-checkbox">
+                          <input
+                            type="checkbox"
+                            checked={cognitiveStatus === 'positive'}
+                            onChange={(event) =>
+                              setCognitiveStatus(event.target.checked ? 'positive' : null)
+                            }
+                          />
+                          Положительный
+                        </label>
+                      </div>
+                    )}
                     <span className="exercise-counter">
                       Выбрано: {selectedExercises.length}
                     </span>
