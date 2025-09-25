@@ -1,9 +1,7 @@
 import { ChangeEvent, FormEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { AllCommunityModule, ModuleRegistry } from 'ag-grid-community';
+import { AllCommunityModule, ModuleRegistry, themeQuartz } from 'ag-grid-community';
 import type { ColDef, GridApi, GridReadyEvent, IDatasource, IGetRowsParams } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
-import 'ag-grid-community/styles/ag-grid.css';
-import 'ag-grid-community/styles/ag-theme-alpine.css';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
@@ -905,17 +903,20 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
     }
     if (!selectedTable) {
       setDatabaseColumns([]);
-      gridApiRef.current.setDatasource(emptyDataSource);
+      gridApiRef.current.setGridOption('datasource', emptyDataSource);
       return;
     }
     setDatabaseColumns([]);
-    gridApiRef.current.setDatasource(createDatasource(selectedTable));
+    gridApiRef.current.setGridOption('datasource', createDatasource(selectedTable));
   }, [selectedTable, emptyDataSource, createDatasource]);
 
   const handleGridReady = useCallback(
     (event: GridReadyEvent) => {
       gridApiRef.current = event.api;
-      event.api.setDatasource(selectedTable ? createDatasource(selectedTable) : emptyDataSource);
+      event.api.setGridOption(
+        'datasource',
+        selectedTable ? createDatasource(selectedTable) : emptyDataSource,
+      );
     },
     [emptyDataSource, selectedTable, createDatasource],
   );
@@ -1012,7 +1013,7 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
                 <p className="muted">Выберите таблицу, чтобы загрузить данные.</p>
               )}
               <div className="database-grid-wrapper">
-                <div className="ag-theme-alpine database-grid">
+                <div className="database-grid">
                   <AgGridReact
                     columnDefs={databaseColumns}
                     defaultColDef={databaseDefaultColDef}
@@ -1020,6 +1021,7 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
                     cacheBlockSize={100}
                     maxBlocksInCache={4}
                     onGridReady={handleGridReady}
+                    theme={themeQuartz}
                     suppressCellFocus
                     animateRows
                   />
