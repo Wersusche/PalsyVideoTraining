@@ -551,6 +551,11 @@ footer {
 .database-grid-wrapper {
   flex: 1;
   min-height: 24rem;
+  display: flex;
+  padding: 1.25rem;
+  border-radius: 1.25rem;
+  background: linear-gradient(135deg, rgba(248, 250, 252, 0.9), #ffffff);
+  box-shadow: 0 20px 45px rgba(15, 23, 42, 0.12);
 }
 
 .database-grid {
