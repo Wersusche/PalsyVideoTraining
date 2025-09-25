@@ -717,6 +717,18 @@ footer {
   flex-wrap: wrap;
 }
 
+.cognitive-status-filter {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.cognitive-status-title {
+  font-weight: 600;
+  color: #1f2937;
+}
+
 .exercise-counter {
   font-weight: 600;
   color: #1f2937;
