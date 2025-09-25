@@ -518,7 +518,8 @@ async def delete_patient(patient_id: int, db: AsyncSession = Depends(get_session
 
 
 def _quote_identifier(identifier: str) -> str:
-    return f'"{identifier.replace("\"", "\"\"")}"'
+    escaped = identifier.replace('"', '""')
+    return f'"{escaped}"'
 
 
 async def _get_public_tables(db: AsyncSession) -> list[str]:
