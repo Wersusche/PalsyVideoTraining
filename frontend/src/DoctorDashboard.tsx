@@ -1090,7 +1090,11 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
                 <p className="muted">Выберите таблицу, чтобы загрузить данные.</p>
               )}
               <div className="database-grid-wrapper">
-              <div className="database-grid" ref={gridContainerRef}>
+                <div
+                  className="database-grid ag-theme-quartz"
+                  ref={gridContainerRef}
+                  style={{ height: '70vh', minHeight: 360, width: '100%' }}
+                >
                   <AgGridReact
                     columnDefs={databaseColumns}
                     defaultColDef={databaseDefaultColDef}
@@ -1098,7 +1102,6 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
                     cacheBlockSize={100}
                     maxBlocksInCache={4}
                     onGridReady={handleGridReady}
-                    theme={themeQuartz}
                     suppressCellFocus
                     animateRows
                   />
