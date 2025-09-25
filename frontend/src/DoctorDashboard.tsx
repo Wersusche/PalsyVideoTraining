@@ -194,6 +194,7 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
   const [databaseColumns, setDatabaseColumns] = useState<ColDef[]>([]);
   const [tableError, setTableError] = useState<string | null>(null);
   const gridApiRef = useRef<GridApi | null>(null);
+  const gridMutationObserverRef = useRef<MutationObserver | null>(null);
   const emptyDataSource = useMemo<IDatasource>(
     () => ({
       getRows: (params: IGetRowsParams) => {
@@ -897,6 +898,51 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
     [setDatabaseColumns, setTableError],
   );
 
+  const sanitizeGridStyles = useCallback((root: Element | null) => {
+    if (!root) {
+      return;
+    }
+
+    const supportsCssValidation = typeof CSS !== 'undefined' && typeof CSS.supports === 'function';
+
+    const processElement = (element: Element) => {
+      if (element.hasAttribute('enable-background')) {
+        element.removeAttribute('enable-background');
+      }
+
+      if (!(element instanceof HTMLElement)) {
+        return;
+      }
+
+      const inlineHeight = element.style.height;
+      if (!inlineHeight) {
+        return;
+      }
+
+      if (supportsCssValidation) {
+        if (!CSS.supports('height', inlineHeight)) {
+          element.style.removeProperty('height');
+        }
+        return;
+      }
+
+      if (typeof document === 'undefined') {
+        return;
+      }
+
+      const probe = document.createElement('div');
+      probe.style.height = inlineHeight;
+      if (probe.style.height !== inlineHeight) {
+        element.style.removeProperty('height');
+      }
+    };
+
+    processElement(root);
+    root.querySelectorAll('*').forEach((element) => {
+      processElement(element);
+    });
+  }, []);
+
   useEffect(() => {
     setTableError(null);
     if (!gridApiRef.current) {
@@ -911,6 +957,16 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
     gridApiRef.current.setGridOption('datasource', createDatasource(selectedTable));
   }, [selectedTable, emptyDataSource, createDatasource]);
 
+  useEffect(
+    () => () => {
+      if (gridMutationObserverRef.current) {
+        gridMutationObserverRef.current.disconnect();
+        gridMutationObserverRef.current = null;
+      }
+    },
+    [],
+  );
+
   const handleGridReady = useCallback(
     (event: GridReadyEvent) => {
       gridApiRef.current = event.api;
@@ -918,8 +974,26 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
         'datasource',
         selectedTable ? createDatasource(selectedTable) : emptyDataSource,
       );
+      const gridElement = event.api.getGui();
+      sanitizeGridStyles(gridElement);
+      if (gridMutationObserverRef.current) {
+        gridMutationObserverRef.current.disconnect();
+      }
+      if (gridElement) {
+        const observer = new MutationObserver((mutations) => {
+          mutations.forEach((mutation) => {
+            mutation.addedNodes.forEach((node) => {
+              if (node instanceof Element) {
+                sanitizeGridStyles(node);
+              }
+            });
+          });
+        });
+        observer.observe(gridElement, { childList: true, subtree: true });
+        gridMutationObserverRef.current = observer;
+      }
     },
-    [emptyDataSource, selectedTable, createDatasource],
+    [emptyDataSource, selectedTable, createDatasource, sanitizeGridStyles],
   );
 
   const handleOpenDatabase = () => {
