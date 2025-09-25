@@ -1,4 +1,8 @@
 import { ChangeEvent, FormEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import type { ColDef, GridApi, GridReadyEvent, IDatasource, IGetRowsParams } from 'ag-grid-community';
+import { AgGridReact } from 'ag-grid-react';
+import 'ag-grid-community/styles/ag-grid.css';
+import 'ag-grid-community/styles/ag-theme-alpine.css';
 
 type Disorder = {
   id: number;
@@ -45,6 +49,18 @@ type DoctorDashboardData = {
   disorders: Disorder[];
   exercises: Exercise[];
   disorderExerciseMap: Record<number, number[]>;
+};
+
+type DoctorViewMode = 'dashboard' | 'database';
+
+type DatabaseTablesResponse = {
+  tables: string[];
+};
+
+type TableDataResponse = {
+  columns: string[];
+  rows: Record<string, unknown>[];
+  totalRows: number;
 };
 
 const COMPLETED_INITIAL_COUNT = 6;
@@ -146,6 +162,7 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
   const [disorderExerciseMap, setDisorderExerciseMap] = useState<Record<number, number[]>>({});
   const [isLoading, setIsLoading] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
+  const [viewMode, setViewMode] = useState<DoctorViewMode>('dashboard');
   const [autoCredentials, setAutoCredentials] = useState(true);
   const [newPatient, setNewPatient] = useState({
     lastName: '',
@@ -168,6 +185,31 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
   const [completedVisibleCount, setCompletedVisibleCount] = useState(COMPLETED_INITIAL_COUNT);
   const completedListRef = useRef<HTMLUListElement | null>(null);
   const previousPatientIdRef = useRef<number | null>(null);
+  const [databaseTables, setDatabaseTables] = useState<string[]>([]);
+  const [isLoadingTables, setIsLoadingTables] = useState(false);
+  const [tablesLoadError, setTablesLoadError] = useState<string | null>(null);
+  const [selectedTable, setSelectedTable] = useState('');
+  const [databaseColumns, setDatabaseColumns] = useState<ColDef[]>([]);
+  const [tableError, setTableError] = useState<string | null>(null);
+  const gridApiRef = useRef<GridApi | null>(null);
+  const emptyDataSource = useMemo<IDatasource>(
+    () => ({
+      getRows: (params: IGetRowsParams) => {
+        params.successCallback([], 0);
+      },
+    }),
+    [],
+  );
+  const databaseDefaultColDef = useMemo<ColDef>(
+    () => ({
+      sortable: true,
+      resizable: true,
+      filter: true,
+      flex: 1,
+      minWidth: 140,
+    }),
+    [],
+  );
 
   const getLatestPatientId = (list: Patient[]) => {
     if (list.length === 0) {
@@ -234,6 +276,34 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
       isMounted = false;
     };
   }, []);
+
+  const loadTables = useCallback(async () => {
+    try {
+      setIsLoadingTables(true);
+      setTablesLoadError(null);
+      const response = await fetch('/api/database/tables');
+      if (!response.ok) {
+        throw new Error('Failed to load table list');
+      }
+      const data: DatabaseTablesResponse = await response.json();
+      setDatabaseTables(Array.isArray(data.tables) ? data.tables : []);
+    } catch (error) {
+      console.error(error);
+      setTablesLoadError('Не удалось получить список таблиц. Попробуйте позже.');
+    } finally {
+      setIsLoadingTables(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (viewMode !== 'database') {
+      return;
+    }
+    if (databaseTables.length > 0 || isLoadingTables) {
+      return;
+    }
+    void loadTables();
+  }, [viewMode, databaseTables.length, isLoadingTables, loadTables]);
 
   useEffect(() => {
     setSelectedExercises([]);
@@ -787,6 +857,178 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
     );
   };
 
+  const createDatasource = useCallback(
+    (tableName: string): IDatasource => ({
+      getRows: async (params: IGetRowsParams) => {
+        try {
+          setTableError(null);
+          const requested = Math.max(params.endRow - params.startRow, 1);
+          const response = await fetch(
+            `/api/database/tables/${encodeURIComponent(tableName)}?offset=${params.startRow}&limit=${requested}`,
+          );
+          if (!response.ok) {
+            throw new Error('Failed to load table data');
+          }
+          const data: TableDataResponse = await response.json();
+          const newColumnDefs = (data.columns ?? []).map((column) => ({
+            field: column,
+            headerName: column,
+          }));
+          setDatabaseColumns((previous) => {
+            const previousKey = previous.map((item) => String(item.field ?? '')).join('|');
+            const nextKey = newColumnDefs.map((item) => String(item.field ?? '')).join('|');
+            if (previousKey === nextKey) {
+              return previous;
+            }
+            return newColumnDefs;
+          });
+          const rows = Array.isArray(data.rows) ? data.rows : [];
+          const totalRows = Number.isFinite(data.totalRows) ? data.totalRows : rows.length;
+          params.successCallback(rows, totalRows);
+        } catch (error) {
+          console.error(error);
+          setTableError('Не удалось загрузить данные таблицы. Попробуйте позже.');
+          params.failCallback();
+        }
+      },
+    }),
+    [setDatabaseColumns, setTableError],
+  );
+
+  useEffect(() => {
+    setTableError(null);
+    if (!gridApiRef.current) {
+      return;
+    }
+    if (!selectedTable) {
+      setDatabaseColumns([]);
+      gridApiRef.current.setDatasource(emptyDataSource);
+      return;
+    }
+    setDatabaseColumns([]);
+    gridApiRef.current.setDatasource(createDatasource(selectedTable));
+  }, [selectedTable, emptyDataSource, createDatasource]);
+
+  const handleGridReady = useCallback(
+    (event: GridReadyEvent) => {
+      gridApiRef.current = event.api;
+      event.api.setDatasource(selectedTable ? createDatasource(selectedTable) : emptyDataSource);
+    },
+    [emptyDataSource, selectedTable, createDatasource],
+  );
+
+  const handleOpenDatabase = () => {
+    setViewMode('database');
+    setTablesLoadError(null);
+    setTableError(null);
+    if (databaseTables.length === 0 && !isLoadingTables) {
+      void loadTables();
+    }
+  };
+
+  const handleBackToDashboard = () => {
+    setViewMode('dashboard');
+  };
+
+  const handleTableSelect = (event: ChangeEvent<HTMLSelectElement>) => {
+    setSelectedTable(event.target.value);
+  };
+
+  const handleRefreshTable = () => {
+    if (!selectedTable || !gridApiRef.current) {
+      return;
+    }
+    gridApiRef.current.refreshInfiniteCache();
+  };
+
+  if (viewMode === 'database') {
+    return (
+      <div className="app page doctor-page">
+        <header className="page-header doctor-header">
+          <div className="doctor-header-top">
+            <div className="doctor-heading" role="presentation">
+              <div className="doctor-heading-row">
+                <h1>База данных</h1>
+                <div className="doctor-actions horizontal">
+                  <button type="button" className="secondary-button" onClick={handleBackToDashboard}>
+                    Вернуться в кабинет
+                  </button>
+                  <button type="button" className="secondary-button" onClick={onLogout}>
+                    Выйти из кабинета
+                  </button>
+                </div>
+              </div>
+              <p className="lead">
+                Просматривайте содержимое таблиц и анализируйте данные в режиме реального времени.
+              </p>
+            </div>
+          </div>
+        </header>
+
+        <main className="doctor-layout database-layout">
+          <section className="doctor-column wide">
+            <div className="panel database-panel">
+              <div className="database-toolbar">
+                <label className="form-label database-label">
+                  Таблица
+                  <select
+                    className="database-select"
+                    value={selectedTable}
+                    onChange={handleTableSelect}
+                    disabled={isLoadingTables || databaseTables.length === 0}
+                  >
+                    <option value="">Выберите таблицу</option>
+                    {databaseTables.map((table) => (
+                      <option key={table} value={table}>
+                        {table}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <button
+                  type="button"
+                  className="secondary-button"
+                  onClick={handleRefreshTable}
+                  disabled={!selectedTable}
+                >
+                  Обновить
+                </button>
+              </div>
+              {isLoadingTables && <p className="muted">Загружаем список таблиц...</p>}
+              {tablesLoadError && (
+                <p className="form-message" role="alert">
+                  {tablesLoadError}
+                </p>
+              )}
+              {tableError && (
+                <p className="form-message" role="alert">
+                  {tableError}
+                </p>
+              )}
+              {!selectedTable && !isLoadingTables && !tablesLoadError && (
+                <p className="muted">Выберите таблицу, чтобы загрузить данные.</p>
+              )}
+              <div className="database-grid-wrapper">
+                <div className="ag-theme-alpine database-grid">
+                  <AgGridReact
+                    columnDefs={databaseColumns}
+                    defaultColDef={databaseDefaultColDef}
+                    rowModelType="infinite"
+                    cacheBlockSize={100}
+                    maxBlocksInCache={4}
+                    onGridReady={handleGridReady}
+                    suppressCellFocus
+                    animateRows
+                  />
+                </div>
+              </div>
+            </div>
+          </section>
+        </main>
+      </div>
+    );
+  }
+
   return (
     <div className="app page doctor-page">
       <header className="page-header doctor-header">
@@ -808,9 +1050,14 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
                   <span className="stat-value">{stats.atRisk}</span>
                 </article>
               </div>
-              <button type="button" className="secondary-button doctor-logout" onClick={onLogout}>
-                Выйти из кабинета
-              </button>
+              <div className="doctor-actions">
+                <button type="button" className="secondary-button doctor-logout" onClick={onLogout}>
+                  Выйти из кабинета
+                </button>
+                <button type="button" className="secondary-button" onClick={handleOpenDatabase}>
+                  База данных
+                </button>
+              </div>
             </div>
             <p className="lead">
               Управляйте пациентами, назначайте упражнения и следите за прогрессом прямо из браузера.
