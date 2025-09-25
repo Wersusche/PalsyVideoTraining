@@ -17,6 +17,8 @@ type Exercise = {
   name: string;
   type: string;
   description?: string;
+  bodyPart?: string;
+  typeOfActivity?: string;
 };
 
 type Appointment = {

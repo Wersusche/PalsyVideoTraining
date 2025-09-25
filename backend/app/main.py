@@ -31,6 +31,8 @@ class ExerciseSchema(BaseModel):
     name: str
     type: str
     description: str | None = None
+    bodyPart: str | None = None
+    typeOfActivity: str | None = None
 
 
 class AppointmentSchema(BaseModel):
@@ -196,6 +198,15 @@ def _coerce_to_str(value: Any) -> str:
     return str(value)
 
 
+def _normalize_optional_str(value: Any) -> str | None:
+    if value is None:
+        return None
+    if isinstance(value, memoryview):
+        value = value.tobytes().decode("utf-8", "ignore")
+    value = str(value).strip()
+    return value or None
+
+
 def _serialize_value(value: Any) -> Any:
     if value is None:
         return None
@@ -322,7 +333,7 @@ async def get_doctor_dashboard(
         await db.execute(
             text(
                 """
-                SELECT "idvideos", "video_name", "ex_type", "filename"
+                SELECT "idvideos", "video_name", "ex_type", "filename", "body_part", "type_of_activity"
                 FROM "videos"
                 ORDER BY "ex_type", "video_name"
                 """
@@ -335,6 +346,8 @@ async def get_doctor_dashboard(
             name=(row["video_name"] or "").strip(),
             type=(row["ex_type"] or "").strip(),
             description=row.get("filename"),
+            bodyPart=_normalize_optional_str(row.get("body_part")),
+            typeOfActivity=_normalize_optional_str(row.get("type_of_activity")),
         )
         for row in exercises_rows
     ]
