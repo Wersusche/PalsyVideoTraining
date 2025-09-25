@@ -195,6 +195,7 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
   const [tableError, setTableError] = useState<string | null>(null);
   const gridApiRef = useRef<GridApi | null>(null);
   const gridMutationObserverRef = useRef<MutationObserver | null>(null);
+  const gridContainerRef = useRef<HTMLDivElement | null>(null);
   const emptyDataSource = useMemo<IDatasource>(
     () => ({
       getRows: (params: IGetRowsParams) => {
@@ -974,12 +975,13 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
         'datasource',
         selectedTable ? createDatasource(selectedTable) : emptyDataSource,
       );
-      const gridElement = event.api.getGui();
-      sanitizeGridStyles(gridElement);
+      const gridRootElement =
+        gridContainerRef.current?.querySelector('.ag-root') ?? gridContainerRef.current;
+      sanitizeGridStyles(gridRootElement);
       if (gridMutationObserverRef.current) {
         gridMutationObserverRef.current.disconnect();
       }
-      if (gridElement) {
+      if (gridRootElement) {
         const observer = new MutationObserver((mutations) => {
           mutations.forEach((mutation) => {
             mutation.addedNodes.forEach((node) => {
@@ -989,7 +991,7 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
             });
           });
         });
-        observer.observe(gridElement, { childList: true, subtree: true });
+        observer.observe(gridRootElement, { childList: true, subtree: true });
         gridMutationObserverRef.current = observer;
       }
     },
@@ -1088,7 +1090,7 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
                 <p className="muted">Выберите таблицу, чтобы загрузить данные.</p>
               )}
               <div className="database-grid-wrapper">
-                <div className="database-grid">
+              <div className="database-grid" ref={gridContainerRef}>
                   <AgGridReact
                     columnDefs={databaseColumns}
                     defaultColDef={databaseDefaultColDef}
