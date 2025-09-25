@@ -4,6 +4,13 @@
   font-weight: 400;
   color: #111827;
   background-color: #f3f4f6;
+  --ag-grid-size: 8px;
+  --ag-font-size: 14px;
+  --ag-icon-size: 16px;
+  --ag-widget-vertical-spacing: calc(var(--ag-grid-size) * 1);
+  --ag-header-height: 48px;
+  --ag-row-height: 42px;
+  --ag-list-item-height: calc(var(--ag-icon-size) + var(--ag-widget-vertical-spacing));
 }
 
 * {
