@@ -1,8 +1,10 @@
 from collections import defaultdict
-from datetime import date
+from datetime import date, datetime, time
+from decimal import Decimal
 import random
 import re
 from typing import Any
+from uuid import UUID
 
 import bcrypt
 from fastapi import Depends, FastAPI, HTTPException
@@ -78,6 +80,16 @@ class DoctorDashboardResponse(BaseModel):
     disorders: list[DisorderSchema]
     exercises: list[ExerciseSchema]
     disorderExerciseMap: dict[int, list[int]]
+
+
+class DatabaseTablesResponse(BaseModel):
+    tables: list[str]
+
+
+class TableDataResponse(BaseModel):
+    columns: list[str]
+    rows: list[dict[str, Any]]
+    totalRows: int
 
 
 @app.get("/api/healthz")
@@ -182,6 +194,22 @@ def _coerce_to_str(value: Any) -> str:
     if isinstance(value, memoryview):
         return value.tobytes().decode("utf-8", "ignore")
     return str(value)
+
+
+def _serialize_value(value: Any) -> Any:
+    if value is None:
+        return None
+    if isinstance(value, memoryview):
+        return value.tobytes().decode("utf-8", "ignore")
+    if isinstance(value, (bytes, bytearray)):
+        return value.decode("utf-8", "ignore")
+    if isinstance(value, (date, datetime, time)):
+        return value.isoformat()
+    if isinstance(value, Decimal):
+        return str(value)
+    if isinstance(value, UUID):
+        return str(value)
+    return value
 
 
 def _verify_password(plain_password: str, hashed_password: str) -> bool:
@@ -487,3 +515,62 @@ async def delete_patient(patient_id: int, db: AsyncSession = Depends(get_session
         {"patient_id": patient_id},
     )
     await db.commit()
+
+
+def _quote_identifier(identifier: str) -> str:
+    return f'"{identifier.replace("\"", "\"\"")}"'
+
+
+async def _get_public_tables(db: AsyncSession) -> list[str]:
+    rows = await db.execute(
+        text(
+            """
+            SELECT table_name
+            FROM information_schema.tables
+            WHERE table_schema = 'public'
+              AND table_type = 'BASE TABLE'
+            ORDER BY table_name
+            """
+        )
+    )
+    return [str(row[0]) for row in rows]
+
+
+@app.get("/api/database/tables", response_model=DatabaseTablesResponse)
+async def list_database_tables(db: AsyncSession = Depends(get_session)) -> DatabaseTablesResponse:
+    tables = await _get_public_tables(db)
+    return DatabaseTablesResponse(tables=tables)
+
+
+@app.get("/api/database/tables/{table_name}", response_model=TableDataResponse)
+async def get_table_data(
+    table_name: str,
+    offset: int = 0,
+    limit: int = 100,
+    db: AsyncSession = Depends(get_session),
+) -> TableDataResponse:
+    offset = max(offset, 0)
+    limit = min(max(limit, 1), 500)
+
+    tables = await _get_public_tables(db)
+    if table_name not in tables:
+        raise HTTPException(status_code=404, detail="Table not found")
+
+    quoted_table = _quote_identifier(table_name)
+
+    count_result = await db.execute(text(f"SELECT COUNT(*) FROM {quoted_table}"))
+    total_rows_raw = count_result.scalar()
+    total_rows = int(total_rows_raw or 0)
+
+    data_result = await db.execute(
+        text(f"SELECT * FROM {quoted_table} OFFSET :offset LIMIT :limit"),
+        {"offset": offset, "limit": limit},
+    )
+
+    columns = list(data_result.keys())
+    rows = [
+        {column: _serialize_value(value) for column, value in row.items()}
+        for row in data_result.mappings()
+    ]
+
+    return TableDataResponse(columns=columns, rows=rows, totalRows=total_rows)
