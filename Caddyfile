@@ -4,6 +4,11 @@ palsy-training.ru {
             reverse_proxy backend:8000
         }
 
+        handle /media/* {
+            root * /media
+            file_server browse
+        }
+
         handle {
             # Раздаём собранный фронтенд
             root * /srv
