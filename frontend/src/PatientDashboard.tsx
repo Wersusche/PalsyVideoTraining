@@ -266,7 +266,7 @@ const PatientDashboard = ({ token, patient, onLogout }: PatientDashboardProps) =
 
         {!loading && !error && (
           <>
-            <section className="section">
+            <section className="section patient-dashboard__section">
               <h2>Ваш прогресс</h2>
               {appointments.length ? (
                 <div className="patient-dashboard__summary-grid">
@@ -288,7 +288,7 @@ const PatientDashboard = ({ token, patient, onLogout }: PatientDashboardProps) =
               )}
             </section>
 
-            <section className="section">
+            <section className="section patient-dashboard__section">
               <h2>Назначения</h2>
               {appointments.length === 0 ? (
                 <p>
@@ -404,7 +404,7 @@ const PatientDashboard = ({ token, patient, onLogout }: PatientDashboardProps) =
               )}
             </section>
 
-            <section className="section">
+            <section className="section patient-dashboard__section">
               <h2>Все упражнения</h2>
               {exercises.length === 0 ? (
                 <p>Список упражнений пока пуст.</p>
