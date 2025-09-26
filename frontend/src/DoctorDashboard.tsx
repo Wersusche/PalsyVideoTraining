@@ -1,6 +1,16 @@
 import { ChangeEvent, FormEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { AllCommunityModule, ModuleRegistry, themeQuartz } from 'ag-grid-community';
-import type { ColDef, GridApi, GridReadyEvent, IDatasource, IGetRowsParams } from 'ag-grid-community';
+import type {
+  CellValueChangedEvent,
+  ColDef,
+  FilterChangedEvent,
+  GetRowIdParams,
+  GridApi,
+  GridReadyEvent,
+  IDatasource,
+  IGetRowsParams,
+  SortChangedEvent,
+} from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/styles/ag-theme-quartz.css';
 
@@ -65,6 +75,18 @@ type TableDataResponse = {
   columns: string[];
   rows: Record<string, unknown>[];
   totalRows: number;
+  pkColumns: string[];
+};
+
+type TableMutationResponse = {
+  inserted: { tempId: number | string | null; primaryKey: Record<string, unknown> }[];
+};
+
+type DatabaseRow = {
+  [key: string]: unknown;
+  __rowId?: string | number;
+  __tmp_id?: number;
+  __deleted?: boolean;
 };
 
 const COMPLETED_INITIAL_COUNT = 6;
@@ -194,10 +216,18 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
   const [tablesLoadError, setTablesLoadError] = useState<string | null>(null);
   const [selectedTable, setSelectedTable] = useState('');
   const [databaseColumns, setDatabaseColumns] = useState<ColDef[]>([]);
+  const [databasePkColumns, setDatabasePkColumns] = useState<string[]>([]);
   const [tableError, setTableError] = useState<string | null>(null);
+  const [databaseNewRows, setDatabaseNewRows] = useState<DatabaseRow[]>([]);
+  const [databaseUpdatedRows, setDatabaseUpdatedRows] = useState<DatabaseRow[]>([]);
+  const [databaseDeletedRows, setDatabaseDeletedRows] = useState<DatabaseRow[]>([]);
+  const [databaseMessage, setDatabaseMessage] = useState<string | null>(null);
+  const [isSavingTable, setIsSavingTable] = useState(false);
   const gridApiRef = useRef<GridApi | null>(null);
   const gridMutationObserverRef = useRef<MutationObserver | null>(null);
   const gridContainerRef = useRef<HTMLDivElement | null>(null);
+  const tempRowIdRef = useRef(-1);
+  const newRowsRef = useRef<DatabaseRow[]>([]);
   const emptyDataSource = useMemo<IDatasource>(
     () => ({
       getRows: (params: IGetRowsParams) => {
@@ -211,6 +241,8 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
       sortable: true,
       resizable: true,
       filter: true,
+      floatingFilter: true,
+      editable: true,
       flex: 1,
       minWidth: 140,
     }),
@@ -314,6 +346,34 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
   useEffect(() => {
     setSelectedExercises([]);
   }, [selectedPatientId]);
+
+  useEffect(() => {
+    newRowsRef.current = databaseNewRows;
+    if (gridApiRef.current) {
+      gridApiRef.current.setPinnedTopRowData(databaseNewRows);
+    }
+  }, [databaseNewRows]);
+
+  useEffect(() => {
+    if (!databaseMessage) {
+      return undefined;
+    }
+    const timer = window.setTimeout(() => {
+      setDatabaseMessage(null);
+    }, 3000);
+    return () => {
+      window.clearTimeout(timer);
+    };
+  }, [databaseMessage]);
+
+  useEffect(() => {
+    setDatabaseNewRows([]);
+    setDatabaseUpdatedRows([]);
+    setDatabaseDeletedRows([]);
+    setDatabasePkColumns([]);
+    tempRowIdRef.current = -1;
+    setDatabaseMessage(null);
+  }, [selectedTable]);
 
   const selectedPatient = patients.find((patient) => patient.id === selectedPatientId) ?? null;
 
@@ -863,22 +923,306 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
     );
   };
 
+  const isSameRow = useCallback(
+    (left: DatabaseRow, right: DatabaseRow) => {
+      if (databasePkColumns.length === 0) {
+        if (left.__rowId === undefined || right.__rowId === undefined) {
+          return false;
+        }
+        return String(left.__rowId) === String(right.__rowId);
+      }
+      return databasePkColumns.every((column) => left[column] === right[column]);
+    },
+    [databasePkColumns],
+  );
+
+  const getDatabaseRowId = useCallback(
+    (params: GetRowIdParams<DatabaseRow>) => {
+      const data = params.data;
+      if (!data) {
+        return String(params.node?.id ?? '');
+      }
+      if (data.__rowId !== undefined && data.__rowId !== null) {
+        return String(data.__rowId);
+      }
+      if (databasePkColumns.length > 0) {
+        const parts = databasePkColumns.map((column) => {
+          const value = data[column];
+          if (value === undefined || value === null) {
+            return null;
+          }
+          return String(value);
+        });
+        if (parts.every((part) => part !== null)) {
+          return parts.join('|');
+        }
+      }
+      if ('id' in data && data.id !== undefined && data.id !== null) {
+        return String(data.id as unknown);
+      }
+      return String(params.node?.id ?? Math.random());
+    },
+    [databasePkColumns],
+  );
+
+  const createEmptyRow = useCallback((): DatabaseRow => {
+    const nextId = tempRowIdRef.current - 1;
+    tempRowIdRef.current = nextId;
+    const row: DatabaseRow = {
+      __rowId: `tmp-${Math.abs(nextId)}`,
+      __tmp_id: nextId,
+    };
+    databaseColumns.forEach((column) => {
+      const field = column.field;
+      if (typeof field === 'string' && !(field in row)) {
+        row[field] = null;
+      }
+    });
+    databasePkColumns.forEach((column) => {
+      if (!(column in row)) {
+        row[column] = null;
+      }
+    });
+    return row;
+  }, [databaseColumns, databasePkColumns]);
+
+  const stripForInsert = useCallback(
+    (row: DatabaseRow) => {
+      const copy: Record<string, unknown> = {};
+      Object.entries(row).forEach(([key, value]) => {
+        if (key.startsWith('__')) {
+          return;
+        }
+        if (databasePkColumns.includes(key)) {
+          return;
+        }
+        copy[key] = value;
+      });
+      const tempId = row.__tmp_id ?? row.__rowId ?? null;
+      if (tempId !== null) {
+        copy.__tmp_id = tempId;
+      }
+      return copy;
+    },
+    [databasePkColumns],
+  );
+
+  const stripForUpdate = useCallback((row: DatabaseRow) => {
+    const copy: Record<string, unknown> = {};
+    Object.entries(row).forEach(([key, value]) => {
+      if (key.startsWith('__')) {
+        return;
+      }
+      copy[key] = value;
+    });
+    return copy;
+  }, []);
+
+  const stripForDelete = useCallback(
+    (row: DatabaseRow) => {
+      const copy: Record<string, unknown> = {};
+      databasePkColumns.forEach((column) => {
+        copy[column] = row[column];
+      });
+      return copy;
+    },
+    [databasePkColumns],
+  );
+
+  const handleAddDatabaseRow = useCallback(() => {
+    if (!selectedTable) {
+      window.alert('Выберите таблицу, чтобы добавить строку');
+      return;
+    }
+    const newRow = createEmptyRow();
+    setDatabaseNewRows((prev) => [...prev, newRow]);
+  }, [createEmptyRow, selectedTable]);
+
+  const handleDeleteDatabaseRow = useCallback(() => {
+    const api = gridApiRef.current;
+    if (!api) {
+      return;
+    }
+    const selectedNodes = api.getSelectedNodes();
+    if (selectedNodes.length === 0) {
+      window.alert('Выберите строку для удаления');
+      return;
+    }
+    const newRowIds = new Set(
+      databaseNewRows.map((row) => (row.__rowId !== undefined ? String(row.__rowId) : '')),
+    );
+    const removeNew = new Set<string>();
+    const existingToDelete: DatabaseRow[] = [];
+    const allowExistingDeletion = databasePkColumns.length > 0;
+    let warnedNoPk = false;
+    selectedNodes.forEach((node) => {
+      const data = node.data as DatabaseRow | undefined;
+      if (!data) {
+        return;
+      }
+      const rowId = data.__rowId !== undefined ? String(data.__rowId) : null;
+      if (rowId && newRowIds.has(rowId)) {
+        removeNew.add(rowId);
+        return;
+      }
+      if (data.__deleted) {
+        return;
+      }
+      if (!allowExistingDeletion) {
+        if (!warnedNoPk) {
+          window.alert('Удаление строк недоступно для этой таблицы');
+          warnedNoPk = true;
+        }
+        return;
+      }
+      existingToDelete.push(data);
+      node.setData({ ...data, __deleted: true });
+    });
+    if (removeNew.size > 0) {
+      setDatabaseNewRows((prev) => prev.filter((row) => !removeNew.has(String(row.__rowId))));
+    }
+    if (existingToDelete.length > 0 && allowExistingDeletion) {
+      setDatabaseUpdatedRows((prev) =>
+        prev.filter((row) => !existingToDelete.some((item) => isSameRow(item, row))),
+      );
+      setDatabaseDeletedRows((prev) => {
+        const next = [...prev];
+        existingToDelete.forEach((item) => {
+          if (!next.some((row) => isSameRow(row, item))) {
+            next.push(item);
+          }
+        });
+        return next;
+      });
+    }
+  }, [databaseNewRows, databasePkColumns.length, isSameRow]);
+
+  const handleDatabaseCellValueChanged = useCallback(
+    (event: CellValueChangedEvent<DatabaseRow>) => {
+      const data = event.data;
+      if (!data || data.__deleted) {
+        return;
+      }
+      const rowId = data.__rowId !== undefined ? String(data.__rowId) : null;
+      if (rowId && newRowsRef.current.some((row) => String(row.__rowId) === rowId)) {
+        setDatabaseNewRows((prev) =>
+          prev.map((row) => (String(row.__rowId) === rowId ? { ...row, ...data } : row)),
+        );
+        return;
+      }
+      setDatabaseUpdatedRows((prev) => {
+        const next = [...prev];
+        const index = next.findIndex((row) => isSameRow(row, data));
+        if (index >= 0) {
+          next[index] = { ...next[index], ...data };
+        } else {
+          next.push({ ...data });
+        }
+        return next;
+      });
+      setDatabaseDeletedRows((prev) => prev.filter((row) => !isSameRow(row, data)));
+    },
+    [isSameRow],
+  );
+
+  const handleDatabaseFilterChanged = useCallback((event: FilterChangedEvent) => {
+    event.api.refreshInfiniteCache();
+  }, []);
+
+  const handleDatabaseSortChanged = useCallback((event: SortChangedEvent) => {
+    event.api.refreshInfiniteCache();
+  }, []);
+
+  const getDatabaseRowStyle = useCallback((params: { data?: DatabaseRow }) => {
+    if (params.data?.__deleted) {
+      return { textDecoration: 'line-through', opacity: '0.5' } as const;
+    }
+    return undefined;
+  }, []);
+
+  const handleSaveDatabaseChanges = useCallback(async () => {
+    if (!selectedTable) {
+      return;
+    }
+    if (!gridApiRef.current) {
+      return;
+    }
+    gridApiRef.current.stopEditing();
+    setIsSavingTable(true);
+    setTableError(null);
+    try {
+      const response = await fetch(
+        `/api/database/tables/${encodeURIComponent(selectedTable)}`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            new_rows: databaseNewRows.map(stripForInsert),
+            updated_rows: databaseUpdatedRows.map(stripForUpdate),
+            deleted_rows: databaseDeletedRows.map(stripForDelete),
+          }),
+        },
+      );
+      if (!response.ok) {
+        const data: { detail?: unknown } | null = await response.json().catch(() => null);
+        const detail = typeof data?.detail === 'string' ? data.detail : null;
+        throw new Error(detail ?? 'Не удалось сохранить изменения.');
+      }
+      const result: TableMutationResponse = await response.json().catch(() => ({ inserted: [] }));
+      if (Array.isArray(result.inserted) && result.inserted.length > 0) {
+        const insertedIds = result.inserted
+          .map((item) => item.primaryKey)
+          .filter((item) => item && typeof item === 'object');
+        if (insertedIds.length > 0) {
+          console.info('Добавлены строки:', insertedIds);
+        }
+      }
+      setDatabaseMessage('Изменения сохранены');
+      setDatabaseNewRows([]);
+      setDatabaseUpdatedRows([]);
+      setDatabaseDeletedRows([]);
+      tempRowIdRef.current = -1;
+      gridApiRef.current.refreshInfiniteCache();
+    } catch (error) {
+      console.error(error);
+      const message = error instanceof Error ? error.message : 'Не удалось сохранить изменения.';
+      setTableError(message);
+    } finally {
+      setIsSavingTable(false);
+    }
+  }, [
+    databaseDeletedRows,
+    databaseNewRows,
+    databaseUpdatedRows,
+    selectedTable,
+    stripForDelete,
+    stripForInsert,
+    stripForUpdate,
+  ]);
+
   const createDatasource = useCallback(
     (tableName: string): IDatasource => ({
       getRows: async (params: IGetRowsParams) => {
         try {
           setTableError(null);
           const requested = Math.max(params.endRow - params.startRow, 1);
+          const filterParam = encodeURIComponent(
+            JSON.stringify(params.filterModel ?? {}),
+          );
+          const sortParam = encodeURIComponent(JSON.stringify(params.sortModel ?? []));
           const response = await fetch(
-            `/api/database/tables/${encodeURIComponent(tableName)}?offset=${params.startRow}&limit=${requested}`,
+            `/api/database/tables/${encodeURIComponent(tableName)}?offset=${params.startRow}&limit=${requested}&filter=${filterParam}&sort=${sortParam}`,
           );
           if (!response.ok) {
             throw new Error('Failed to load table data');
           }
           const data: TableDataResponse = await response.json();
+          const pkColumns = Array.isArray(data.pkColumns) ? data.pkColumns : [];
+          setDatabasePkColumns(pkColumns);
           const newColumnDefs = (data.columns ?? []).map((column) => ({
             field: column,
             headerName: column,
+            editable: !pkColumns.includes(column),
           }));
           setDatabaseColumns((previous) => {
             const previousKey = previous.map((item) => String(item.field ?? '')).join('|');
@@ -898,7 +1242,7 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
         }
       },
     }),
-    [setDatabaseColumns, setTableError],
+    [setDatabaseColumns, setDatabasePkColumns, setTableError],
   );
 
   const sanitizeGridStyles = useCallback((root: Element | null) => {
@@ -1021,8 +1365,23 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
     if (!selectedTable || !gridApiRef.current) {
       return;
     }
+    gridApiRef.current.stopEditing();
+    gridApiRef.current.deselectAll();
+    setDatabaseNewRows([]);
+    setDatabaseUpdatedRows([]);
+    setDatabaseDeletedRows([]);
+    tempRowIdRef.current = -1;
+    setDatabaseMessage(null);
+    setTableError(null);
     gridApiRef.current.refreshInfiniteCache();
   };
+
+  const hasDatabaseChanges =
+    databaseNewRows.length > 0 ||
+    databaseUpdatedRows.length > 0 ||
+    databaseDeletedRows.length > 0;
+
+  const isSaveDisabled = !selectedTable || isSavingTable || !hasDatabaseChanges;
 
   if (viewMode === 'database') {
     return (
@@ -1076,6 +1435,30 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
                 >
                   Обновить
                 </button>
+                <button
+                  type="button"
+                  className="secondary-button"
+                  onClick={handleAddDatabaseRow}
+                  disabled={!selectedTable || isSavingTable}
+                >
+                  Добавить строку
+                </button>
+                <button
+                  type="button"
+                  className="secondary-button"
+                  onClick={handleDeleteDatabaseRow}
+                  disabled={!selectedTable || isSavingTable}
+                >
+                  Удалить выбранные
+                </button>
+                <button
+                  type="button"
+                  className="primary-button"
+                  onClick={handleSaveDatabaseChanges}
+                  disabled={isSaveDisabled}
+                >
+                  Сохранить
+                </button>
               </div>
               {isLoadingTables && <p className="muted">Загружаем список таблиц...</p>}
               {tablesLoadError && (
@@ -1086,6 +1469,12 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
               {tableError && (
                 <p className="form-message" role="alert">
                   {tableError}
+                </p>
+              )}
+              {isSavingTable && <p className="muted">Сохраняем изменения...</p>}
+              {databaseMessage && (
+                <p className="muted" role="status" aria-live="polite">
+                  {databaseMessage}
                 </p>
               )}
               {!selectedTable && !isLoadingTables && !tablesLoadError && (
@@ -1100,10 +1489,19 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
                   <AgGridReact
                     columnDefs={databaseColumns}
                     defaultColDef={databaseDefaultColDef}
+                    pinnedTopRowData={databaseNewRows}
+                    getRowId={getDatabaseRowId}
+                    rowSelection={{ mode: 'multiRow', headerCheckbox: false }}
+                    onCellValueChanged={handleDatabaseCellValueChanged}
+                    onFilterChanged={handleDatabaseFilterChanged}
+                    onSortChanged={handleDatabaseSortChanged}
+                    getRowStyle={getDatabaseRowStyle}
+                    isRowSelectable={(node) => !node.data?.__deleted}
                     rowModelType="infinite"
                     cacheBlockSize={100}
                     maxBlocksInCache={4}
                     onGridReady={handleGridReady}
+                    stopEditingWhenCellsLoseFocus
                     suppressCellFocus
                     animateRows
                   />
