@@ -977,9 +977,12 @@ footer {
   gap: 1.5rem;
   justify-content: space-between;
   align-items: flex-start;
-  padding: 2.5rem clamp(1.5rem, 4vw, 4rem) 1.5rem;
+  margin: 2rem clamp(1.5rem, 4vw, 4rem) 0;
+  padding: 2rem clamp(1.5rem, 4vw, 4rem);
+  border-radius: 1.5rem;
   background: white;
-  border-bottom: 1px solid #e5e7eb;
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  box-shadow: 0 18px 35px rgba(15, 23, 42, 0.08);
 }
 
 .patient-dashboard__actions {
