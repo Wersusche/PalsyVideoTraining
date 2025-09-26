@@ -108,6 +108,7 @@ const PatientDashboard = ({ token, patient, onLogout }: PatientDashboardProps) =
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [reloadCounter, setReloadCounter] = useState(0);
+  const [selectedAppointmentIndex, setSelectedAppointmentIndex] = useState(0);
 
   useEffect(() => {
     let isActive = true;
@@ -151,6 +152,7 @@ const PatientDashboard = ({ token, patient, onLogout }: PatientDashboardProps) =
 
         setAppointments(appointmentsData);
         setExercises(exercisesData);
+        setSelectedAppointmentIndex(0);
       } catch (error) {
         if (!isActive) {
           return;
@@ -195,6 +197,35 @@ const PatientDashboard = ({ token, patient, onLogout }: PatientDashboardProps) =
   const handleRefresh = () => {
     setReloadCounter((value) => value + 1);
   };
+
+  const handleSelectAppointment = (index: number) => {
+    setSelectedAppointmentIndex(index);
+  };
+
+  const handlePrevAppointment = () => {
+    setSelectedAppointmentIndex((current) => Math.max(0, current - 1));
+  };
+
+  const handleNextAppointment = () => {
+    setSelectedAppointmentIndex((current) =>
+      Math.min(appointments.length - 1, current + 1),
+    );
+  };
+
+  const selectedAppointment = appointments[selectedAppointmentIndex];
+
+  useEffect(() => {
+    if (!appointments.length) {
+      if (selectedAppointmentIndex !== 0) {
+        setSelectedAppointmentIndex(0);
+      }
+      return;
+    }
+
+    if (selectedAppointmentIndex >= appointments.length) {
+      setSelectedAppointmentIndex(appointments.length - 1);
+    }
+  }, [appointments, selectedAppointmentIndex]);
 
   const patientFullName = useMemo(() => {
     const parts = [patient.lastName, patient.firstName];
@@ -253,49 +284,110 @@ const PatientDashboard = ({ token, patient, onLogout }: PatientDashboardProps) =
             <section className="section">
               <h2>Назначения</h2>
               {appointments.length === 0 ? (
-                <p>Назначения отсутствуют. Как только врач добавит новые упражнения, они появятся здесь.</p>
+                <p>
+                  Назначения отсутствуют. Как только врач добавит новые упражнения, они появятся здесь.
+                </p>
               ) : (
-                <ul className="patient-dashboard__card-list">
-                  {appointments.map((appointment) => (
-                    <li key={appointment.id} className="patient-dashboard__card">
-                      <header className="patient-dashboard__card-header">
-                        <div>
-                          <h3>{appointment.videoName ?? `Упражнение №${appointment.exerciseId}`}</h3>
-                          <p className="patient-dashboard__muted">
-                            {formatDate(appointment.start)} — {formatDate(appointment.end)} • {appointment.perDay} раз(а) в день
-                          </p>
+                <div className="patient-dashboard__player">
+                  <div className="patient-dashboard__player-main">
+                    {selectedAppointment ? (
+                      <>
+                        <header className="patient-dashboard__player-header">
+                          <div>
+                            <h3>
+                              {selectedAppointment.videoName ?? `Упражнение №${selectedAppointment.exerciseId}`}
+                            </h3>
+                            <p className="patient-dashboard__muted">
+                              {formatDate(selectedAppointment.start)} — {formatDate(selectedAppointment.end)} •{' '}
+                              {selectedAppointment.perDay} раз(а) в день
+                            </p>
+                          </div>
+                          <span
+                            className={`patient-status patient-status--${selectedAppointment.status}`}
+                          >
+                            {statusLabels[selectedAppointment.status]}
+                          </span>
+                        </header>
+                        <div className="patient-dashboard__player-media">
+                          {selectedAppointment.videoUrl ? (
+                            <video controls preload="metadata" width="100%">
+                              <source
+                                src={selectedAppointment.videoUrl}
+                                type={selectedAppointment.mimeType ?? undefined}
+                              />
+                              Ваш браузер не поддерживает воспроизведение этого видео.
+                            </video>
+                          ) : (
+                            <div className="patient-dashboard__player-placeholder">
+                              <p>Видео недоступно.</p>
+                            </div>
+                          )}
                         </div>
-                        <span className={`patient-status patient-status--${appointment.status}`}>
-                          {statusLabels[appointment.status]}
-                        </span>
-                      </header>
-                      {appointment.videoUrl ? (
-                        <div className="patient-dashboard__card-media">
-                          <video controls preload="metadata" width="100%">
-                            <source
-                              src={appointment.videoUrl}
-                              type={appointment.mimeType ?? undefined}
-                            />
-                            Ваш браузер не поддерживает воспроизведение этого видео.
-                          </video>
+                        <footer className="patient-dashboard__player-footer">
+                          <div>
+                            <strong>Прогресс:</strong> {selectedAppointment.donePercent}%
+                          </div>
+                          <div>
+                            <strong>Выполнено:</strong> {selectedAppointment.totalCompleted} раз(а)
+                          </div>
+                          <div>
+                            <strong>Длительность:</strong> {formatDuration(selectedAppointment.durationSeconds)}
+                          </div>
+                        </footer>
+                        <div className="patient-dashboard__player-controls">
+                          <button
+                            type="button"
+                            className="secondary-button"
+                            onClick={handlePrevAppointment}
+                            disabled={selectedAppointmentIndex === 0}
+                          >
+                            Предыдущее
+                          </button>
+                          <span>
+                            {selectedAppointmentIndex + 1} из {appointments.length}
+                          </span>
+                          <button
+                            type="button"
+                            className="secondary-button"
+                            onClick={handleNextAppointment}
+                            disabled={selectedAppointmentIndex === appointments.length - 1}
+                          >
+                            Следующее
+                          </button>
                         </div>
-                      ) : (
-                        <p className="patient-dashboard__muted">Видео недоступно.</p>
-                      )}
-                      <footer className="patient-dashboard__card-footer">
-                        <div>
-                          <strong>Прогресс:</strong> {appointment.donePercent}%
-                        </div>
-                        <div>
-                          <strong>Выполнено:</strong> {appointment.totalCompleted} раз(а)
-                        </div>
-                        <div>
-                          <strong>Длительность:</strong> {formatDuration(appointment.durationSeconds)}
-                        </div>
-                      </footer>
-                    </li>
-                  ))}
-                </ul>
+                      </>
+                    ) : (
+                      <p>Выберите назначение из списка справа.</p>
+                    )}
+                  </div>
+
+                  <aside className="patient-dashboard__playlist">
+                    <h3>Плейлист</h3>
+                    <ul>
+                      {appointments.map((appointment, index) => {
+                        const isActive = index === selectedAppointmentIndex;
+                        return (
+                          <li key={appointment.id}>
+                            <button
+                              type="button"
+                              className={`patient-dashboard__playlist-item${
+                                isActive ? ' patient-dashboard__playlist-item--active' : ''
+                              }`}
+                              onClick={() => handleSelectAppointment(index)}
+                            >
+                              <span className="patient-dashboard__playlist-title">
+                                {appointment.videoName ?? `Упражнение №${appointment.exerciseId}`}
+                              </span>
+                              <span className="patient-dashboard__playlist-meta">
+                                {appointment.donePercent}% • {statusLabels[appointment.status]}
+                              </span>
+                            </button>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  </aside>
+                </div>
               )}
             </section>
 
