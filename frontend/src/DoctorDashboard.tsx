@@ -744,6 +744,23 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
     });
   };
 
+  const handleExerciseGroupSelection = (exerciseIds: number[], checked: boolean) => {
+    setSelectedExercises((prev) => {
+      if (checked) {
+        const next = [...prev];
+        exerciseIds.forEach((id) => {
+          if (!next.includes(id)) {
+            next.push(id);
+          }
+        });
+        return next;
+      }
+
+      const idsToRemove = new Set(exerciseIds);
+      return prev.filter((id) => !idsToRemove.has(id));
+    });
+  };
+
   const updateExerciseForm = (
     field: keyof typeof exerciseForm,
     event: ChangeEvent<HTMLInputElement>,
@@ -1938,29 +1955,57 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
                   </div>
 
                   <div className="exercise-groups">
-                    {Object.entries(categorizedExercises).map(([group, items]) => (
-                      <article key={group} className="exercise-group">
-                        <header>
-                          <h4>{group}</h4>
-                        </header>
-                        <ul>
-                          {items.map((exercise) => (
-                            <li key={exercise.id}>
-                              <label className="form-checkbox">
-                                <input
-                                  type="checkbox"
-                                  checked={selectedExercises.includes(exercise.id)}
-                                  onChange={(event) =>
-                                    handleExerciseSelection(exercise.id, event.target.checked)
+                    {Object.entries(categorizedExercises).map(([group, items]) => {
+                      const groupExerciseIds = items.map((exercise) => exercise.id);
+                      const isGroupFullySelected = groupExerciseIds.every((id) =>
+                        selectedExercises.includes(id),
+                      );
+                      const isGroupPartiallySelected =
+                        !isGroupFullySelected &&
+                        groupExerciseIds.some((id) => selectedExercises.includes(id));
+
+                      return (
+                        <article key={group} className="exercise-group">
+                          <header className="exercise-group-header">
+                            <label className="form-checkbox exercise-group-checkbox">
+                              <input
+                                type="checkbox"
+                                checked={isGroupFullySelected}
+                                aria-checked={isGroupPartiallySelected ? 'mixed' : isGroupFullySelected}
+                                ref={(element) => {
+                                  if (element) {
+                                    element.indeterminate = isGroupPartiallySelected;
                                   }
-                                />
-                                {exercise.name}
-                              </label>
-                            </li>
-                          ))}
-                        </ul>
-                      </article>
-                    ))}
+                                }}
+                                onChange={(event) =>
+                                  handleExerciseGroupSelection(
+                                    groupExerciseIds,
+                                    event.target.checked,
+                                  )
+                                }
+                              />
+                              <h4>{group}</h4>
+                            </label>
+                          </header>
+                          <ul>
+                            {items.map((exercise) => (
+                              <li key={exercise.id}>
+                                <label className="form-checkbox">
+                                  <input
+                                    type="checkbox"
+                                    checked={selectedExercises.includes(exercise.id)}
+                                    onChange={(event) =>
+                                      handleExerciseSelection(exercise.id, event.target.checked)
+                                    }
+                                  />
+                                  {exercise.name}
+                                </label>
+                              </li>
+                            ))}
+                          </ul>
+                        </article>
+                      );
+                    })}
                     {Object.keys(categorizedExercises).length === 0 && (
                       <p className="muted">Нет подходящих упражнений. Добавьте патологии пациенту.</p>
                     )}

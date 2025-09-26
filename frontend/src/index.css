@@ -807,10 +807,28 @@ footer {
   background: #f9fafb;
 }
 
-.disorder-group h4,
-.exercise-group h4 {
+.disorder-group h4 {
   margin: 0 0 0.75rem;
   font-size: 1rem;
+}
+
+.exercise-group h4 {
+  font-size: 1rem;
+}
+
+.exercise-group-header {
+  margin: 0 0 0.75rem;
+}
+
+.exercise-group-checkbox {
+  width: 100%;
+}
+
+.exercise-group-checkbox h4 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1f2937;
 }
 
 .disorder-group ul,
