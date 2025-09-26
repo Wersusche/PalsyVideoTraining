@@ -95,6 +95,7 @@ class AppointmentSchema(BaseModel):
 class PatientAppointmentWithVideoSchema(AppointmentSchema):
     videoUrl: str | None = None
     videoName: str | None = None
+    mimeType: str | None = None
     status: str
 
 
@@ -917,6 +918,7 @@ async def get_my_appointments(
                 durationSeconds=int(row.get("duration_seconds") or 0),
                 videoUrl=metadata.url,
                 videoName=metadata.name,
+                mimeType=metadata.mimeType,
                 status=_resolve_completion_status(done_percent, total_completed),
             )
         )
