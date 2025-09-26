@@ -478,7 +478,7 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
     }, {});
   }, [disorders]);
 
-  const recommendedExercises = useMemo(() => {
+  const excludedExercises = useMemo(() => {
     if (!selectedPatient) {
       return new Set<number>();
     }
@@ -526,8 +526,8 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
   const categorizedExercises = useMemo(() => {
     return exercises.reduce<Record<string, Exercise[]>>((acc, exercise) => {
       if (showOnlyRecommended && selectedPatient) {
-        const recommended = recommendedExercises.has(exercise.id);
-        if (!recommended) {
+        const excluded = excludedExercises.has(exercise.id);
+        if (excluded) {
           return acc;
         }
       }
@@ -538,7 +538,7 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
       acc[exercise.type].push(exercise);
       return acc;
     }, {});
-  }, [exercises, recommendedExercises, selectedPatient, showOnlyRecommended]);
+  }, [exercises, excludedExercises, selectedPatient, showOnlyRecommended]);
 
   const resetForm = () => {
     setNewPatient({
