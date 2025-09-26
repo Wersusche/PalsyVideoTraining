@@ -9,7 +9,7 @@ from uuid import UUID
 
 import bcrypt
 from fastapi import Depends, FastAPI, HTTPException
-from sqlalchemy import text
+from sqlalchemy import bindparam, text
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import get_settings
@@ -67,6 +67,15 @@ class PatientCreateRequest(BaseModel):
     generateCredentials: bool = False
     username: str | None = None
     password: str | None = None
+
+
+class PatientDisordersUpdateRequest(BaseModel):
+    disorderIds: list[int] = Field(default_factory=list)
+
+
+class PatientDisordersUpdateResponse(BaseModel):
+    id: int
+    disorders: list[int]
 
 
 class DoctorLoginRequest(BaseModel):
@@ -545,6 +554,102 @@ async def delete_patient(patient_id: int, db: AsyncSession = Depends(get_session
         {"patient_id": patient_id},
     )
     await db.commit()
+
+
+@app.put(
+    "/api/patients/{patient_id}/disorders",
+    response_model=PatientDisordersUpdateResponse,
+)
+async def update_patient_disorders(
+    patient_id: int,
+    payload: PatientDisordersUpdateRequest,
+    db: AsyncSession = Depends(get_session),
+) -> PatientDisordersUpdateResponse:
+    patient_result = await db.execute(
+        text(
+            """
+            SELECT "idPatients", "Name", "Surname", "Secname", "Birthdate", "Username", "Password"
+            FROM "patients"
+            WHERE "idPatients" = :patient_id
+            """
+        ),
+        {"patient_id": patient_id},
+    )
+    patient_row = patient_result.mappings().first()
+
+    if patient_row is None:
+        raise HTTPException(status_code=404, detail="Patient not found")
+
+    unique_disorder_ids: list[int] = []
+    seen_ids: set[int] = set()
+    for disorder_id in payload.disorderIds:
+        if disorder_id not in seen_ids:
+            unique_disorder_ids.append(disorder_id)
+            seen_ids.add(disorder_id)
+
+    if unique_disorder_ids:
+        disorder_query = text(
+            """
+            SELECT "idDisorders", "Disorder_type"
+            FROM "disorders"
+            WHERE "idDisorders" IN :disorder_ids
+            """
+        ).bindparams(bindparam("disorder_ids", expanding=True))
+        disorder_rows = (
+            await db.execute(disorder_query, {"disorder_ids": unique_disorder_ids})
+        ).mappings()
+
+        fetched_ids: set[int] = set()
+        seen_categories: set[str] = set()
+        for row in disorder_rows:
+            disorder_id_raw = row.get("idDisorders")
+            if disorder_id_raw is None:
+                continue
+            disorder_id = int(disorder_id_raw)
+            fetched_ids.add(disorder_id)
+            category = _coerce_to_str(row.get("Disorder_type")).strip()
+            if category in seen_categories:
+                raise HTTPException(
+                    status_code=400,
+                    detail="Для каждой группы патологий можно выбрать только одну запись.",
+                )
+            seen_categories.add(category)
+
+        if len(fetched_ids) != len(unique_disorder_ids):
+            raise HTTPException(status_code=400, detail="Некоторые патологии не найдены.")
+
+    try:
+        await db.execute(
+            text('DELETE FROM "patient_disorders" WHERE "patient_id" = :patient_id'),
+            {"patient_id": patient_id},
+        )
+
+        if unique_disorder_ids:
+            await db.execute(
+                text(
+                    """
+                    INSERT INTO "patient_disorders" ("patient_id", "disorder_id")
+                    VALUES (:patient_id, :disorder_id)
+                    """
+                ),
+                [
+                    {"patient_id": patient_id, "disorder_id": disorder_id}
+                    for disorder_id in unique_disorder_ids
+                ],
+            )
+
+        await db.commit()
+    except Exception as exc:  # pragma: no cover - defensive branch
+        await db.rollback()
+        raise HTTPException(
+            status_code=500,
+            detail="Не удалось сохранить патологии пациента.",
+        ) from exc
+
+    return PatientDisordersUpdateResponse(
+        id=patient_id,
+        disorders=unique_disorder_ids,
+    )
 
 
 def _quote_identifier(identifier: str) -> str:
