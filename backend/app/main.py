@@ -554,7 +554,7 @@ async def _require_patient_authorization(
 async def patient_login(
     payload: PatientLoginRequest, db: AsyncSession = Depends(get_session)
 ) -> PatientLoginResponse:
-    username = _filter_alpha_numeric(payload.username.strip())
+    username = payload.username.strip()
     password = payload.password.strip()
 
     if not username or not password:
