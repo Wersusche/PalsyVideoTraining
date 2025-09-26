@@ -1,5 +1,10 @@
 import { ChangeEvent, FormEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { AllCommunityModule, ModuleRegistry, themeQuartz } from 'ag-grid-community';
+import {
+  AllCommunityModule,
+  ModuleRegistry,
+  RowSelectionOptions,
+  themeQuartz,
+} from 'ag-grid-community';
 import type {
   CellValueChangedEvent,
   ColDef,
@@ -249,6 +254,15 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
     [],
   );
 
+  const databaseRowSelection = useMemo<RowSelectionOptions<DatabaseRow>>(
+    () => ({
+      mode: 'multiRow',
+      headerCheckbox: false,
+      isRowSelectable: (node) => !node.data?.__deleted,
+    }),
+    [],
+  );
+
   const getLatestPatientId = (list: Patient[]) => {
     if (list.length === 0) {
       return null;
@@ -350,7 +364,7 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
   useEffect(() => {
     newRowsRef.current = databaseNewRows;
     if (gridApiRef.current) {
-      gridApiRef.current.setPinnedTopRowData(databaseNewRows);
+      gridApiRef.current.setGridOption('pinnedTopRowData', databaseNewRows);
     }
   }, [databaseNewRows]);
 
@@ -1491,12 +1505,11 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
                     defaultColDef={databaseDefaultColDef}
                     pinnedTopRowData={databaseNewRows}
                     getRowId={getDatabaseRowId}
-                    rowSelection={{ mode: 'multiRow', headerCheckbox: false }}
+                    rowSelection={databaseRowSelection}
                     onCellValueChanged={handleDatabaseCellValueChanged}
                     onFilterChanged={handleDatabaseFilterChanged}
                     onSortChanged={handleDatabaseSortChanged}
                     getRowStyle={getDatabaseRowStyle}
-                    isRowSelectable={(node) => !node.data?.__deleted}
                     rowModelType="infinite"
                     cacheBlockSize={100}
                     maxBlocksInCache={4}
