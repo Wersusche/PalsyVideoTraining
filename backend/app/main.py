@@ -1,4 +1,5 @@
 from collections import defaultdict
+import json
 from datetime import date, datetime, time
 from decimal import Decimal
 import random
@@ -14,7 +15,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.config import get_settings
 from app.db.session import get_session
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 settings = get_settings()
 app = FastAPI(title=settings.project_name)
@@ -92,6 +93,22 @@ class TableDataResponse(BaseModel):
     columns: list[str]
     rows: list[dict[str, Any]]
     totalRows: int
+    pkColumns: list[str]
+
+
+class InsertedRowSchema(BaseModel):
+    tempId: Any | None = None
+    primaryKey: dict[str, Any]
+
+
+class TableMutationRequest(BaseModel):
+    new_rows: list[dict[str, Any]] = Field(default_factory=list)
+    updated_rows: list[dict[str, Any]] = Field(default_factory=list)
+    deleted_rows: list[dict[str, Any]] = Field(default_factory=list)
+
+
+class TableMutationResponse(BaseModel):
+    inserted: list[InsertedRowSchema] = []
 
 
 @app.get("/api/healthz")
@@ -550,6 +567,239 @@ async def _get_public_tables(db: AsyncSession) -> list[str]:
     return [str(row[0]) for row in rows]
 
 
+async def _get_table_columns(db: AsyncSession, table_name: str) -> list[str]:
+    rows = await db.execute(
+        text(
+            """
+            SELECT column_name
+            FROM information_schema.columns
+            WHERE table_schema = 'public'
+              AND table_name = :table_name
+            ORDER BY ordinal_position
+            """
+        ),
+        {"table_name": table_name},
+    )
+    return [str(row[0]) for row in rows]
+
+
+async def _get_table_pk_columns(db: AsyncSession, table_name: str) -> list[str]:
+    rows = await db.execute(
+        text(
+            """
+            SELECT kcu.column_name
+            FROM information_schema.table_constraints tc
+            JOIN information_schema.key_column_usage kcu
+              ON tc.constraint_name = kcu.constraint_name
+             AND tc.table_schema = kcu.table_schema
+            WHERE tc.constraint_type = 'PRIMARY KEY'
+              AND tc.table_schema = 'public'
+              AND tc.table_name = :table_name
+            ORDER BY kcu.ordinal_position
+            """
+        ),
+        {"table_name": table_name},
+    )
+    return [str(row[0]) for row in rows]
+
+
+def _build_filter_clause(filter_model: dict[str, Any], valid_columns: set[str]) -> tuple[str, dict[str, Any]]:
+    if not filter_model:
+        return "", {}
+
+    params: dict[str, Any] = {}
+    clauses: list[str] = []
+    counter = 0
+
+    def build_condition(column: str, config: dict[str, Any]) -> tuple[str, dict[str, Any]]:
+        nonlocal counter
+        if not isinstance(config, dict):
+            return "", {}
+
+        operator = config.get("operator")
+        condition1 = config.get("condition1")
+        condition2 = config.get("condition2")
+        if operator and isinstance(condition1, dict) and isinstance(condition2, dict):
+            clause1, params1 = build_condition(column, condition1)
+            clause2, params2 = build_condition(column, condition2)
+            merged = {**params1, **params2}
+            if clause1 and clause2:
+                op = "AND" if str(operator).lower() == "and" else "OR"
+                return f"({clause1} {op} {clause2})", merged
+            if clause1:
+                return clause1, merged
+            if clause2:
+                return clause2, merged
+            return "", merged
+
+        filter_type = config.get("filterType")
+        column_expr = _quote_identifier(column)
+
+        def make_param(value: Any) -> tuple[str, dict[str, Any]]:
+            nonlocal counter
+            param_name = f"p_{counter}"
+            counter += 1
+            return param_name, {param_name: value}
+
+        if filter_type == "text":
+            filter_condition = config.get("type")
+            if filter_condition in {"blank", "notBlank"}:
+                if filter_condition == "blank":
+                    return f"({column_expr} IS NULL OR CAST({column_expr} AS TEXT) = '')", {}
+                return f"({column_expr} IS NOT NULL AND CAST({column_expr} AS TEXT) <> '')", {}
+
+            value = config.get("filter")
+            if not isinstance(value, str):
+                return "", {}
+            param_name, param_value = make_param(value)
+            if filter_condition == "contains":
+                return (
+                    f"CAST({column_expr} AS TEXT) ILIKE '%' || :{param_name} || '%'",
+                    param_value,
+                )
+            if filter_condition == "notContains":
+                return (
+                    f"CAST({column_expr} AS TEXT) NOT ILIKE '%' || :{param_name} || '%'",
+                    param_value,
+                )
+            if filter_condition == "equals":
+                return (f"CAST({column_expr} AS TEXT) ILIKE :{param_name}", param_value)
+            if filter_condition == "notEqual":
+                return (f"CAST({column_expr} AS TEXT) NOT ILIKE :{param_name}", param_value)
+            if filter_condition == "startsWith":
+                return (
+                    f"CAST({column_expr} AS TEXT) ILIKE :{param_name} || '%'",
+                    param_value,
+                )
+            if filter_condition == "endsWith":
+                return (
+                    f"CAST({column_expr} AS TEXT) ILIKE '%' || :{param_name}",
+                    param_value,
+                )
+            return "", {}
+
+        if filter_type == "number":
+            filter_condition = config.get("type")
+            if filter_condition in {"blank", "notBlank"}:
+                if filter_condition == "blank":
+                    return f"{column_expr} IS NULL", {}
+                return f"{column_expr} IS NOT NULL", {}
+
+            value = config.get("filter")
+            filter_to = config.get("filterTo")
+            try:
+                numeric_value = float(value)
+            except (TypeError, ValueError):
+                return "", {}
+
+            if filter_condition == "inRange":
+                try:
+                    numeric_value_to = float(filter_to)
+                except (TypeError, ValueError):
+                    return "", {}
+                param_from, param_dict_from = make_param(numeric_value)
+                param_to, param_dict_to = make_param(numeric_value_to)
+                return (
+                    f"{column_expr} BETWEEN :{param_from} AND :{param_to}",
+                    {**param_dict_from, **param_dict_to},
+                )
+
+            param_name, param_value = make_param(numeric_value)
+            if filter_condition == "equals":
+                return (f"{column_expr} = :{param_name}", param_value)
+            if filter_condition == "notEqual":
+                return (f"{column_expr} <> :{param_name}", param_value)
+            if filter_condition == "lessThan":
+                return (f"{column_expr} < :{param_name}", param_value)
+            if filter_condition == "lessThanOrEqual":
+                return (f"{column_expr} <= :{param_name}", param_value)
+            if filter_condition == "greaterThan":
+                return (f"{column_expr} > :{param_name}", param_value)
+            if filter_condition == "greaterThanOrEqual":
+                return (f"{column_expr} >= :{param_name}", param_value)
+            return "", {}
+
+        if filter_type == "set":
+            values = config.get("values")
+            if not isinstance(values, list) or not values:
+                return "", {}
+            placeholders: list[str] = []
+            collected: dict[str, Any] = {}
+            for value in values:
+                param_name, param_value = make_param(value)
+                placeholders.append(f":{param_name}")
+                collected.update(param_value)
+            joined = ", ".join(placeholders)
+            return (f"{column_expr} IN ({joined})", collected)
+
+        if filter_type == "date":
+            filter_condition = config.get("type")
+            if filter_condition in {"blank", "notBlank"}:
+                if filter_condition == "blank":
+                    return f"{column_expr} IS NULL", {}
+                return f"{column_expr} IS NOT NULL", {}
+
+            value = config.get("dateFrom") or config.get("filter")
+            if not value:
+                return "", {}
+            identifier = f"CAST({column_expr} AS DATE)"
+            if filter_condition == "inRange":
+                value_to = config.get("dateTo") or config.get("filterTo")
+                if not value_to:
+                    return "", {}
+                param_from, param_dict_from = make_param(value)
+                param_to, param_dict_to = make_param(value_to)
+                return (
+                    f"{identifier} BETWEEN :{param_from} AND :{param_to}",
+                    {**param_dict_from, **param_dict_to},
+                )
+            param_name, param_value = make_param(value)
+            if filter_condition == "equals":
+                return (f"{identifier} = :{param_name}", param_value)
+            if filter_condition == "notEqual":
+                return (f"{identifier} <> :{param_name}", param_value)
+            if filter_condition == "lessThan":
+                return (f"{identifier} < :{param_name}", param_value)
+            if filter_condition == "lessThanOrEqual":
+                return (f"{identifier} <= :{param_name}", param_value)
+            if filter_condition == "greaterThan":
+                return (f"{identifier} > :{param_name}", param_value)
+            if filter_condition == "greaterThanOrEqual":
+                return (f"{identifier} >= :{param_name}", param_value)
+            return "", {}
+
+        return "", {}
+
+    for column, config in filter_model.items():
+        if not isinstance(config, dict):
+            continue
+        if column not in valid_columns:
+            continue
+        clause, clause_params = build_condition(column, config)
+        if clause:
+            clauses.append(clause)
+            params.update(clause_params)
+
+    if not clauses:
+        return "", {}
+
+    return " AND ".join(clauses), params
+
+
+def _build_sort_clause(sort_model: list[dict[str, Any]], valid_columns: set[str]) -> str:
+    if not sort_model:
+        return ""
+    parts: list[str] = []
+    for item in sort_model:
+        column = item.get("colId")
+        if column not in valid_columns:
+            continue
+        direction_raw = str(item.get("sort", "asc")).lower()
+        direction = "DESC" if direction_raw == "desc" else "ASC"
+        parts.append(f"{_quote_identifier(column)} {direction}")
+    return ", ".join(parts)
+
+
 @app.get("/api/database/tables", response_model=DatabaseTablesResponse)
 async def list_database_tables(db: AsyncSession = Depends(get_session)) -> DatabaseTablesResponse:
     tables = await _get_public_tables(db)
@@ -561,6 +811,8 @@ async def get_table_data(
     table_name: str,
     offset: int = 0,
     limit: int = 100,
+    filter: str | None = None,
+    sort: str | None = None,
     db: AsyncSession = Depends(get_session),
 ) -> TableDataResponse:
     offset = max(offset, 0)
@@ -572,19 +824,164 @@ async def get_table_data(
 
     quoted_table = _quote_identifier(table_name)
 
-    count_result = await db.execute(text(f"SELECT COUNT(*) FROM {quoted_table}"))
+    try:
+        filter_model = json.loads(filter) if filter else {}
+    except json.JSONDecodeError:
+        filter_model = {}
+    if not isinstance(filter_model, dict):
+        filter_model = {}
+
+    try:
+        sort_model = json.loads(sort) if sort else []
+    except json.JSONDecodeError:
+        sort_model = []
+    if not isinstance(sort_model, list):
+        sort_model = []
+
+    columns = await _get_table_columns(db, table_name)
+    valid_columns = set(columns)
+    filter_clause, filter_params = _build_filter_clause(filter_model, valid_columns)
+    sort_clause = _build_sort_clause(sort_model, valid_columns)
+    pk_columns = await _get_table_pk_columns(db, table_name)
+
+    count_query = f"SELECT COUNT(*) FROM {quoted_table}"
+    if filter_clause:
+        count_query += f" WHERE {filter_clause}"
+    count_result = await db.execute(text(count_query), filter_params)
     total_rows_raw = count_result.scalar()
     total_rows = int(total_rows_raw or 0)
 
-    data_result = await db.execute(
-        text(f"SELECT * FROM {quoted_table} OFFSET :offset LIMIT :limit"),
-        {"offset": offset, "limit": limit},
-    )
+    query = f"SELECT * FROM {quoted_table}"
+    if filter_clause:
+        query += f" WHERE {filter_clause}"
+    if sort_clause:
+        query += f" ORDER BY {sort_clause}"
+    query += " OFFSET :offset LIMIT :limit"
 
-    columns = list(data_result.keys())
+    params = {**filter_params, "offset": offset, "limit": limit}
+    data_result = await db.execute(text(query), params)
+
+    if not columns:
+        columns = list(data_result.keys())
     rows = [
         {column: _serialize_value(value) for column, value in row.items()}
         for row in data_result.mappings()
     ]
 
-    return TableDataResponse(columns=columns, rows=rows, totalRows=total_rows)
+    return TableDataResponse(
+        columns=columns,
+        rows=rows,
+        totalRows=total_rows,
+        pkColumns=pk_columns,
+    )
+
+
+@app.post("/api/database/tables/{table_name}", response_model=TableMutationResponse)
+async def mutate_table_data(
+    table_name: str,
+    payload: TableMutationRequest,
+    db: AsyncSession = Depends(get_session),
+) -> TableMutationResponse:
+    tables = await _get_public_tables(db)
+    if table_name not in tables:
+        raise HTTPException(status_code=404, detail="Table not found")
+
+    quoted_table = _quote_identifier(table_name)
+    columns = await _get_table_columns(db, table_name)
+    pk_columns = await _get_table_pk_columns(db, table_name)
+    column_set = set(columns)
+    pk_set = set(pk_columns)
+
+    inserted_rows: list[InsertedRowSchema] = []
+
+    try:
+        # Handle inserts
+        for index, row in enumerate(payload.new_rows):
+            if not isinstance(row, dict):
+                continue
+            temp_id = row.get("__tmp_id") or row.get("tempId") or row.get("__rowId")
+            values = {key: row[key] for key in row if key in column_set and key not in pk_set}
+            params: dict[str, Any] = {}
+            if values:
+                column_names = ", ".join(_quote_identifier(column) for column in values)
+                value_placeholders: list[str] = []
+                for position, (column, value) in enumerate(values.items()):
+                    param_name = f"ins_{index}_{position}"
+                    params[param_name] = value
+                    value_placeholders.append(f":{param_name}")
+                query = f"INSERT INTO {quoted_table} ({column_names}) VALUES ({', '.join(value_placeholders)})"
+            else:
+                query = f"INSERT INTO {quoted_table} DEFAULT VALUES"
+            if pk_columns:
+                returning = ", ".join(_quote_identifier(column) for column in pk_columns)
+                query = f"{query} RETURNING {returning}"
+            result = await db.execute(text(query), params)
+            if pk_columns:
+                mapping = result.mappings().first()
+                if mapping is not None:
+                    primary_key = {
+                        column: _serialize_value(mapping[column]) for column in pk_columns
+                    }
+                else:
+                    primary_key = {column: None for column in pk_columns}
+            else:
+                primary_key = {}
+            inserted_rows.append(InsertedRowSchema(tempId=temp_id, primaryKey=primary_key))
+
+        # Handle updates
+        for index, row in enumerate(payload.updated_rows):
+            if not isinstance(row, dict):
+                continue
+            if not pk_columns:
+                continue
+            pk_values = {column: row.get(column) for column in pk_columns}
+            if any(value is None for value in pk_values.values()):
+                continue
+            updates = {
+                key: row[key]
+                for key in row
+                if key in column_set and key not in pk_set and key not in {"__deleted"}
+            }
+            if not updates:
+                continue
+            set_clauses: list[str] = []
+            params: dict[str, Any] = {}
+            for position, (column, value) in enumerate(updates.items()):
+                param_name = f"upd_{index}_{position}"
+                set_clauses.append(f"{_quote_identifier(column)} = :{param_name}")
+                params[param_name] = value
+            where_clauses: list[str] = []
+            for position, (column, value) in enumerate(pk_values.items()):
+                param_name = f"upd_pk_{index}_{position}"
+                where_clauses.append(f"{_quote_identifier(column)} = :{param_name}")
+                params[param_name] = value
+            query = (
+                f"UPDATE {quoted_table} SET {', '.join(set_clauses)}"
+                f" WHERE {' AND '.join(where_clauses)}"
+            )
+            await db.execute(text(query), params)
+
+        # Handle deletes
+        for index, row in enumerate(payload.deleted_rows):
+            if not isinstance(row, dict):
+                continue
+            if not pk_columns:
+                continue
+            pk_values = {column: row.get(column) for column in pk_columns}
+            if any(value is None for value in pk_values.values()):
+                continue
+            where_clauses: list[str] = []
+            params: dict[str, Any] = {}
+            for position, (column, value) in enumerate(pk_values.items()):
+                param_name = f"del_{index}_{position}"
+                where_clauses.append(f"{_quote_identifier(column)} = :{param_name}")
+                params[param_name] = value
+            query = f"DELETE FROM {quoted_table} WHERE {' AND '.join(where_clauses)}"
+            await db.execute(text(query), params)
+
+        await db.commit()
+    except Exception as exc:  # pragma: no cover - defensive branch
+        await db.rollback()
+        raise HTTPException(status_code=400, detail="Не удалось сохранить изменения") from exc
+
+    return TableMutationResponse(inserted=inserted_rows)
