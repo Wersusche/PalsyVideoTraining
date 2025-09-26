@@ -91,6 +91,13 @@ class AssignExercisesResponse(BaseModel):
     appointments: list[AppointmentSchema]
 
 
+class UpdateAppointmentRequest(BaseModel):
+    start: date
+    end: date
+    perDay: int = Field(ge=1)
+    durationSeconds: int = Field(gt=0)
+
+
 class DoctorLoginRequest(BaseModel):
     login: str
     password: str
@@ -839,6 +846,114 @@ async def assign_patient_exercises(
         ) from exc
 
     return AssignExercisesResponse(id=patient_id, appointments=inserted_appointments)
+
+
+@app.put(
+    "/api/patients/{patient_id}/appointments/{appointment_id}",
+    response_model=AppointmentSchema,
+)
+async def update_patient_appointment(
+    patient_id: int,
+    appointment_id: int,
+    payload: UpdateAppointmentRequest,
+    db: AsyncSession = Depends(get_session),
+) -> AppointmentSchema:
+    if payload.start > payload.end:
+        raise HTTPException(
+            status_code=400,
+            detail="Дата окончания не может быть раньше даты начала.",
+        )
+
+    appointment_row = (
+        await db.execute(
+            text(
+                'SELECT "idAppointments", "idPatients"\n'
+                'FROM "appointments"\n'
+                'WHERE "idAppointments" = :appointment_id\n'
+                '  AND "idPatients" = :patient_id'
+            ),
+            {"appointment_id": appointment_id, "patient_id": patient_id},
+        )
+    ).mappings().first()
+
+    if appointment_row is None:
+        raise HTTPException(status_code=404, detail="Назначение не найдено.")
+
+    try:
+        duration_time = _seconds_to_time(payload.durationSeconds)
+    except ValueError as exc:
+        raise HTTPException(
+            status_code=400,
+            detail="Длительность упражнения должна быть меньше 24 часов.",
+        ) from exc
+
+    try:
+        result = await db.execute(
+            text(
+                """
+                UPDATE "appointments"
+                SET "Starttime" = :start,
+                    "Endtime" = :end,
+                    "kolvden" = :per_day,
+                    "dlitelnost" = :duration
+                WHERE "idAppointments" = :appointment_id
+                  AND "idPatients" = :patient_id
+                RETURNING
+                    "idAppointments",
+                    "idvideos",
+                    "Starttime",
+                    "Endtime",
+                    "kolvden",
+                    "sdelanovsego",
+                    "done_percent",
+                    EXTRACT(EPOCH FROM "dlitelnost") AS duration_seconds
+                """
+            ),
+            {
+                "start": payload.start,
+                "end": payload.end,
+                "per_day": payload.perDay,
+                "duration": duration_time,
+                "appointment_id": appointment_id,
+                "patient_id": patient_id,
+            },
+        )
+        row = result.mappings().first()
+        if row is None:
+            raise HTTPException(status_code=404, detail="Назначение не найдено.")
+
+        await db.commit()
+    except HTTPException:
+        await db.rollback()
+        raise
+    except Exception as exc:  # pragma: no cover - defensive branch
+        await db.rollback()
+        raise HTTPException(
+            status_code=500,
+            detail="Не удалось обновить назначение.",
+        ) from exc
+
+    duration_raw = row.get("duration_seconds")
+    if isinstance(duration_raw, Decimal):
+        duration_seconds = int(duration_raw)
+    elif duration_raw is None:
+        duration_seconds = payload.durationSeconds
+    else:
+        try:
+            duration_seconds = int(duration_raw)
+        except (TypeError, ValueError):
+            duration_seconds = payload.durationSeconds
+
+    return AppointmentSchema(
+        id=str(row["idAppointments"]),
+        exerciseId=int(row["idvideos"]),
+        start=_to_iso_date(row["Starttime"]),
+        end=_to_iso_date(row["Endtime"]),
+        perDay=int(row.get("kolvden") or 0),
+        totalCompleted=int(row.get("sdelanovsego") or 0),
+        donePercent=int(row.get("done_percent") or 0),
+        durationSeconds=duration_seconds,
+    )
 
 
 def _quote_identifier(identifier: str) -> str:
