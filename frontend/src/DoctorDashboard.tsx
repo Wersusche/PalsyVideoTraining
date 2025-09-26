@@ -32,8 +32,24 @@ type Exercise = {
   name: string;
   type: string;
   description?: string;
-  bodyPart?: string;
-  typeOfActivity?: string;
+  bodyPart?: string | null;
+  typeOfActivity?: string | null;
+  filename?: string | null;
+  filePath?: string | null;
+  mimeType?: string | null;
+  videoUrl?: string | null;
+};
+
+type VideoMetadata = {
+  id: number;
+  name: string | null;
+  type: string | null;
+  filename: string | null;
+  bodyPart: string | null;
+  typeOfActivity: string | null;
+  filePath: string | null;
+  mimeType: string | null;
+  url: string | null;
 };
 
 type Appointment = {
@@ -196,6 +212,19 @@ const getAge = (birthDate: string) => {
   return { years, months: Math.max(0, months) };
 };
 
+const mapVideoMetadataToExercise = (metadata: VideoMetadata): Exercise => ({
+  id: metadata.id,
+  name: metadata.name ?? '',
+  type: metadata.type ?? '',
+  description: metadata.filename ?? undefined,
+  filename: metadata.filename,
+  bodyPart: metadata.bodyPart,
+  typeOfActivity: metadata.typeOfActivity,
+  filePath: metadata.filePath,
+  mimeType: metadata.mimeType,
+  videoUrl: metadata.url,
+});
+
 const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
   const [patients, setPatients] = useState<Patient[]>([]);
   const [patientSearch, setPatientSearch] = useState('');
@@ -228,9 +257,21 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
     minutes: '05',
     seconds: '00',
   });
+  const [isUploadDialogOpen, setIsUploadDialogOpen] = useState(false);
+  const [uploadingVideo, setUploadingVideo] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
+  const [uploadStatusMessage, setUploadStatusMessage] = useState<StatusMessage | null>(null);
+  const [uploadForm, setUploadForm] = useState<{
+    exerciseId: number | 'new';
+    file: File | null;
+  }>({
+    exerciseId: 'new',
+    file: null,
+  });
   const [completedVisibleCount, setCompletedVisibleCount] = useState(COMPLETED_INITIAL_COUNT);
   const completedListRef = useRef<HTMLUListElement | null>(null);
   const previousPatientIdRef = useRef<number | null>(null);
+  const uploadFileInputRef = useRef<HTMLInputElement | null>(null);
   const [databaseTables, setDatabaseTables] = useState<string[]>([]);
   const [isLoadingTables, setIsLoadingTables] = useState(false);
   const [tablesLoadError, setTablesLoadError] = useState<string | null>(null);
@@ -380,6 +421,18 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
     setDisorderMessage(null);
     setIsSavingDisorders(false);
   }, [selectedPatientId]);
+
+  useEffect(() => {
+    if (!uploadStatusMessage) {
+      return undefined;
+    }
+    const timer = window.setTimeout(() => {
+      setUploadStatusMessage(null);
+    }, 4000);
+    return () => {
+      window.clearTimeout(timer);
+    };
+  }, [uploadStatusMessage]);
 
   useEffect(() => {
     newRowsRef.current = databaseNewRows;
@@ -792,6 +845,118 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
       ...prev,
       [field]: value,
     }));
+  };
+
+  const resetUploadState = useCallback(() => {
+    setUploadForm({ exerciseId: 'new', file: null });
+    setUploadError(null);
+    setUploadingVideo(false);
+    if (uploadFileInputRef.current) {
+      uploadFileInputRef.current.value = '';
+    }
+  }, [uploadFileInputRef]);
+
+  const closeUploadDialog = useCallback(() => {
+    setIsUploadDialogOpen(false);
+    resetUploadState();
+  }, [resetUploadState]);
+
+  const handleUploadClick = () => {
+    setUploadStatusMessage(null);
+    setIsUploadDialogOpen(true);
+    setUploadError(null);
+    setUploadingVideo(false);
+    setUploadForm((prev) => ({
+      ...prev,
+      exerciseId: selectedExercises[0] ?? 'new',
+      file: null,
+    }));
+    if (uploadFileInputRef.current) {
+      uploadFileInputRef.current.value = '';
+    }
+  };
+
+  const handleUploadExerciseChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    const { value } = event.target;
+    setUploadForm((prev) => ({
+      ...prev,
+      exerciseId: value === 'new' ? 'new' : Number.parseInt(value, 10),
+    }));
+  };
+
+  const handleUploadFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0] ?? null;
+    setUploadForm((prev) => ({
+      ...prev,
+      file,
+    }));
+    if (file) {
+      setUploadError(null);
+    }
+  };
+
+  const handleUploadConfirm = async () => {
+    if (!uploadForm.file) {
+      setUploadError('Выберите видеофайл для загрузки.');
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('file', uploadForm.file);
+    if (uploadForm.exerciseId !== 'new') {
+      formData.append('video_id', String(uploadForm.exerciseId));
+    }
+
+    try {
+      setUploadingVideo(true);
+      setUploadError(null);
+      const response = await fetch('/api/videos/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) {
+        const data = (await response.json().catch(() => null)) as { detail?: string } | null;
+        const message = data?.detail || 'Не удалось загрузить видео. Попробуйте ещё раз.';
+        throw new Error(message);
+      }
+
+      const metadata = (await response.json()) as VideoMetadata;
+      const updatedExercise = mapVideoMetadataToExercise(metadata);
+
+      setExercises((prev) => {
+        const index = prev.findIndex((exercise) => exercise.id === updatedExercise.id);
+        if (index === -1) {
+          const next = [...prev, updatedExercise];
+          return next.sort((a, b) => {
+            const typeCompare = a.type.localeCompare(b.type);
+            if (typeCompare !== 0) {
+              return typeCompare;
+            }
+            return a.name.localeCompare(b.name);
+          });
+        }
+        const next = [...prev];
+        next[index] = { ...next[index], ...updatedExercise };
+        return next;
+      });
+
+      setUploadStatusMessage({
+        status: 'success',
+        text:
+          uploadForm.exerciseId === 'new'
+            ? 'Видео успешно загружено.'
+            : 'Видео для упражнения обновлено.',
+      });
+
+      closeUploadDialog();
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : 'Не удалось загрузить видео. Попробуйте ещё раз.';
+      setUploadError(message);
+    } finally {
+      setUploadingVideo(false);
+    }
   };
 
   const handleAssignExercises = async (event: FormEvent<HTMLFormElement>) => {
@@ -2082,7 +2247,16 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
                     <span className="exercise-counter">
                       Выбрано: {selectedExercises.length}
                     </span>
+                    <button type="button" className="secondary-button" onClick={handleUploadClick}>
+                      Загрузить видео
+                    </button>
                   </div>
+
+                  {uploadStatusMessage && (
+                    <p className={`patient-section-message ${uploadStatusMessage.status}`}>
+                      {uploadStatusMessage.text}
+                    </p>
+                  )}
 
                   <div className="exercise-groups">
                     {Object.entries(categorizedExercises).map(([group, items]) => {
@@ -2258,6 +2432,84 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
           )}
         </section>
       </main>
+
+      {isUploadDialogOpen && (
+        <div className="auth-modal-backdrop" role="presentation">
+          <div
+            className="auth-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="upload-dialog-title"
+          >
+            <button
+              type="button"
+              className="auth-close"
+              onClick={closeUploadDialog}
+              aria-label="Закрыть окно"
+              disabled={uploadingVideo}
+            >
+              ×
+            </button>
+            <h3 id="upload-dialog-title">Загрузка видео</h3>
+            <p className="muted">
+              Выберите упражнение для обновления или создайте новое и прикрепите видеофайл.
+            </p>
+            <label className="form-label">
+              Упражнение
+              <select
+                value={uploadForm.exerciseId === 'new' ? 'new' : String(uploadForm.exerciseId)}
+                onChange={handleUploadExerciseChange}
+                disabled={uploadingVideo}
+              >
+                <option value="new">Создать новое упражнение</option>
+                {exercises.map((exercise) => (
+                  <option key={exercise.id} value={exercise.id}>
+                    {exercise.name || `Упражнение ${exercise.id}`}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label className="form-label">
+              Видео файл
+              <input
+                ref={uploadFileInputRef}
+                type="file"
+                accept="video/*"
+                onChange={handleUploadFileChange}
+                disabled={uploadingVideo}
+              />
+            </label>
+            {uploadForm.file && (
+              <p className="muted" role="status">
+                Выбран файл: {uploadForm.file.name}
+              </p>
+            )}
+            {uploadError && (
+              <p className="patient-section-message error" role="alert">
+                {uploadError}
+              </p>
+            )}
+            <div className="auth-actions">
+              <button
+                type="button"
+                className="secondary-button"
+                onClick={closeUploadDialog}
+                disabled={uploadingVideo}
+              >
+                Отмена
+              </button>
+              <button
+                type="button"
+                className="primary-button"
+                onClick={handleUploadConfirm}
+                disabled={uploadingVideo}
+              >
+                {uploadingVideo ? 'Загрузка…' : 'Загрузить'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
