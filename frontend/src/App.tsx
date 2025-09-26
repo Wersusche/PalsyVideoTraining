@@ -1,5 +1,6 @@
 import { FormEvent, useMemo, useState } from 'react';
 import DoctorDashboard from './DoctorDashboard';
+import PatientDashboard, { PatientSessionProfile } from './PatientDashboard';
 
 type Role = 'doctor' | 'patient';
 
@@ -31,13 +32,6 @@ const roleContent: Record<Role, RoleContent> = {
   },
 };
 
-const patientPageContent = {
-  title: 'Личный кабинет пациента',
-  lead: 'Ваша домашняя страница с упражнениями и напоминаниями.',
-  description:
-    'Мы работаем над разделом, где будут отображаться занятия, видеоинструкции и рекомендации врача. Как только сервис будет готов, вы сможете отслеживать прогресс и получать обратную связь.',
-};
-
 const App = () => {
   const roadmapItems = useMemo(
     () => [
@@ -52,14 +46,50 @@ const App = () => {
   const [login, setLogin] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [patientSession, setPatientSession] = useState<{
+    token: string;
+    profile: PatientSessionProfile;
+  } | null>(null);
 
   const patientDemoCredentials = roleContent.patient.demoCredentials;
   const activeRoleContent = activeRole ? roleContent[activeRole] : null;
 
+  const readErrorMessage = async (response: Response) => {
+    const contentType = response.headers.get('content-type') ?? '';
+
+    if (contentType.includes('application/json')) {
+      try {
+        const data = await response.clone().json();
+        const detail = typeof data?.detail === 'string' ? data.detail.trim() : '';
+        if (detail) {
+          return detail;
+        }
+      } catch (error_) {
+        console.error('Не удалось обработать ответ сервера', error_);
+      }
+    }
+
+    try {
+      const text = (await response.text()).trim();
+      if (text) {
+        return text;
+      }
+    } catch (error_) {
+      console.error('Не удалось прочитать текст ответа', error_);
+    }
+
+    return 'Не удалось выполнить запрос. Попробуйте позже.';
+  };
+
   const openModal = (role: Role) => {
     setActiveRole(role);
-    setLogin('');
-    setPassword('');
+    if (role === 'patient' && patientDemoCredentials) {
+      setLogin(patientDemoCredentials.login);
+      setPassword(patientDemoCredentials.password);
+    } else {
+      setLogin('');
+      setPassword('');
+    }
     setError('');
   };
 
@@ -98,38 +128,47 @@ const App = () => {
           return;
         }
 
-        let message = 'Неверный логин или пароль. Попробуйте ещё раз.';
-        const contentType = response.headers.get('content-type') ?? '';
-
-        if (contentType.includes('application/json')) {
-          const data = await response.json();
-          if (typeof data?.detail === 'string' && data.detail.trim() !== '') {
-            message = data.detail;
-          }
-        } else {
-          const text = (await response.text()).trim();
-          if (text !== '') {
-            message = text;
-          }
-        }
-
-        setError(message);
+        setError(await readErrorMessage(response));
       } catch (error_) {
+        console.error(error_);
         setError('Не удалось связаться с сервером. Проверьте соединение и попробуйте снова.');
       }
 
       return;
     }
 
-    const expected = roleContent[activeRole].demoCredentials;
-
-    if (expected && normalizedLogin === expected.login && password === expected.password) {
-      setView(activeRole);
-      closeModal();
+    if (!normalizedLogin || !password) {
+      setError('Введите логин и пароль.');
       return;
     }
 
-    setError('Неверный логин или пароль. Попробуйте ещё раз.');
+    try {
+      const response = await fetch('/api/patient-login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: normalizedLogin, password }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        const profile: PatientSessionProfile = {
+          id: data.patientId,
+          firstName: data.firstName,
+          lastName: data.lastName,
+          middleName: data.middleName ?? null,
+          username: data.username,
+        };
+        setPatientSession({ token: data.token, profile });
+        setView('patient');
+        closeModal();
+        return;
+      }
+
+      setError(await readErrorMessage(response));
+    } catch (error_) {
+      console.error(error_);
+      setError('Не удалось связаться с сервером. Проверьте соединение и попробуйте снова.');
+    }
   };
 
   const handleLogout = () => {
@@ -138,24 +177,31 @@ const App = () => {
     setLogin('');
     setPassword('');
     setError('');
+    setPatientSession(null);
   };
 
   if (view === 'doctor') {
     return <DoctorDashboard onLogout={handleLogout} />;
   }
 
+  if (view === 'patient' && patientSession) {
+    return (
+      <PatientDashboard
+        token={patientSession.token}
+        patient={patientSession.profile}
+        onLogout={handleLogout}
+      />
+    );
+  }
+
   if (view === 'patient') {
     return (
       <div className="app page patient-page">
-        <header className="page-header">
-          <h1>{patientPageContent.title}</h1>
-          <p className="lead">{patientPageContent.lead}</p>
-          <button type="button" className="secondary-button" onClick={handleLogout}>
-            Выйти
-          </button>
-        </header>
         <main className="page-body">
-          <p>{patientPageContent.description}</p>
+          <p>Не удалось загрузить данные пациента. Попробуйте войти снова.</p>
+          <button type="button" className="secondary-button" onClick={handleLogout}>
+            Вернуться на главную
+          </button>
         </main>
       </div>
     );
