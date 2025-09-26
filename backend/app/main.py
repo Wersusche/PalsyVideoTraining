@@ -8,7 +8,7 @@ from typing import Any
 from uuid import UUID
 
 import bcrypt
-from fastapi import Depends, FastAPI, HTTPException
+from fastapi import Depends, FastAPI, HTTPException, Response
 from sqlalchemy import bindparam, text
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -954,6 +954,44 @@ async def update_patient_appointment(
         donePercent=int(row.get("done_percent") or 0),
         durationSeconds=duration_seconds,
     )
+
+
+@app.delete(
+    "/api/patients/{patient_id}/appointments/{appointment_id}",
+    status_code=204,
+)
+async def delete_patient_appointment(
+    patient_id: int,
+    appointment_id: int,
+    db: AsyncSession = Depends(get_session),
+) -> Response:
+    try:
+        result = await db.execute(
+            text(
+                'DELETE FROM "appointments"\n'
+                'WHERE "idAppointments" = :appointment_id\n'
+                '  AND "idPatients" = :patient_id\n'
+                'RETURNING "idAppointments"'
+            ),
+            {"appointment_id": appointment_id, "patient_id": patient_id},
+        )
+        row = result.first()
+        if row is None:
+            await db.rollback()
+            raise HTTPException(status_code=404, detail="Назначение не найдено.")
+
+        await db.commit()
+    except HTTPException:
+        await db.rollback()
+        raise
+    except Exception as exc:  # pragma: no cover - defensive branch
+        await db.rollback()
+        raise HTTPException(
+            status_code=500,
+            detail="Не удалось удалить назначение.",
+        ) from exc
+
+    return Response(status_code=204)
 
 
 def _quote_identifier(identifier: str) -> str:
