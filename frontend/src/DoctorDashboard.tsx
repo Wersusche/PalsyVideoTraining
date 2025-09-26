@@ -72,6 +72,11 @@ type DoctorDashboardData = {
 
 type PatientDisordersUpdateResponse = Pick<Patient, 'id' | 'disorders'>;
 
+type AssignExercisesResponse = {
+  id: number;
+  appointments: Appointment[];
+};
+
 type DoctorViewMode = 'dashboard' | 'database';
 
 type DatabaseTablesResponse = {
@@ -213,6 +218,7 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
   const [formMessage, setFormMessage] = useState<string | null>(null);
   const [showOnlyRecommended, setShowOnlyRecommended] = useState(true);
   const [selectedExercises, setSelectedExercises] = useState<number[]>([]);
+  const [isAssigningExercises, setIsAssigningExercises] = useState(false);
   const [isSavingDisorders, setIsSavingDisorders] = useState(false);
   const [disorderMessage, setDisorderMessage] = useState<StatusMessage | null>(null);
   const [exerciseForm, setExerciseForm] = useState({
@@ -788,8 +794,9 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
     }));
   };
 
-  const handleAssignExercises = (event: FormEvent<HTMLFormElement>) => {
+  const handleAssignExercises = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setFormMessage(null);
 
     if (!selectedPatient) {
       setFormMessage('Сначала выберите пациента.');
@@ -804,13 +811,19 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
     const start = new Date(exerciseForm.start);
     const end = new Date(exerciseForm.end);
 
+    if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) {
+      setFormMessage('Укажите корректные даты начала и окончания.');
+      return;
+    }
+
     if (end < start) {
       setFormMessage('Дата окончания не может быть раньше даты начала.');
       return;
     }
 
     const perDay = Math.max(1, Number.parseInt(exerciseForm.perDay, 10) || 1);
-    const durationSeconds = Number.parseInt(exerciseForm.minutes, 10) * 60 +
+    const durationSeconds =
+      Number.parseInt(exerciseForm.minutes, 10) * 60 +
       Number.parseInt(exerciseForm.seconds, 10);
 
     if (Number.isNaN(durationSeconds) || durationSeconds <= 0) {
@@ -819,61 +832,101 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
     }
 
     let overlapsDetected = false;
+    const exercisesToAssign: number[] = [];
 
-    setPatients((prevPatients) =>
-      prevPatients.map((patient) => {
-        if (patient.id !== selectedPatient.id) {
-          return patient;
+    selectedExercises.forEach((exerciseId) => {
+      const overlap = selectedPatient.appointments.some((appointment) => {
+        if (appointment.exerciseId !== exerciseId) {
+          return false;
         }
+        const existingStart = new Date(appointment.start);
+        const existingEnd = new Date(appointment.end);
+        return (
+          (start >= existingStart && start <= existingEnd) ||
+          (end >= existingStart && end <= existingEnd) ||
+          (existingStart >= start && existingStart <= end)
+        );
+      });
 
-        const updatedAppointments = [...patient.appointments];
+      if (overlap) {
+        const confirmOverwrite = window.confirm(
+          'Для выбранного периода уже назначено упражнение. Добавить ещё одну запись?',
+        );
+        if (!confirmOverwrite) {
+          overlapsDetected = true;
+          return;
+        }
+      }
 
-        selectedExercises.forEach((exerciseId) => {
-          const overlap = patient.appointments.some((appointment) => {
-            if (appointment.exerciseId !== exerciseId) {
-              return false;
-            }
-            const existingStart = new Date(appointment.start);
-            const existingEnd = new Date(appointment.end);
-            return (
-              (start >= existingStart && start <= existingEnd) ||
-              (end >= existingStart && end <= existingEnd) ||
-              (existingStart >= start && existingStart <= end)
-            );
-          });
+      exercisesToAssign.push(exerciseId);
+    });
 
-          if (overlap) {
-            const confirmOverwrite = window.confirm(
-              'Для выбранного периода уже назначено упражнение. Добавить ещё одну запись?',
-            );
-            if (!confirmOverwrite) {
-              overlapsDetected = true;
-              return;
-            }
+    if (exercisesToAssign.length === 0) {
+      return;
+    }
+
+    setIsAssigningExercises(true);
+
+    try {
+      const response = await fetch(`/api/patients/${selectedPatient.id}/appointments`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          exerciseIds: exercisesToAssign,
+          start: exerciseForm.start,
+          end: exerciseForm.end,
+          perDay,
+          durationSeconds,
+        }),
+      });
+
+      const data = (await response.json().catch(() => null)) as
+        | (AssignExercisesResponse & { detail?: never })
+        | { detail?: string }
+        | null;
+
+      if (!response.ok || !data || 'detail' in data) {
+        const message =
+          data && 'detail' in data && data.detail
+            ? data.detail
+            : 'Не удалось назначить упражнения. Попробуйте позже.';
+        throw new Error(message);
+      }
+
+      const result = data as AssignExercisesResponse;
+
+      setPatients((prevPatients) =>
+        prevPatients.map((patient) => {
+          if (patient.id !== result.id) {
+            return patient;
           }
-
-          updatedAppointments.push({
-            id: `app-${Date.now()}-${Math.random().toString(16).slice(2)}`,
-            exerciseId,
-            start: exerciseForm.start,
-            end: exerciseForm.end,
-            perDay,
-            totalCompleted: 0,
-            donePercent: 0,
-            durationSeconds,
+          const existingIds = new Set(patient.appointments.map((item) => item.id));
+          const mergedAppointments = [...patient.appointments];
+          result.appointments.forEach((appointment) => {
+            if (!existingIds.has(appointment.id)) {
+              mergedAppointments.push(appointment);
+              existingIds.add(appointment.id);
+            }
           });
-        });
+          return {
+            ...patient,
+            appointments: mergedAppointments,
+          };
+        }),
+      );
 
-        return {
-          ...patient,
-          appointments: updatedAppointments,
-        };
-      }),
-    );
-
-    if (!overlapsDetected) {
-      setSelectedExercises([]);
-      setFormMessage('Назначение сохранено.');
+      if (!overlapsDetected) {
+        setSelectedExercises([]);
+        setFormMessage('Назначение сохранено.');
+      }
+    } catch (error) {
+      const message =
+        error instanceof Error
+          ? error.message
+          : 'Не удалось назначить упражнения. Попробуйте позже.';
+      setFormMessage(message);
+    } finally {
+      setIsAssigningExercises(false);
     }
   };
 
@@ -2060,8 +2113,12 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
                     </label>
                   </div>
 
-                  <button type="submit" className="primary-button">
-                    Назначить упражнения
+                  <button
+                    type="submit"
+                    className="primary-button"
+                    disabled={isAssigningExercises}
+                  >
+                    {isAssigningExercises ? 'Сохранение…' : 'Назначить упражнения'}
                   </button>
                 </form>
               </div>
