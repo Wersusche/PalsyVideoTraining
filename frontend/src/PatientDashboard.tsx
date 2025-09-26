@@ -21,6 +21,7 @@ type PatientAppointment = {
   durationSeconds: number;
   videoUrl: string | null;
   videoName: string | null;
+  mimeType: string | null;
   status: ExerciseStatus;
 };
 
@@ -270,7 +271,13 @@ const PatientDashboard = ({ token, patient, onLogout }: PatientDashboardProps) =
                       </header>
                       {appointment.videoUrl ? (
                         <div className="patient-dashboard__card-media">
-                          <video src={appointment.videoUrl} controls preload="metadata" width="100%" />
+                          <video controls preload="metadata" width="100%">
+                            <source
+                              src={appointment.videoUrl}
+                              type={appointment.mimeType ?? undefined}
+                            />
+                            Ваш браузер не поддерживает воспроизведение этого видео.
+                          </video>
                         </div>
                       ) : (
                         <p className="patient-dashboard__muted">Видео недоступно.</p>
