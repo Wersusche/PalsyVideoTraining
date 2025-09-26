@@ -1806,12 +1806,12 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
           </div>
         </section>
 
-        <section className="doctor-column wide" aria-live="polite">
+        <section className="doctor-column" aria-labelledby="active-patients-heading">
           <div className="panel" aria-labelledby="active-patients-heading">
             <header className="panel-header">
               <h2 id="active-patients-heading">Активные пациенты</h2>
               <p className="panel-description">
-                Сейчас выполняют программу:{' '}
+                Сейчас выполняют программу{' '}
                 {isLoading ? 'загрузка…' : activePatients.length || 'нет данных'}
               </p>
             </header>
@@ -1840,6 +1840,9 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
               )}
             </ul>
           </div>
+        </section>
+
+        <section className="doctor-column wide" aria-live="polite">
           {isLoading ? (
             <div className="panel">
               <header className="panel-header">
