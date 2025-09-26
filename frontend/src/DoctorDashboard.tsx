@@ -831,11 +831,12 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
       return;
     }
 
-    let overlapsDetected = false;
+    let hasDeclinedReplacement = false;
     const exercisesToAssign: number[] = [];
+    const appointmentsToUpdate: Appointment[] = [];
 
     selectedExercises.forEach((exerciseId) => {
-      const overlap = selectedPatient.appointments.some((appointment) => {
+      const overlappingAppointment = selectedPatient.appointments.find((appointment) => {
         if (appointment.exerciseId !== exerciseId) {
           return false;
         }
@@ -848,66 +849,120 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
         );
       });
 
-      if (overlap) {
-        const confirmOverwrite = window.confirm(
-          'Для выбранного периода уже назначено упражнение. Добавить ещё одну запись?',
+      if (overlappingAppointment) {
+        const confirmReplace = window.confirm(
+          'Для выбранного периода уже назначено упражнение. Заменить его на упражнение с новыми параметрами?',
         );
-        if (!confirmOverwrite) {
-          overlapsDetected = true;
+        if (!confirmReplace) {
+          hasDeclinedReplacement = true;
           return;
         }
+        appointmentsToUpdate.push(overlappingAppointment);
+        return;
       }
 
       exercisesToAssign.push(exerciseId);
     });
 
-    if (exercisesToAssign.length === 0) {
+    if (exercisesToAssign.length === 0 && appointmentsToUpdate.length === 0) {
       return;
     }
 
     setIsAssigningExercises(true);
 
     try {
-      const response = await fetch(`/api/patients/${selectedPatient.id}/appointments`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          exerciseIds: exercisesToAssign,
-          start: exerciseForm.start,
-          end: exerciseForm.end,
-          perDay,
-          durationSeconds,
-        }),
-      });
+      const updatedAppointments: Appointment[] = [];
 
-      const data = (await response.json().catch(() => null)) as
-        | (AssignExercisesResponse & { detail?: never })
-        | { detail?: string }
-        | null;
+      for (const appointment of appointmentsToUpdate) {
+        const response = await fetch(
+          `/api/patients/${selectedPatient.id}/appointments/${appointment.id}`,
+          {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              start: exerciseForm.start,
+              end: exerciseForm.end,
+              perDay,
+              durationSeconds,
+            }),
+          },
+        );
 
-      if (!response.ok || !data || 'detail' in data) {
-        const message =
-          data && 'detail' in data && data.detail
-            ? data.detail
-            : 'Не удалось назначить упражнения. Попробуйте позже.';
-        throw new Error(message);
+        const data = (await response.json().catch(() => null)) as
+          | (Appointment & { detail?: never })
+          | { detail?: string }
+          | null;
+
+        if (!response.ok || !data || 'detail' in data) {
+          const message =
+            data && 'detail' in data && data.detail
+              ? data.detail
+              : 'Не удалось обновить назначение. Попробуйте позже.';
+          throw new Error(message);
+        }
+
+        updatedAppointments.push(data as Appointment);
       }
 
-      const result = data as AssignExercisesResponse;
+      let insertedAppointments: Appointment[] = [];
+
+      if (exercisesToAssign.length > 0) {
+        const response = await fetch(`/api/patients/${selectedPatient.id}/appointments`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            exerciseIds: exercisesToAssign,
+            start: exerciseForm.start,
+            end: exerciseForm.end,
+            perDay,
+            durationSeconds,
+          }),
+        });
+
+        const data = (await response.json().catch(() => null)) as
+          | (AssignExercisesResponse & { detail?: never })
+          | { detail?: string }
+          | null;
+
+        if (!response.ok || !data || 'detail' in data) {
+          const message =
+            data && 'detail' in data && data.detail
+              ? data.detail
+              : 'Не удалось назначить упражнения. Попробуйте позже.';
+          throw new Error(message);
+        }
+
+        const result = data as AssignExercisesResponse;
+        insertedAppointments = result.appointments;
+      }
 
       setPatients((prevPatients) =>
         prevPatients.map((patient) => {
-          if (patient.id !== result.id) {
+          if (patient.id !== selectedPatient.id) {
             return patient;
           }
-          const existingIds = new Set(patient.appointments.map((item) => item.id));
-          const mergedAppointments = [...patient.appointments];
-          result.appointments.forEach((appointment) => {
-            if (!existingIds.has(appointment.id)) {
+
+          const updatesMap = new Map<string, Appointment>();
+          updatedAppointments.forEach((appointment) => {
+            updatesMap.set(appointment.id, appointment);
+          });
+          insertedAppointments.forEach((appointment) => {
+            updatesMap.set(appointment.id, appointment);
+          });
+
+          const mergedAppointments = patient.appointments.map((appointment) =>
+            updatesMap.get(appointment.id) ?? appointment,
+          );
+
+          const existingIds = new Set(mergedAppointments.map((appointment) => appointment.id));
+
+          updatesMap.forEach((appointment, id) => {
+            if (!existingIds.has(id)) {
               mergedAppointments.push(appointment);
-              existingIds.add(appointment.id);
+              existingIds.add(id);
             }
           });
+
           return {
             ...patient,
             appointments: mergedAppointments,
@@ -915,7 +970,7 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
         }),
       );
 
-      if (!overlapsDetected) {
+      if (!hasDeclinedReplacement) {
         setSelectedExercises([]);
         setFormMessage('Назначение сохранено.');
       }
@@ -923,7 +978,7 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
       const message =
         error instanceof Error
           ? error.message
-          : 'Не удалось назначить упражнения. Попробуйте позже.';
+          : 'Не удалось сохранить назначение. Попробуйте позже.';
       setFormMessage(message);
     } finally {
       setIsAssigningExercises(false);
