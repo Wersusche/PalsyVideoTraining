@@ -1984,7 +1984,7 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
                                   )
                                 }
                               />
-                              <h4>{group}</h4>
+                              <span className="exercise-group-title">{group}</span>
                             </label>
                           </header>
                           <ul>

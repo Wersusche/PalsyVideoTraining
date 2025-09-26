@@ -812,10 +812,6 @@ footer {
   font-size: 1rem;
 }
 
-.exercise-group h4 {
-  font-size: 1rem;
-}
-
 .exercise-group-header {
   margin: 0 0 0.75rem;
 }
@@ -824,10 +820,11 @@ footer {
   width: 100%;
 }
 
-.exercise-group-checkbox h4 {
+.exercise-group-title {
+  display: inline-block;
   margin: 0;
   font-size: 1rem;
-  font-weight: 600;
+  font-weight: 700;
   color: #1f2937;
 }
 
