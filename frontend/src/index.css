@@ -1118,6 +1118,16 @@ footer {
   font-weight: 500;
 }
 
+.patient-dashboard__player-hint {
+  margin: 0;
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+  background: rgba(99, 102, 241, 0.08);
+  color: #3730a3;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
 .patient-dashboard__player-footer {
   display: grid;
   gap: 0.75rem;
