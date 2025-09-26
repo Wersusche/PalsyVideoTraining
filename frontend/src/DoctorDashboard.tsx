@@ -70,6 +70,8 @@ type DoctorDashboardData = {
   disorderExerciseMap: Record<number, number[]>;
 };
 
+type PatientDisordersUpdateResponse = Pick<Patient, 'id' | 'disorders'>;
+
 type DoctorViewMode = 'dashboard' | 'database';
 
 type DatabaseTablesResponse = {
@@ -81,6 +83,11 @@ type TableDataResponse = {
   rows: Record<string, unknown>[];
   totalRows: number;
   pkColumns: string[];
+};
+
+type StatusMessage = {
+  status: 'success' | 'error';
+  text: string;
 };
 
 type TableMutationResponse = {
@@ -206,6 +213,8 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
   const [formMessage, setFormMessage] = useState<string | null>(null);
   const [showOnlyRecommended, setShowOnlyRecommended] = useState(true);
   const [selectedExercises, setSelectedExercises] = useState<number[]>([]);
+  const [isSavingDisorders, setIsSavingDisorders] = useState(false);
+  const [disorderMessage, setDisorderMessage] = useState<StatusMessage | null>(null);
   const [exerciseForm, setExerciseForm] = useState({
     start: new Date().toISOString().slice(0, 10),
     end: new Date().toISOString().slice(0, 10),
@@ -362,6 +371,11 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
   }, [selectedPatientId]);
 
   useEffect(() => {
+    setDisorderMessage(null);
+    setIsSavingDisorders(false);
+  }, [selectedPatientId]);
+
+  useEffect(() => {
     newRowsRef.current = databaseNewRows;
     if (gridApiRef.current) {
       gridApiRef.current.setGridOption('pinnedTopRowData', databaseNewRows);
@@ -445,6 +459,14 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
 
     return ranked.slice(0, 5).map((item) => item.patient);
   }, [patients, patientSearch]);
+
+  const disorderCategoryMap = useMemo(() => {
+    const map = new Map<number, string>();
+    disorders.forEach((item) => {
+      map.set(item.id, item.category);
+    });
+    return map;
+  }, [disorders]);
 
   const groupedDisorders = useMemo(() => {
     return disorders.reduce<Record<string, Disorder[]>>((acc, item) => {
@@ -629,6 +651,8 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
   const toggleDisorder = (disorderId: number) => {
     if (!selectedPatient) return;
 
+    setDisorderMessage(null);
+
     setPatients((prevPatients) =>
       prevPatients.map((patient) => {
         if (patient.id !== selectedPatient.id) {
@@ -636,14 +660,79 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
         }
 
         const hasDisorder = patient.disorders.includes(disorderId);
+        if (hasDisorder) {
+          return {
+            ...patient,
+            disorders: patient.disorders.filter((item) => item !== disorderId),
+          };
+        }
+
+        const category = disorderCategoryMap.get(disorderId);
+        const filteredDisorders =
+          category === undefined
+            ? patient.disorders
+            : patient.disorders.filter(
+                (item) => disorderCategoryMap.get(item) !== category,
+              );
+
         return {
           ...patient,
-          disorders: hasDisorder
-            ? patient.disorders.filter((item) => item !== disorderId)
-            : [...patient.disorders, disorderId],
+          disorders: [...filteredDisorders, disorderId],
         };
       }),
     );
+  };
+
+  const handleSaveDisorders = async () => {
+    if (!selectedPatient) {
+      setDisorderMessage({
+        status: 'error',
+        text: 'Сначала выберите пациента.',
+      });
+      return;
+    }
+
+    setIsSavingDisorders(true);
+    setDisorderMessage(null);
+
+    try {
+      const response = await fetch(`/api/patients/${selectedPatient.id}/disorders`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ disorderIds: selectedPatient.disorders }),
+      });
+
+      const data = (await response.json().catch(() => null)) as
+        | (PatientDisordersUpdateResponse & { detail?: never })
+        | { detail?: string }
+        | null;
+
+      if (!response.ok || !data || 'detail' in data) {
+        const message = data && 'detail' in data && data.detail
+          ? data.detail
+          : 'Не удалось сохранить патологии. Попробуйте ещё раз.';
+        throw new Error(message);
+      }
+
+      const updated = data as PatientDisordersUpdateResponse;
+      setPatients((prevPatients) =>
+        prevPatients.map((patient) =>
+          patient.id === updated.id
+            ? { ...patient, disorders: [...updated.disorders] }
+            : patient,
+        ),
+      );
+
+      setDisorderMessage({ status: 'success', text: 'Патологии сохранены.' });
+    } catch (error) {
+      const message =
+        error instanceof Error
+          ? error.message
+          : 'Не удалось сохранить патологии. Попробуйте ещё раз.';
+      setDisorderMessage({ status: 'error', text: message });
+    } finally {
+      setIsSavingDisorders(false);
+    }
   };
 
   const handleExerciseSelection = (exerciseId: number, checked: boolean) => {
@@ -1660,39 +1749,6 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
             </form>
           </div>
 
-          <div className="panel" aria-labelledby="active-patients-heading">
-            <header className="panel-header">
-              <h2 id="active-patients-heading">Активные пациенты</h2>
-              <p className="panel-description">
-                Сейчас выполняют программу:{' '}
-                {isLoading ? 'загрузка…' : activePatients.length || 'нет данных'}
-              </p>
-            </header>
-            <ul className="patient-list">
-              {isLoading ? (
-                <li className="patient-empty">Загрузка данных…</li>
-              ) : (
-                <>
-                  {activePatients.map((patient) => (
-                    <li key={patient.id} className="patient-item">
-                      <button
-                        type="button"
-                        className={`patient-button ${
-                          selectedPatientId === patient.id ? 'is-active' : ''
-                        }`}
-                        onClick={() => setSelectedPatientId(patient.id)}
-                      >
-                        {patient.lastName} {patient.firstName}
-                      </button>
-                    </li>
-                  ))}
-                  {activePatients.length === 0 && (
-                    <li className="patient-empty">Нет активных назначений</li>
-                  )}
-                </>
-              )}
-            </ul>
-          </div>
         </section>
 
         <section className="doctor-column" aria-labelledby="patient-list-heading">
@@ -1751,6 +1807,39 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
         </section>
 
         <section className="doctor-column wide" aria-live="polite">
+          <div className="panel" aria-labelledby="active-patients-heading">
+            <header className="panel-header">
+              <h2 id="active-patients-heading">Активные пациенты</h2>
+              <p className="panel-description">
+                Сейчас выполняют программу:{' '}
+                {isLoading ? 'загрузка…' : activePatients.length || 'нет данных'}
+              </p>
+            </header>
+            <ul className="patient-list">
+              {isLoading ? (
+                <li className="patient-empty">Загрузка данных…</li>
+              ) : (
+                <>
+                  {activePatients.map((patient) => (
+                    <li key={patient.id} className="patient-item">
+                      <button
+                        type="button"
+                        className={`patient-button ${
+                          selectedPatientId === patient.id ? 'is-active' : ''
+                        }`}
+                        onClick={() => setSelectedPatientId(patient.id)}
+                      >
+                        {patient.lastName} {patient.firstName}
+                      </button>
+                    </li>
+                  ))}
+                  {activePatients.length === 0 && (
+                    <li className="patient-empty">Нет активных назначений</li>
+                  )}
+                </>
+              )}
+            </ul>
+          </div>
           {isLoading ? (
             <div className="panel">
               <header className="panel-header">
@@ -1787,7 +1876,22 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
               </div>
 
               <div className="patient-section">
-                <h3>Патологии</h3>
+                <div className="patient-section-header">
+                  <h3>Патологии</h3>
+                  <button
+                    type="button"
+                    className="secondary-button"
+                    onClick={handleSaveDisorders}
+                    disabled={isSavingDisorders}
+                  >
+                    {isSavingDisorders ? 'Сохранение…' : 'Сохранить патологии'}
+                  </button>
+                </div>
+                {disorderMessage && (
+                  <p className={`patient-section-message ${disorderMessage.status}`}>
+                    {disorderMessage.text}
+                  </p>
+                )}
                 <div className="disorder-groups">
                   {Object.entries(groupedDisorders).map(([category, items]) => (
                     <article className="disorder-group" key={category}>
