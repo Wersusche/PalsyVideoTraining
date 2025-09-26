@@ -4,21 +4,32 @@ from datetime import date, datetime, time
 from decimal import Decimal
 import random
 import re
-from typing import Any
+from pathlib import Path
+from typing import Any, Mapping
 from uuid import UUID
 
 import bcrypt
-from fastapi import Depends, FastAPI, HTTPException, Response
+from fastapi import Depends, FastAPI, File, HTTPException, Response, UploadFile
 from sqlalchemy import bindparam, text
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import get_settings
+from app.core.media import (
+    build_public_url,
+    delete_media_file,
+    save_video_upload,
+)
 from app.db.session import get_session
 
 from pydantic import BaseModel, Field
 
 settings = get_settings()
 app = FastAPI(title=settings.project_name)
+
+_VIDEO_COLUMNS = (
+    '"idvideos", "video_name", "ex_type", "filename", '
+    '"body_part", "type_of_activity", "file_path", "mime_type"'
+)
 
 
 class DisorderSchema(BaseModel):
@@ -32,8 +43,24 @@ class ExerciseSchema(BaseModel):
     name: str
     type: str
     description: str | None = None
+    filename: str | None = None
     bodyPart: str | None = None
     typeOfActivity: str | None = None
+    filePath: str | None = None
+    mimeType: str | None = None
+    videoUrl: str | None = None
+
+
+class VideoMetadataSchema(BaseModel):
+    id: int
+    name: str | None = None
+    type: str | None = None
+    filename: str | None = None
+    bodyPart: str | None = None
+    typeOfActivity: str | None = None
+    filePath: str | None = None
+    mimeType: str | None = None
+    url: str | None = None
 
 
 class AppointmentSchema(BaseModel):
@@ -146,6 +173,140 @@ async def healthcheck(db: AsyncSession = Depends(get_session)) -> dict[str, str]
     return {"status": "ok"}
 
 
+@app.post("/api/videos/upload", response_model=VideoMetadataSchema, status_code=201)
+async def upload_video(
+    file: UploadFile = File(...),
+    video_id: int | None = None,
+    db: AsyncSession = Depends(get_session),
+) -> VideoMetadataSchema:
+    previous_file_path: str | None = None
+    if video_id is not None:
+        existing_row = (
+            await db.execute(
+                text(
+                    f"""
+                    SELECT {_VIDEO_COLUMNS}
+                    FROM "videos"
+                    WHERE "idvideos" = :video_id
+                    """
+                ),
+                {"video_id": video_id},
+            )
+        ).mappings().first()
+        if existing_row is None:
+            raise HTTPException(status_code=404, detail="Видео не найдено.")
+        previous_file_path = _normalize_optional_str(existing_row.get("file_path"))
+
+    original_filename = file.filename
+    try:
+        relative_path, mime_type = await save_video_upload(file)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+    except OSError as exc:
+        raise HTTPException(
+            status_code=500,
+            detail="Не удалось сохранить файл на сервере.",
+        ) from exc
+
+    stored_filename = Path(original_filename or "").name
+    if not stored_filename:
+        stored_filename = Path(relative_path).name
+
+    params = {
+        "file_path": relative_path,
+        "mime_type": mime_type,
+        "filename": stored_filename,
+    }
+
+    try:
+        if video_id is not None:
+            result = await db.execute(
+                text(
+                    f"""
+                    UPDATE "videos"
+                    SET "file_path" = :file_path,
+                        "mime_type" = :mime_type,
+                        "filename" = :filename
+                    WHERE "idvideos" = :video_id
+                    RETURNING {_VIDEO_COLUMNS}
+                    """
+                ),
+                {**params, "video_id": video_id},
+            )
+        else:
+            result = await db.execute(
+                text(
+                    f"""
+                    INSERT INTO "videos" (
+                        "video_name",
+                        "filename",
+                        "ex_type",
+                        "file_path",
+                        "mime_type"
+                    )
+                    VALUES (
+                        :video_name,
+                        :filename,
+                        :ex_type,
+                        :file_path,
+                        :mime_type
+                    )
+                    RETURNING {_VIDEO_COLUMNS}
+                    """
+                ),
+                {
+                    **params,
+                    "video_name": _humanize_filename(original_filename),
+                    "ex_type": "для всех",
+                },
+            )
+        row = result.mappings().first()
+        if row is None:
+            raise HTTPException(
+                status_code=500,
+                detail="Не удалось сохранить данные о видео.",
+            )
+        await db.commit()
+    except HTTPException:
+        await db.rollback()
+        delete_media_file(relative_path)
+        raise
+    except Exception as exc:
+        await db.rollback()
+        delete_media_file(relative_path)
+        raise HTTPException(
+            status_code=500,
+            detail="Не удалось сохранить данные о видео.",
+        ) from exc
+
+    if video_id is not None and previous_file_path and previous_file_path != relative_path:
+        delete_media_file(previous_file_path)
+
+    return _serialize_video_row(row)
+
+
+@app.get("/api/videos/{video_id}", response_model=VideoMetadataSchema)
+async def get_video_metadata(
+    video_id: int,
+    db: AsyncSession = Depends(get_session),
+) -> VideoMetadataSchema:
+    row = (
+        await db.execute(
+            text(
+                f"""
+                SELECT {_VIDEO_COLUMNS}
+                FROM "videos"
+                WHERE "idvideos" = :video_id
+                """
+            ),
+            {"video_id": video_id},
+        )
+    ).mappings().first()
+    if row is None:
+        raise HTTPException(status_code=404, detail="Видео не найдено.")
+    return _serialize_video_row(row)
+
+
 def _to_iso_date(value: Any) -> str:
     if value is None:
         return ""
@@ -194,6 +355,13 @@ _TRANSLIT_MAP: dict[str, str] = {
 
 def _transliterate(value: str) -> str:
     return "".join(_TRANSLIT_MAP.get(char, char) for char in value.lower())
+
+
+def _humanize_filename(filename: str | None) -> str:
+    if not filename:
+        return "Новое видео"
+    stem = Path(filename).stem.replace("_", " ").replace("-", " ").strip()
+    return stem or "Новое видео"
 
 
 def _generate_random_password() -> str:
@@ -251,6 +419,21 @@ def _normalize_optional_str(value: Any) -> str | None:
         value = value.tobytes().decode("utf-8", "ignore")
     value = str(value).strip()
     return value or None
+
+
+def _serialize_video_row(row: Mapping[str, Any]) -> VideoMetadataSchema:
+    file_path = _normalize_optional_str(row.get("file_path"))
+    return VideoMetadataSchema(
+        id=int(row["idvideos"]),
+        name=_normalize_optional_str(row.get("video_name")),
+        type=_normalize_optional_str(row.get("ex_type")),
+        filename=_normalize_optional_str(row.get("filename")),
+        bodyPart=_normalize_optional_str(row.get("body_part")),
+        typeOfActivity=_normalize_optional_str(row.get("type_of_activity")),
+        filePath=file_path,
+        mimeType=_normalize_optional_str(row.get("mime_type")),
+        url=build_public_url(file_path),
+    )
 
 
 def _seconds_to_time(total_seconds: int) -> time:
@@ -388,25 +571,31 @@ async def get_doctor_dashboard(
     exercises_rows = (
         await db.execute(
             text(
-                """
-                SELECT "idvideos", "video_name", "ex_type", "filename", "body_part", "type_of_activity"
+                f"""
+                SELECT {_VIDEO_COLUMNS}
                 FROM "videos"
                 ORDER BY "ex_type", "video_name"
                 """
             )
         )
     ).mappings()
-    exercises = [
-        ExerciseSchema(
-            id=int(row["idvideos"]),
-            name=(row["video_name"] or "").strip(),
-            type=(row["ex_type"] or "").strip(),
-            description=row.get("filename"),
-            bodyPart=_normalize_optional_str(row.get("body_part")),
-            typeOfActivity=_normalize_optional_str(row.get("type_of_activity")),
+    exercises: list[ExerciseSchema] = []
+    for row in exercises_rows:
+        metadata = _serialize_video_row(row)
+        exercises.append(
+            ExerciseSchema(
+                id=metadata.id,
+                name=metadata.name or "",
+                type=metadata.type or "",
+                description=metadata.filename,
+                filename=metadata.filename,
+                bodyPart=metadata.bodyPart,
+                typeOfActivity=metadata.typeOfActivity,
+                filePath=metadata.filePath,
+                mimeType=metadata.mimeType,
+                videoUrl=metadata.url,
+            )
         )
-        for row in exercises_rows
-    ]
 
     patient_disorders_rows = (
         await db.execute(

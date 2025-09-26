@@ -7,6 +7,8 @@ from pydantic_settings import BaseSettings
 class Settings(BaseSettings):
     project_name: str = "myapp"
     database_url: PostgresDsn
+    media_root: str = "/media"
+    media_url: str = "/media"
 
     model_config = {
         "env_file": ".env",
