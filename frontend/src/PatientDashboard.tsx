@@ -1,0 +1,334 @@
+import { useEffect, useMemo, useState } from 'react';
+
+export type PatientSessionProfile = {
+  id: number;
+  firstName: string;
+  lastName: string;
+  middleName?: string | null;
+  username: string;
+};
+
+type ExerciseStatus = 'pending' | 'in_progress' | 'completed';
+
+type PatientAppointment = {
+  id: string;
+  exerciseId: number;
+  start: string;
+  end: string;
+  perDay: number;
+  totalCompleted: number;
+  donePercent: number;
+  durationSeconds: number;
+  videoUrl: string | null;
+  videoName: string | null;
+  status: ExerciseStatus;
+};
+
+type PatientExercise = {
+  id: number;
+  name: string | null;
+  type: string | null;
+  filename: string | null;
+  bodyPart: string | null;
+  typeOfActivity: string | null;
+  filePath: string | null;
+  mimeType: string | null;
+  videoUrl: string | null;
+  donePercent: number;
+  status: ExerciseStatus;
+};
+
+type PatientDashboardProps = {
+  token: string;
+  patient: PatientSessionProfile;
+  onLogout: () => void;
+};
+
+const statusLabels: Record<ExerciseStatus, string> = {
+  pending: 'Не начато',
+  in_progress: 'В процессе',
+  completed: 'Завершено',
+};
+
+const parseErrorResponse = async (response: Response): Promise<string> => {
+  const contentType = response.headers.get('content-type') ?? '';
+
+  if (contentType.includes('application/json')) {
+    try {
+      const data = await response.json();
+      const detail = typeof data?.detail === 'string' ? data.detail.trim() : '';
+      if (detail) {
+        return detail;
+      }
+    } catch (error) {
+      console.error('Не удалось разобрать ответ сервера', error);
+    }
+  }
+
+  try {
+    const text = (await response.text()).trim();
+    if (text) {
+      return text;
+    }
+  } catch (error) {
+    console.error('Не удалось получить текст ответа', error);
+  }
+
+  return 'Не удалось загрузить данные. Попробуйте обновить страницу.';
+};
+
+const formatDate = (value: string) => {
+  if (!value) {
+    return '—';
+  }
+  const parsed = new Date(value);
+  if (Number.isNaN(parsed.getTime())) {
+    return value;
+  }
+  return new Intl.DateTimeFormat('ru-RU').format(parsed);
+};
+
+const formatDuration = (seconds: number) => {
+  if (!Number.isFinite(seconds) || seconds <= 0) {
+    return '—';
+  }
+  const minutes = Math.round(seconds / 60);
+  if (minutes < 60) {
+    return `${minutes} мин.`;
+  }
+  const hours = Math.floor(minutes / 60);
+  const restMinutes = minutes % 60;
+  return restMinutes ? `${hours} ч. ${restMinutes} мин.` : `${hours} ч.`;
+};
+
+const PatientDashboard = ({ token, patient, onLogout }: PatientDashboardProps) => {
+  const [appointments, setAppointments] = useState<PatientAppointment[]>([]);
+  const [exercises, setExercises] = useState<PatientExercise[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+  const [reloadCounter, setReloadCounter] = useState(0);
+
+  useEffect(() => {
+    let isActive = true;
+    const controller = new AbortController();
+
+    const loadData = async () => {
+      setLoading(true);
+      setError('');
+
+      try {
+        const [appointmentsResponse, exercisesResponse] = await Promise.all([
+          fetch('/api/patients/me/appointments', {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+            signal: controller.signal,
+          }),
+          fetch('/api/patients/me/exercises', {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+            signal: controller.signal,
+          }),
+        ]);
+
+        if (!appointmentsResponse.ok) {
+          throw new Error(await parseErrorResponse(appointmentsResponse));
+        }
+        if (!exercisesResponse.ok) {
+          throw new Error(await parseErrorResponse(exercisesResponse));
+        }
+
+        const [appointmentsData, exercisesData] = await Promise.all([
+          appointmentsResponse.json() as Promise<PatientAppointment[]>,
+          exercisesResponse.json() as Promise<PatientExercise[]>,
+        ]);
+
+        if (!isActive) {
+          return;
+        }
+
+        setAppointments(appointmentsData);
+        setExercises(exercisesData);
+      } catch (error) {
+        if (!isActive) {
+          return;
+        }
+        if ((error as DOMException).name === 'AbortError') {
+          return;
+        }
+        console.error(error);
+        setError(
+          error instanceof Error
+            ? error.message
+            : 'Не удалось загрузить данные. Попробуйте позже.',
+        );
+      } finally {
+        if (isActive) {
+          setLoading(false);
+        }
+      }
+    };
+
+    void loadData();
+
+    return () => {
+      isActive = false;
+      controller.abort();
+    };
+  }, [token, reloadCounter]);
+
+  const completedAppointments = useMemo(
+    () => appointments.filter((item) => item.status === 'completed').length,
+    [appointments],
+  );
+
+  const totalProgress = useMemo(() => {
+    if (!appointments.length) {
+      return 0;
+    }
+    const totalPercent = appointments.reduce((acc, item) => acc + item.donePercent, 0);
+    return Math.round(totalPercent / appointments.length);
+  }, [appointments]);
+
+  const handleRefresh = () => {
+    setReloadCounter((value) => value + 1);
+  };
+
+  const patientFullName = useMemo(() => {
+    const parts = [patient.lastName, patient.firstName];
+    if (patient.middleName) {
+      parts.push(patient.middleName);
+    }
+    return parts.filter(Boolean).join(' ');
+  }, [patient.firstName, patient.lastName, patient.middleName]);
+
+  return (
+    <div className="app page patient-dashboard">
+      <header className="page-header">
+        <div>
+          <p className="badge">Личный кабинет</p>
+          <h1>{patientFullName}</h1>
+          <p className="lead">Логин: {patient.username}</p>
+        </div>
+        <div className="patient-dashboard__actions">
+          <button type="button" className="secondary-button" onClick={handleRefresh} disabled={loading}>
+            Обновить
+          </button>
+          <button type="button" className="secondary-button" onClick={onLogout}>
+            Выйти
+          </button>
+        </div>
+      </header>
+
+      <main className="page-body">
+        {loading && <p>Загружаем данные...</p>}
+        {error && !loading && <p className="error">{error}</p>}
+
+        {!loading && !error && (
+          <>
+            <section className="section">
+              <h2>Ваш прогресс</h2>
+              {appointments.length ? (
+                <div className="patient-dashboard__summary-grid">
+                  <div className="patient-dashboard__summary-card">
+                    <span className="patient-dashboard__summary-title">Назначений</span>
+                    <span className="patient-dashboard__summary-value">{appointments.length}</span>
+                  </div>
+                  <div className="patient-dashboard__summary-card">
+                    <span className="patient-dashboard__summary-title">Завершено</span>
+                    <span className="patient-dashboard__summary-value">{completedAppointments}</span>
+                  </div>
+                  <div className="patient-dashboard__summary-card">
+                    <span className="patient-dashboard__summary-title">Средний прогресс</span>
+                    <span className="patient-dashboard__summary-value">{totalProgress}%</span>
+                  </div>
+                </div>
+              ) : (
+                <p>У вас пока нет активных назначений.</p>
+              )}
+            </section>
+
+            <section className="section">
+              <h2>Назначения</h2>
+              {appointments.length === 0 ? (
+                <p>Назначения отсутствуют. Как только врач добавит новые упражнения, они появятся здесь.</p>
+              ) : (
+                <ul className="patient-dashboard__card-list">
+                  {appointments.map((appointment) => (
+                    <li key={appointment.id} className="patient-dashboard__card">
+                      <header className="patient-dashboard__card-header">
+                        <div>
+                          <h3>{appointment.videoName ?? `Упражнение №${appointment.exerciseId}`}</h3>
+                          <p className="patient-dashboard__muted">
+                            {formatDate(appointment.start)} — {formatDate(appointment.end)} • {appointment.perDay} раз(а) в день
+                          </p>
+                        </div>
+                        <span className={`patient-status patient-status--${appointment.status}`}>
+                          {statusLabels[appointment.status]}
+                        </span>
+                      </header>
+                      {appointment.videoUrl ? (
+                        <div className="patient-dashboard__card-media">
+                          <video src={appointment.videoUrl} controls preload="metadata" width="100%" />
+                        </div>
+                      ) : (
+                        <p className="patient-dashboard__muted">Видео недоступно.</p>
+                      )}
+                      <footer className="patient-dashboard__card-footer">
+                        <div>
+                          <strong>Прогресс:</strong> {appointment.donePercent}%
+                        </div>
+                        <div>
+                          <strong>Выполнено:</strong> {appointment.totalCompleted} раз(а)
+                        </div>
+                        <div>
+                          <strong>Длительность:</strong> {formatDuration(appointment.durationSeconds)}
+                        </div>
+                      </footer>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </section>
+
+            <section className="section">
+              <h2>Все упражнения</h2>
+              {exercises.length === 0 ? (
+                <p>Список упражнений пока пуст.</p>
+              ) : (
+                <ul className="patient-dashboard__card-list patient-dashboard__card-list--compact">
+                  {exercises.map((exercise) => (
+                    <li key={exercise.id} className="patient-dashboard__card patient-dashboard__card--compact">
+                      <header className="patient-dashboard__card-header">
+                        <div>
+                          <h3>{exercise.name ?? `Упражнение №${exercise.id}`}</h3>
+                          <p className="patient-dashboard__muted">{exercise.type ?? 'Тип не указан'}</p>
+                        </div>
+                        <span className={`patient-status patient-status--${exercise.status}`}>
+                          {statusLabels[exercise.status]}
+                        </span>
+                      </header>
+                      <footer className="patient-dashboard__card-footer">
+                        <div>
+                          <strong>Прогресс:</strong> {exercise.donePercent}%
+                        </div>
+                        {exercise.bodyPart && (
+                          <div>
+                            <strong>Область:</strong> {exercise.bodyPart}
+                          </div>
+                        )}
+                      </footer>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </section>
+          </>
+        )}
+      </main>
+    </div>
+  );
+};
+
+export default PatientDashboard;

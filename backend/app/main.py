@@ -1,3 +1,4 @@
+import asyncio
 from collections import defaultdict
 import json
 from datetime import date, datetime, time
@@ -5,11 +6,12 @@ from decimal import Decimal
 import random
 import re
 from pathlib import Path
+from secrets import token_urlsafe
 from typing import Any, Mapping
 from uuid import UUID
 
 import bcrypt
-from fastapi import Depends, FastAPI, File, HTTPException, Response, UploadFile
+from fastapi import Depends, FastAPI, File, HTTPException, Header, Response, UploadFile
 from sqlalchemy import bindparam, text
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -30,6 +32,13 @@ _VIDEO_COLUMNS = (
     '"idvideos", "video_name", "ex_type", "filename", '
     '"body_part", "type_of_activity", "file_path", "mime_type"'
 )
+_VIDEO_COLUMNS_ALIAS = (
+    'v."idvideos", v."video_name", v."ex_type", v."filename", '
+    'v."body_part", v."type_of_activity", v."file_path", v."mime_type"'
+)
+
+_PATIENT_SESSIONS: dict[str, int] = {}
+_PATIENT_SESSIONS_LOCK = asyncio.Lock()
 
 
 class DisorderSchema(BaseModel):
@@ -72,6 +81,12 @@ class AppointmentSchema(BaseModel):
     totalCompleted: int
     donePercent: int
     durationSeconds: int
+
+
+class PatientAppointmentWithVideoSchema(AppointmentSchema):
+    videoUrl: str | None = None
+    videoName: str | None = None
+    status: str
 
 
 class PatientSchema(BaseModel):
@@ -118,6 +133,20 @@ class AssignExercisesResponse(BaseModel):
     appointments: list[AppointmentSchema]
 
 
+class PatientExerciseSchema(BaseModel):
+    id: int
+    name: str | None = None
+    type: str | None = None
+    filename: str | None = None
+    bodyPart: str | None = None
+    typeOfActivity: str | None = None
+    filePath: str | None = None
+    mimeType: str | None = None
+    videoUrl: str | None = None
+    donePercent: int
+    status: str
+
+
 class UpdateAppointmentRequest(BaseModel):
     start: date
     end: date
@@ -139,6 +168,20 @@ class DoctorDashboardResponse(BaseModel):
     disorders: list[DisorderSchema]
     exercises: list[ExerciseSchema]
     disorderExerciseMap: dict[int, list[int]]
+
+
+class PatientLoginRequest(BaseModel):
+    username: str
+    password: str
+
+
+class PatientLoginResponse(BaseModel):
+    token: str
+    patientId: int
+    firstName: str
+    lastName: str
+    middleName: str | None = None
+    username: str
 
 
 class DatabaseTablesResponse(BaseModel):
@@ -436,6 +479,16 @@ def _serialize_video_row(row: Mapping[str, Any]) -> VideoMetadataSchema:
     )
 
 
+async def _store_patient_session(token: str, patient_id: int) -> None:
+    async with _PATIENT_SESSIONS_LOCK:
+        _PATIENT_SESSIONS[token] = patient_id
+
+
+async def _get_patient_id_by_token(token: str) -> int | None:
+    async with _PATIENT_SESSIONS_LOCK:
+        return _PATIENT_SESSIONS.get(token)
+
+
 def _seconds_to_time(total_seconds: int) -> time:
     if total_seconds < 0:
         raise ValueError("Duration must be non-negative")
@@ -462,6 +515,14 @@ def _serialize_value(value: Any) -> Any:
     return value
 
 
+def _resolve_completion_status(done_percent: int, total_completed: int) -> str:
+    if done_percent >= 100:
+        return "completed"
+    if total_completed > 0:
+        return "in_progress"
+    return "pending"
+
+
 def _verify_password(plain_password: str, hashed_password: str) -> bool:
     if not plain_password or not hashed_password:
         return False
@@ -471,6 +532,66 @@ def _verify_password(plain_password: str, hashed_password: str) -> bool:
         )
     except ValueError:
         return False
+
+
+async def _require_patient_authorization(
+    authorization: str | None = Header(default=None),
+) -> int:
+    if authorization is None:
+        raise HTTPException(status_code=401, detail="Укажите токен авторизации пациента.")
+
+    scheme, _, token = authorization.strip().partition(" ")
+    if scheme.lower() != "bearer" or not token:
+        raise HTTPException(status_code=401, detail="Недействительный формат токена.")
+
+    patient_id = await _get_patient_id_by_token(token)
+    if patient_id is None:
+        raise HTTPException(status_code=401, detail="Недействительный токен авторизации.")
+    return patient_id
+
+
+@app.post("/api/patient-login", response_model=PatientLoginResponse)
+async def patient_login(
+    payload: PatientLoginRequest, db: AsyncSession = Depends(get_session)
+) -> PatientLoginResponse:
+    username = payload.username.strip()
+    password = payload.password.strip()
+
+    if not username or not password:
+        raise HTTPException(status_code=401, detail="Неверный логин или пароль.")
+
+    patient_row = (
+        await db.execute(
+            text(
+                """
+                SELECT "idPatients", "Name", "Surname", "Secname", "Username", "Password"
+                FROM "patients"
+                WHERE "Username" = :username
+                """
+            ),
+            {"username": username},
+        )
+    ).mappings().first()
+
+    if not patient_row:
+        raise HTTPException(status_code=401, detail="Неверный логин или пароль.")
+
+    stored_password = _coerce_to_str(patient_row.get("Password")).strip()
+    if stored_password != password:
+        raise HTTPException(status_code=401, detail="Неверный логин или пароль.")
+
+    patient_id = int(patient_row["idPatients"])
+    token = token_urlsafe(32)
+    await _store_patient_session(token, patient_id)
+
+    return PatientLoginResponse(
+        token=token,
+        patientId=patient_id,
+        firstName=_coerce_to_str(patient_row.get("Name")).strip(),
+        lastName=_coerce_to_str(patient_row.get("Surname")).strip(),
+        middleName=_normalize_optional_str(patient_row.get("Secname")),
+        username=_coerce_to_str(patient_row.get("Username")).strip(),
+    )
 
 
 @app.post("/api/doctor-login", response_model=DoctorLoginResponse)
@@ -742,6 +863,105 @@ async def create_patient(
         disorders=[],
         appointments=[],
     )
+
+
+@app.get(
+    "/api/patients/me/appointments",
+    response_model=list[PatientAppointmentWithVideoSchema],
+)
+async def get_my_appointments(
+    patient_id: int = Depends(_require_patient_authorization),
+    db: AsyncSession = Depends(get_session),
+) -> list[PatientAppointmentWithVideoSchema]:
+    rows = (
+        await db.execute(
+            text(
+                f"""
+                SELECT a."idAppointments", a."idvideos", a."Starttime", a."Endtime",
+                       a."kolvden", a."sdelanovsego", a."done_percent",
+                       EXTRACT(EPOCH FROM a."dlitelnost") AS duration_seconds,
+                       {_VIDEO_COLUMNS_ALIAS}
+                FROM "appointments" AS a
+                JOIN "videos" AS v ON v."idvideos" = a."idvideos"
+                WHERE a."idPatients" = :patient_id
+                ORDER BY a."Starttime" NULLS LAST, a."idAppointments"
+                """
+            ),
+            {"patient_id": patient_id},
+        )
+    ).mappings()
+
+    appointments: list[PatientAppointmentWithVideoSchema] = []
+    for row in rows:
+        metadata = _serialize_video_row(row)
+        done_percent = int(row.get("done_percent") or 0)
+        total_completed = int(row.get("sdelanovsego") or 0)
+        appointments.append(
+            PatientAppointmentWithVideoSchema(
+                id=str(row["idAppointments"]),
+                exerciseId=int(row["idvideos"]),
+                start=_to_iso_date(row.get("Starttime")),
+                end=_to_iso_date(row.get("Endtime")),
+                perDay=int(row.get("kolvden") or 0),
+                totalCompleted=total_completed,
+                donePercent=done_percent,
+                durationSeconds=int(row.get("duration_seconds") or 0),
+                videoUrl=metadata.url,
+                videoName=metadata.name,
+                status=_resolve_completion_status(done_percent, total_completed),
+            )
+        )
+
+    return appointments
+
+
+@app.get(
+    "/api/patients/me/exercises", response_model=list[PatientExerciseSchema]
+)
+async def get_my_exercises(
+    patient_id: int = Depends(_require_patient_authorization),
+    db: AsyncSession = Depends(get_session),
+) -> list[PatientExerciseSchema]:
+    rows = (
+        await db.execute(
+            text(
+                f"""
+                SELECT {_VIDEO_COLUMNS_ALIAS},
+                       COALESCE(MAX(a."done_percent"), 0) AS max_done_percent,
+                       COALESCE(SUM(a."sdelanovsego"), 0) AS total_completed
+                FROM "appointments" AS a
+                JOIN "videos" AS v ON v."idvideos" = a."idvideos"
+                WHERE a."idPatients" = :patient_id
+                GROUP BY {_VIDEO_COLUMNS_ALIAS}
+                ORDER BY v."video_name"
+                """
+            ),
+            {"patient_id": patient_id},
+        )
+    ).mappings()
+
+    exercises: list[PatientExerciseSchema] = []
+    for row in rows:
+        metadata = _serialize_video_row(row)
+        done_percent = int(row.get("max_done_percent") or 0)
+        total_completed = int(row.get("total_completed") or 0)
+        exercises.append(
+            PatientExerciseSchema(
+                id=metadata.id,
+                name=metadata.name,
+                type=metadata.type,
+                filename=metadata.filename,
+                bodyPart=metadata.bodyPart,
+                typeOfActivity=metadata.typeOfActivity,
+                filePath=metadata.filePath,
+                mimeType=metadata.mimeType,
+                videoUrl=metadata.url,
+                donePercent=done_percent,
+                status=_resolve_completion_status(done_percent, total_completed),
+            )
+        )
+
+    return exercises
 
 
 @app.delete("/api/patients/{patient_id}", status_code=204)
