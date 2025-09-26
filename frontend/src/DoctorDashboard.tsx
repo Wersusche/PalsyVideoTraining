@@ -985,21 +985,43 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
     }
   };
 
-  const handleDeleteAppointment = (appointmentId: string) => {
+  const handleDeleteAppointment = async (appointmentId: string) => {
     if (!selectedPatient) return;
 
-    setPatients((prevPatients) =>
-      prevPatients.map((patient) => {
-        if (patient.id !== selectedPatient.id) {
-          return patient;
-        }
+    const patientId = selectedPatient.id;
 
-        return {
-          ...patient,
-          appointments: patient.appointments.filter((appointment) => appointment.id !== appointmentId),
-        };
-      }),
-    );
+    try {
+      const response = await fetch(`/api/patients/${patientId}/appointments/${appointmentId}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) {
+        const data = (await response.json().catch(() => null)) as { detail?: string } | null;
+        const message = data && data.detail ? data.detail : 'Не удалось удалить назначение. Попробуйте позже.';
+        throw new Error(message);
+      }
+
+      setPatients((prevPatients) =>
+        prevPatients.map((patient) => {
+          if (patient.id !== patientId) {
+            return patient;
+          }
+
+          return {
+            ...patient,
+            appointments: patient.appointments.filter((appointment) => appointment.id !== appointmentId),
+          };
+        }),
+      );
+
+      setFormMessage('Назначение удалено.');
+    } catch (error) {
+      const message =
+        error instanceof Error
+          ? error.message
+          : 'Не удалось удалить назначение. Попробуйте позже.';
+      setFormMessage(message);
+    }
   };
 
   const handleDeletePatient = async (patientId: number) => {
