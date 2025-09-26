@@ -11,7 +11,16 @@ from typing import Any, Mapping
 from uuid import UUID
 
 import bcrypt
-from fastapi import Depends, FastAPI, File, HTTPException, Header, Response, UploadFile
+from fastapi import (
+    Depends,
+    FastAPI,
+    File,
+    Form,
+    HTTPException,
+    Header,
+    Response,
+    UploadFile,
+)
 from sqlalchemy import bindparam, text
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -219,7 +228,7 @@ async def healthcheck(db: AsyncSession = Depends(get_session)) -> dict[str, str]
 @app.post("/api/videos/upload", response_model=VideoMetadataSchema, status_code=201)
 async def upload_video(
     file: UploadFile = File(...),
-    video_id: int | None = None,
+    video_id: int | None = Form(default=None),
     db: AsyncSession = Depends(get_session),
 ) -> VideoMetadataSchema:
     previous_file_path: str | None = None
