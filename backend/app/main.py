@@ -78,6 +78,19 @@ class PatientDisordersUpdateResponse(BaseModel):
     disorders: list[int]
 
 
+class AssignExercisesRequest(BaseModel):
+    exerciseIds: list[int] = Field(default_factory=list)
+    start: date
+    end: date
+    perDay: int = Field(ge=1)
+    durationSeconds: int = Field(gt=0)
+
+
+class AssignExercisesResponse(BaseModel):
+    id: int
+    appointments: list[AppointmentSchema]
+
+
 class DoctorLoginRequest(BaseModel):
     login: str
     password: str
@@ -231,6 +244,16 @@ def _normalize_optional_str(value: Any) -> str | None:
         value = value.tobytes().decode("utf-8", "ignore")
     value = str(value).strip()
     return value or None
+
+
+def _seconds_to_time(total_seconds: int) -> time:
+    if total_seconds < 0:
+        raise ValueError("Duration must be non-negative")
+    hours, remainder = divmod(total_seconds, 3600)
+    if hours >= 24:
+        raise ValueError("Duration must be less than 24 hours")
+    minutes, seconds = divmod(remainder, 60)
+    return time(hour=hours, minute=minutes, second=seconds)
 
 
 def _serialize_value(value: Any) -> Any:
@@ -650,6 +673,172 @@ async def update_patient_disorders(
         id=patient_id,
         disorders=unique_disorder_ids,
     )
+
+
+@app.post(
+    "/api/patients/{patient_id}/appointments",
+    response_model=AssignExercisesResponse,
+    status_code=201,
+)
+async def assign_patient_exercises(
+    patient_id: int,
+    payload: AssignExercisesRequest,
+    db: AsyncSession = Depends(get_session),
+) -> AssignExercisesResponse:
+    if payload.start > payload.end:
+        raise HTTPException(
+            status_code=400,
+            detail="Дата окончания не может быть раньше даты начала.",
+        )
+
+    unique_exercise_ids: list[int] = []
+    seen_exercise_ids: set[int] = set()
+    for exercise_id in payload.exerciseIds:
+        if exercise_id not in seen_exercise_ids:
+            unique_exercise_ids.append(exercise_id)
+            seen_exercise_ids.add(exercise_id)
+
+    if not unique_exercise_ids:
+        raise HTTPException(
+            status_code=400,
+            detail="Выберите хотя бы одно упражнение для назначения.",
+        )
+
+    patient_exists = await db.execute(
+        text('SELECT 1 FROM "patients" WHERE "idPatients" = :patient_id'),
+        {"patient_id": patient_id},
+    )
+    if patient_exists.scalar() is None:
+        raise HTTPException(status_code=404, detail="Patient not found")
+
+    exercise_query = (
+        text(
+            """
+            SELECT "idvideos"
+            FROM "videos"
+            WHERE "idvideos" IN :exercise_ids
+            """
+        ).bindparams(bindparam("exercise_ids", expanding=True))
+        if unique_exercise_ids
+        else None
+    )
+
+    if exercise_query is not None:
+        exercise_rows = (
+            await db.execute(
+                exercise_query,
+                {"exercise_ids": unique_exercise_ids},
+            )
+        ).mappings()
+        fetched_ids: set[int] = set()
+        for row in exercise_rows:
+            value = row.get("idvideos")
+            if value is None:
+                continue
+            fetched_ids.add(int(value))
+        missing_exercises = [
+            exercise_id
+            for exercise_id in unique_exercise_ids
+            if exercise_id not in fetched_ids
+        ]
+        if missing_exercises:
+            raise HTTPException(
+                status_code=400,
+                detail="Некоторые упражнения не найдены.",
+            )
+
+    try:
+        duration_time = _seconds_to_time(payload.durationSeconds)
+    except ValueError as exc:
+        raise HTTPException(
+            status_code=400,
+            detail="Длительность упражнения должна быть меньше 24 часов.",
+        ) from exc
+
+    inserted_appointments: list[AppointmentSchema] = []
+
+    try:
+        for exercise_id in unique_exercise_ids:
+            result = await db.execute(
+                text(
+                    """
+                    INSERT INTO "appointments" (
+                        "Starttime",
+                        "Endtime",
+                        "idPatients",
+                        "idvideos",
+                        "kolvden",
+                        "dlitelnost"
+                    )
+                    VALUES (
+                        :start,
+                        :end,
+                        :patient_id,
+                        :exercise_id,
+                        :per_day,
+                        :duration
+                    )
+                    RETURNING
+                        "idAppointments",
+                        "idvideos",
+                        "Starttime",
+                        "Endtime",
+                        "kolvden",
+                        "sdelanovsego",
+                        "done_percent",
+                        EXTRACT(EPOCH FROM "dlitelnost") AS duration_seconds
+                    """
+                ),
+                {
+                    "start": payload.start,
+                    "end": payload.end,
+                    "patient_id": patient_id,
+                    "exercise_id": exercise_id,
+                    "per_day": payload.perDay,
+                    "duration": duration_time,
+                },
+            )
+            row = result.mappings().first()
+            if row is None:
+                raise HTTPException(
+                    status_code=500, detail="Не удалось сохранить назначение."
+                )
+
+            duration_raw = row.get("duration_seconds")
+            if isinstance(duration_raw, Decimal):
+                duration_seconds = int(duration_raw)
+            elif duration_raw is None:
+                duration_seconds = payload.durationSeconds
+            else:
+                try:
+                    duration_seconds = int(duration_raw)
+                except (TypeError, ValueError):
+                    duration_seconds = payload.durationSeconds
+
+            appointment = AppointmentSchema(
+                id=str(row["idAppointments"]),
+                exerciseId=int(row["idvideos"]),
+                start=_to_iso_date(row["Starttime"]),
+                end=_to_iso_date(row["Endtime"]),
+                perDay=int(row.get("kolvden") or 0),
+                totalCompleted=int(row.get("sdelanovsego") or 0),
+                donePercent=int(row.get("done_percent") or 0),
+                durationSeconds=duration_seconds,
+            )
+            inserted_appointments.append(appointment)
+
+        await db.commit()
+    except HTTPException:
+        await db.rollback()
+        raise
+    except Exception as exc:  # pragma: no cover - defensive branch
+        await db.rollback()
+        raise HTTPException(
+            status_code=500,
+            detail="Не удалось назначить упражнения.",
+        ) from exc
+
+    return AssignExercisesResponse(id=patient_id, appointments=inserted_appointments)
 
 
 def _quote_identifier(identifier: str) -> str:
