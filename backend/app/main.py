@@ -1,7 +1,6 @@
 import asyncio
 from collections import defaultdict
 import json
-import mimetypes
 from datetime import date, datetime, time
 from decimal import Decimal
 import random
@@ -49,11 +48,6 @@ _VIDEO_COLUMNS_ALIAS = (
 
 _PATIENT_SESSIONS: dict[str, int] = {}
 _PATIENT_SESSIONS_LOCK = asyncio.Lock()
-
-_STREAMING_MIME_TYPES = {
-    "application/x-mpegurl",
-    "application/vnd.apple.mpegurl",
-}
 
 
 class DisorderSchema(BaseModel):
@@ -480,37 +474,6 @@ def _normalize_optional_str(value: Any) -> str | None:
     return value or None
 
 
-def _guess_video_mime_type(value: Any, file_path: str | None) -> str | None:
-    """Return a browser-friendly MIME type for a stored video."""
-
-    stored = _normalize_optional_str(value)
-    stored_normalized = stored.lower() if stored else None
-
-    guessed: str | None = None
-    if file_path:
-        guess, _ = mimetypes.guess_type(file_path)
-        if guess:
-            guessed = guess.lower()
-
-    def is_video_mime(mime: str | None) -> bool:
-        if not mime:
-            return False
-        return mime.startswith("video/") or mime in _STREAMING_MIME_TYPES
-
-    if is_video_mime(stored_normalized):
-        return stored_normalized
-
-    if is_video_mime(guessed):
-        return guessed
-
-    if stored_normalized and stored_normalized.startswith("audio/"):
-        # Some legacy records contain audio MIME types for MP4 files. Avoid
-        # returning them so browsers don't switch to audio-only playback.
-        return guessed
-
-    return stored_normalized or guessed
-
-
 def _serialize_video_row(row: Mapping[str, Any]) -> VideoMetadataSchema:
     file_path = _normalize_optional_str(row.get("file_path"))
     return VideoMetadataSchema(
@@ -521,7 +484,7 @@ def _serialize_video_row(row: Mapping[str, Any]) -> VideoMetadataSchema:
         bodyPart=_normalize_optional_str(row.get("body_part")),
         typeOfActivity=_normalize_optional_str(row.get("type_of_activity")),
         filePath=file_path,
-        mimeType=_guess_video_mime_type(row.get("mime_type"), file_path),
+        mimeType=_normalize_optional_str(row.get("mime_type")),
         url=build_public_url(file_path),
     )
 
