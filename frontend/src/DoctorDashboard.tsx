@@ -52,6 +52,11 @@ type VideoMetadata = {
   url: string | null;
 };
 
+type BulkVideoUploadResponse = {
+  updated: VideoMetadata[];
+  unmatchedFiles: string[];
+};
+
 type Appointment = {
   id: string;
   exerciseId: number;
@@ -261,17 +266,12 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
   const [uploadingVideo, setUploadingVideo] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [uploadStatusMessage, setUploadStatusMessage] = useState<StatusMessage | null>(null);
-  const [uploadForm, setUploadForm] = useState<{
-    exerciseId: number | 'new';
-    file: File | null;
-  }>({
-    exerciseId: 'new',
-    file: null,
-  });
+  const [uploadFiles, setUploadFiles] = useState<FileList | null>(null);
+  const [uploadDirectoryLabel, setUploadDirectoryLabel] = useState('');
   const [completedVisibleCount, setCompletedVisibleCount] = useState(COMPLETED_INITIAL_COUNT);
   const completedListRef = useRef<HTMLUListElement | null>(null);
   const previousPatientIdRef = useRef<number | null>(null);
-  const uploadFileInputRef = useRef<HTMLInputElement | null>(null);
+  const uploadDirectoryInputRef = useRef<HTMLInputElement | null>(null);
   const [databaseTables, setDatabaseTables] = useState<string[]>([]);
   const [isLoadingTables, setIsLoadingTables] = useState(false);
   const [tablesLoadError, setTablesLoadError] = useState<string | null>(null);
@@ -848,13 +848,14 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
   };
 
   const resetUploadState = useCallback(() => {
-    setUploadForm({ exerciseId: 'new', file: null });
+    setUploadFiles(null);
+    setUploadDirectoryLabel('');
     setUploadError(null);
     setUploadingVideo(false);
-    if (uploadFileInputRef.current) {
-      uploadFileInputRef.current.value = '';
+    if (uploadDirectoryInputRef.current) {
+      uploadDirectoryInputRef.current.value = '';
     }
-  }, [uploadFileInputRef]);
+  }, []);
 
   const closeUploadDialog = useCallback(() => {
     setIsUploadDialogOpen(false);
@@ -866,50 +867,56 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
     setIsUploadDialogOpen(true);
     setUploadError(null);
     setUploadingVideo(false);
-    setUploadForm((prev) => ({
-      ...prev,
-      exerciseId: selectedExercises[0] ?? 'new',
-      file: null,
-    }));
-    if (uploadFileInputRef.current) {
-      uploadFileInputRef.current.value = '';
+    setUploadFiles(null);
+    setUploadDirectoryLabel('');
+    if (uploadDirectoryInputRef.current) {
+      uploadDirectoryInputRef.current.value = '';
     }
   };
 
-  const handleUploadExerciseChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    const { value } = event.target;
-    setUploadForm((prev) => ({
-      ...prev,
-      exerciseId: value === 'new' ? 'new' : Number.parseInt(value, 10),
-    }));
-  };
-
-  const handleUploadFileChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0] ?? null;
-    setUploadForm((prev) => ({
-      ...prev,
-      file,
-    }));
-    if (file) {
-      setUploadError(null);
+  useEffect(() => {
+    if (isUploadDialogOpen && uploadDirectoryInputRef.current) {
+      uploadDirectoryInputRef.current.setAttribute('webkitdirectory', 'true');
+      uploadDirectoryInputRef.current.setAttribute('mozdirectory', 'true');
+      uploadDirectoryInputRef.current.setAttribute('directory', 'true');
     }
-  };
-
-  const handleUploadConfirm = async () => {
-    if (!uploadForm.file) {
-      setUploadError('Выберите видеофайл для загрузки.');
+  }, [isUploadDialogOpen]);
+  const handleUploadDirectoryChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const { files } = event.target;
+    if (!files || files.length === 0) {
+      setUploadFiles(null);
+      setUploadDirectoryLabel('');
       return;
     }
 
-    const formData = new FormData();
-    formData.append('file', uploadForm.file);
-    if (uploadForm.exerciseId !== 'new') {
-      formData.append('video_id', String(uploadForm.exerciseId));
+    setUploadFiles(files);
+    const firstFile = files[0];
+    const relativePath = (firstFile as File & { webkitRelativePath?: string }).webkitRelativePath || '';
+    let label = '';
+    if (relativePath) {
+      const slashIndex = relativePath.indexOf('/');
+      label = slashIndex === -1 ? relativePath : relativePath.slice(0, slashIndex);
+    }
+    if (!label) {
+      label = files.length === 1 ? firstFile.name : `Выбрано файлов: ${files.length}`;
+    }
+    setUploadDirectoryLabel(label);
+    setUploadError(null);
+  };
+
+  const handleUploadConfirm = async () => {
+    if (!uploadFiles || uploadFiles.length === 0) {
+      setUploadError('Выберите папку с видеофайлами.');
+      return;
     }
 
     try {
       setUploadingVideo(true);
       setUploadError(null);
+      const formData = new FormData();
+      Array.from(uploadFiles).forEach((file) => {
+        formData.append('files', file);
+      });
       const response = await fetch('/api/videos/upload', {
         method: 'POST',
         body: formData,
@@ -921,13 +928,33 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
         throw new Error(message);
       }
 
-      const metadata = (await response.json()) as VideoMetadata;
-      const updatedExercise = mapVideoMetadataToExercise(metadata);
+      const data = (await response.json()) as BulkVideoUploadResponse;
 
-      setExercises((prev) => {
-        const index = prev.findIndex((exercise) => exercise.id === updatedExercise.id);
-        if (index === -1) {
-          const next = [...prev, updatedExercise];
+      if (data.updated.length > 0) {
+        setExercises((prev) => {
+          const updates = data.updated.map(mapVideoMetadataToExercise);
+          if (updates.length === 0) {
+            return prev;
+          }
+
+          const next = [...prev];
+          let hasChanges = false;
+
+          updates.forEach((updatedExercise) => {
+            const index = next.findIndex((exercise) => exercise.id === updatedExercise.id);
+            if (index === -1) {
+              next.push(updatedExercise);
+              hasChanges = true;
+              return;
+            }
+            next[index] = { ...next[index], ...updatedExercise };
+            hasChanges = true;
+          });
+
+          if (!hasChanges) {
+            return prev;
+          }
+
           return next.sort((a, b) => {
             const typeCompare = a.type.localeCompare(b.type);
             if (typeCompare !== 0) {
@@ -935,18 +962,23 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
             }
             return a.name.localeCompare(b.name);
           });
-        }
-        const next = [...prev];
-        next[index] = { ...next[index], ...updatedExercise };
-        return next;
-      });
+        });
+      }
+
+      const messageParts: string[] = [];
+      if (data.updated.length > 0) {
+        messageParts.push(`Обновлено видео: ${data.updated.length}.`);
+      }
+      if (data.unmatchedFiles.length > 0) {
+        messageParts.push(`Файлы без совпадений: ${data.unmatchedFiles.length}.`);
+      }
+      if (messageParts.length === 0) {
+        messageParts.push('Совпадения по именам не найдены.');
+      }
 
       setUploadStatusMessage({
-        status: 'success',
-        text:
-          uploadForm.exerciseId === 'new'
-            ? 'Видео успешно загружено.'
-            : 'Видео для упражнения обновлено.',
+        status: data.updated.length > 0 ? 'success' : 'error',
+        text: messageParts.join(' '),
       });
 
       closeUploadDialog();
@@ -2450,39 +2482,24 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
             >
               ×
             </button>
-            <h3 id="upload-dialog-title">Загрузка видео</h3>
+            <h3 id="upload-dialog-title">Пакетная загрузка видео</h3>
             <p className="muted">
-              Выберите упражнение для обновления или создайте новое и прикрепите видеофайл.
+              Выберите папку на компьютере. Все видео из неё будут сопоставлены с названиями упражнений
+              без учёта расширения и загружены на сервер.
             </p>
             <label className="form-label">
-              Упражнение
-              <select
-                value={uploadForm.exerciseId === 'new' ? 'new' : String(uploadForm.exerciseId)}
-                onChange={handleUploadExerciseChange}
-                disabled={uploadingVideo}
-              >
-                <option value="new">Создать новое упражнение</option>
-                {exercises.map((exercise) => (
-                  <option key={exercise.id} value={exercise.id}>
-                    {exercise.name || `Упражнение ${exercise.id}`}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <label className="form-label">
-              Видео файл
+              Папка с видео
               <input
-                ref={uploadFileInputRef}
+                ref={uploadDirectoryInputRef}
                 type="file"
-                accept="video/*"
-                onChange={handleUploadFileChange}
+                multiple
+                onChange={handleUploadDirectoryChange}
                 disabled={uploadingVideo}
+                autoFocus
               />
             </label>
-            {uploadForm.file && (
-              <p className="muted" role="status">
-                Выбран файл: {uploadForm.file.name}
-              </p>
+            {uploadDirectoryLabel && (
+              <p className="muted">Выбрано: {uploadDirectoryLabel}</p>
             )}
             {uploadError && (
               <p className="patient-section-message error" role="alert">

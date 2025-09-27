@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import mimetypes
 import secrets
+import shutil
 from pathlib import Path
 from typing import Final
 
@@ -16,6 +17,7 @@ __all__ = [
     "build_public_url",
     "delete_media_file",
     "generate_unique_filename",
+    "import_video_file",
     "resolve_extension",
     "save_video_upload",
 ]
@@ -109,6 +111,32 @@ async def save_video_upload(upload: UploadFile) -> tuple[str, str]:
                 mime_type = content_type
     if not mime_type:
         mime_type = _MIME_BY_EXTENSION.get(extension, "application/octet-stream")
+
+    return relative_path, mime_type
+
+
+def import_video_file(source: Path | str) -> tuple[str, str]:
+    """Copy a video file from ``source`` into the media storage."""
+
+    candidate = Path(source)
+    if not candidate.is_file():
+        raise ValueError("Указанный путь не является файлом.")
+
+    extension = candidate.suffix.lower()
+    if extension not in ALLOWED_VIDEO_EXTENSIONS:
+        allowed = ", ".join(sorted(ALLOWED_VIDEO_EXTENSIONS))
+        raise ValueError(f"Недопустимое расширение файла. Разрешены: {allowed}.")
+
+    destination_dir = _video_directory()
+    filename = generate_unique_filename(extension)
+    destination = destination_dir / filename
+    shutil.copy2(candidate, destination)
+
+    relative_path = str(Path("videos") / filename)
+    mime_type = _MIME_BY_EXTENSION.get(extension)
+    if not mime_type:
+        guessed, _ = mimetypes.guess_type(str(candidate))
+        mime_type = guessed or "application/octet-stream"
 
     return relative_path, mime_type
 
