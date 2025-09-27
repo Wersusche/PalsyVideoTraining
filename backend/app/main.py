@@ -11,24 +11,16 @@ from typing import Any, Mapping
 from uuid import UUID
 
 import bcrypt
-from fastapi import (
-    Depends,
-    FastAPI,
-    File,
-    Form,
-    HTTPException,
-    Header,
-    Response,
-    UploadFile,
-)
+from fastapi import Depends, FastAPI, HTTPException, Header, Response
 from sqlalchemy import bindparam, text
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import get_settings
 from app.core.media import (
+    ALLOWED_VIDEO_EXTENSIONS,
     build_public_url,
     delete_media_file,
-    save_video_upload,
+    import_video_file,
 )
 from app.db.session import get_session
 
@@ -79,6 +71,15 @@ class VideoMetadataSchema(BaseModel):
     filePath: str | None = None
     mimeType: str | None = None
     url: str | None = None
+
+
+class BulkVideoUploadRequest(BaseModel):
+    directory: str
+
+
+class BulkVideoUploadResponse(BaseModel):
+    updated: list[VideoMetadataSchema] = Field(default_factory=list)
+    unmatchedFiles: list[str] = Field(default_factory=list)
 
 
 class AppointmentSchema(BaseModel):
@@ -226,54 +227,83 @@ async def healthcheck(db: AsyncSession = Depends(get_session)) -> dict[str, str]
     return {"status": "ok"}
 
 
-@app.post("/api/videos/upload", response_model=VideoMetadataSchema, status_code=201)
-async def upload_video(
-    file: UploadFile = File(...),
-    video_id: int | None = Form(default=None),
+@app.post("/api/videos/upload", response_model=BulkVideoUploadResponse)
+async def upload_videos_from_directory(
+    payload: BulkVideoUploadRequest,
     db: AsyncSession = Depends(get_session),
-) -> VideoMetadataSchema:
-    previous_file_path: str | None = None
-    if video_id is not None:
-        existing_row = (
-            await db.execute(
-                text(
-                    f"""
-                    SELECT {_VIDEO_COLUMNS}
-                    FROM "videos"
-                    WHERE "idvideos" = :video_id
-                    """
-                ),
-                {"video_id": video_id},
-            )
-        ).mappings().first()
-        if existing_row is None:
-            raise HTTPException(status_code=404, detail="Видео не найдено.")
-        previous_file_path = _normalize_optional_str(existing_row.get("file_path"))
-
-    original_filename = file.filename
+) -> BulkVideoUploadResponse:
+    directory = Path(payload.directory).expanduser()
     try:
-        relative_path, mime_type = await save_video_upload(file)
-    except ValueError as exc:
-        raise HTTPException(status_code=400, detail=str(exc)) from exc
-    except OSError as exc:
+        directory = directory.resolve()
+    except FileNotFoundError as exc:
+        raise HTTPException(status_code=400, detail="Указанная папка не найдена.") from exc
+
+    if not directory.exists() or not directory.is_dir():
+        raise HTTPException(status_code=400, detail="Укажите существующую папку с видеофайлами.")
+
+    files_by_key: dict[str, Path] = {}
+    duplicate_files: list[str] = []
+    for entry in directory.iterdir():
+        if not entry.is_file():
+            continue
+        extension = entry.suffix.lower()
+        if extension not in ALLOWED_VIDEO_EXTENSIONS:
+            continue
+        key = _build_video_lookup_key(entry.stem)
+        if not key:
+            duplicate_files.append(entry.name)
+            continue
+        if key in files_by_key:
+            duplicate_files.append(entry.name)
+            continue
+        files_by_key[key] = entry
+
+    if not files_by_key:
         raise HTTPException(
-            status_code=500,
-            detail="Не удалось сохранить файл на сервере.",
-        ) from exc
+            status_code=400,
+            detail="В указанной папке нет поддерживаемых видеофайлов.",
+        )
 
-    stored_filename = Path(original_filename or "").name
-    if not stored_filename:
-        stored_filename = Path(relative_path).name
+    result = await db.execute(
+        text('SELECT "idvideos", "video_name", "file_path" FROM "videos"')
+    )
+    video_rows = result.mappings().all()
 
-    params = {
-        "file_path": relative_path,
-        "mime_type": mime_type,
-        "filename": stored_filename,
-    }
+    videos_by_key: dict[str, Mapping[str, Any] | None] = {}
+    for row in video_rows:
+        name = _normalize_optional_str(row.get("video_name"))
+        if not name:
+            continue
+        key = _build_video_lookup_key(name)
+        if not key:
+            continue
+        if key in videos_by_key:
+            videos_by_key[key] = None
+        else:
+            videos_by_key[key] = row
+
+    unmatched_files: list[str] = list(dict.fromkeys(duplicate_files))
+    stored_relative_paths: list[str] = []
+    previous_paths_to_delete: list[str] = []
+    updated_metadata: list[VideoMetadataSchema] = []
 
     try:
-        if video_id is not None:
-            result = await db.execute(
+        for key, file_path in files_by_key.items():
+            row = videos_by_key.get(key)
+            if not row:
+                unmatched_files.append(file_path.name)
+                continue
+
+            previous_file_path = _normalize_optional_str(row.get("file_path"))
+            try:
+                relative_path, mime_type = import_video_file(file_path)
+            except ValueError:
+                unmatched_files.append(file_path.name)
+                continue
+
+            stored_relative_paths.append(relative_path)
+
+            update_result = await db.execute(
                 text(
                     f"""
                     UPDATE "videos"
@@ -284,58 +314,40 @@ async def upload_video(
                     RETURNING {_VIDEO_COLUMNS}
                     """
                 ),
-                {**params, "video_id": video_id},
-            )
-        else:
-            result = await db.execute(
-                text(
-                    f"""
-                    INSERT INTO "videos" (
-                        "video_name",
-                        "filename",
-                        "ex_type",
-                        "file_path",
-                        "mime_type"
-                    )
-                    VALUES (
-                        :video_name,
-                        :filename,
-                        :ex_type,
-                        :file_path,
-                        :mime_type
-                    )
-                    RETURNING {_VIDEO_COLUMNS}
-                    """
-                ),
                 {
-                    **params,
-                    "video_name": _humanize_filename(original_filename),
-                    "ex_type": "для всех",
+                    "file_path": relative_path,
+                    "mime_type": mime_type,
+                    "filename": file_path.name,
+                    "video_id": row["idvideos"],
                 },
             )
-        row = result.mappings().first()
-        if row is None:
-            raise HTTPException(
-                status_code=500,
-                detail="Не удалось сохранить данные о видео.",
-            )
+            updated_row = update_result.mappings().first()
+            if updated_row is None:
+                unmatched_files.append(file_path.name)
+                stored_relative_paths.pop()
+                delete_media_file(relative_path)
+                continue
+
+            updated_metadata.append(_serialize_video_row(updated_row))
+            if previous_file_path and previous_file_path != relative_path:
+                previous_paths_to_delete.append(previous_file_path)
+
         await db.commit()
-    except HTTPException:
-        await db.rollback()
-        delete_media_file(relative_path)
-        raise
     except Exception as exc:
         await db.rollback()
-        delete_media_file(relative_path)
+        for relative_path in stored_relative_paths:
+            delete_media_file(relative_path)
         raise HTTPException(
             status_code=500,
-            detail="Не удалось сохранить данные о видео.",
+            detail="Не удалось обновить видеофайлы.",
         ) from exc
 
-    if video_id is not None and previous_file_path and previous_file_path != relative_path:
-        delete_media_file(previous_file_path)
+    unmatched_files = list(dict.fromkeys(unmatched_files))
 
-    return _serialize_video_row(row)
+    for previous_path in previous_paths_to_delete:
+        delete_media_file(previous_path)
+
+    return BulkVideoUploadResponse(updated=updated_metadata, unmatchedFiles=unmatched_files)
 
 
 @app.get("/api/videos/{video_id}", response_model=VideoMetadataSchema)
@@ -472,6 +484,12 @@ def _normalize_optional_str(value: Any) -> str | None:
         value = value.tobytes().decode("utf-8", "ignore")
     value = str(value).strip()
     return value or None
+
+
+def _build_video_lookup_key(value: str) -> str:
+    normalized = value.replace("_", " ").replace("-", " ")
+    normalized = re.sub(r"\s+", " ", normalized)
+    return normalized.strip().casefold()
 
 
 def _serialize_video_row(row: Mapping[str, Any]) -> VideoMetadataSchema:
