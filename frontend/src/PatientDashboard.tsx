@@ -51,12 +51,6 @@ const statusLabels: Record<ExerciseStatus, string> = {
   completed: 'Завершено',
 };
 
-type VideoPlaybackState = {
-  targetSeconds: number;
-  accumulatedSeconds: number;
-  videoDuration: number;
-};
-
 const parseErrorResponse = async (response: Response): Promise<string> => {
   const contentType = response.headers.get('content-type') ?? '';
 
@@ -116,11 +110,6 @@ const PatientDashboard = ({ token, patient, onLogout }: PatientDashboardProps) =
   const [reloadCounter, setReloadCounter] = useState(0);
   const [selectedAppointmentIndex, setSelectedAppointmentIndex] = useState(0);
   const videoRef = useRef<HTMLVideoElement | null>(null);
-  const playbackStateRef = useRef<VideoPlaybackState>({
-    targetSeconds: 0,
-    accumulatedSeconds: 0,
-    videoDuration: 0,
-  });
 
   useEffect(() => {
     let isActive = true;
@@ -227,88 +216,10 @@ const PatientDashboard = ({ token, patient, onLogout }: PatientDashboardProps) =
   const selectedAppointment = appointments[selectedAppointmentIndex];
 
   useEffect(() => {
-    playbackStateRef.current = {
-      targetSeconds: selectedAppointment?.durationSeconds ?? 0,
-      accumulatedSeconds: 0,
-      videoDuration: 0,
-    };
-  }, [selectedAppointment?.durationSeconds, selectedAppointment?.id]);
-
-  useEffect(() => {
     if (videoRef.current) {
       videoRef.current.load();
     }
   }, [selectedAppointment?.id, selectedAppointment?.videoUrl, selectedAppointment?.mimeType]);
-
-  const handleVideoLoadedMetadata = () => {
-    const element = videoRef.current;
-    if (!element) {
-      return;
-    }
-    const duration = Number.isFinite(element.duration) ? element.duration : 0;
-    playbackStateRef.current.videoDuration = duration;
-    playbackStateRef.current.accumulatedSeconds = 0;
-  };
-
-  const handleVideoEnded = () => {
-    const element = videoRef.current;
-    if (!element) {
-      return;
-    }
-    const state = playbackStateRef.current;
-    if (state.targetSeconds <= 0 || state.videoDuration <= 0) {
-      return;
-    }
-
-    state.accumulatedSeconds = Math.min(
-      state.targetSeconds,
-      state.accumulatedSeconds + state.videoDuration,
-    );
-
-    if (state.accumulatedSeconds + 0.25 < state.targetSeconds) {
-      element.currentTime = 0;
-      const playPromise = element.play();
-      if (playPromise !== undefined) {
-        void playPromise.catch(() => undefined);
-      }
-    }
-  };
-
-  const handleVideoPlay = () => {
-    const element = videoRef.current;
-    if (!element) {
-      return;
-    }
-    const state = playbackStateRef.current;
-    if (state.targetSeconds <= 0) {
-      return;
-    }
-
-    if (state.accumulatedSeconds + 0.1 >= state.targetSeconds && element.currentTime < 0.25) {
-      state.accumulatedSeconds = 0;
-    }
-  };
-
-  const handleVideoTimeUpdate = () => {
-    const element = videoRef.current;
-    if (!element) {
-      return;
-    }
-    const state = playbackStateRef.current;
-    if (state.targetSeconds <= 0) {
-      return;
-    }
-
-    const totalElapsed = state.accumulatedSeconds + element.currentTime;
-    if (totalElapsed + 0.1 >= state.targetSeconds) {
-      const remaining = Math.max(0, state.targetSeconds - state.accumulatedSeconds);
-      if (remaining > 0 && element.currentTime > remaining) {
-        element.currentTime = remaining;
-      }
-      state.accumulatedSeconds = state.targetSeconds;
-      element.pause();
-    }
-  };
 
   useEffect(() => {
     if (!appointments.length) {
@@ -412,10 +323,6 @@ const PatientDashboard = ({ token, patient, onLogout }: PatientDashboardProps) =
                               controls
                               preload="metadata"
                               width="100%"
-                              onPlay={handleVideoPlay}
-                              onLoadedMetadata={handleVideoLoadedMetadata}
-                              onEnded={handleVideoEnded}
-                              onTimeUpdate={handleVideoTimeUpdate}
                             >
                               <source
                                 src={selectedAppointment.videoUrl}
@@ -429,12 +336,6 @@ const PatientDashboard = ({ token, patient, onLogout }: PatientDashboardProps) =
                             </div>
                           )}
                         </div>
-                        {selectedAppointment.durationSeconds > 0 && (
-                          <p className="patient-dashboard__player-hint">
-                            Видео будет повторяться автоматически, пока не истечет{' '}
-                            {formatDuration(selectedAppointment.durationSeconds)} упражнения.
-                          </p>
-                        )}
                         <footer className="patient-dashboard__player-footer">
                           <div>
                             <strong>Прогресс:</strong> {selectedAppointment.donePercent}%
