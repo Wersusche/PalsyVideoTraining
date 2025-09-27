@@ -266,10 +266,12 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
   const [uploadingVideo, setUploadingVideo] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [uploadStatusMessage, setUploadStatusMessage] = useState<StatusMessage | null>(null);
-  const [uploadForm, setUploadForm] = useState<{ directory: string }>({ directory: '' });
+  const [uploadFiles, setUploadFiles] = useState<FileList | null>(null);
+  const [uploadDirectoryLabel, setUploadDirectoryLabel] = useState('');
   const [completedVisibleCount, setCompletedVisibleCount] = useState(COMPLETED_INITIAL_COUNT);
   const completedListRef = useRef<HTMLUListElement | null>(null);
   const previousPatientIdRef = useRef<number | null>(null);
+  const uploadDirectoryInputRef = useRef<HTMLInputElement | null>(null);
   const [databaseTables, setDatabaseTables] = useState<string[]>([]);
   const [isLoadingTables, setIsLoadingTables] = useState(false);
   const [tablesLoadError, setTablesLoadError] = useState<string | null>(null);
@@ -846,9 +848,13 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
   };
 
   const resetUploadState = useCallback(() => {
-    setUploadForm({ directory: '' });
+    setUploadFiles(null);
+    setUploadDirectoryLabel('');
     setUploadError(null);
     setUploadingVideo(false);
+    if (uploadDirectoryInputRef.current) {
+      uploadDirectoryInputRef.current.value = '';
+    }
   }, []);
 
   const closeUploadDialog = useCallback(() => {
@@ -861,32 +867,59 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
     setIsUploadDialogOpen(true);
     setUploadError(null);
     setUploadingVideo(false);
-    setUploadForm({ directory: '' });
-  };
-  const handleUploadDirectoryChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.target;
-    setUploadForm({ directory: value });
-    if (value.trim()) {
-      setUploadError(null);
+    setUploadFiles(null);
+    setUploadDirectoryLabel('');
+    if (uploadDirectoryInputRef.current) {
+      uploadDirectoryInputRef.current.value = '';
     }
   };
 
+  useEffect(() => {
+    if (isUploadDialogOpen && uploadDirectoryInputRef.current) {
+      uploadDirectoryInputRef.current.setAttribute('webkitdirectory', 'true');
+      uploadDirectoryInputRef.current.setAttribute('mozdirectory', 'true');
+      uploadDirectoryInputRef.current.setAttribute('directory', 'true');
+    }
+  }, [isUploadDialogOpen]);
+  const handleUploadDirectoryChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const { files } = event.target;
+    if (!files || files.length === 0) {
+      setUploadFiles(null);
+      setUploadDirectoryLabel('');
+      return;
+    }
+
+    setUploadFiles(files);
+    const firstFile = files[0];
+    const relativePath = (firstFile as File & { webkitRelativePath?: string }).webkitRelativePath || '';
+    let label = '';
+    if (relativePath) {
+      const slashIndex = relativePath.indexOf('/');
+      label = slashIndex === -1 ? relativePath : relativePath.slice(0, slashIndex);
+    }
+    if (!label) {
+      label = files.length === 1 ? firstFile.name : `Выбрано файлов: ${files.length}`;
+    }
+    setUploadDirectoryLabel(label);
+    setUploadError(null);
+  };
+
   const handleUploadConfirm = async () => {
-    const directory = uploadForm.directory.trim();
-    if (!directory) {
-      setUploadError('Укажите папку с видеофайлами.');
+    if (!uploadFiles || uploadFiles.length === 0) {
+      setUploadError('Выберите папку с видеофайлами.');
       return;
     }
 
     try {
       setUploadingVideo(true);
       setUploadError(null);
+      const formData = new FormData();
+      Array.from(uploadFiles).forEach((file) => {
+        formData.append('files', file);
+      });
       const response = await fetch('/api/videos/upload', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ directory }),
+        body: formData,
       });
 
       if (!response.ok) {
@@ -2451,20 +2484,23 @@ const DoctorDashboard = ({ onLogout }: DoctorDashboardProps) => {
             </button>
             <h3 id="upload-dialog-title">Пакетная загрузка видео</h3>
             <p className="muted">
-              Укажите папку на сервере. Файлы из неё будут сопоставлены с названиями видео без учёта
-              расширения и автоматически загружены.
+              Выберите папку на компьютере. Все видео из неё будут сопоставлены с названиями упражнений
+              без учёта расширения и загружены на сервер.
             </p>
             <label className="form-label">
-              Путь к папке
+              Папка с видео
               <input
-                type="text"
-                value={uploadForm.directory}
+                ref={uploadDirectoryInputRef}
+                type="file"
+                multiple
                 onChange={handleUploadDirectoryChange}
-                placeholder="Например, /data/videos"
                 disabled={uploadingVideo}
                 autoFocus
               />
             </label>
+            {uploadDirectoryLabel && (
+              <p className="muted">Выбрано: {uploadDirectoryLabel}</p>
+            )}
             {uploadError && (
               <p className="patient-section-message error" role="alert">
                 {uploadError}
