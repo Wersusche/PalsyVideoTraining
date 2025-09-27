@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 export type PatientSessionProfile = {
   id: number;
@@ -109,7 +109,6 @@ const PatientDashboard = ({ token, patient, onLogout }: PatientDashboardProps) =
   const [error, setError] = useState('');
   const [reloadCounter, setReloadCounter] = useState(0);
   const [selectedAppointmentIndex, setSelectedAppointmentIndex] = useState(0);
-  const videoRef = useRef<HTMLVideoElement | null>(null);
 
   useEffect(() => {
     let isActive = true;
@@ -216,12 +215,6 @@ const PatientDashboard = ({ token, patient, onLogout }: PatientDashboardProps) =
   const selectedAppointment = appointments[selectedAppointmentIndex];
 
   useEffect(() => {
-    if (videoRef.current) {
-      videoRef.current.load();
-    }
-  }, [selectedAppointment?.id, selectedAppointment?.videoUrl, selectedAppointment?.mimeType]);
-
-  useEffect(() => {
     if (!appointments.length) {
       if (selectedAppointmentIndex !== 0) {
         setSelectedAppointmentIndex(0);
@@ -317,13 +310,7 @@ const PatientDashboard = ({ token, patient, onLogout }: PatientDashboardProps) =
                         </header>
                         <div className="patient-dashboard__player-media">
                           {selectedAppointment.videoUrl ? (
-                            <video
-                              key={selectedAppointment.id}
-                              ref={videoRef}
-                              controls
-                              preload="metadata"
-                              width="100%"
-                            >
+                            <video controls preload="metadata" width="100%">
                               <source
                                 src={selectedAppointment.videoUrl}
                                 type={selectedAppointment.mimeType ?? undefined}
