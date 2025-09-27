@@ -11,7 +11,7 @@ from typing import Any, Mapping
 from uuid import UUID
 
 import bcrypt
-from fastapi import Depends, FastAPI, HTTPException, Header, Response
+from fastapi import Depends, FastAPI, File, HTTPException, Header, Response, UploadFile
 from sqlalchemy import bindparam, text
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -20,7 +20,7 @@ from app.core.media import (
     ALLOWED_VIDEO_EXTENSIONS,
     build_public_url,
     delete_media_file,
-    import_video_file,
+    save_video_upload,
 )
 from app.db.session import get_session
 
@@ -71,10 +71,6 @@ class VideoMetadataSchema(BaseModel):
     filePath: str | None = None
     mimeType: str | None = None
     url: str | None = None
-
-
-class BulkVideoUploadRequest(BaseModel):
-    directory: str
 
 
 class BulkVideoUploadResponse(BaseModel):
@@ -229,39 +225,45 @@ async def healthcheck(db: AsyncSession = Depends(get_session)) -> dict[str, str]
 
 @app.post("/api/videos/upload", response_model=BulkVideoUploadResponse)
 async def upload_videos_from_directory(
-    payload: BulkVideoUploadRequest,
+    files: list[UploadFile] = File(...),
     db: AsyncSession = Depends(get_session),
 ) -> BulkVideoUploadResponse:
-    directory = Path(payload.directory).expanduser()
-    try:
-        directory = directory.resolve()
-    except FileNotFoundError as exc:
-        raise HTTPException(status_code=400, detail="Указанная папка не найдена.") from exc
+    if not files:
+        raise HTTPException(
+            status_code=400,
+            detail="Выберите папку с поддерживаемыми видеофайлами.",
+        )
 
-    if not directory.exists() or not directory.is_dir():
-        raise HTTPException(status_code=400, detail="Укажите существующую папку с видеофайлами.")
-
-    files_by_key: dict[str, Path] = {}
+    files_by_key: dict[str, tuple[UploadFile, str]] = {}
     duplicate_files: list[str] = []
-    for entry in directory.iterdir():
-        if not entry.is_file():
+    for upload in files:
+        original_name = (upload.filename or "").strip()
+        original_name = Path(original_name).name
+        if not original_name:
+            duplicate_files.append("безымянный файл")
+            await upload.close()
             continue
-        extension = entry.suffix.lower()
+
+        extension = Path(original_name).suffix.lower()
         if extension not in ALLOWED_VIDEO_EXTENSIONS:
+            await upload.close()
             continue
-        key = _build_video_lookup_key(entry.stem)
+
+        key = _build_video_lookup_key(Path(original_name).stem)
         if not key:
-            duplicate_files.append(entry.name)
+            duplicate_files.append(original_name)
+            await upload.close()
             continue
         if key in files_by_key:
-            duplicate_files.append(entry.name)
+            duplicate_files.append(original_name)
+            await upload.close()
             continue
-        files_by_key[key] = entry
+        files_by_key[key] = (upload, original_name)
 
     if not files_by_key:
         raise HTTPException(
             status_code=400,
-            detail="В указанной папке нет поддерживаемых видеофайлов.",
+            detail="Выберите папку с поддерживаемыми видеофайлами.",
         )
 
     result = await db.execute(
@@ -288,17 +290,18 @@ async def upload_videos_from_directory(
     updated_metadata: list[VideoMetadataSchema] = []
 
     try:
-        for key, file_path in files_by_key.items():
+        for key, (upload, original_name) in files_by_key.items():
             row = videos_by_key.get(key)
             if not row:
-                unmatched_files.append(file_path.name)
+                unmatched_files.append(original_name)
+                await upload.close()
                 continue
 
             previous_file_path = _normalize_optional_str(row.get("file_path"))
             try:
-                relative_path, mime_type = import_video_file(file_path)
+                relative_path, mime_type = await save_video_upload(upload)
             except ValueError:
-                unmatched_files.append(file_path.name)
+                unmatched_files.append(original_name)
                 continue
 
             stored_relative_paths.append(relative_path)
@@ -317,13 +320,13 @@ async def upload_videos_from_directory(
                 {
                     "file_path": relative_path,
                     "mime_type": mime_type,
-                    "filename": file_path.name,
+                    "filename": original_name,
                     "video_id": row["idvideos"],
                 },
             )
             updated_row = update_result.mappings().first()
             if updated_row is None:
-                unmatched_files.append(file_path.name)
+                unmatched_files.append(original_name)
                 stored_relative_paths.pop()
                 delete_media_file(relative_path)
                 continue
@@ -335,6 +338,8 @@ async def upload_videos_from_directory(
         await db.commit()
     except Exception as exc:
         await db.rollback()
+        for upload, _ in files_by_key.values():
+            await upload.close()
         for relative_path in stored_relative_paths:
             delete_media_file(relative_path)
         raise HTTPException(
